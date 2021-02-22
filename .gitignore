@@ -8,5 +8,6 @@ db.*
 *.pot
 *.pyc
 __pycache__/
+nohup.out
 ## pycharm
 .idea
