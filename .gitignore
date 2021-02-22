@@ -1,0 +1,12 @@
+# front
+
+# backend
+venv
+db.*
+## temporary files
+*.log
+*.pot
+*.pyc
+__pycache__/
+## pycharm
+.idea
