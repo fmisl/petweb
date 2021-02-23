@@ -1,9 +1,15 @@
 import React, {useState} from 'react';
 import './App.css'
 import {Link} from 'react-router-dom'
+import {useSelector, useDispatch} from 'react-redux';
+import {login, logout} from './actions';
+// import {usePath} from 'hookrouter';
 
 function Sidebar() {
   const [active, setActive] = useState('');
+  const dispatch = useDispatch();
+  // const path = usePath();
+  // console.log(path);
   return (
     <div className="sidebar">
       <ul className="sidebar-links">
@@ -14,7 +20,7 @@ function Sidebar() {
         <Link onClick={()=>setActive('setting')} className={`sidebar-link ${active === 'setting' ? 'act' : ''}`} to="/Setting"><li>Setting</li></Link>
       </ul>
       <ul className="sidebar-links">
-      <Link className={"sidebar-link"} ><li>Logout</li></Link>
+      <Link  onClick={()=> dispatch(logout())} className={"sidebar-link"} to='/'><li>Logout</li></Link>
       </ul>
     </div>
   );

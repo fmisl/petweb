@@ -14,7 +14,7 @@ function Analysis() {
         <h1>Counter: {counter}</h1>
         <button onClick={()=> dispatch(increment(1))}>+</button>
         <button onClick={()=> dispatch(decrement(2))}>-</button>
-        {/* {isLogged ? <h3>Valueable Information I shouldn't see</h3> : ''} */}
+        {isLogged ? '' : <h3>Valueable Information I shouldn't see</h3>}
       </div>
     </div>
   );
