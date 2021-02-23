@@ -1,0 +1,111 @@
+.App {
+  display: flex;
+  text-align: center;
+  height: 100vh;
+  background: #292D30;
+
+  /* border: red solid;
+  box-sizing: border-box; */
+}
+
+.Headerbar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50px;
+  width: 100%;
+  background: #383C41;
+  color: #ccccda;
+
+  /* border: yellow solid;
+  box-sizing: border-box; */
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  /* min-height: 10vh; */
+  padding-top: 50px;
+  /* margin-top: 50px; */
+  /* height: 100%; */
+  width: 250px;
+  /* color: white; */
+  background: #383C41;
+
+  /* border: green solid;
+  box-sizing: border-box; */
+}
+
+.sidebar-links {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between; */
+  /* align-items: center; */
+  /* margin-top: 50px; */
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  /* width: 100%; */
+
+  /* border: lightblue solid;
+  box-sizing: border-box; */
+}
+
+.sidebar-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding-left: 90px; */
+  height: 65px;
+  width: 250px;
+  user-select: none;
+
+  list-style: none;
+  text-align: left;
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+  text-decoration: none;
+  color: #ccccda;
+
+  /* border: blue solid; */
+  /* box-sizing: border-box; */
+}
+
+.sidebar-link:hover {
+  /* border: 1px lightblue solid; */
+  box-sizing: border-box;
+  /* border-right: 6px #118AF7 solid; */
+  background: #292D30;
+  color: #118AF7;
+}
+
+.sidebar-link.act {
+  /* border: 1px lightblue solid; */
+  box-sizing: border-box;
+  border-right: 6px #118AF7 solid;
+  background: #292D30;
+  color: #118AF7;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  color: white;
+
+  /* border: red solid;
+  box-sizing: border-box; */
+}
+
+.content-div {
+  /* border: white solid; */
+}
