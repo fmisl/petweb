@@ -1,16 +1,19 @@
 import React from 'react';
 import '../App.css';
+import Sidebar from './components/Sidebar'
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement} from '../actions';
 
-function Upload() {
+function View({history}) {
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
+  console.log(history.location.pathname)
   return (
     <div className="content">
+      <Sidebar />
       <div className="content-div">
-        <h1>Upload page</h1>
+        <h1>View page</h1>
         <h1>Counter: {counter}</h1>
         <button onClick={()=> dispatch(increment(1))}>+</button>
         <button onClick={()=> dispatch(decrement(2))}>-</button>
@@ -20,4 +23,4 @@ function Upload() {
   );
 }
 
-export default Upload;
+export default View;

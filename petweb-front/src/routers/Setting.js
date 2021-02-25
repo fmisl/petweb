@@ -1,19 +1,19 @@
 import React from 'react';
 import '../App.css';
+import Sidebar from './components/Sidebar'
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement} from '../actions';
-// import {usePath} from 'hookrouter';
 
-function Dashboard() {
+function Setting({history}) {
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
-  // const path = usePath();
-  // console.log(path);
+  console.log(history.location.pathname)
   return (
     <div className="content">
+      <Sidebar/>
       <div className="content-div">
-        <h1>Dashboard page</h1>
+        <h1>Setting page</h1>
         <h1>Counter: {counter}</h1>
         <button onClick={()=> dispatch(increment(1))}>+</button>
         <button onClick={()=> dispatch(decrement(2))}>-</button>
@@ -23,4 +23,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Setting;

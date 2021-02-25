@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css'
-import Sidebar from './Sidebar'
-import Headerbar from './Headerbar'
-import Login from './Login'
+import Headerbar from './components/Headerbar'
+// import Sidebar from './pages/components/Sidebar'
+import Login from './routers/login/Login'
 import {useSelector, useDispatch} from 'react-redux';
-import {Dashboard, Upload, View, Analysis, Setting} from './sidebar/'
-import {BrowserRouter as Router, Switch, Route, useParams} from 'react-router-dom' 
+import {Dashboard, Upload, View, Analysis, Setting} from './routers'
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom' 
 
 
 function App() {
@@ -21,13 +21,14 @@ function App() {
           :
           <div className="App">
             <Headerbar/>
-            <Sidebar />
-            {/* <Route path="/dashboard" exact render={(props)=><Dashboard {...props}/>}/> */}
-            <Route path="/dashboard" exact component={Dashboard}/>
+            {/* <Sidebar/> */}
+            {/* <Route path="/" exact component={Dashboard}/> */}
+            <Route path="/" exact component={Dashboard}/>
             <Route path="/upload" exact component={Upload}/>
-            <Route path="/View" exact component={View}/>
-            <Route path="/Analysis" exact component={Analysis}/>
-            <Route path="/Setting" exact component={Setting}/>
+            <Route path="/view" exact component={View}/>
+            <Route path="/analysis" exact component={Analysis}/>
+            <Route path="/setting" exact component={Setting}/>
+            {/* <Redirect path="*" to="/dashboard" /> */}
           </div>
         }
       </Switch>

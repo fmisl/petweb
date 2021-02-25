@@ -30,7 +30,11 @@
 }
 
 .login-form div {
-  display: block;
+  /* display: flex;
+  align-items: center;
+  letter-spacing: -0.333333px; */
+
+  /* display: block; */
   width: 339px;
   margin-bottom: 40px;
 
@@ -39,9 +43,23 @@
   font-weight: 500;
   font-size: 34px;
   line-height: 41px;
-  display: flex;
-  align-items: center;
-  letter-spacing: -0.333333px;
+
+  color: #FFFFFF;
+  /* border: blue solid;
+  box-sizing: border-box; */
+}
+
+.login-form label {
+  display: block;
+  width: 339px;
+  height: 110px;
+  /* margin-top: 22px; */
+
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
 
   color: #FFFFFF;
   /* border: blue solid;
@@ -53,34 +71,31 @@
   width: 319px;
   height: 49px;
   padding-left: 20px;
+  margin-bottom: 3px;
 
   font-family: Montserrat;
   font-style: normal;
-  font-weight: 200;
+  font-weight: 400;
   font-size: 18px;
   line-height: 22px;
   background-color: #202223;
 
   border: 0;
   color: #FFFFFF;
-  /* border: blue solid;
-  box-sizing: border-box; */
 }
 
-.login-form label {
-  display: block;
-  width: 339px;
-  margin-top: 22px;
+.login-form input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  /* background-color: red !important; */
+  -webkit-text-fill-color: #fff !important;
+  -webkit-box-shadow: inset 0 0 0px 9999px #202223;
+}
 
-  font-family: Montserrat;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 24px;
-
-  color: #FFFFFF;
-  /* border: blue solid;
-  box-sizing: border-box; */
+.errorMessage {
+  color: red;
+  white-space: nowrap;
 }
 
 .login-link {
@@ -109,15 +124,21 @@
   box-sizing: border-box; */
 }
 
+.login-link:hover {
+  border: 1px white solid;
+  box-sizing: border-box;
+}
+
 .Headerbar {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
   height: 50px;
-  width: 100%;
+  width: vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   background: #383C41;
   color: #ccccda;
 
@@ -126,15 +147,19 @@
 }
 
 .sidebar {
+  position: absolute;
+  top: 50px;
+  bottom: 0px;
+  left: 0;
+  width: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   /* min-height: 10vh; */
-  padding-top: 50px;
+  /* padding-top: 50px; */
   /* margin-top: 50px; */
-  /* height: 100%; */
-  width: 250px;
+  /* height: 100vh; */
   /* color: white; */
   background: #383C41;
 
