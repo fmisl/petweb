@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_CREDENTIALS = True
 
 # Application definition
 
@@ -41,7 +43,14 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_auth',   # rest_auth 추가
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -64,6 +73,10 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.BasicAuthentication',
     ),
 }
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"
+REST_USE_JWT = True
+ACCOUNT_LOGOUT_ON_GET = True
 
 JWT_AUTH = {
     'JWT_SECRET_KEY': SECRET_KEY,

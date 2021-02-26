@@ -24,7 +24,13 @@ urlpatterns = [
     # path('api/token/refresh/', refresh_jwt_token),
     # path('api/blog/', include('blog.urls'))
 
-    path('api-jwt-auth/', obtain_jwt_token),
-    path('api-jwt-auth/refresh/', refresh_jwt_token),
-    path('api-jwt-auth/verify/', verify_jwt_token),
+    path('api/token/', obtain_jwt_token),
+    path('api/token/verify/', verify_jwt_token),
+    path('api/token/refresh/', refresh_jwt_token),
+    # path('api/dashboard/', include('dashboard.urls'))
+    # path('api-auth/', include("rest_framework.urls")),
+    path('api/rest-auth/', include("rest_auth.urls")),
+
+    path('rest-auth/', include('rest_auth.urls')),
+    path('rest-auth/registration/', include('rest_auth.registration.urls'))
 ]

@@ -3,15 +3,16 @@ import '../App.css';
 import Sidebar from './components/Sidebar'
 import {useHistory} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
-import {increment, decrement} from '../actions';
+import {increment, decrement} from '../reduxs/actions';
 
 function Dashboard() {
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const history =useHistory();
-  console.log("dashboard")
-  console.log(history.location.pathname)
+  // console.log("dashboard")
+  // console.log(history.location.pathname)
+  console.log(window.location.pathname)
   return (
     <div className="content">
       <Sidebar />

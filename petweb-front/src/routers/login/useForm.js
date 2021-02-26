@@ -14,11 +14,12 @@ function useForm({ initialValues, onSubmit, validate }) {
   const handleSubmit = async (event) => {
     setSubmitting(true)
     event.preventDefault()
-    await new Promise((r) => setTimeout(r, 1000))
+    await new Promise((r) => setTimeout(r, 1500))
     setErrors(validate(values))
   }
 
   useEffect(() => {
+    console.log('handleSubmit',errors)
     if (submitting) {
       if (Object.keys(errors).length === 0) {
         onSubmit(values)

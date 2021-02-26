@@ -5,7 +5,7 @@ const loggedReducer = (state = false, action) => {
     case 'LOGOUT':
       return false;
     default:
-      return false;
+      return localStorage.getItem('token') ? true : false;
   }
 }
 export default loggedReducer;

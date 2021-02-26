@@ -1,4 +1,4 @@
-export default function validate({ username, password }) {
+export default function validateLogin({ username, password }) {
   const errors = {}
 
   if (!username) {

@@ -1,14 +1,20 @@
 import React, {useState} from 'react';
 import '../../App.css'
-import {useHistory} from 'react-router-dom'
+import {useHistory, Redirect} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
-import {logout} from '../../actions';
+import {logout} from '../../reduxs/actions';
 
 function Sidebar() {
   const dispatch = useDispatch();
   const history =useHistory();
+  const handleLogout = () =>{
+    dispatch(logout()) 
+    localStorage.removeItem("token")
+    history.push('/')
+  }
   // console.log("sidebar:")
-  console.log(history.location.pathname)
+  // console.log(history.location.pathname)
+  console.log(window.location.pathname)
   return (
     <div className="sidebar">
       <ul className="sidebar-links">
@@ -19,7 +25,7 @@ function Sidebar() {
         <div onClick={()=>history.push('/setting')} className={`sidebar-link ${history.location.pathname === '/setting' ? 'act' : ''}`}><li>Setting</li></div>
       </ul>
       <ul className="sidebar-links">
-        <div  onClick={()=> dispatch(logout())} className={"sidebar-link"}><li>Logout</li></div>
+        <div  onClick={()=> handleLogout()} className={"sidebar-link"}><li>Logout</li></div>
       </ul>
     </div>
   );
