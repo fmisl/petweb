@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react';
 import '../../App.css'
 import {useSelector, useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom'
-import {login} from '../../reduxs/actions';
+import {login,profile} from '../../reduxs/actions';
 import useForm from "./useForm"
 import validateLogin from "./validateLogin"
 import * as services from '../../services/fetchApi'
@@ -17,11 +17,13 @@ function Login() {
       try{
         res = await services.Login(values)
         console.log(res)
-        const token = res.data.token[0]
+        const token = res.data.token
         console.log(token)
         alert("Login success.")
         localStorage.setItem('token', token)
+        localStorage.setItem('username', values.username)
         dispatch(login())
+        // dispatch(profile(values.username))
       } catch (e){
         console.log(e.response.data.non_field_errors)
         alert(e.response.data.non_field_errors)

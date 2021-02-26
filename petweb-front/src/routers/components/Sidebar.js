@@ -3,6 +3,8 @@ import '../../App.css'
 import {useHistory, Redirect} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
 import {logout} from '../../reduxs/actions';
+import logoWhite from '../../images/logo-white.png'
+import IconDashboard from '../../images/IconDashboard';
 
 function Sidebar() {
   const dispatch = useDispatch();
@@ -18,7 +20,8 @@ function Sidebar() {
   return (
     <div className="sidebar">
       <ul className="sidebar-links">
-        <div onClick={()=>history.push('/')} className={`sidebar-link ${history.location.pathname === '/' ? 'act' : ''}`}><li>Dashboard</li></div>
+        <div className='sidebar-logo'><img src={logoWhite} alt="logo" /></div>
+        <div onClick={()=>history.push('/')} className={`sidebar-link ${history.location.pathname === '/' ? 'act' : ''}`}><IconDashboard stroke="#118AF7"/><li>Dashboard</li></div>
         <div onClick={()=>history.push('/upload')} className={`sidebar-link ${history.location.pathname === '/upload' ? 'act' : ''}`}><li>Upload</li></div>
         <div onClick={()=>history.push('/view')} className={`sidebar-link ${history.location.pathname === '/view' ? 'act' : ''}`}><li>View</li></div>
         <div onClick={()=>history.push('/analysis')} className={`sidebar-link ${history.location.pathname === '/analysis' ? 'act' : ''}`}><li>Analysis</li></div>

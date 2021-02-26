@@ -20,3 +20,9 @@ export const logout = () =>{
     type: 'LOGOUT',
   };
 };
+export const profile = (text) =>{
+  return {
+    type: 'PROFILE',
+    username: text
+  };
+};

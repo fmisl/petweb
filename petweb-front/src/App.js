@@ -16,6 +16,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect, useHistory} from 'reac
 function App() {
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
+  // dispatch(profile())
   const history =useHistory();
 
   useEffect(async () => {
@@ -41,7 +42,7 @@ function App() {
       <Switch>
         {!isLogged && 
           <div className="App-unAuth">
-            <Headerbar/>
+            {/* <Headerbar/> */}
             <Route path="/" exact component={Login}/>
             <Route path="/login" component={Login}/>
             <Route path="/upload" component={Login}/>
@@ -55,7 +56,7 @@ function App() {
         }
         {isLogged && 
           <div className="App">
-            <Headerbar/>
+            {/* <Headerbar/> */}
             {/* <Sidebar/> */}
             {/* <Route path="/" exact component={Dashboard}/> */}
             <Route path="/" exact component={Dashboard}/>

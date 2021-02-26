@@ -388,7 +388,7 @@ input:-webkit-autofill:active {
 
 .sidebar {
   position: absolute;
-  top: 50px;
+  top: 0px;
   bottom: 0px;
   left: 0;
   width: 250px;
@@ -404,6 +404,13 @@ input:-webkit-autofill:active {
   background: #383C41;
 
   /* border: green solid;
+  box-sizing: border-box; */
+}
+
+.sidebar-logo {
+  padding-top: 37px;
+  padding-bottom: 25px;
+  /* border: 1px red solid;
   box-sizing: border-box; */
 }
 
