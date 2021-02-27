@@ -19,7 +19,7 @@ function Login() {
         console.log(res)
         const token = res.data.token
         console.log(token)
-        alert("Login success.")
+        // alert("Login success.")
         localStorage.setItem('token', token)
         localStorage.setItem('username', values.username)
         dispatch(login())

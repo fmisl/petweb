@@ -1,34 +1,49 @@
 import React, {useState} from 'react';
 import '../../App.css'
-import {useHistory, Redirect} from 'react-router-dom'
+import {useHistory, Redirect, Link} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
 import {logout} from '../../reduxs/actions';
-import logoWhite from '../../images/logo-white.png'
+// import logoWhite from '../../images/logo-white.png'
+import LogoWhite from '../../images/LogoWhite';
 import IconDashboard from '../../images/IconDashboard';
+import IconUpload from '../../images/IconUpload';
+import IconView from '../../images/IconView';
+import IconAnalysis from '../../images/IconAnalysis';
+import IconSetting from '../../images/IconSetting';
+import IconLogout from '../../images/IconLogout';
 
 function Sidebar() {
   const dispatch = useDispatch();
   const history =useHistory();
-  const handleLogout = () =>{
-    dispatch(logout()) 
-    localStorage.removeItem("token")
-    history.push('/')
-  }
-  // console.log("sidebar:")
-  // console.log(history.location.pathname)
-  console.log(window.location.pathname)
   return (
     <div className="sidebar">
-      <ul className="sidebar-links">
-        <div className='sidebar-logo'><img src={logoWhite} alt="logo" /></div>
-        <div onClick={()=>history.push('/')} className={`sidebar-link ${history.location.pathname === '/' ? 'act' : ''}`}><IconDashboard stroke="#118AF7"/><li>Dashboard</li></div>
-        <div onClick={()=>history.push('/upload')} className={`sidebar-link ${history.location.pathname === '/upload' ? 'act' : ''}`}><li>Upload</li></div>
-        <div onClick={()=>history.push('/view')} className={`sidebar-link ${history.location.pathname === '/view' ? 'act' : ''}`}><li>View</li></div>
-        <div onClick={()=>history.push('/analysis')} className={`sidebar-link ${history.location.pathname === '/analysis' ? 'act' : ''}`}><li>Analysis</li></div>
-        <div onClick={()=>history.push('/setting')} className={`sidebar-link ${history.location.pathname === '/setting' ? 'act' : ''}`}><li>Setting</li></div>
+      <div className='sidebar-logo'><LogoWhite fill="white"/></div>
+      <ul className='sidebar-grp1' >
+        {/* <div className={`sidebar-grp1-item ${history.location.pathname === '/dashboard' ? 'act' : ''}`}> */}
+        <div className={`sidebar-grp1-menu ${history.location.pathname.split('/')[1] == 'dashboard' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/dashboard');}}>
+          <div className={`sidebar-grp1-menu-title`}><IconDashboard stroke={history.location.pathname === '/dashboard' ? "#118AF7" : "#ccccda"}/><li>Dashboard</li></div>
+        </div>
+        {/* <div onClick={()=>history.push('/dashboard/profile')} className={`sidebar-link-contents ${history.location.pathname === '/dashboard' ? '' : ''}`}><li>profile</li></div> */}
+        <div className={`sidebar-grp1-menu ${history.location.pathname.split('/')[1] == 'upload' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/upload');}}>
+          <div className={`sidebar-grp1-menu-title`}><IconUpload stroke={history.location.pathname === '/upload' ? "#118AF7" : "#ccccda"}/><li>Upload</li></div>
+        </div>
+        <div className={'sidebar-grp1-splitter'}></div>
+        <div className={`sidebar-grp1-menu ${history.location.pathname.split('/')[1] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/view');}}>
+          <div className={`sidebar-grp1-menu-title`}><IconView stroke={history.location.pathname === '/view' ? "#118AF7" : "#ccccda"}/><li>View</li></div>
+        </div>
+        <div className={`sidebar-grp1-menu ${history.location.pathname.split('/')[1] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}>
+          <div className={`sidebar-grp1-menu-title`}><IconAnalysis stroke={history.location.pathname.split('/')[1] === 'analysis' ? "#118AF7" : "#ccccda"} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}/><li>Analysis</li></div>
+          <div className={`sidebar-grp1-menu-item ${history.location.pathname == '/analysis/suvr' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}><li>SUVR</li></div>
+          <div className={`sidebar-grp1-menu-item ${history.location.pathname == '/analysis/report' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/report');}}><li>Report</li></div>
+        </div>
+        <div className={`sidebar-grp1-menu ${history.location.pathname.split('/')[1] == 'setting' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/setting');}}>
+          <div className={`sidebar-grp1-menu-title`}><IconSetting stroke={history.location.pathname === '/setting' ? "#118AF7" : "#ccccda"}/><li>Setting</li></div>
+        </div>
       </ul>
-      <ul className="sidebar-links">
-        <div  onClick={()=> handleLogout()} className={"sidebar-link"}><li>Logout</li></div>
+      <ul className='sidebar-grp2'>
+        <div className={`sidebar-grp2-menu`} onClick={()=> {dispatch(logout());localStorage.removeItem("token");}} >
+          <div className={`sidebar-grp2-menu-title`}><IconLogout stroke={"#ccccda"}/><li>Logout</li></div>
+        </div>
       </ul>
     </div>
   );

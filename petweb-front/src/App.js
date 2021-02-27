@@ -45,6 +45,7 @@ function App() {
             {/* <Headerbar/> */}
             <Route path="/" exact component={Login}/>
             <Route path="/login" component={Login}/>
+            <Route path="/dashboard" component={Login}/>
             <Route path="/upload" component={Login}/>
             <Route path="/view" component={Login}/>
             <Route path="/analysis" component={Login}/>
@@ -59,14 +60,14 @@ function App() {
             {/* <Headerbar/> */}
             {/* <Sidebar/> */}
             {/* <Route path="/" exact component={Dashboard}/> */}
-            <Route path="/" exact component={Dashboard}/>
+            {/* <Redirect exact from="/" to="/dashboard" /> */}
+            <Route path="/dashboard" component={Dashboard}/>
             <Route path="/upload" component={Upload}/>
             <Route path="/view" component={View}/>
             <Route path="/analysis" component={Analysis}/>
             <Route path="/setting" component={Setting}/>
             {/* <Redirect exact path="/signup" to="/" />
             <Redirect exact path="/forgot" to="/" /> */}
-            {/* <Redirect from="/" to="/" /> */}
           </div>
         }
       </Switch>
