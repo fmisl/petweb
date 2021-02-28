@@ -1,10 +1,10 @@
 import React from 'react';
-import '../App.css'
+import '../../App.css'
 
 function Headerbar() {
   return (
     <div className="Headerbar">
-      Logo
+      {/* Logo */}
     </div>
   );
 }

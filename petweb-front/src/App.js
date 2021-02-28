@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import './App.css'
-import Headerbar from './components/Headerbar'
 import axios from 'axios';
 // import Sidebar from './pages/components/Sidebar'
 import Login from './routers/login/Login'
