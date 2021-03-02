@@ -58,8 +58,12 @@ function App() {
           <div className="App">
             {/* <Headerbar/> */}
             {/* <Sidebar/> */}
-            {/* <Route path="/" exact component={Dashboard}/> */}
+            <Route path="/" exact component={Login}/>
             {/* <Redirect exact from="/" to="/dashboard" /> */}
+            {/* <Route path="/" exact component={Dashboard}/>
+            <Route path="/login" exact component={Dashboard}/>
+            <Route path="/forgot" exact component={Dashboard}/>
+            <Route path="/signup" exact component={Dashboard}/> */}
             <Route path="/dashboard" component={Dashboard}/>
             <Route path="/upload" component={Upload}/>
             <Route path="/view" component={View}/>

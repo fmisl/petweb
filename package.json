@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "axios": "^0.21.1",
-    "hookrouter": "^1.2.5"
+    "axios": "^0.21.1"
   }
 }

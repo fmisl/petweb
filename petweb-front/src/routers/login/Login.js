@@ -1,7 +1,7 @@
 import React,{useState, useEffect} from 'react';
 import '../../App.css'
 import {useSelector, useDispatch} from 'react-redux';
-import {useHistory} from 'react-router-dom'
+import {useHistory, Redirect} from 'react-router-dom'
 import {login,profile} from '../../reduxs/actions';
 import useForm from "./useForm"
 import validateLogin from "./validateLogin"
@@ -9,8 +9,17 @@ import * as services from '../../services/fetchApi'
 import logoWhite from '../../images/logo-white.png';
 
 function Login() {
+  const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const history = useHistory();
+  useEffect(() => {
+    // 브라우저 API를 이용하여 문서 타이틀을 업데이트합니다.
+    console.log('refresh')
+    if (isLogged){
+      history.push('/dashboard')
+      // return(<Redirect to="/dashboard"/>)
+    }
+  });
   const { values, errors, submitting, handleChange, handleSubmit } = useForm({
     initialValues: { username: "", password: "" },
     onSubmit: async (values) => {
@@ -24,6 +33,11 @@ function Login() {
         localStorage.setItem('token', token)
         localStorage.setItem('username', values.username)
         dispatch(login())
+        if (history.location.pathname === "/"){
+          history.push("/dashboard")
+        } else if (history.location.pathname === "/login"){
+          history.push("/dashboard")
+        }
         // dispatch(profile(values.username))
       } catch (e){
         console.log(e.response.data.non_field_errors)
@@ -38,7 +52,7 @@ function Login() {
   return (
     <React.Fragment>
       <div className="login-left" >
-        <div style={{display:'flex', justifyContent:'center',marginBottom:'50px'}}><img src={logoWhite}/></div>
+        <div style={{display:'flex', justifyContent:'center',marginBottom:'50px'}}><img src={logoWhite} onClick={()=>history.push('/')}/></div>
         <div onClick={()=>history.push('/signup')} className="signup-link">SIGN UP</div>
       </div>
       <div className="login-right">
