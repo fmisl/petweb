@@ -15,6 +15,7 @@ function Setting({history}) {
     <div className="content">
       <Sidebar/>
       <Headerbar/>
+      {/* <SimpleSlider/> */}
       <div className="content-page">
         <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>

@@ -79,7 +79,6 @@ function View({history}) {
           </div>
         </div>
 
-
         <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>
           <h1>View page</h1>
