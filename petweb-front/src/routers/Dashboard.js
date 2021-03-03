@@ -76,8 +76,8 @@ function Dashboard() {
           <h1>isLogged: {isLogged.toString()}</h1>
           <h1>Dashboard page</h1>
           <h1>Counter: {counter}</h1>
-          <button onClick={()=> dispatch(increment(1))}>+</button>
-          <button onClick={()=> dispatch(decrement(2))}>-</button>
+          <button onClick={()=> dispatch(increment())}>+</button>
+          <button onClick={()=> dispatch(decrement())}>-</button>
         </div>
       </div>
     </div>

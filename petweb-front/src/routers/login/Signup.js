@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom'
 import useForm from "./useForm"
 import validateSignup from "./validateSignup"
 import * as services from '../../services/fetchApi'
+import logoWhite from '../../images/logo-white.png';
 import '../../App.css'
 
 function Signup(){
@@ -59,80 +60,83 @@ function Signup(){
   //   console.log(data);
   // }
   return (
-    <form onSubmit={handleSubmit} noValidate className="signup-form">
-      <div className="signup-title">SIGN UP</div>
-      <label>
-        Name
-        <div>
+    <React.Fragment>
+      <div style={{position:"absolute", top: "37px", left:"45px"}}><img src={logoWhite} width="180px" onClick={()=>history.push('/')}/></div>
+      <form onSubmit={handleSubmit} noValidate className="signup-form">
+        <div className="signup-title">SIGN UP</div>
+        <label>
+          Name
+          <div>
+            <input
+              type="first_name"
+              name="first_name"
+              placeholder="First name"
+              value={values.first_name}
+              onChange={handleChange}
+            />
+            <input
+              type="last_name"
+              name="last_name"
+              placeholder="Last name"
+              value={values.last_name}
+              onChange={handleChange}
+            />
+          </div>
+        </label>
+        <label>
+          Username
           <input
-            type="first_name"
-            name="first_name"
-            placeholder="First name"
-            value={values.first_name}
+            type="username"
+            name="username"
+            placeholder="Username"
+            value={values.username}
             onChange={handleChange}
           />
+        </label>
+        <label>
+          Password
           <input
-            type="last_name"
-            name="last_name"
-            placeholder="Last name"
-            value={values.last_name}
+            type="password"
+            name="password1"
+            placeholder="Password"
+            value={values.password1}
             onChange={handleChange}
           />
-        </div>
-      </label>
-      <label>
-        Username
-        <input
-          type="username"
-          name="username"
-          placeholder="Username"
-          value={values.username}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Password
-        <input
-          type="password"
-          name="password1"
-          placeholder="Password"
-          value={values.password1}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Confirm Password
-        <input
-          type="password"
-          name="password2"
-          placeholder="Confirm Password"
-          value={values.password2}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Email
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={values.email}
-          onChange={handleChange}
-        />
-      </label>
-      <label>
-        Phone Number
-        <input
-          type="phone"
-          name="phone"
-          placeholder="Phone Number"
-          value={values.phone}
-          onChange={handleChange}
-        />
-      </label>
-      <button type="submit" disabled={submitting} className={"signup-btn"}>NEXT</button>
-      {/* <button type="submit" disabled={submitting} onClick={()=> dispatch(login())} className={"login-link"}>Login</button> */}
-    </form>
+        </label>
+        <label>
+          Confirm Password
+          <input
+            type="password"
+            name="password2"
+            placeholder="Confirm Password"
+            value={values.password2}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Email
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={values.email}
+            onChange={handleChange}
+          />
+        </label>
+        <label>
+          Phone Number
+          <input
+            type="phone"
+            name="phone"
+            placeholder="Phone Number"
+            value={values.phone}
+            onChange={handleChange}
+          />
+        </label>
+        <button type="submit" disabled={submitting} className={"signup-btn"}>SIGN UP</button>
+        {/* <button type="submit" disabled={submitting} onClick={()=> dispatch(login())} className={"login-link"}>Login</button> */}
+      </form>
+    </React.Fragment>
   )
 }
 export default Signup;

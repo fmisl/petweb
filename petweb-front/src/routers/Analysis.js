@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from 'react-dom';
 import Slider from "react-slick";
 import '../App.css';
 import "slick-carousel/slick/slick.css"; 
@@ -16,22 +17,22 @@ import CustomSlide from './components/Slider/CustomSlide'
 class Analysis extends Component {
    constructor(props) {
     super(props);
-    this.slide = this.slide.bind(this);
+    this.handleWheel = this.handleWheel.bind(this);
     this.state = {
       showMenu: false,
     };
   }
-  slide(y){
-      y > 0 ? (
-         this.slider.slickNext()
-      ) : (
-         this.slider.slickPrev()
-      )
+  handleWheel(e) {
+    e.preventDefault();
+    // console.log(e.deltaY)
+    e.deltaY > 0 ? this.slider.slickNext() : this.slider.slickPrev();
   }
-  componentWillMount(){
-      window.addEventListener('wheel', (e) => {
-          this.slide(e.wheelDelta);
-      })
+  componentDidMount() {
+    ReactDOM.findDOMNode(this).addEventListener('wheel', this.handleWheel);
+  }
+
+  componentWillUnmount() {
+    ReactDOM.findDOMNode(this).removeEventListener('wheel', this.handleWheel);
   }
   render(){
     const { counter, isLogged, increment, decrement } = this.props;
@@ -47,9 +48,9 @@ class Analysis extends Component {
       infinite: false,
       vertical: true,
       verticalSwiping: true,
-      speed: 500,
+      speed: 300,
       slidesToShow: 1,
-      // centerPadding: "50px",
+      centerPadding: "50px",
       slidesToScroll: 1
     };
   
@@ -101,7 +102,7 @@ class Analysis extends Component {
                 <div className="content-var" >Male</div>
               </div>
             </div>
-          
+
             <div style={{display:"flex", color:"white"}}>
               <div className="view-btn" onClick={(e)=>{e.stopPropagation();this.setState({showMenu:!this.state.showMenu})}}>
                 <IconBurger className={`view-icon ${this.state.showMenu && 'show'}`}/>
