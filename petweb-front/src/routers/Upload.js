@@ -10,6 +10,7 @@ import IconView from '../images/IconView';
 import IconAnalysis from '../images/IconAnalysis';
 import IconDelete from '../images/IconDelete';
 import IconWorklist from '../images/IconWorklist';
+import UploadTable from './components/Tables/UploadTable'
 
 function Upload({history}) {
   const counter = useSelector(state => state.counter);
@@ -29,8 +30,8 @@ function Upload({history}) {
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>
-            <div className="upload-btn"><IconView className="upload-icon"/>View</div>
-            <div className="upload-btn"><IconAnalysis className="upload-icon"/>Analysis</div>
+            <div className="upload-btn" onClick={()=>history.push('/view')}><IconView className="upload-icon"/>View</div>
+            <div className="upload-btn" onClick={()=>history.push('/analysis/suvr')}><IconAnalysis className="upload-icon"/>Analysis</div>
             <div className="upload-btn" onClick={toggle}><IconWorklist className="upload-icon"/>Worklist</div>
             <div className="upload-btn"><IconDelete className="upload-icon"/>Delete</div>
             <div className="upload-btn" style={{width:"199px", marginLeft:"40px"}}>Connect to PACS</div>
@@ -40,7 +41,7 @@ function Upload({history}) {
           </div>
         </div>
         <div className="upload-table">
-          Upload table
+          <UploadTable/>
         </div>
 
         <div className="redux-info">

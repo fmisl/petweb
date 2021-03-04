@@ -5,6 +5,9 @@ import Headerbar from './components/Headerbar'
 import {useHistory} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement} from '../reduxs/actions';
+import WeeklyGraph from './components/Charts/WeeklyGraph'
+import WeeklyPie from './components/Charts/WeeklyPie'
+// import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
 function Dashboard() {
   const counter = useSelector(state => state.counter);
@@ -65,10 +68,20 @@ function Dashboard() {
         </div>
         <div className="dashboard-box">
           <div className="dashboard-box1">
-            Weekly Analysis
+            <span>Weekly Analysis</span>
+            <span>2021.03.05 - 2021.03.09</span>
+            <br/>
+            <br/>
+            <WeeklyGraph />
           </div>
           <div className="dashboard-box2">
-            Weekly Analysis
+            <span>Amyloid Tracers</span>
+            <span>2021.03.05 - 2021.03.09</span>
+            <span>53</span>
+            <span>Total</span>
+            <br/>
+            <br/>
+            <WeeklyPie />
           </div>
         </div>
 
