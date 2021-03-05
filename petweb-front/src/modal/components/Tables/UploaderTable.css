@@ -1,0 +1,332 @@
+.filterable-table-container.UploaderTable {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  width: 100%;
+  height: 100%;
+
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 22px;
+  /* identical to box height */
+
+  text-align: center;
+  color: #FFFFFF;
+
+  /* border: yellow solid;
+  box-sizing: border-box; */
+}
+
+.filterable-table-container.UploaderTable>div:first-child {
+  display: none;
+}
+
+.filterable-table-container.UploaderTable>.table-container {
+  width: 100%;
+  height: 650px;
+  /* width: 80%;
+  height: 80%; */
+  /* border: white solid; */
+  /* background: red; */
+  position: relative;
+  background: rgb(56, 60, 65);
+  /* background: rgba(41, 45, 48, 1); */
+  /* border: red solid; */
+  /* box-sizing: border-box; */
+  overflow: auto;
+}
+
+.filterable-table-container.UploaderTable>.table-container>div {
+  /* width: 100%;
+  height: 550px; */
+  /* border: red solid; */
+}
+
+.filterable-table-container.UploaderTable>.table-container>nav {
+  /* border: white; */
+  /* display: none; */
+  /* position: absolute; */
+  /* top:0; */
+  /* bottom: 0;
+  width: 100%;
+  background: #383C41; */
+  width: 95%;
+}
+
+.UploaderTable.filterable-table {
+  /* border: red solid; */
+  width: 100%;
+}
+
+.UploaderTable.filterable-table {
+  /* background:rgba(255, 255, 255, 0.5); */
+  border-collapse: collapse;
+  /* border: 0; */
+  /* height:500px; */
+  /* background: rgba(56, 60, 65, 1); */
+  background: rgb(56, 60, 65);
+  cursor: pointer;
+  /* background:rgba(56, 60, 65,0.1); */
+  /* border: red solid;
+  box-sizing: border-box; */
+}
+
+.UploaderTable.filterable-table>thead>tr {
+  /* background: #383C41; */
+  height: 50px;
+}
+
+.UploaderTable.filterable-table>thead>tr>th {
+  /* background: yellow; */
+  width: 100px;
+  height: 50px;
+  /* border: red solid; */
+  /* opacity: 1; */
+}
+
+.UploaderTable.filterable-table>thead>tr>th:nth-child(1) {
+  width: 60px;
+  /* border: red solid; */
+}
+
+.UploaderTable.filterable-table>thead>tr>th:nth-child(2) {
+  width: 150px;
+  /* border: red solid; */
+}
+
+.UploaderTable.filterable-table>thead>tr>th:nth-child(3) {
+  width: 150px;
+}
+
+.UploaderTable.filterable-table>thead>tr>th:nth-child(4) {
+  width: 40px;
+}
+
+.UploaderTable.filterable-table>thead>tr>th:nth-child(5) {
+  width: 40px;
+  /* border: red solid; */
+}
+
+.UploaderTable.filterable-table>thead>tr>th:nth-child(6) {
+  width: 20px;
+  /* border: red solid; */
+}
+
+/* .UploaderTable.filterable-table>thead>tr>th:nth-child(7) {
+  width: 180px;
+} */
+
+.UploaderTable.filterable-table>tbody {
+  /* background:rgba(0,0,0,0.3); */
+  background: rgb(56, 60, 65);
+  /* border: yellow solid;
+  box-sizing: border-box; */
+}
+
+.UploaderTable.filterable-table>tbody>tr {
+  /* background:rgba(0,0,0,0.3); */
+  /* height: 67px; */
+  /* width: 100px; */
+  /* background:#292D30; */
+  /* border: red solid; */
+}
+
+.filterable-table>tbody>tr:hover {
+  /* background:rgba(0,0,0,0.3); */
+  color: #118AF7;
+}
+
+.filterable-table>tbody>tr:active {
+  background: #292D30;
+}
+
+.UploaderTable.filterable-table>tbody>tr>td:nth-child(1) {
+  /* width: 80px; */
+  display: flex;
+  justify-content: center;
+  /* border: red solid; */
+  /* align-items: center; */
+}
+
+.UploaderTable.filterable-table>tbody>tr>td:nth-child(1)>span {
+  width: 100%;
+  /* padding-left: 10px; */
+  /* background: white; */
+}
+
+.UploaderTable.filterable-table>tbody>tr>td {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: normal;
+  font-weight: 100;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
+  height: 56px;
+  /* border: red solid; */
+}
+
+.pagination {
+  /* width: 100%; */
+  /* overflow: hidden; */
+  padding: 0;
+  /* margin: 10px; */
+  /* background:white; */
+  /* display:none; */
+  list-style-type: none;
+  white-space: nowrap;
+}
+
+.pagination>li {
+  display: inline-block;
+  /* height: 40px;
+  width: 60px; */
+  /* border: white solid; */
+}
+
+.pagination>li>a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  /* border: red solid; */
+  height: 40px;
+  width: 60px;
+}
+
+.pagination>li>a:hover {
+  border: 1px #118AF7 solid;
+  box-sizing: border-box;
+}
+
+.btn-numbered-page.active {
+  /* background: black; */
+  color: #118AF7;
+}
+
+.btn-last-page {
+  display: none;
+  visibility: hidden;
+}
+
+.btn-first-page {
+  display: none;
+  visibility: hidden;
+}
+
+.UploaderTable-Default {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.UploaderTable-Default.sel {
+  background: #292D30;
+}
+
+.UploaderTable-Default.focus {
+  color: #118AF7;
+  /* border: 1.5px #118AF7 solid;
+  box-sizing: border-box; */
+}
+
+.UploaderTable-Default.sel.focus {
+  color: #118AF7;
+  /* border: 1.5px #118AF7 solid;
+  box-sizing: border-box; */
+}
+
+.UploaderTable-Select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid #91919C;
+  box-sizing: border-box;
+}
+
+.UploaderTable-Select.act {
+  width: 20px;
+  height: 20px;
+  border: 1.5px #118AF7 solid;
+  box-sizing: border-box;
+}
+
+.UploaderTable-Select.act>div {
+  width: 12px;
+  height: 12px;
+  background: #118AF7;
+  box-sizing: border-box;
+}
+
+.UploaderTable-Tracer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100%;
+  /* border: red solid;
+  background: #118AF7;
+  box-sizing: border-box; */
+}
+
+.UploaderTable-Tracer>div {
+  text-align: left;
+  border-left: white solid;
+  /* margin-left: 0px; */
+  width: 70%;
+  /* border: white solid; */
+}
+
+.UploaderTable-Tracer.C-PIB>div {
+  border-left: #118AF7 solid;
+  /* border: red solid; */
+}
+
+.UploaderTable-Tracer.FBP>div {
+  border-left: #1AFFD6 solid;
+}
+
+.UploaderTable-Tracer.FBB>div {
+  border-left: #FF6D4C solid;
+}
+
+.UploaderTable-SUVR {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: red solid; */
+}
+
+.UploaderTable-SUVR>span {
+  display: inline-block;
+  text-align: right;
+  color: white;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 24px;
+
+  color: #FFFFFF;
+  width: 60px;
+  margin-right: 30px;
+  /* border: red solid; */
+}
+
+.UploaderIcon-Delete {
+  stroke: white;
+  width: 40px;
+  height: 40px;
+  /* border: red solid; */
+}
+
+.UploaderIcon-Delete:hover {
+  stroke: #118AF7;
+}

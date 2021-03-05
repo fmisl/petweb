@@ -3,7 +3,8 @@ import '../App.css';
 import Sidebar from './components/Sidebar'
 import Headerbar from './components/Headerbar'
 import Worklist from "../modal/Worklist";
-import useWorklist from '../modal/useWorklist';
+// import useWorklist from '../modal/useWorklist';
+import Uploader from "../modal/Uploader";
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement} from '../reduxs/actions';
 import IconView from '../images/IconView';
@@ -14,11 +15,15 @@ import UploadTable from './components/Tables/UploadTable'
 
 function Upload({history}) {
   const counter = useSelector(state => state.counter);
-  const [isShowing, setIsShowing] = useState(false);
+  const [isShowingWorklist, setIsShowingWorklist] = useState(false);
+  const [isShowingUploader, setIsShowingUploader] = useState(false);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
-  function toggle() {
-    setIsShowing(!isShowing);
+  function toggleWorklist() {
+    setIsShowingWorklist(!isShowingWorklist);
+  }
+  function toggleUploader() {
+    setIsShowingUploader(!isShowingUploader);
   }
   // console.log(history.location.pathname)
   console.log(window.location.pathname)
@@ -26,18 +31,19 @@ function Upload({history}) {
     <div className="content">
       <Sidebar />
       <Headerbar/>
-      <Worklist isShowing={isShowing} hide={toggle}/>
+      <Worklist isShowing={isShowingWorklist} hide={toggleWorklist}/>
+      <Uploader isShowing={isShowingUploader} hide={toggleUploader}/>
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>
             <div className="upload-btn" onClick={()=>history.push('/view')}><IconView className="upload-icon"/>View</div>
             <div className="upload-btn" onClick={()=>history.push('/analysis/suvr')}><IconAnalysis className="upload-icon"/>Analysis</div>
-            <div className="upload-btn" onClick={toggle}><IconWorklist className="upload-icon"/>Worklist</div>
+            <div className="upload-btn" onClick={toggleWorklist}><IconWorklist className="upload-icon"/>Worklist</div>
             <div className="upload-btn"><IconDelete className="upload-icon"/>Delete</div>
             <div className="upload-btn" style={{width:"199px", marginLeft:"40px"}}>Connect to PACS</div>
           </div>
           <div style={{display:"flex", color:"white"}}>
-            <div className="upload-btn upload" >Upload</div>
+            <div className="upload-btn upload" onClick={toggleUploader}>Upload</div>
           </div>
         </div>
         <div className="upload-table">

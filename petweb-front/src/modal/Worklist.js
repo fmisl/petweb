@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import '../App.css';
 import IconDelete from '../images/IconDelete';
+import WorklistTable from './components/Tables/WorklistTable'
 
 function Worklist({ isShowing, hide }) {
   // const [isShown, setIsShown] = useState(false);
@@ -16,7 +17,7 @@ function Worklist({ isShowing, hide }) {
               WORKLIST <span onClick={hide} ><IconDelete className="worklist-delete" /></span>
             </div>
             <div className="modal-body">
-              worklist table
+              <WorklistTable/>
             </div>
             <div style={{display:"flex", marginTop:"21px", justifyContent:"flex-end"}}>
               <div className="upload-btn">Export Nifti</div>
