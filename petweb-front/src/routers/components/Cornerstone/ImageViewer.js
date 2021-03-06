@@ -26,15 +26,41 @@ cornerstoneTools.external.Hammer = Hammer;
 // cornerstoneTools.init();
 // const LengthTool = cornerstoneTools.LengthTool;
 
-const divStyle = {
+const divStyleC = {
   // width: "512px",
   // height: "512px",
-  // width:"100%",
-  height:"100%",
-  position: "relative",
+  top:"0",
+  left:"0",
+  width:"50%",
+  height:"50%",
+  position: "absolute",
   color: "white",
   // border:"1px red solid",
   // boxSizing:"border-box",
+};
+const divStyleS = {
+  // width: "512px",
+  // height: "512px",
+  top:"0",
+  left:"50%",
+  width:"50%",
+  height:"50%",
+  position: "absolute",
+  color: "white",
+  // border:"1px red solid",
+  // boxSizing:"border-box",
+};
+const divStyleA = {
+  // width: "512px",
+  // height: "512px",
+  top:"50%",
+  left:"0",
+  width:"50%",
+  height:"50%",
+  position: "absolute",
+  color: "white",
+  border:"1px red solid",
+  boxSizing:"border-box",
 };
 
 const bottomLeftStyle = {
@@ -55,9 +81,15 @@ export default class ImageViewer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      stack: props.stack,
-      viewport: cornerstone.getDefaultViewport(null, undefined),
-      imageId: props.stack.imageIds[0]
+      stackC: props.stackC,
+      stackS: props.stackS,
+      stackA: props.stackA,
+      viewportC: cornerstone.getDefaultViewport(null, undefined),
+      viewportS: cornerstone.getDefaultViewport(null, undefined),
+      viewportA: cornerstone.getDefaultViewport(null, undefined),
+      imageIdC: props.stackC.imageIds[20],
+      imageIdS: props.stackS.imageIds[20],
+      imageIdA: props.stackA.imageIds[20],
     };
 
     this.onImageRendered = this.onImageRendered.bind(this);
@@ -67,19 +99,47 @@ export default class ImageViewer extends Component {
 
   render() {
     return (
-      <div style={{width:"100%", height:"100%"}}>
+      <div style={{position:"relative",width:"100%", height:"100%", border:"red solid", boxSizing:"border-box"}}>
         <div
           className="viewportElement"
-          style={divStyle}
+          style={divStyleC}
           ref={input => {
-            this.element = input;
+            this.elementC = input;
           }}
         >
           <canvas className="cornerstone-canvas" />
-          <div style={bottomLeftStyle}>Zoom: {this.state.viewport.scale}</div>
+          <div style={bottomLeftStyle}>Zoom: {this.state.viewportC.scale}</div>
           <div style={bottomRightStyle}>
-            WW/WC: {this.state.viewport.voi.windowWidth} /{" "}
-            {this.state.viewport.voi.windowCenter}
+            WW/WC: {this.state.viewportC.voi.windowWidth} /{" "}
+            {this.state.viewportC.voi.windowCenter}
+          </div>
+        </div>
+        <div
+          className="viewportElement"
+          style={divStyleS}
+          ref={input => {
+            this.elementS = input;
+          }}
+        >
+          <canvas className="cornerstone-canvas" />
+          <div style={bottomLeftStyle}>Zoom: {this.state.viewportS.scale}</div>
+          <div style={bottomRightStyle}>
+            WW/WC: {this.state.viewportS.voi.windowWidth} /{" "}
+            {this.state.viewportS.voi.windowCenter}
+          </div>
+        </div>
+        <div
+          className="viewportElement"
+          style={divStyleA}
+          ref={input => {
+            this.elementA = input;
+          }}
+        >
+          <canvas className="cornerstone-canvas" />
+          <div style={bottomLeftStyle}>Zoom: {this.state.viewportA.scale}</div>
+          <div style={bottomRightStyle}>
+            WW/WC: {this.state.viewportA.voi.windowWidth} /{" "}
+            {this.state.viewportA.voi.windowCenter}
           </div>
         </div>
       </div>
@@ -88,88 +148,134 @@ export default class ImageViewer extends Component {
 
   onWindowResize() {
     console.log("onWindowResize");
-    cornerstone.resize(this.element);
+    cornerstone.resize(this.elementC);
+    cornerstone.resize(this.elementS);
+    cornerstone.resize(this.elementA);
   }
 
   onImageRendered() {
-    const viewport = cornerstone.getViewport(this.element);
-    console.log(viewport);
+    const viewportC = cornerstone.getViewport(this.elementC);
+    const viewportS = cornerstone.getViewport(this.elementS);
+    const viewportA = cornerstone.getViewport(this.elementA);
+    console.log(viewportC, viewportS, viewportA);
 
     this.setState({
-      viewport
+      ...this.state,
+      viewportC,
+      viewportS,
+      viewportA,
     });
 
-    console.log(this.state.viewport);
+    console.log(this.state.viewportC,this.state.viewportS,this.state.viewportA);
   }
 
   onNewImage() {
-    const enabledElement = cornerstone.getEnabledElement(this.element);
+    const enabledElementC = cornerstone.getEnabledElement(this.elementC);
+    const enabledElementS = cornerstone.getEnabledElement(this.elementS);
+    const enabledElementA = cornerstone.getEnabledElement(this.elementA);
 
-    this.setState({
-      imageId: enabledElement.image.imageId
-    });
+    if (enabledElementC.image!==undefined && enabledElementS.image!==undefined && enabledElementA.image!==undefined ){
+      this.setState({
+        ...this.state,
+        imageIdC: enabledElementC.image.imageId,
+        imageIdS: enabledElementS.image.imageId,
+        imageIdA: enabledElementA.image.imageId,
+      });
+    }
   }
 
   componentDidMount() {
-    const element = this.element;
+    const elementC = this.elementC;
+    const elementS = this.elementS;
+    const elementA = this.elementA;
 
     // Enable the DOM Element for use with Cornerstone
-    cornerstone.enable(element);
-    console.dir(this.state.imageId);
+    cornerstone.enable(elementC);
+    cornerstone.enable(elementS);
+    cornerstone.enable(elementA);
+    cornerstoneTools.mouseInput.enable(elementC);
+    cornerstoneTools.mouseInput.enable(elementS);
+    cornerstoneTools.mouseInput.enable(elementA);
+    cornerstoneTools.mouseWheelInput.enable(elementC);
+    cornerstoneTools.mouseWheelInput.enable(elementS);
+    cornerstoneTools.mouseWheelInput.enable(elementA);
     // Load the first image in the stack
-    cornerstone.loadImage(this.state.imageId).then(image => {
+    cornerstone.loadImage(this.state.imageIdC).then(image => {
       // Display the first image
-      cornerstone.displayImage(element, image);
+      cornerstone.displayImage(elementC, image);
 
-      // Add the stack tool state to the enabled element
-      const stack = this.state.stack;
-      cornerstoneTools.addStackStateManager(element, ["stack"]);
-      cornerstoneTools.addToolState(element, "stack", stack);
+      const stack = this.state.stackC;
+      cornerstoneTools.addStackStateManager(elementC, ["stack"]);
+      cornerstoneTools.addToolState(elementC, "stack", stack);
+      cornerstoneTools.stackScroll.activate(elementC, 1);
+      cornerstoneTools.stackScrollWheel.activate(elementC);
 
-      console.dir(cornerstoneTools);
-      // Adds tool to ALL currently Enabled elements
-      // cornerstoneTools.addTool(LengthTool);
+      elementC.addEventListener("cornerstoneimagerendered",this.onImageRendered);
+      elementC.addEventListener("cornerstonenewimage", this.onNewImage);
+      window.addEventListener("resize", this.onWindowResize);
+    });
+    cornerstone.loadImage(this.state.imageIdS).then(image => {
+      // Display the first image
+      cornerstone.displayImage(elementS, image);
 
-      cornerstoneTools.mouseInput.enable(element);
-      cornerstoneTools.mouseWheelInput.enable(element);
-      cornerstoneTools.wwwc.activate(element, 1); // ww/wc is the default tool for left mouse button
-      cornerstoneTools.pan.activate(element, 2); // pan is the default tool for middle mouse button
-      // cornerstoneTools.zoom.activate(element, 4); // zoom is the default tool for right mouse button
-      // cornerstoneTools.zoomWheel.activate(element); // zoom is the default tool for middle mouse wheel
+      const stack = this.state.stackS;
+      cornerstoneTools.addStackStateManager(elementS, ["stack"]);
+      cornerstoneTools.addToolState(elementS, "stack", stack);
+      cornerstoneTools.stackScroll.activate(elementS, 1);
+      cornerstoneTools.stackScrollWheel.activate(elementS);
+      
+      elementS.addEventListener("cornerstoneimagerendered",this.onImageRendered);
+      elementS.addEventListener("cornerstonenewimage", this.onNewImage);
+      window.addEventListener("resize", this.onWindowResize);
+    });
+    cornerstone.loadImage(this.state.imageIdA).then(image => {
+      // Display the first image
+      cornerstone.displayImage(elementA, image);
 
-      // cornerstoneTools.touchInput.enable(element);
-      // cornerstoneTools.panTouchDrag.activate(element);
-      // cornerstoneTools.zoomTouchPinch.activate(element);
-
-      element.addEventListener(
-        "cornerstoneimagerendered",
-        this.onImageRendered
-      );
-      element.addEventListener("cornerstonenewimage", this.onNewImage);
+      const stack = this.state.stackA;
+      cornerstoneTools.addStackStateManager(elementA, ["stack"]);
+      cornerstoneTools.addToolState(elementA, "stack", stack);
+      cornerstoneTools.stackScroll.activate(elementA, 1);
+      cornerstoneTools.stackScrollWheel.activate(elementA);
+      
+      elementA.addEventListener("cornerstoneimagerendered",this.onImageRendered);
+      elementA.addEventListener("cornerstonenewimage", this.onNewImage);
       window.addEventListener("resize", this.onWindowResize);
     });
   }
 
   componentWillUnmount() {
-    const element = this.element;
-    element.removeEventListener(
-      "cornerstoneimagerendered",
-      this.onImageRendered
-    );
-
-    element.removeEventListener("cornerstonenewimage", this.onNewImage);
-
+    const elementC = this.elementC;
+    const elementS = this.elementS;
+    const elementA = this.elementA;
+    elementC.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
+    elementS.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
+    elementA.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
+    elementC.removeEventListener("cornerstonenewimage", this.onNewImage);
+    elementS.removeEventListener("cornerstonenewimage", this.onNewImage);
+    elementA.removeEventListener("cornerstonenewimage", this.onNewImage);
     window.removeEventListener("resize", this.onWindowResize);
-
-    cornerstone.disable(element);
+    cornerstone.disable(elementC);
+    cornerstone.disable(elementS);
+    cornerstone.disable(elementA);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const stackData = cornerstoneTools.getToolState(this.element, "stack");
-    const stack = stackData.data[0];
-    stack.currentImageIdIndex = this.state.stack.currentImageIdIndex;
-    stack.imageIds = this.state.stack.imageIds;
-    cornerstoneTools.addToolState(this.element, "stack", stack);
+    const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
+    const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
+    const stackDataA = cornerstoneTools.getToolState(this.elementA, "stack");
+    const stackC = stackDataC.data[0];
+    const stackS = stackDataS.data[0];
+    const stackA = stackDataA.data[0];
+    stackC.currentImageIdIndex = this.state.stackC.currentImageIdIndex;
+    stackS.currentImageIdIndex = this.state.stackS.currentImageIdIndex;
+    stackA.currentImageIdIndex = this.state.stackA.currentImageIdIndex;
+    stackC.imageIds = this.state.stackC.imageIds;
+    stackS.imageIds = this.state.stackS.imageIds;
+    stackA.imageIds = this.state.stackA.imageIds;
+    cornerstoneTools.addToolState(this.elementC, "stack", stackC);
+    cornerstoneTools.addToolState(this.elementS, "stack", stackS);
+    cornerstoneTools.addToolState(this.elementA, "stack", stackA);
 
     //const imageId = stack.imageIds[stack.currentImageIdIndex];
     //cornerstoneTools.scrollToIndex(this.element, stack.currentImageIdIndex);

@@ -13,20 +13,22 @@ import IconSNOff from '../images/IconSNOff';
 import IconBurger from '../images/IconBurger';
 import ImageViewer from './components/Cornerstone/ImageViewer';
 
-const imageIdC = "http://localhost:8000/result/download/case190/input1_coronal_190_30.png";
-const imageIdS = "http://localhost:8000/result/download/case190/input1_sagittal_190_30.png";
-const imageIdA = "http://localhost:8000/result/download/case190/input1_axial_190_30.png";
-
+// const imageIdC = ["http://localhost:8000/result/download/case190/input1_coronal_190_30.png"];
+// const imageIdS = ["http://localhost:8000/result/download/case190/input1_sagittal_190_30.png"];
+// const imageIdA = ["http://localhost:8000/result/download/case190/input1_axial_190_30.png"];
+const imageIdC = [...Array(40).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_coronal_190_"+i+".png"));
+const imageIdS = [...Array(40).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_sagittal_190_"+i+".png"));
+const imageIdA = [...Array(40).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_axial_190_"+i+".png"));
 const stackCoronal = {
-  imageIds: [imageIdC],
+  imageIds: imageIdC,
   currentImageIdIndex: 0
 };
 const stackSaggital = {
-  imageIds: [imageIdS],
+  imageIds: imageIdS,
   currentImageIdIndex: 0
 };
 const stackAxial = {
-  imageIds: [imageIdA],
+  imageIds: imageIdA,
   currentImageIdIndex: 0
 };
 
@@ -99,19 +101,8 @@ function View({history}) {
           </div>
         </div>
 
-        <div style={{position: "relative", marginTop: "20px", width:"1550px", height:"850px"}}>
-          <div style={{background:"black",display:"flex",justifyContent:"center",alignItems:"center",position: "absolute", top:"0", left:"0",width:"50%",height:"50%", border:"1px white solid", boxSizing:"border-box"}}>
-            <ImageViewer stack={{ ...stackCoronal }} />
-          </div>
-          <div style={{background:"black",display:"flex",justifyContent:"center",alignItems:"center",position: "absolute", top:"0", left:"50%",width:"50%",height:"50%", border:"1px white solid", boxSizing:"border-box"}}>
-            <ImageViewer stack={{ ...stackSaggital }} />
-          </div>
-          <div style={{background:"black",display:"flex",justifyContent:"center",alignItems:"center",position: "absolute", top:"50%", left:"0",width:"50%",height:"50%", border:"1px white solid", boxSizing:"border-box"}}>
-            <ImageViewer stack={{ ...stackAxial }} />
-          </div>
-          <div style={{background:"black",display:"flex",justifyContent:"center",alignItems:"center",position: "absolute", top:"50%", left:"50%",width:"50%",height:"50%", border:"1px white solid", boxSizing:"border-box"}}>
-            Image Information
-          </div>
+        <div style={{background:"black",position: "relative", top:"0", left:"0",width:"100%",height:"100%", border:"1px white solid", boxSizing:"border-box",marginTop: "20px", width:"1550px", height:"850px"}}>
+          <ImageViewer stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
         </div>
 
 

@@ -3781,17 +3781,17 @@ cornerstone-math@^0.1.6:
   resolved "https://registry.yarnpkg.com/cornerstone-math/-/cornerstone-math-0.1.9.tgz#7ce5509e8b9f465b01f7c548470725e7569859fc"
   integrity sha512-NxdooV73asEQgav1S+0e+a4K+W3CXJdLXyFkVN24qqCtmIpzZzwtw3F9KWPCekzSAJmbhtQ3HicOQj3d4vRtuw==
 
-cornerstone-tools@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/cornerstone-tools/-/cornerstone-tools-2.6.0.tgz#381d74648d43390b78b6f7247940756d647ab01d"
-  integrity sha512-6B6MMiQgyPkNjKYHM5aRVmEIruUDm628b9j9tqRlI5P8dS8/kltY3UjUR50RW/PEY5W0IDD09pYNMTqP2oANtw==
+cornerstone-tools@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/cornerstone-tools/-/cornerstone-tools-2.1.0.tgz#c8df0ae0568c4c00de7ab51a3041f6213f0d02a8"
+  integrity sha512-N4hYwN8b/baFVZrE2T+BRY8rj52p/nRug7MUUJPH92Pe1amJcm7uQJtdpySPhA6ATHQ58+8d5oRmzCkGRryMbQ==
   dependencies:
     cornerstone-math "^0.1.6"
 
-cornerstone-web-image-loader@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/cornerstone-web-image-loader/-/cornerstone-web-image-loader-2.0.0.tgz#0c895baa71807a520201b927958e05cdec6d0b88"
-  integrity sha1-DIlbqnGAelICAbknlY4FzextC4g=
+cornerstone-web-image-loader@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/cornerstone-web-image-loader/-/cornerstone-web-image-loader-2.1.1.tgz#531262668d3b44fb461161c67d58ebcaefbae73d"
+  integrity sha512-EYT7nLyXMFDeCCQhDkf6czFUm58EgqiTX+tOOLt79gPvbNRdEvPgQoXJgXOd5/3Xuc5QNqzTyOzYtf1v/KH0aA==
 
 cosmiconfig@^5.0.0:
   version "5.2.1"

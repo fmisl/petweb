@@ -35,7 +35,7 @@
   /* background: rgba(41, 45, 48, 1); */
   /* border: red solid; */
   /* box-sizing: border-box; */
-  overflow: auto;
+  overflow-y: scroll;
 }
 
 .filterable-table-container.UploaderTable>.table-container>div {
