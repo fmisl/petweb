@@ -26,3 +26,6 @@ __pycache__/
 nohup.out
 ## pycharm
 .idea
+
+# data
+uploads

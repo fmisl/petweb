@@ -11,6 +11,24 @@ import IconInvertOff from '../images/IconInvertOff';
 import IconSN from '../images/IconSN';
 import IconSNOff from '../images/IconSNOff';
 import IconBurger from '../images/IconBurger';
+import ImageViewer from './components/Cornerstone/ImageViewer';
+
+const imageIdC = "http://localhost:8000/result/download/case190/input1_coronal_190_30.png";
+const imageIdS = "http://localhost:8000/result/download/case190/input1_sagittal_190_30.png";
+const imageIdA = "http://localhost:8000/result/download/case190/input1_axial_190_30.png";
+
+const stackCoronal = {
+  imageIds: [imageIdC],
+  currentImageIdIndex: 0
+};
+const stackSaggital = {
+  imageIds: [imageIdS],
+  currentImageIdIndex: 0
+};
+const stackAxial = {
+  imageIds: [imageIdA],
+  currentImageIdIndex: 0
+};
 
 function View({history}) {
   const counter = useSelector(state => state.counter);
@@ -22,6 +40,8 @@ function View({history}) {
   const dispatch = useDispatch();
   // console.log(history.location.pathname)
   console.log(window.location.pathname)
+
+
   return (
     <div className="content" onClick={()=>setShowMenu(false)}>
       <Sidebar />
@@ -78,6 +98,22 @@ function View({history}) {
             </div>
           </div>
         </div>
+
+        <div style={{position: "relative", marginTop: "20px", width:"1550px", height:"850px"}}>
+          <div style={{background:"black",display:"flex",justifyContent:"center",alignItems:"center",position: "absolute", top:"0", left:"0",width:"50%",height:"50%", border:"1px white solid", boxSizing:"border-box"}}>
+            <ImageViewer stack={{ ...stackCoronal }} />
+          </div>
+          <div style={{background:"black",display:"flex",justifyContent:"center",alignItems:"center",position: "absolute", top:"0", left:"50%",width:"50%",height:"50%", border:"1px white solid", boxSizing:"border-box"}}>
+            <ImageViewer stack={{ ...stackSaggital }} />
+          </div>
+          <div style={{background:"black",display:"flex",justifyContent:"center",alignItems:"center",position: "absolute", top:"50%", left:"0",width:"50%",height:"50%", border:"1px white solid", boxSizing:"border-box"}}>
+            <ImageViewer stack={{ ...stackAxial }} />
+          </div>
+          <div style={{background:"black",display:"flex",justifyContent:"center",alignItems:"center",position: "absolute", top:"50%", left:"50%",width:"50%",height:"50%", border:"1px white solid", boxSizing:"border-box"}}>
+            Image Information
+          </div>
+        </div>
+
 
         <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>
