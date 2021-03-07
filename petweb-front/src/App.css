@@ -700,6 +700,12 @@ input:-webkit-autofill:active {
   text-align: center;
 }
 
+.view-box {
+  width: 1550px;
+  height: 850px;
+  margin-top: 20px;
+}
+
 .analysis-box {
   /* display: block; */
   /* padding-top:100px; */

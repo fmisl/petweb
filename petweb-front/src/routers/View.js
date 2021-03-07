@@ -16,20 +16,20 @@ import ImageViewer from './components/Cornerstone/ImageViewer';
 // const imageIdC = ["http://localhost:8000/result/download/case190/input1_coronal_190_30.png"];
 // const imageIdS = ["http://localhost:8000/result/download/case190/input1_sagittal_190_30.png"];
 // const imageIdA = ["http://localhost:8000/result/download/case190/input1_axial_190_30.png"];
-const imageIdC = [...Array(40).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_coronal_190_"+i+".png"));
-const imageIdS = [...Array(40).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_sagittal_190_"+i+".png"));
-const imageIdA = [...Array(40).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_axial_190_"+i+".png"));
+const imageIdC = [...Array(108).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_coronal_190_"+i+".png"));
+const imageIdS = [...Array(90).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_sagittal_190_"+i+".png"));
+const imageIdA = [...Array(90).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_axial_190_"+i+".png"));
 const stackCoronal = {
   imageIds: imageIdC,
-  currentImageIdIndex: 0
+  currentImageIdIndex: 20
 };
 const stackSaggital = {
   imageIds: imageIdS,
-  currentImageIdIndex: 0
+  currentImageIdIndex: 20
 };
 const stackAxial = {
   imageIds: imageIdA,
-  currentImageIdIndex: 0
+  currentImageIdIndex: 20
 };
 
 function View({history}) {
@@ -49,6 +49,12 @@ function View({history}) {
       <Sidebar />
       <Headerbar/>
       <div className="content-page">
+        {/* <div className="view-box"> */}
+          <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", border:"1px white solid", boxSizing:"border-box",width:"1550px", height:"850px"}}>
+            <ImageViewer isCrosshaired={isCrosshaired} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
+          </div>
+        {/* </div> */}
+
         <div  className="content-title">
           <div className="content-info" >
             <div style={{marginRight:"25px"}}>
@@ -100,11 +106,6 @@ function View({history}) {
             </div>
           </div>
         </div>
-
-        <div style={{background:"black",position: "relative", top:"0", left:"0",width:"100%",height:"100%", border:"1px white solid", boxSizing:"border-box",marginTop: "20px", width:"1550px", height:"850px"}}>
-          <ImageViewer stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
-        </div>
-
 
         <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>
