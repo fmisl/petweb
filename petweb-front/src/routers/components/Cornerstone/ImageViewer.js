@@ -32,8 +32,8 @@ const divStyleC = {
   // height: "512px",
   top:"0",
   left:"0",
-  width:"50%",
-  height:"50%",
+  width:"775px",
+  height:"425px",
   position: "absolute",
   color: "white",
   // border:"1px red solid",
@@ -44,8 +44,8 @@ const divStyleS = {
   // height: "512px",
   top:"0",
   left:"50%",
-  width:"50%",
-  height:"50%",
+  width:"775px",
+  height:"425px",
   position: "absolute",
   color: "white",
   // border:"1px red solid",
@@ -56,8 +56,8 @@ const divStyleA = {
   // height: "512px",
   top:"50%",
   left:"0",
-  width:"50%",
-  height:"50%",
+  width:"775px",
+  height:"425px",
   position: "absolute",
   color: "white",
   // border:"1px red solid",
@@ -91,42 +91,45 @@ export default class ImageViewer extends Component {
       imageIdC: props.stackC.imageIds,
       imageIdS: props.stackS.imageIds,
       imageIdA: props.stackA.imageIds,
-      selectIdC:0,
-      selectIdS:0,
-      selectIdA:0,
     };
 
     this.onImageRendered = this.onImageRendered.bind(this);
     this.onNewImage = this.onNewImage.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
+    this.wwwcsynchronizer = new cornerstoneTools.Synchronizer("cornerstoneimagerendered", cornerstoneTools.wwwcSynchronizer);
     this.synchronizer = new cornerstoneTools.Synchronizer("cornerstonenewimage", cornerstoneTools.updateImageSynchronizer);
   }
 
   render() {
-    // console.log(this.state.selectIdC, typeof(this.state.selectIdC));
-    console.log(this.state.stackC.currentImageIdIndex, typeof(this.state.stackC.currentImageIdIndex));
-    console.log(this.state.stackS.currentImageIdIndex, typeof(this.state.stackS.currentImageIdIndex));
-    console.log(this.state.stackA.currentImageIdIndex, typeof(this.state.stackA.currentImageIdIndex));
+    console.log(this.state);
+    // console.log("stackC: ", this.state.stackC, typeof(this.state.stackC.currentImageIdIndex));
+    // console.log("stackS: ", this.state.stackS, typeof(this.state.stackS.currentImageIdIndex));
+    // console.log("stackA: ", this.state.stackA, typeof(this.state.stackA.currentImageIdIndex));
     return (
-      <div style={{position:"relative",width:"100%", height:"100%", border:"blue solid", boxSizing:"border-box"}}>
-        <div style={{position:"absolute", top:"-30px",left:"0"}}>
-          <input type="range" id="slice-range" 
-            min="0" max="108" 
-            // value={this.state.selectIdC}
-            // onChange={(e)=>this.setState({selectIdC:Number(e.target.value)})}
-            value={this.state.stackC.currentImageIdIndex} 
-            // onChange={(e)=>{this.setState({stackC: {...this.state.stackC, currentImageIdIndex: Number(e.target.value)}})}}
-            // onClick={(e)=>{this.setState({stackC: {...this.state.stackC, currentImageIdIndex: Number(e.target.value)}})}}
-            // onChange={(e)=>{console.log("inputRange");this.onImageRenderedbyRange(Number(e.target.value))}}
-            step="1"
-          />
-        </div>
+      <div style={{position:"relative",width:"100%", height:"100%"}}>
         <div
           className="viewportElement"
           style={divStyleC}
           ref={input => {
             this.elementC = input;
           }}
+          onClick={(e)=>{
+              console.dir(e); 
+              console.log("x:",e.pageX," y:",e.pageY);
+              console.log("x - 300:",e.pageX - 300," y - 170 + 89:",-e.pageY + 170 - 89);
+              console.log("(x - 300)/775*90:",(e.pageX - 300)/775*90," y - 170 + 89:",-e.pageY + 170 - 89);
+              // cornerstoneTools.scrollToIndex(this.elementS, (e.pageX - 300)/775*90);
+            //   this.setState({
+            //     ...this.state,
+            //     // stackA:{...this.state.stackA,
+            //     //   currentImageIdIndex:Number(-e.pageY + 170 - 89),
+            //     // },
+            //     stackS:{...this.state.stackS,
+            //       currentImageIdIndex:Math.round((e.pageX - 300)/775*90),
+            //     }
+            //   })
+            }
+          }
         >
           {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.state.stackA.currentImageIdIndex/90*100}%`, width:"100%"}}></div>}
           {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackS.currentImageIdIndex/90*100}%`, height:"100%"}}></div>}
@@ -181,10 +184,12 @@ export default class ImageViewer extends Component {
   }
 
   onImageRendered() {
-    const viewportC = cornerstone.getViewport(this.elementC);
-    const viewportS = cornerstone.getViewport(this.elementS);
-    const viewportA = cornerstone.getViewport(this.elementA);
-    // console.log(viewportC, viewportS, viewportA);
+    let viewportC = cornerstone.getViewport(this.elementC);
+    let viewportS = cornerstone.getViewport(this.elementS);
+    let viewportA = cornerstone.getViewport(this.elementA);
+    // console.log(viewportC, viewportS, viewportA); 
+    // let viewport = cornerstone.getViewport(this.elementA);
+    // cornerstone.setViewport(this.elementA, viewport);
 
     this.setState({
       ...this.state,
@@ -193,7 +198,7 @@ export default class ImageViewer extends Component {
       viewportA,
     });
     console.log("onImageRendered()")
-    console.log(this.state.stackC)
+    // console.log(this.state.stackC)
     // console.log(this.state.viewportC,this.state.viewportS,this.state.viewportA);
   }
 
@@ -244,6 +249,8 @@ export default class ImageViewer extends Component {
       // cornerstoneTools.stackScroll.activate(elementC, 1);
       cornerstoneTools.stackScrollWheel.activate(elementC);
       cornerstoneTools.scrollIndicator.enable(elementC);
+      cornerstoneTools.wwwcRegion.activate(elementC, 4);
+      this.wwwcsynchronizer.add(elementC);
       // Set the div to focused, so keypress events are handled
       // elementC.tabIndex = 0;
       // elementC.focus();
@@ -269,6 +276,8 @@ export default class ImageViewer extends Component {
       // cornerstoneTools.stackScroll.activate(elementS, 1);
       cornerstoneTools.stackScrollWheel.activate(elementS);
       cornerstoneTools.scrollIndicator.enable(elementS);
+      cornerstoneTools.wwwcRegion.activate(elementS, 4);
+      this.wwwcsynchronizer.add(elementS);
       // this.state.synchronizer.add(elementS);
       // elementS.tabIndex = 1;
       // elementS.focus();
@@ -289,6 +298,8 @@ export default class ImageViewer extends Component {
       // cornerstoneTools.stackScroll.activate(elementA, 1);
       cornerstoneTools.stackScrollWheel.activate(elementA);
       cornerstoneTools.scrollIndicator.enable(elementA);
+      cornerstoneTools.wwwcRegion.activate(elementA, 4);
+      this.wwwcsynchronizer.add(elementA);
       // elementA.tabIndex = 2;
       // elementA.focus();
       // Enable all tools we want to use with this element
@@ -322,6 +333,14 @@ export default class ImageViewer extends Component {
   componentDidUpdate(prevProps, prevState) {
     // console.log("componentDidUpdate")
     try{
+      console.log("prevProps.isInverted, this.props.isInverted")
+      console.log(prevProps.isInverted, this.props.isInverted)
+      console.log(prevProps !== this.props)
+      if (prevProps !== this.props){
+        let viewportA = cornerstone.getViewport(this.elementA);
+        viewportA.invert=!this.props.isInverted;
+        cornerstone.setViewport(this.elementA, viewportA);
+      }
       // const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
       // const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
       // const stackDataA = cornerstoneTools.getToolState(this.elementA, "stack");
@@ -329,7 +348,7 @@ export default class ImageViewer extends Component {
       // const stackS = stackDataS.data[0];
       // const stackA = stackDataA.data[0];
       // stackC.currentImageIdIndex = this.state.stackC.currentImageIdIndex;
-      // // stackC.currentImageIdIndex = this.state.selectIdC;
+      // // stackS.currentImageIdIndex = 0;
       // stackS.currentImageIdIndex = this.state.stackS.currentImageIdIndex;
       // stackA.currentImageIdIndex = this.state.stackA.currentImageIdIndex;
       // stackC.imageIds = this.state.stackC.imageIds;
@@ -339,8 +358,12 @@ export default class ImageViewer extends Component {
       // cornerstoneTools.addToolState(this.elementS, "stack", stackS);
       // cornerstoneTools.addToolState(this.elementA, "stack", stackA);
       
-      //const imageId = stack.imageIds[stack.currentImageIdIndex];
-      //cornerstoneTools.scrollToIndex(this.element, stack.currentImageIdIndex);
+      // // const imageIdC = stackC.imageIds[stackC.currentImageIdIndex];
+      // // const imageIdS = stackS.imageIds[stackS.currentImageIdIndex];
+      // // const imageIdA = stackA.imageIds[stackA.currentImageIdIndex];
+      // cornerstoneTools.scrollToIndex(this.elementC, stackC.currentImageIdIndex);
+      // cornerstoneTools.scrollToIndex(this.elementS, stackS.currentImageIdIndex);
+      // cornerstoneTools.scrollToIndex(this.elementA, stackA.currentImageIdIndex);
       console.log("componentDidUpdate:passed")
     } catch(e){
       console.error(e)

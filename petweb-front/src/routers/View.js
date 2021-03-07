@@ -21,15 +21,15 @@ const imageIdS = [...Array(90).keys()].map((v,i)=>("http://localhost:8000/result
 const imageIdA = [...Array(90).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_axial_190_"+i+".png"));
 const stackCoronal = {
   imageIds: imageIdC,
-  currentImageIdIndex: 20
+  currentImageIdIndex: 50
 };
 const stackSaggital = {
   imageIds: imageIdS,
-  currentImageIdIndex: 20
+  currentImageIdIndex: 40
 };
 const stackAxial = {
   imageIds: imageIdA,
-  currentImageIdIndex: 20
+  currentImageIdIndex: 40
 };
 
 function View({history}) {
@@ -50,8 +50,8 @@ function View({history}) {
       <Headerbar/>
       <div className="content-page">
         {/* <div className="view-box"> */}
-          <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", border:"1px white solid", boxSizing:"border-box",width:"1550px", height:"850px"}}>
-            <ImageViewer isCrosshaired={isCrosshaired} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
+          <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
+            <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
           </div>
         {/* </div> */}
 
