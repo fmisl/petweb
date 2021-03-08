@@ -108,7 +108,7 @@ export default class ImageViewer extends Component {
     return (
       <div style={{position:"relative",width:"100%", height:"100%"}}>
         <div
-          className="viewportElement"
+          className="viewportElement coronal"
           style={divStyleC}
           ref={input => {
             this.elementC = input;
@@ -131,8 +131,9 @@ export default class ImageViewer extends Component {
             }
           }
         >
-          {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.state.stackA.currentImageIdIndex/90*100}%`, width:"100%"}}></div>}
-          {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackS.currentImageIdIndex/90*100}%`, height:"100%"}}></div>}
+
+          {/* {this.props.isCrosshaired && <div id="axialDiv" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.state.stackA.currentImageIdIndex/90*100}%`, width:"100%"}}></div>} */}
+          {/* {this.props.isCrosshaired && <div id="sagittalDiv" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackS.currentImageIdIndex/90*100}%`, height:"100%"}}></div>} */}
           <canvas className="cornerstone-canvas" />
           {/* <div style={bottomLeftStyle}>Zoom: {this.state.viewportC.scale}</div>
           <div style={bottomRightStyle}>
@@ -141,14 +142,14 @@ export default class ImageViewer extends Component {
           </div> */}
         </div>
         <div
-          className="viewportElement"
+          className="viewportElement sagittal"
           style={divStyleS}
           ref={input => {
             this.elementS = input;
           }}
         >
-          {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.state.stackA.currentImageIdIndex/90*100}%`, width:"100%"}}></div>}
-          {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackC.currentImageIdIndex/108*100}%`, height:"100%"}}></div>}
+        {/* {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.state.stackA.currentImageIdIndex/90*100}%`, width:"100%"}}></div>} */}
+        {/* {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackC.currentImageIdIndex/108*100}%`, height:"100%"}}></div>} */}
           <canvas className="cornerstone-canvas" />
           {/* <div style={bottomLeftStyle}>Zoom: {this.state.viewportS.scale}</div>
           <div style={bottomRightStyle}>
@@ -157,14 +158,14 @@ export default class ImageViewer extends Component {
           </div> */}
         </div>
         <div
-          className="viewportElement"
+          className="viewportElement axial"
           style={divStyleA}
           ref={input => {
             this.elementA = input;
           }}
         >
-          {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackS.currentImageIdIndex/90*100}%`, height:"100%"}}></div>}
-          {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.state.stackC.currentImageIdIndex/108*100}%`, width:"100%"}}></div>}
+          {/* {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackS.currentImageIdIndex/90*100}%`, height:"100%"}}></div>} */}
+          {/* {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.state.stackC.currentImageIdIndex/108*100}%`, width:"100%"}}></div>} */}
           <canvas className="cornerstone-canvas" />
           {/* <div style={bottomLeftStyle}>Zoom: {this.state.viewportA.scale}</div>
           <div style={bottomRightStyle}>
@@ -172,6 +173,12 @@ export default class ImageViewer extends Component {
             {this.state.viewportA.voi.windowCenter}
           </div> */}
         </div>
+        {this.props.isCrosshaired && <div className="coronal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.state.stackC.currentImageIdIndex/108*50}%`,left:"0%", width:"50%", height:"0%"}}></div>}
+        {this.props.isCrosshaired && <div className="coronal-sagittal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",top:"0%",left:`${this.state.stackC.currentImageIdIndex/108*50+50}%`, width:"0%", height:"50%"}}></div>}
+        {this.props.isCrosshaired && <div className="sagittal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackS.currentImageIdIndex/90*50}%`, height:"50%"}}></div>}
+        {this.props.isCrosshaired && <div className="sagittal-coronal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackS.currentImageIdIndex/90*50}%`, height:"50%"}}></div>}
+        {this.props.isCrosshaired && <div className="axial-coronal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:"0%", bottom:`${this.state.stackA.currentImageIdIndex/90*50+50}%`, width:"50%"}}></div>}
+        {this.props.isCrosshaired && <div className="axial-sagittal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:"50%", bottom:`${this.state.stackA.currentImageIdIndex/90*50+50}%`, width:"50%"}}></div>}
       </div>
     );
   }
@@ -248,7 +255,7 @@ export default class ImageViewer extends Component {
       cornerstoneTools.addToolState(elementC, "stack", stack);
       // cornerstoneTools.stackScroll.activate(elementC, 1);
       cornerstoneTools.stackScrollWheel.activate(elementC);
-      cornerstoneTools.scrollIndicator.enable(elementC);
+      // cornerstoneTools.scrollIndicator.enable(elementC);
       cornerstoneTools.wwwcRegion.activate(elementC, 4);
       this.wwwcsynchronizer.add(elementC);
       // Set the div to focused, so keypress events are handled
@@ -275,7 +282,7 @@ export default class ImageViewer extends Component {
       cornerstoneTools.addToolState(elementS, "stack", stack);
       // cornerstoneTools.stackScroll.activate(elementS, 1);
       cornerstoneTools.stackScrollWheel.activate(elementS);
-      cornerstoneTools.scrollIndicator.enable(elementS);
+      // cornerstoneTools.scrollIndicator.enable(elementS);
       cornerstoneTools.wwwcRegion.activate(elementS, 4);
       this.wwwcsynchronizer.add(elementS);
       // this.state.synchronizer.add(elementS);
@@ -297,7 +304,7 @@ export default class ImageViewer extends Component {
       cornerstoneTools.addToolState(elementA, "stack", stack);
       // cornerstoneTools.stackScroll.activate(elementA, 1);
       cornerstoneTools.stackScrollWheel.activate(elementA);
-      cornerstoneTools.scrollIndicator.enable(elementA);
+      // cornerstoneTools.scrollIndicator.enable(elementA);
       cornerstoneTools.wwwcRegion.activate(elementA, 4);
       this.wwwcsynchronizer.add(elementA);
       // elementA.tabIndex = 2;

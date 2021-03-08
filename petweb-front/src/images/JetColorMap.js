@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function JetColorMap(props){
   return (
-<svg  style={{border:"0px white solid"}} width="490" height="8" viewBox="0 0 490 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg  style={{width:"600px", height:"12px"}} viewBox="0 0 490 8" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect width="490" height="8" rx="4" fill="url(#paint0_linear)"/>
   <defs>
     <linearGradient id="paint0_linear" x1="490" y1="7.99991" x2="-1.18305e-05" y2="7.99919" gradientUnits="userSpaceOnUse">

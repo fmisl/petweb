@@ -773,7 +773,7 @@ input:-webkit-autofill:active {
 }
 
 .analysis-score {
-  border-right: 10px red solid;
+  /* border-right: 10px red solid; */
   box-sizing: border-box;
   text-align: end;
   /* display: flex;
@@ -793,7 +793,7 @@ input:-webkit-autofill:active {
 
 .analysis-box1-content {
   margin: 0px 0px 10px 45px;
-  width: 607px;
+  width: 650px;
   /* height: 650px; */
   /* border: red solid;
   box-sizing: border-box; */
@@ -841,7 +841,7 @@ input:-webkit-autofill:active {
 .analysis-box2-title {
   /* margin-top: 20px; */
   /* display: inline-block; */
-  margin: 35px 0px 41px 45px;
+  margin: 35px 0px 21px 45px;
   text-align: left;
   font-family: "Montserrat";
   font-style: normal;
@@ -853,6 +853,12 @@ input:-webkit-autofill:active {
   color: #FFFFFF;
   /* border: blue solid;
   box-sizing: border-box; */
+}
+
+.analysis-box2-content {
+  margin: 0px 40px 0px 40px;
+  border: red solid;
+  box-sizing: border-box;
 }
 
 .analysis-box3 {

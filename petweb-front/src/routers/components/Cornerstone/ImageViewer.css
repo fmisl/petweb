@@ -1,4 +1,37 @@
-.cornerstone-canvas {
-  /* width: 50% !important;
-  height: 50% !important; */
+/* .cornerstone-canvas{
+  position:relative;
+} */
+.cornerstone-canvas:hover {
+  border: 1px #118AF7 solid !important;
+  box-sizing: border-box !important;
+}
+
+.viewportElement.coronal:hover~.coronal-axial,
+.viewportElement.coronal:hover~.coronal-sagittal {
+  /* z-index: 100000; */
+  border: 1px #118AF7 solid !important;
+  box-sizing: border-box !important;
+}
+
+.viewportElement.sagittal:hover~.sagittal-axial,
+.viewportElement.sagittal:hover~.sagittal-coronal {
+  /* z-index: 100000; */
+  border: 1px #118AF7 solid !important;
+  box-sizing: border-box !important;
+}
+
+.viewportElement.axial:hover~.axial-coronal,
+.viewportElement.axial:hover~.axial-sagittal {
+  /* z-index: 100000; */
+  border: 1px #118AF7 solid !important;
+  box-sizing: border-box !important;
+}
+
+.coronal-axial,
+.coronal-sagittal,
+.sagittal-axial,
+.sagittal-coronal,
+.axial-coronal,
+.axial-sagittal {
+  pointer-events: none;
 }

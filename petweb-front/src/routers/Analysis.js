@@ -12,8 +12,8 @@ import * as actions from '../reduxs/actions';
 // import {increment, decrement} from '../reduxs/actions';
 import IconBurger from '../images/IconBurger';
 import CustomSlide from './components/Slider/CustomSlide';
-import BrainImage from '../images/BrainImage';
-import JetColorMap from '../images/JetColorMap'
+import AnalysisItem1 from './components/Items/AnalysisItem1'
+import AnalysisItem2 from './components/Items/AnalysisItem2'
 
 // function Analysis() {
 class Analysis extends Component {
@@ -69,108 +69,12 @@ class Analysis extends Component {
                 <div  style={{display:"flex", whiteSpace:"nowrap", margin:"0px 0px 15px"}}>
                   <div className="analysis-box1">
                     <div className="analysis-box1-title">Regional SUVR</div>
-                    <div className="analysis-box1-content">
-                      <div>
-                        <div style={{height:"120px", width:"120px"}}>
-                          <BrainImage className="BrainImage" region="global"/>
-                          Global Lobe
-                        </div>
-                        <div style={{height:"100%", width:"80%"}}>
-                          <div className="analysis-score" style={{width:"0%"}}>
-                            R
-                            <br/>
-                            2.2
-                          </div>
-                          <div className="analysis-score" style={{width:"40%"}}>
-                            L
-                            <br/>
-                            1.2
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <div style={{height:"120px", width:"120px"}}>
-                          <BrainImage className="BrainImage" region="frontal"/>
-                          Frontal Lobe
-                        </div>
-                        <div style={{height:"100%", width:"80%"}}>
-                          <div className="analysis-score" style={{width:"20%"}}>
-                            R
-                            <br/>
-                            2.2
-                          </div>
-                          <div className="analysis-score" style={{width:"50%"}}>
-                            L
-                            <br/>
-                            1.2
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <div style={{height:"120px", width:"120px"}}>
-                          <BrainImage className="BrainImage" region="parietal"/>
-                          Parietal Lobe
-                        </div>
-                        <div style={{height:"100%", width:"80%"}}>
-                          <div className="analysis-score" style={{width:"60%"}}>
-                            R
-                            <br/>
-                            2.2
-                          </div>
-                          <div className="analysis-score" style={{width:"100%"}}>
-                            L
-                            <br/>
-                            1.2
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <div style={{height:"120px", width:"120px"}}>
-                          <BrainImage className="BrainImage" region="temporal"/>
-                          Temporal Lobe
-                        </div>
-                        <div style={{height:"100%", width:"80%"}}>
-                          <div className="analysis-score" style={{width:"20%"}}>
-                            R
-                            <br/>
-                            2.2
-                          </div>
-                          <div className="analysis-score" style={{width:"40%"}}>
-                            L
-                            <br/>
-                            1.2
-                          </div>
-                        </div>
-                      </div>
-                      <div style={{borderBottom:"2px #2A2E31 solid"}}>
-                        <div style={{height:"120px", width:"120px"}}>
-                          <BrainImage className="BrainImage" region="occipital"/>
-                          Occipital Lobe
-                        </div>
-                        <div style={{height:"100%", width:"80%"}}>
-                          <div className="analysis-score" style={{width:"80%"}}>
-                            R
-                            <br/>
-                            2.2
-                          </div>
-                          <div className="analysis-score" style={{width:"60%"}}>
-                            L
-                            <br/>
-                            1.2
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{display:"flex",flexDirection:"column", alignItems:"flex-end", width:"652px"}}>
-                      <JetColorMap/>
-                      <div style={{width:"552px", textAlign:"start"}}>
-                        SUVR &emsp;1.0&emsp;&emsp;&emsp;&emsp;&ensp;1.2&emsp;&emsp;&emsp;&emsp;&ensp;1.4&emsp;&emsp;&emsp;&emsp;&ensp;1.5&emsp;&emsp;&emsp;&emsp;&ensp;1.6&emsp;&emsp;&emsp;&emsp;&ensp;2.0
-                      </div>
-                    </div>
+                    <AnalysisItem1/>
                   </div>
 
                   <div className="analysis-box2">
                     <div className="analysis-box2-title">Sub-regional SUVR</div>
+                    <AnalysisItem2/>
                   </div>
                 </div>
               </CustomSlide>
