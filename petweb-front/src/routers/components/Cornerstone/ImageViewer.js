@@ -92,16 +92,17 @@ export default class ImageViewer extends Component {
       imageIdS: props.stackS.imageIds,
       imageIdA: props.stackA.imageIds,
     };
-
+    this.onKeyPress = this.onKeyPress.bind(this);
     this.onImageRendered = this.onImageRendered.bind(this);
     this.onNewImage = this.onNewImage.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
     this.wwwcsynchronizer = new cornerstoneTools.Synchronizer("cornerstoneimagerendered", cornerstoneTools.wwwcSynchronizer);
     this.synchronizer = new cornerstoneTools.Synchronizer("cornerstonenewimage", cornerstoneTools.updateImageSynchronizer);
+    // var synchronizer = new cornerstoneTools.Synchronizer("cornerstonenewimage", cornerstoneTools.updateImageSynchronizer);
   }
 
   render() {
-    console.log(this.state);
+    console.log("state:",this.state);
     // console.log("stackC: ", this.state.stackC, typeof(this.state.stackC.currentImageIdIndex));
     // console.log("stackS: ", this.state.stackS, typeof(this.state.stackS.currentImageIdIndex));
     // console.log("stackA: ", this.state.stackA, typeof(this.state.stackA.currentImageIdIndex));
@@ -118,16 +119,9 @@ export default class ImageViewer extends Component {
               console.log("x:",e.pageX," y:",e.pageY);
               console.log("x - 300:",e.pageX - 300," y - 170 + 89:",-e.pageY + 170 - 89);
               console.log("(x - 300)/775*90:",(e.pageX - 300)/775*90," y - 170 + 89:",-e.pageY + 170 - 89);
-              // cornerstoneTools.scrollToIndex(this.elementS, (e.pageX - 300)/775*90);
-            //   this.setState({
-            //     ...this.state,
-            //     // stackA:{...this.state.stackA,
-            //     //   currentImageIdIndex:Number(-e.pageY + 170 - 89),
-            //     // },
-            //     stackS:{...this.state.stackS,
-            //       currentImageIdIndex:Math.round((e.pageX - 300)/775*90),
-            //     }
-            //   })
+              
+              // this.elementC.tabIndex = 0;
+              // this.elementC.focus();
             }
           }
         >
@@ -147,6 +141,10 @@ export default class ImageViewer extends Component {
           ref={input => {
             this.elementS = input;
           }}
+          onClick={(e)=>{
+            // this.elementS.tabIndex = 0;
+            // this.elementS.focus();
+          }}
         >
         {/* {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.state.stackA.currentImageIdIndex/90*100}%`, width:"100%"}}></div>} */}
         {/* {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackC.currentImageIdIndex/108*100}%`, height:"100%"}}></div>} */}
@@ -162,6 +160,10 @@ export default class ImageViewer extends Component {
           style={divStyleA}
           ref={input => {
             this.elementA = input;
+          }}
+          onClick={(e)=>{
+            // this.elementA.tabIndex = 0;
+            // this.elementA.focus();
           }}
         >
           {/* {this.props.isCrosshaired && <div style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.state.stackS.currentImageIdIndex/90*100}%`, height:"100%"}}></div>} */}
@@ -189,8 +191,11 @@ export default class ImageViewer extends Component {
     cornerstone.resize(this.elementS);
     cornerstone.resize(this.elementA);
   }
-
+  onImageRendered1(){
+    console.log("onImageRendered1")
+  }
   onImageRendered() {
+    console.log("onImageRendered")
     let viewportC = cornerstone.getViewport(this.elementC);
     let viewportS = cornerstone.getViewport(this.elementS);
     let viewportA = cornerstone.getViewport(this.elementA);
@@ -204,12 +209,12 @@ export default class ImageViewer extends Component {
       viewportS,
       viewportA,
     });
-    console.log("onImageRendered()")
     // console.log(this.state.stackC)
     // console.log(this.state.viewportC,this.state.viewportS,this.state.viewportA);
   }
 
   onNewImage() {
+    console.log("onNewImage")
     const enabledElementC = cornerstone.getEnabledElement(this.elementC);
     const enabledElementS = cornerstone.getEnabledElement(this.elementS);
     const enabledElementA = cornerstone.getEnabledElement(this.elementA);
@@ -223,8 +228,26 @@ export default class ImageViewer extends Component {
       });
     }
   }
+  onKeyPress(e) {
+    console.log("onKeyPress");
+      var data = e.detail;
+      var keyCode = data.keyCode;
+      var keyName;
+      var keys = {
+          UP: 38,
+          DOWN: 40
+      };
+      if (keyCode === keys.UP) {
+          keyName = 'Up arrow';
+      } else if (keyCode === keys.DOWN) {
+          keyName = 'Down arrow';
+      } else {
+          keyName = String.fromCharCode(keyCode);
+      }
+  }
 
   componentDidMount() {
+    console.log("componentDidMount")
     const elementC = this.elementC;
     const elementS = this.elementS;
     const elementA = this.elementA;
@@ -233,32 +256,50 @@ export default class ImageViewer extends Component {
     cornerstone.enable(elementC);
     cornerstone.enable(elementS);
     cornerstone.enable(elementA);
+    // Add and activate tools
+    // cornerstoneTools.addTool(cornerstoneTools.StackScrollTool);
+    // cornerstoneTools.addTool(cornerstoneTools.StackScrollMouseWheelTool);
+    // cornerstoneTools.setToolActive('StackScroll', { mouseButtonMask: 1 });
+    // cornerstoneTools.setToolActive('StackScrollMouseWheel', { });
+
     cornerstoneTools.touchInput.enable(elementC);
     cornerstoneTools.touchInput.enable(elementS);
     cornerstoneTools.touchInput.enable(elementA);
-    // cornerstoneTools.keyboardInput.enable(elementC);
-    // cornerstoneTools.keyboardInput.enable(elementS);
-    // cornerstoneTools.keyboardInput.enable(elementA);
+    cornerstoneTools.keyboardInput.enable(elementC);
+    cornerstoneTools.keyboardInput.enable(elementS);
+    cornerstoneTools.keyboardInput.enable(elementA);
     cornerstoneTools.mouseInput.enable(elementC);
     cornerstoneTools.mouseInput.enable(elementS);
     cornerstoneTools.mouseInput.enable(elementA);
     cornerstoneTools.mouseWheelInput.enable(elementC);
     cornerstoneTools.mouseWheelInput.enable(elementS);
     cornerstoneTools.mouseWheelInput.enable(elementA);
+    // cornerstoneTools.crosshairs.enable(elementC, 1, this.synchronizer);
+    // cornerstoneTools.crosshairs.enable(elementS, 1, this.synchronizer);
+    // cornerstoneTools.crosshairs.enable(elementA, 1, this.synchronizer);
+    // cornerstoneTools.crosshairsTouch.enable(elementC, this.synchronizer);
+    // cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
+    // cornerstoneTools.crosshairsTouch.enable(elementA, this.synchronizer);
     // Load the first image in the stack
-    cornerstone.loadImage(this.state.imageIdC[this.state.stackC.currentImageIdIndex]).then(image => {
+    const coronalLoadImagePromise = cornerstone.loadImage(this.state.imageIdC[this.state.stackC.currentImageIdIndex]).then(image => {
       // Display the first image
       cornerstone.displayImage(elementC, image);
 
       const stack = this.state.stackC;
-      cornerstoneTools.addStackStateManager(elementC, ["stack", 'referenceLines']);
+      // this.synchronizer.add(elementC);
+      cornerstoneTools.addStackStateManager(elementC, ["stack", 'Crosshairs']);
       cornerstoneTools.addToolState(elementC, "stack", stack);
-      // cornerstoneTools.stackScroll.activate(elementC, 1);
+      cornerstoneTools.stackScroll.activate(elementC, 1);
       cornerstoneTools.stackScrollWheel.activate(elementC);
       // cornerstoneTools.scrollIndicator.enable(elementC);
+      cornerstoneTools.stackPrefetch.enable(elementC, 3);
       cornerstoneTools.wwwcRegion.activate(elementC, 4);
       this.wwwcsynchronizer.add(elementC);
       // Set the div to focused, so keypress events are handled
+      // Set the div to focused, so keypress events are handled
+
+      // Enable all tools we want to use with this element
+      cornerstoneTools.stackScrollKeyboard.activate(elementC);
       // elementC.tabIndex = 0;
       // elementC.focus();
       // Enable all tools we want to use with this element
@@ -269,49 +310,60 @@ export default class ImageViewer extends Component {
       // this.state.synchronizer.add(elementC);
       // cornerstoneTools.referenceLines.tool.enable(elementC, this.synchronizer);
 
+      elementC.addEventListener("cornerstonetoolskeydown", this.onKeyPress);
       elementC.addEventListener("cornerstoneimagerendered",this.onImageRendered);
       elementC.addEventListener("cornerstonenewimage", this.onNewImage);
       window.addEventListener("resize", this.onWindowResize);
     });
-    cornerstone.loadImage(this.state.imageIdS[this.state.stackS.currentImageIdIndex]).then(image => {
+    const sagittalLoadImagePromise = cornerstone.loadImage(this.state.imageIdS[this.state.stackS.currentImageIdIndex]).then(image => {
       // Display the first image
       cornerstone.displayImage(elementS, image);
 
       const stack = this.state.stackS;
-      cornerstoneTools.addStackStateManager(elementS, ["stack", 'referenceLines']);
+      // this.synchronizer.add(elementS);
+      cornerstoneTools.addStackStateManager(elementS, ["stack", 'Crosshairs']);
       cornerstoneTools.addToolState(elementS, "stack", stack);
-      // cornerstoneTools.stackScroll.activate(elementS, 1);
+      cornerstoneTools.stackScroll.activate(elementS, 1);
       cornerstoneTools.stackScrollWheel.activate(elementS);
       // cornerstoneTools.scrollIndicator.enable(elementS);
+      cornerstoneTools.stackPrefetch.enable(elementS, 3);
       cornerstoneTools.wwwcRegion.activate(elementS, 4);
       this.wwwcsynchronizer.add(elementS);
+      // Set the div to focused, so keypress events are handled
+
+      // Enable all tools we want to use with this element
+      cornerstoneTools.stackScrollKeyboard.activate(elementS);
       // this.state.synchronizer.add(elementS);
       // elementS.tabIndex = 1;
       // elementS.focus();
       // Enable all tools we want to use with this element
       // cornerstoneTools.stackScrollKeyboard.activate(elementS);
       
+      elementS.addEventListener("cornerstonetoolskeydown", this.onKeyPress);
       elementS.addEventListener("cornerstoneimagerendered",this.onImageRendered);
       elementS.addEventListener("cornerstonenewimage", this.onNewImage);
       window.addEventListener("resize", this.onWindowResize);
     });
-    cornerstone.loadImage(this.state.imageIdA[this.state.stackA.currentImageIdIndex]).then(image => {
+    const axialLoadImagePromise = cornerstone.loadImage(this.state.imageIdA[this.state.stackA.currentImageIdIndex]).then(image => {
       // Display the first image
       cornerstone.displayImage(elementA, image);
 
       const stack = this.state.stackA;
-      cornerstoneTools.addStackStateManager(elementA, ["stack", 'referenceLines']);
+      // this.synchronizer.add(elementA);
+      cornerstoneTools.addStackStateManager(elementA, ["stack", 'Crosshairs']);
       cornerstoneTools.addToolState(elementA, "stack", stack);
-      // cornerstoneTools.stackScroll.activate(elementA, 1);
+      cornerstoneTools.stackScroll.activate(elementA, 1);
       cornerstoneTools.stackScrollWheel.activate(elementA);
       // cornerstoneTools.scrollIndicator.enable(elementA);
+      cornerstoneTools.stackPrefetch.enable(elementA, 3);
       cornerstoneTools.wwwcRegion.activate(elementA, 4);
       this.wwwcsynchronizer.add(elementA);
-      // elementA.tabIndex = 2;
-      // elementA.focus();
+      // Set the div to focused, so keypress events are handled
+
       // Enable all tools we want to use with this element
-      // cornerstoneTools.stackScrollKeyboard.activate(elementA);
+      cornerstoneTools.stackScrollKeyboard.activate(elementA);
       
+      elementA.addEventListener("cornerstonetoolskeydown", this.onKeyPress);
       elementA.addEventListener("cornerstoneimagerendered",this.onImageRendered);
       elementA.addEventListener("cornerstonenewimage", this.onNewImage);
       window.addEventListener("resize", this.onWindowResize);
@@ -319,6 +371,24 @@ export default class ImageViewer extends Component {
     // this.setState({
     //   ...this.state,
     // });
+    // After images have loaded, and our sync context has added both elements
+    Promise.all([coronalLoadImagePromise, sagittalLoadImagePromise, axialLoadImagePromise])
+    .then(() => {
+      this.synchronizer.add(elementC);
+      this.synchronizer.add(elementS);
+
+      cornerstoneTools.crosshairs.enable(elementC, 1, this.synchronizer);
+      cornerstoneTools.crosshairs.enable(elementS, 1, this.synchronizer);
+
+      cornerstoneTools.crosshairsTouch.enable(elementC, this.synchronizer);
+      cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
+      // const tool = cornerstoneTools.CrosshairsTool;
+      // cornerstoneTools.addTool(tool);
+      // cornerstoneTools.setToolActive('Crosshairs', {
+      //   mouseButtonMask: 1,
+      //   synchronizationContext: this.synchronizer,
+      // });
+    });
   }
 
   componentWillUnmount() {
@@ -338,11 +408,11 @@ export default class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log("componentDidUpdate")
+    console.log("componentDidUpdate")
     try{
-      console.log("prevProps.isInverted, this.props.isInverted")
-      console.log(prevProps.isInverted, this.props.isInverted)
-      console.log(prevProps !== this.props)
+      // console.log("prevProps.isInverted, this.props.isInverted")
+      // console.log(prevProps.isInverted, this.props.isInverted)
+      // console.log(prevProps !== this.props)
       if (prevProps !== this.props){
         let viewportA = cornerstone.getViewport(this.elementA);
         viewportA.invert=!this.props.isInverted;
