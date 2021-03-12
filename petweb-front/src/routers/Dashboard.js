@@ -1,26 +1,33 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../App.css';
 import Sidebar from './components/Sidebar'
 import Headerbar from './components/Headerbar'
-import {useHistory} from 'react-router-dom'
+import {useHistory, useLocation} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement} from '../reduxs/actions';
 import WeeklyGraph from './components/Charts/WeeklyGraph'
 import WeeklyPie from './components/Charts/WeeklyPie'
 // import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 
-function Dashboard() {
+function Dashboard(props) {
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const history =useHistory();
+  const location = useLocation();
+  // useEffect(() => {
+  //    console.log(location.pathname); // result: '/secondpage'
+  //    console.log(location.search); // result: '?query=abc'
+  //    console.log(location.state.detail); // result: 'some_value'
+  // }, [location]);
   // console.log("dashboard")
   // console.log(history.location.pathname)
-  console.log(window.location.pathname)
+  // console.log(window.location.pathname)
+  // console.log(props.location)
   return (
     <div className="content">
-      <Sidebar />
-      <Headerbar/>
+      {/* <Sidebar />
+      <Headerbar/> */}
       <div className="content-page">
         <div className="dashboard-title">
           <div >

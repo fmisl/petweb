@@ -1,13 +1,19 @@
-export const increment = (num) =>{
+export const increment = (max) =>{
   return {
     type: 'INCREMENT',
-    payload: num
+    max: max
   };
 };
-export const decrement = (num) =>{
+export const decrement = (max) =>{
   return {
     type: 'DECREMENT',
-    payload: num
+    max: max
+  };
+};
+export const tab_number = (num) =>{
+  return {
+    type: 'TAB_NUMBER',
+    tabNumber: num
   };
 };
 export const login = () =>{

@@ -14,6 +14,7 @@ import IconBurger from '../images/IconBurger';
 import CustomSlide from './components/Slider/CustomSlide';
 import AnalysisItem1 from './components/Items/AnalysisItem1'
 import AnalysisItem2 from './components/Items/AnalysisItem2'
+import AnalysisItem3 from './components/Items/AnalysisItem3'
 
 // function Analysis() {
 class Analysis extends Component {
@@ -59,8 +60,8 @@ class Analysis extends Component {
     console.log(window.location.pathname)
     return (
       <div className="content" onClick={()=>this.setState({showMenu:false})}>
-        <Sidebar/>
-        <Headerbar/>
+        {/* <Sidebar/>
+        <Headerbar/> */}
         <div className="content-page">
 
           <div className="analysis-box">
@@ -82,6 +83,7 @@ class Analysis extends Component {
                 <div style={{display:"flex", whiteSpace:"nowrap", margin:"0px 0px 15px"}}>
                   <div className="analysis-box3">
                     <div className="analysis-box3-title">Brain Surface</div>
+                    <AnalysisItem3/>
                   </div>
                 </div>
               </CustomSlide>

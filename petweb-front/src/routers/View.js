@@ -16,9 +16,9 @@ import ImageViewer from './components/Cornerstone/ImageViewer';
 // const imageIdC = ["http://localhost:8000/result/download/case190/input1_coronal_190_30.png"];
 // const imageIdS = ["http://localhost:8000/result/download/case190/input1_sagittal_190_30.png"];
 // const imageIdA = ["http://localhost:8000/result/download/case190/input1_axial_190_30.png"];
-const imageIdC = [...Array(108).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_coronal_190_"+i+".png"));
-const imageIdS = [...Array(90).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_sagittal_190_"+i+".png"));
-const imageIdA = [...Array(90).keys()].map((v,i)=>("http://localhost:8000/result/download/case190/input1_axial_190_"+i+".png"));
+const imageIdC = [...Array(108).keys()].map((v,i)=>("http://147.47.228.204:8002/result/download/case100/input_coronal_100_"+i+".png"));
+const imageIdS = [...Array(90).keys()].map((v,i)=>("http://147.47.228.204:8002/result/download/case100/input_sagittal_100_"+i+".png"));
+const imageIdA = [...Array(90).keys()].map((v,i)=>("http://147.47.228.204:8002/result/download/case100/input_axial_100_"+i+".png"));
 const stackCoronal = {
   imageIds: imageIdC,
   currentImageIdIndex: 50
@@ -46,8 +46,8 @@ function View({history}) {
 
   return (
     <div className="content" onClick={()=>setShowMenu(false)}>
-      <Sidebar />
-      <Headerbar/>
+      {/* <Sidebar />
+      <Headerbar/> */}
       <div className="content-page">
         {/* <div className="view-box"> */}
           <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>

@@ -868,7 +868,8 @@ input:-webkit-autofill:active {
   /* top: 150px;
   left: 30px; */
   margin: 0px 10px;
-  width: 1550px;
+  /* width: 1550px; */
+  width: 755px;
   height: 800px;
   background: #383C41;
   box-shadow: 0px 15px 30px rgba(25, 25, 25, 0.15);

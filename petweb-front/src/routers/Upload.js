@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState, useRef, useEffect } from 'react';
 import '../App.css';
 import Sidebar from './components/Sidebar'
 import Headerbar from './components/Headerbar'
@@ -19,18 +19,31 @@ function Upload({history}) {
   const [isShowingUploader, setIsShowingUploader] = useState(false);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
+  const dropRef = useRef();
+  
+
   function toggleWorklist() {
     setIsShowingWorklist(!isShowingWorklist);
   }
   function toggleUploader() {
+    // alert("hi")
     setIsShowingUploader(!isShowingUploader);
   }
+  // function handleDrop() {
+  //   alert("drop")
+  //   setIsShowingUploader(!isShowingUploader);
+  // }
   // console.log(history.location.pathname)
+  const toggleUploader2=(e)=>{
+    //   e.preventDefault();
+    setIsShowingUploader(!isShowingUploader);
+  };
+
   console.log(window.location.pathname)
   return (
     <div className="content">
-      <Sidebar />
-      <Headerbar/>
+      {/* <Sidebar />
+      <Headerbar/> */}
       <Worklist isShowing={isShowingWorklist} hide={toggleWorklist}/>
       <Uploader isShowing={isShowingUploader} hide={toggleUploader}/>
       <div className="content-page">
@@ -42,8 +55,9 @@ function Upload({history}) {
             <div className="upload-btn"><IconDelete className="upload-icon"/>Delete</div>
             <div className="upload-btn" style={{width:"199px", marginLeft:"40px"}}>Connect to PACS</div>
           </div>
-          <div style={{display:"flex", color:"white"}}>
-            <div className="upload-btn upload" onClick={toggleUploader}>Upload</div>
+          <div style={{display:"flex", color:"white"}} >
+            <label for="upload-input" className="upload-btn upload" >Upload</label>
+            <input style={{display:"none"}} multiple type="file" id="upload-input" onChange={(e)=>toggleUploader2(e)} onClick={(e)=>e.target.value=null} />
           </div>
         </div>
         <div className="upload-table">

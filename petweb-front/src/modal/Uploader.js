@@ -34,15 +34,15 @@ function Uploader({ isShowing, hide }) {
               <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41"}}>
                 <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
                   <img height={'100%'} style={{border:"1px white solid", boxSizing:"border-box"}} 
-                  src={`http://localhost:8000/result/download/case100/input_coronal_100_${focusItem}.png`}/>
+                  src={`http://147.47.228.204:8002/result/download/case100/input_coronal_100_${focusItem}.png`}/>
                 </div>
                 <div style={{...styleDiv, ...{top:"", left:"50%"}}} >
                 <img height={'100%'} style={{border:"1px white solid", boxSizing:"border-box"}} 
-                src={`http://localhost:8000/result/download/case100/input_sagittal_100_${focusItem}.png`}/>
+                src={`http://147.47.228.204:8002/result/download/case100/input_sagittal_100_${focusItem}.png`}/>
                 </div>
                 <div style={{...styleDiv, ...{top:"50%", left:"0"}}} >
                 <img height={'100%'} style={{border:"1px white solid", boxSizing:"border-box"}} 
-                src={`http://localhost:8000/result/download/case100/input_axial_100_${focusItem}.png`}/>
+                src={`http://147.47.228.204:8002/result/download/case100/input_axial_100_${focusItem}.png`}/>
                 </div>
                 <div style={{...styleDiv, ...{top:"50%", left:"50%"}}} >
                 {/* <img src={'http://localhost:8000/result/download/case100/input_axial_100_10.png'}/> */}
@@ -58,7 +58,7 @@ function Uploader({ isShowing, hide }) {
               </div>
               <div style={{display: "flex"}}>
                 <div style={{}} className="upload-btn" onClick={hide}>Cancel</div>
-                <div style={{}} className="upload-btn type1">Run</div>
+                <div style={{}} className="upload-btn type1" onClick={hide}>Run</div>
               </div>
             </div>
 

@@ -40,8 +40,9 @@ function Login() {
         }
         // dispatch(profile(values.username))
       } catch (e){
-        console.log(e.response.data.non_field_errors)
-        alert(e.response.data.non_field_errors)
+        // console.log(e.response.data.non_field_errors)
+        // alert(e.response.data.non_field_errors)
+        alert("login failed")
       } finally{
         console.log(res)
       }

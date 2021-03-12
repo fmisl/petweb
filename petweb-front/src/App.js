@@ -1,5 +1,7 @@
 import React, {useEffect} from 'react';
 import './App.css'
+import Sidebar from './routers/components/Sidebar'
+import Headerbar from './routers/components/Headerbar'
 import axios from 'axios';
 // import Sidebar from './pages/components/Sidebar'
 import Login from './routers/login/Login'
@@ -25,12 +27,13 @@ function App() {
       try{
         res = await services.TokenVerify({'token':token})
       } catch (e){
-        console.log(e.response.data.non_field_errors[0])
+        // console.log(e.response.data.non_field_errors[0])
+        console.log("Token expired")
         dispatch(logout())
         localStorage.removeItem('token');
         alert('Logout')
       } finally {
-        console.log(res)
+        // console.log(res)
       }
     }
   }, [])
@@ -56,6 +59,8 @@ function App() {
         }
         {isLogged && 
           <div className="App">
+            <Sidebar />
+            <Headerbar/>
             {/* <Headerbar/> */}
             {/* <Sidebar/> */}
             <Route path="/" exact component={Login}/>
@@ -64,6 +69,7 @@ function App() {
             <Route path="/login" exact component={Dashboard}/>
             <Route path="/forgot" exact component={Dashboard}/>
             <Route path="/signup" exact component={Dashboard}/> */}
+            {/* <Route path="/dashboard" render={(props)=> <Dashboard state={{detail:'test1'}}/>}/> */}
             <Route path="/dashboard" component={Dashboard}/>
             <Route path="/upload" component={Upload}/>
             <Route path="/view" component={View}/>

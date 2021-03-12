@@ -13,8 +13,8 @@ function Setting({history}) {
   console.log(window.location.pathname)
   return (
     <div className="content">
-      <Sidebar/>
-      <Headerbar/>
+      {/* <Sidebar/>
+      <Headerbar/> */}
       {/* <SimpleSlider/> */}
       <div className="content-page">
         <div className="setting-title">
