@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './AnalysisItem3.css'
-import * as services from '../../../services/fetchApi'
+// import * as services from '../../../services/fetchApi'
+import {IPinUSE} from '../../../services/IPs'
 
 export default class Analysisitem3 extends Component {
     constructor(props) {
@@ -33,12 +34,12 @@ export default class Analysisitem3 extends Component {
         return (
             <div className="AnalysisItem3-Default">
                 <div className="AnalysisItem3-Surface" >
-                    <div><img src={`${services.IPinUSE}+'result/download/case190/_llat.png'`} height="220px"/>Left Lateral</div>
-                    <div><img src={`${services.IPinUSE}+'http://147.47.228.204:8002/result/download/case190/_rlat.png'`} height="220px"/>Right Lateral</div>
+                    <div><img src={IPinUSE+'result/download/case190/_llat.png'} height="220px"/>Left Lateral</div>
+                    <div><img src={IPinUSE+'result/download/case190/_rlat.png'} height="220px"/>Right Lateral</div>
                 </div>
                 <div className="AnalysisItem3-Surface" >
-                    <div><img src={`${services.IPinUSE}+'result/download/case190/_lmed.png'`} height="220px"/>Left Medial</div>
-                    <div><img src={`${services.IPinUSE}+'result/download/case190/_rmed.png'`} height="220px"/>Right Medial</div>
+                    <div><img src={IPinUSE+'result/download/case190/_lmed.png'} height="220px"/>Left Medial</div>
+                    <div><img src={IPinUSE+'result/download/case190/_rmed.png'} height="220px"/>Right Medial</div>
                 </div>
                 <div className="AnalysisItem3-Threshold">
                     <input type="range" style={{width:"35%"}}/>

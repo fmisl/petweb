@@ -12,13 +12,11 @@ import IconSN from '../images/IconSN';
 import IconSNOff from '../images/IconSNOff';
 import IconBurger from '../images/IconBurger';
 import ImageViewer from './components/Cornerstone/ImageViewer';
+import {IPinUSE} from '../services/IPs'
 
-// const imageIdC = ["http://localhost:8000/result/download/case190/input1_coronal_190_30.png"];
-// const imageIdS = ["http://localhost:8000/result/download/case190/input1_sagittal_190_30.png"];
-// const imageIdA = ["http://localhost:8000/result/download/case190/input1_axial_190_30.png"];
-const imageIdC = [...Array(108).keys()].map((v,i)=>("http://147.47.228.204:8002/result/download/case100/input_coronal_100_"+i+".png"));
-const imageIdS = [...Array(90).keys()].map((v,i)=>("http://147.47.228.204:8002/result/download/case100/input_sagittal_100_"+i+".png"));
-const imageIdA = [...Array(90).keys()].map((v,i)=>("http://147.47.228.204:8002/result/download/case100/input_axial_100_"+i+".png"));
+const imageIdC = [...Array(108).keys()].map((v,i)=>(IPinUSE+'result/download/case100/input_coronal_100_'+i+'.png'));
+const imageIdS = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/case100/input_sagittal_100_'+i+'.png'));
+const imageIdA = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/case100/input_axial_100_'+i+'.png'));
 const stackCoronal = {
   imageIds: imageIdC,
   currentImageIdIndex: 50
