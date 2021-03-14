@@ -1,7 +1,5 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import '../App.css';
-import Sidebar from './components/Sidebar'
-import Headerbar from './components/Headerbar'
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement} from '../reduxs/actions';
 import IconCrosshair from '../images/IconCrosshair';
@@ -13,6 +11,9 @@ import IconSNOff from '../images/IconSNOff';
 import IconBurger from '../images/IconBurger';
 import ImageViewer from './components/Cornerstone/ImageViewer';
 import {IPinUSE} from '../services/IPs'
+import {useParams} from 'react-router-dom' 
+import * as services from '../services/fetchApi'
+import Home from './components/Cornerstone/Home'
 
 const imageIdC = [...Array(108).keys()].map((v,i)=>(IPinUSE+'result/download/case100/input_coronal_100_'+i+'.png'));
 const imageIdS = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/case100/input_sagittal_100_'+i+'.png'));
@@ -30,17 +31,39 @@ const stackAxial = {
   currentImageIdIndex: 40
 };
 
-function View({history}) {
+function View({}) {
   const counter = useSelector(state => state.counter);
+  const listSelected = useSelector(state => state.listManager);
   const isLogged = useSelector(state => state.isLogged);
   const [showMenu, setShowMenu] = useState(false)
+  // const [caseID, setCaseID] = useState(null)
+  const { caseID } = useParams();
   const [isCrosshaired, setIsCrosshaired] = useState(true)
   const [isInverted, setIsInverted] = useState(true)
   const [isSNed, setIsSNed] = useState(true)
   const dispatch = useDispatch();
   // console.log(history.location.pathname)
-  console.log(window.location.pathname)
+  // console.log(window.location.pathname)
+  useEffect(async () => {
+    console.log('useEffect (caseID): ',caseID)
+    // await getCase(caseID);
+    // if (!history.match.params.caseID) {
+    //   console.log('history.match.params.caseID:',history.match.params.caseID)
+  
+    //   this.setState({
+    //     caseID: history.match.params.caseID,
+    //   })
+    // }
+  }, [])
 
+  const getCase = async (caseID) => {
+    console.log('getCase (caseID): ',caseID)
+    const token = localStorage.getItem('token')
+    // res = await services.TokenVerify({'token':token})
+    const res = await services.getCase({'token':token, id:caseID})
+    console.log('res: ', res.data[0])
+    // let slices = res.data[0].slices;
+  }
 
   return (
     <div className="content" onClick={()=>setShowMenu(false)}>
@@ -49,7 +72,8 @@ function View({history}) {
       <div className="content-page">
         {/* <div className="view-box"> */}
           <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-            <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
+            {/* <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/> */}
+            <Home caseID={caseID}/>
           </div>
         {/* </div> */}
 
@@ -108,6 +132,7 @@ function View({history}) {
         <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>
           <h1>View page</h1>
+          <h1>listSelected: {listSelected}</h1>
           <h1>Counter: {counter}</h1>
           <button onClick={()=> dispatch(increment())}>+</button>
           <button onClick={()=> dispatch(decrement())}>-</button>

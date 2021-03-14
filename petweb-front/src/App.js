@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import './App.css'
-import Sidebar from './routers/components/Sidebar'
-import Headerbar from './routers/components/Headerbar'
+import Sidebar from './components/Sidebar'
+import Headerbar from './components/Headerbar'
 import axios from 'axios';
 // import Sidebar from './pages/components/Sidebar'
 import Login from './routers/login/Login'
@@ -72,7 +72,7 @@ function App() {
             {/* <Route path="/dashboard" render={(props)=> <Dashboard state={{detail:'test1'}}/>}/> */}
             <Route path="/dashboard" component={Dashboard}/>
             <Route path="/upload" component={Upload}/>
-            <Route path="/view" component={View}/>
+            <Route path="/view/:caseID" exact component={View}/>
             <Route path="/analysis" component={Analysis}/>
             <Route path="/setting" component={Setting}/>
             {/* <Redirect exact path="/signup" to="/" />

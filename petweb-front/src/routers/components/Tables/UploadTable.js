@@ -1,96 +1,15 @@
 import React, { Component } from 'react';
 import './UploadTable.css'
+import { connect } from 'react-redux';
+import * as actions from '../../../reduxs/actions';
 
 const FilterableTable = require('react-filterable-table');
  
-// let data = [
-//     { Select:true, Tracer: "C-PIB", SUVR: 2.11, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 38, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "FBB", SUVR: 1.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 26, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "FBB", SUVR:1.1, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 39, Sex:"M", Update:"20.07.15" },
-//     { Select:true, Tracer: "FBP", SUVR: 2.1, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 33, Sex:"M", Update:"20.07.15" },
-//     { Select:true, Tracer: "C-PIB", SUVR: 2.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 34, Sex:"M", Update:"20.07.15"  },
-//     { Select:true, Tracer: "C-PIB", SUVR: 2.51, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 42, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 1.2, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 55, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 1.52, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 72, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 0.72, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 46, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.0, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 88, Sex:"M", Update:"20.07.15"  },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.2, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 56, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.8, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 47, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 3.0, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 86, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 66, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.9, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 72, Sex:"M", Update:"20.07.15"  },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.2, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 56, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.8, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 47, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 3.0, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 86, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 66, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.9, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 72, Sex:"M", Update:"20.07.15"  },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.2, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 56, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.8, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 47, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 3.0, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 86, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 66, Sex:"M", Update:"20.07.15" },
-//     { Select:false, Tracer: "C-PIB", SUVR: 2.9, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 72, Sex:"M", Update:"20.07.15"  },
-// ];
- 
-// const renderSelect = (props) => {
-//     return(
-//         <div className={`UploadTable-Default ${props.record.Select && 'sel'}`} onClick={()=>console.dir(props)}>
-//             <div className={`UploadTable-Select ${props.value && 'act'}`} >
-//                 <div></div>
-//             </div>
-//         </div>
-//     );
-// }
-// const renderClick = (props) => {
-//     return(
-//         <div className={`UploadTable-Default ${props.record.Select && 'sel'}`} onClick={()=>console.dir(props)}>
-//             {props.value}
-//         </div>
-//     );
-// }
-// const renderTracer = (props) => {
-//     return(
-//         <div className={`UploadTable-Default ${props.record.Select && 'sel'}`} onClick={()=>console.dir(props)}>
-//             <div className={`UploadTable-Tracer ${props.value}`} onClick={()=>console.dir(props)}>
-//                 <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
-//             </div>
-//         </div>
-//     );
-// }
-// const renderSUVR = (props) => {
-//     const styleDiv = {
-//         height: "100%",
-//         width: `${props.value /4 * 150}px`,
-//         background:'white',
-//         borderRadius:"5px",
-//     }
-//     return(
-//         <div  className={`UploadTable-Default ${props.record.Select && 'sel'}`}>
-//             <div className={`UploadTable-SUVR ${props.value}`}>
-//                 <span>{props.value}</span>
-//                 {/* <progress value={props.value} min={0} max={5} /> */}
-//                 <div style={{width: "150px", height:"5px", borderRadius:"5px",
-//                 boxSizing:"border-box", background:"#383C41"}}>
-//                     <div style={styleDiv}></div>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// }
-// const fields = [
-//     { render: renderSelect, name: 'Select', displayName: "Select (Open)", inputFilterable: true, sortable: true},
-//     { render: renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
-//     { render: renderSUVR, name: 'SUVR', displayName: "SUVR", inputFilterable: true, exactFilterable: false, sortable: true },
-//     { render: renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
-//     { render: renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
-//     { render: renderClick, name: 'Age', displayName: "Age", inputFilterable: true, exactFilterable: false, sortable: true },
-//     { render: renderClick, name: 'Sex', displayName: "Sex", inputFilterable: true, exactFilterable: false, sortable: true },
-//     { render: renderClick, name: 'Update', displayName: "Update", inputFilterable: true, exactFilterable: false, sortable: true },
-// ];
- 
-export default class UploadTable extends Component {
+class UploadTable extends Component {
+    // const dispatch = useDispatch();
     state={
         data: [
-            { id:0,Focus:false, Select:true, Tracer: "C-PIB", SUVR: 2.11, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 38, Sex:"M", Update:"20.07.15" },
+            { id:0,Focus:false, Select:false, Tracer: "C-PIB", SUVR: 2.11, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 38, Sex:"M", Update:"20.07.15" },
             { id:1,Focus:false, Select:false, Tracer: "FBB", SUVR: 1.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 26, Sex:"M", Update:"20.07.15" },
             { id:2,Focus:false, Select:false, Tracer: "FBB", SUVR:1.1, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 39, Sex:"M", Update:"20.07.15" },
             { id:3,Focus:false, Select:false, Tracer: "FBP", SUVR: 2.1, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 33, Sex:"M", Update:"20.07.15" },
@@ -122,6 +41,7 @@ export default class UploadTable extends Component {
         return(
             <div className={`UploadTable-Default ${props.record.Select && 'sel'}`} 
                         onClick={()=>{
+                            {props.record.Select ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
                             this.setState({
                               // data:[...data, props.record]
                                 data: data.map(
@@ -130,7 +50,7 @@ export default class UploadTable extends Component {
                                   : {...item,...{Focus:false}} // 기존의 값을 그대로 유지
                                 ),
                             });
-                            console.dir(props)
+                            // console.dir(props)
                         }
                     }
                 >
@@ -145,6 +65,7 @@ export default class UploadTable extends Component {
         return(
             <div className={`UploadTable-Default ${props.record.Select && 'sel'}`} 
                         onClick={()=>{
+                            {props.record.Select ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
                             this.setState({
                               // data:[...data, props.record]
                                 data: data.map(
@@ -153,7 +74,7 @@ export default class UploadTable extends Component {
                                   : {...item,...{Focus:false}} // 기존의 값을 그대로 유지
                                 ),
                             });
-                            console.dir(props)
+                            // console.dir(props)
                         }
                     }
                 >
@@ -166,6 +87,7 @@ export default class UploadTable extends Component {
         return(
             <div className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Focus && 'focus'}`} 
                         onClick={()=>{
+                            {props.record.Select ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
                             this.setState({
                               // data:[...data, props.record]
                                 data: data.map(
@@ -195,6 +117,7 @@ export default class UploadTable extends Component {
         return(
             <div  className={`UploadTable-Default ${props.record.Select && 'sel'}`}
                         onClick={()=>{
+                            {props.record.Select ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
                             this.setState({
                                 // data:[...data, props.record]
                                     data: data.map(
@@ -245,3 +168,19 @@ export default class UploadTable extends Component {
         );
     }
 }
+const mapStateToProps = (state) => ({
+  // storeCount: state.count.count,
+  counter:state.counter,
+  isLogged:state.isLogged,
+  listManager:state.listManager,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  increment: () => dispatch(actions.increment()),
+  decrement: () => dispatch(actions.decrement()),
+  login: () => dispatch(actions.login()),
+  logout: () => dispatch(actions.logout()),
+  addToList: (item) => dispatch(actions.addToList(item)),
+  removeFromList: (item) => dispatch(actions.removeFromList(item)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(UploadTable);

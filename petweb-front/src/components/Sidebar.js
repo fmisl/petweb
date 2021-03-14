@@ -1,16 +1,16 @@
 import React, {useState, useEffect } from 'react';
-import '../../App.css'
+import '../App.css'
 import {useHistory, Redirect, Link, useLocation} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
-import {logout, increment, decrement, tab_number} from '../../reduxs/actions';
+import {logout, increment, decrement, tab_number} from '../reduxs/actions';
 // import logoWhite from '../../images/logo-white.png'
-import LogoWhite from '../../images/LogoWhite';
-import IconDashboard from '../../images/IconDashboard';
-import IconUpload from '../../images/IconUpload';
-import IconView from '../../images/IconView';
-import IconAnalysis from '../../images/IconAnalysis';
-import IconSetting from '../../images/IconSetting';
-import IconLogout from '../../images/IconLogout';
+import LogoWhite from '../images/LogoWhite';
+import IconDashboard from '../images/IconDashboard';
+import IconUpload from '../images/IconUpload';
+import IconView from '../images/IconView';
+import IconAnalysis from '../images/IconAnalysis';
+import IconSetting from '../images/IconSetting';
+import IconLogout from '../images/IconLogout';
 
 function Sidebar() {
   const [tab, setTab] = useState(0)
@@ -18,7 +18,7 @@ function Sidebar() {
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const history =useHistory();
-  const menuList = ['dashboard', 'upload', 'view', 'analysis/suvr', 'analysis/report', 'setting']
+  const menuList = ['dashboard', 'upload', 'view/191', 'analysis/suvr', 'analysis/report', 'setting']
   useEffect(() => {
     console.log(counter);
     console.log(menuList[counter]);
@@ -31,7 +31,8 @@ function Sidebar() {
   // onWheel={(e)=>{if (e.deltaY >= 0) {setTab(Math.min(menuList.length-1,tab+1))} else {setTab(Math.max(0, tab-1))}}}
   // onWheel={(e)=>{let temp = tab; if (e.deltaY >= 0) {temp = Math.min(menuList.length-1,tab+1)} else {temp = Math.max(0, tab-1)}; history.push({pathname:'/'+menuList[temp],state:{tab:temp}})}}
   return (
-    <div className="sidebar" onWheel={(e)=>{if (e.deltaY>=0){dispatch(increment(menuList.length))}else{dispatch(decrement(menuList.length))}}}>
+    <div className="sidebar" tabIndex={0} onKeyDown={(e)=>{if (e.keyCode == 40){dispatch(increment(menuList.length))} else if (e.keyCode == 38) {dispatch(decrement(menuList.length))};}}>
+      {/* onWheel={(e)=>{if (e.deltaY>=0){dispatch(increment(menuList.length))}else{dispatch(decrement(menuList.length))}}} */}
       <div className='sidebar-logo'><LogoWhite fill="white"/></div>
       <ul className='sidebar-grp1' >
         {/* <div className={`sidebar-grp1-item ${history.location.pathname === '/dashboard' ? 'act' : ''}`}> */}
@@ -44,7 +45,7 @@ function Sidebar() {
           <div className={`sidebar-grp1-menu-title`}><IconUpload size={'40'} stroke={menuList[counter] === 'upload' ? "#118AF7" : "#ccccda"}/><li>Upload</li></div>
         </div>
         <div className={'sidebar-grp1-splitter'}></div>
-        <div className={`sidebar-grp1-menu ${menuList[counter] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); dispatch(tab_number(2));}}>
+        <div className={`sidebar-grp1-menu ${menuList[counter].split('/')[0] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); dispatch(tab_number(2));}}>
           <div className={`sidebar-grp1-menu-title`}><IconView size={'40'} stroke={menuList[counter] === 'view' ? "#118AF7" : "#ccccda"}/><li>View</li></div>
         </div>
         <div className={`sidebar-grp1-menu ${menuList[counter].split('/')[0] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); dispatch(tab_number(3));}}>

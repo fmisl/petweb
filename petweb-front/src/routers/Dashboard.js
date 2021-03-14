@@ -1,7 +1,5 @@
 import React, {useEffect} from 'react';
 import '../App.css';
-import Sidebar from './components/Sidebar'
-import Headerbar from './components/Headerbar'
 import {useHistory, useLocation} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement} from '../reduxs/actions';
@@ -11,6 +9,7 @@ import WeeklyPie from './components/Charts/WeeklyPie'
 
 function Dashboard(props) {
   const counter = useSelector(state => state.counter);
+  const listSelected = useSelector(state => state.listManager);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const history =useHistory();
@@ -95,6 +94,7 @@ function Dashboard(props) {
         <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>
           <h1>Dashboard page</h1>
+          <h1>listSelected: {listSelected}</h1>
           <h1>Counter: {counter}</h1>
           <button onClick={()=> dispatch(increment())}>+</button>
           <button onClick={()=> dispatch(decrement())}>-</button>
