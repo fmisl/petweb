@@ -63,15 +63,14 @@ function Upload({history}) {
           <UploadTable/>
         </div>
 
-        <div className="redux-info">
+        {/* <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>
           <h1>Upload page</h1>
           <h1>listSelected: {listSelected}</h1>
           <h1>Counter: {counter}</h1>
           <button onClick={()=> dispatch(increment())}>+</button>
           <button onClick={()=> dispatch(decrement())}>-</button>
-          {/* {isLogged ? '' : <h3>Valueable Information I shouldn't see</h3>} */}
-        </div>
+        </div> */}
       </div>
     </div>
   );

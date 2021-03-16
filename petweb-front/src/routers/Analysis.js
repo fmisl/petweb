@@ -55,7 +55,6 @@ class Analysis extends Component {
       slidesToScroll: 1
     };
   
-    console.log(window.location.pathname)
     return (
       <div className="content" onClick={()=>this.setState({showMenu:false})}>
         {/* <Sidebar/>
@@ -122,15 +121,15 @@ class Analysis extends Component {
             </div>
           </div>
 
-          <div className="redux-info">
+          {/* <div className="redux-info">
             <h1>isLogged: {isLogged.toString()}</h1>
             <h1>Analysis page</h1>
             <h1>listSelected: {listSelected}</h1>
             <h1>Counter: {counter}</h1>
             <button onClick={()=> increment()}>+</button>
             <button onClick={()=> decrement()}>-</button>
+          </div> */}
             {/* {isLogged ? '' : <h3>Valueable Information I shouldn't see</h3>} */}
-          </div>
         </div>
       </div>
     );

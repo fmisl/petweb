@@ -23,6 +23,7 @@ function Dashboard(props) {
   // console.log(history.location.pathname)
   // console.log(window.location.pathname)
   // console.log(props.location)
+    // console.log(window.location.pathname)
   return (
     <div className="content">
       {/* <Sidebar />
@@ -91,14 +92,14 @@ function Dashboard(props) {
           </div>
         </div>
 
-        <div className="redux-info">
+        {/* <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>
           <h1>Dashboard page</h1>
           <h1>listSelected: {listSelected}</h1>
           <h1>Counter: {counter}</h1>
           <button onClick={()=> dispatch(increment())}>+</button>
           <button onClick={()=> dispatch(decrement())}>-</button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -45,7 +45,7 @@ function View({}) {
   // console.log(history.location.pathname)
   // console.log(window.location.pathname)
   useEffect(async () => {
-    console.log('useEffect (caseID): ',caseID)
+    // console.log('useEffect (caseID): ',caseID)
     // await getCase(caseID);
     // if (!history.match.params.caseID) {
     //   console.log('history.match.params.caseID:',history.match.params.caseID)
@@ -64,7 +64,7 @@ function View({}) {
     console.log('res: ', res.data[0])
     // let slices = res.data[0].slices;
   }
-
+  console.log("view: ",caseID)
   return (
     <div className="content" onClick={()=>setShowMenu(false)}>
       {/* <Sidebar />
@@ -72,8 +72,8 @@ function View({}) {
       <div className="content-page">
         {/* <div className="view-box"> */}
           <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-            {/* <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/> */}
-            <Home caseID={caseID}/>
+            <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
+            {/* <Home caseID={caseID}/> */}
           </div>
         {/* </div> */}
 
@@ -129,15 +129,15 @@ function View({}) {
           </div>
         </div>
 
-        <div className="redux-info">
+        {/* <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>
           <h1>View page</h1>
           <h1>listSelected: {listSelected}</h1>
           <h1>Counter: {counter}</h1>
           <button onClick={()=> dispatch(increment())}>+</button>
           <button onClick={()=> dispatch(decrement())}>-</button>
-          {/* {isLogged ? '' : <h3>Valueable Information I shouldn't see</h3>} */}
-        </div>
+        </div> */}
+        {/* {isLogged ? '' : <h3>Valueable Information I shouldn't see</h3>} */}
       </div>
     </div>
   );
