@@ -33,6 +33,7 @@
     /* overflow: auto; */
     height: 810px;
     overflow-y: scroll;
+    overflow-x: hidden;
     /* border: red solid;
     box-sizing: border-box; */
 }
@@ -101,9 +102,10 @@
 .table.table-condensed.table-hover.filterable-table>tbody>tr:hover {
     /* background:rgba(0,0,0,0.3); */
     /* background: #292D30; */
-    color: #118AF7;
-    /* border: 1.5px #118AF7 solid;
-    box-sizing: border-box; */
+    /* color: #118AF7; */
+    color: white;
+    border: 1.5px #118AF7 solid;
+    box-sizing: border-box;
 }
 
 
@@ -199,14 +201,15 @@
 }
 
 .UploadTable-Default.sel {
+    /* background: #292D30; */
+}
+
+/* .UploadTable-Default.sel.opened {
+} */
+
+.UploadTable-Default.opened {
+    /* color: #118AF7; */
     background: #292D30;
-}
-
-.UploadTable-Default.sel.focus {
-    color: #118AF7;
-}
-
-.UploadTable-Default.focus {
     color: #118AF7;
 }
 
@@ -218,6 +221,13 @@
     height: 100%;
     /* border: red solid; */
     box-sizing: border-box;
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Old versions of Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
 }
 
 .UploadTable-Select {

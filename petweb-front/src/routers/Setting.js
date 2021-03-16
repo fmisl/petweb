@@ -1,16 +1,14 @@
 import React from 'react';
 import '../App.css';
-import Sidebar from './components/Sidebar'
-import Headerbar from './components/Headerbar'
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement} from '../reduxs/actions';
 
 function Setting({history}) {
   const counter = useSelector(state => state.counter);
+  const listSelected = useSelector(state => state.listManager);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   // console.log(history.location.pathname)
-  console.log(window.location.pathname)
   return (
     <div className="content">
       {/* <Sidebar/>
@@ -34,14 +32,15 @@ function Setting({history}) {
           </div>
         </div>
 
-        <div className="redux-info">
+        {/* <div className="redux-info">
           <h1>isLogged: {isLogged.toString()}</h1>
           <h1>Setting page</h1>
+          <h1>listSelected: {listSelected}</h1>
           <h1>Counter: {counter}</h1>
           <button onClick={()=> dispatch(increment())}>+</button>
           <button onClick={()=> dispatch(decrement())}>-</button>
+        </div> */}
           {/* {isLogged ? '' : <h3>Valueable Information I shouldn't see</h3>} */}
-        </div>
       </div>
     </div>
   );

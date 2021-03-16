@@ -1,12 +1,12 @@
 import counterReducer from './counter';
 import loggedReducer from './isLogged';
-import profileReducer from './profile';
+import listManagerReducer from './listManager';
 import {combineReducers} from 'redux';
 
   //counter: counterReducer
 const allReducers = combineReducers({
   counter: counterReducer,
   isLogged: loggedReducer,
-  // profile: profileReducer
+  listManager: listManagerReducer,
 })
 export default allReducers;

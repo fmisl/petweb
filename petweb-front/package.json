@@ -28,6 +28,8 @@
   "scripts": {
     "start-win": "set PORT=3002 && react-scripts start",
     "start-mac": "PORT=3002 react-scripts start",
+    "dev-win": "set PORT=3022 && react-scripts start",
+    "dev-mac": "PORT=3022 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

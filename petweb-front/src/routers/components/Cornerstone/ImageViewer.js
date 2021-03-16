@@ -317,7 +317,7 @@ export default class ImageViewer extends Component {
         elementC.addEventListener("cornerstonenewimage", this.onNewImage);
         window.addEventListener("resize", this.onWindowResize);
       } catch(e){
-        console.log('error')
+        console.error('FastSkip')
       }
       });
       const sagittalLoadImagePromise = cornerstone.loadImage(this.state.imageIdS[this.state.stackS.currentImageIdIndex]).then(image => {
@@ -350,7 +350,7 @@ export default class ImageViewer extends Component {
         elementS.addEventListener("cornerstonenewimage", this.onNewImage);
         window.addEventListener("resize", this.onWindowResize);
       } catch(e){
-        console.log('error')
+        console.error('FastSkip')
       }
       });
       const axialLoadImagePromise = cornerstone.loadImage(this.state.imageIdA[this.state.stackA.currentImageIdIndex]).then(image => {
@@ -378,7 +378,7 @@ export default class ImageViewer extends Component {
         elementA.addEventListener("cornerstonenewimage", this.onNewImage);
         window.addEventListener("resize", this.onWindowResize);
       } catch(e){
-        console.log('error')
+        console.error('FastSkip')
       }
       });
       // this.setState({
@@ -403,11 +403,11 @@ export default class ImageViewer extends Component {
         //   synchronizationContext: this.synchronizer,
         // });
       } catch(e){
-        console.log('error')
+        console.error('FastSkip')
       }
       });
     } catch(e){
-      console.log('fast skip by wheel')
+      console.error('fast skip by wheel')
     }
   }
 

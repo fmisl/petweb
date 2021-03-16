@@ -3,53 +3,7 @@ import IconDelete from '../../../images/IconDelete';
 import './UploaderTable.css'
 
 const FilterableTable = require('react-filterable-table');
- 
-// let data = [
-//     { Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_101.nii", Remove: "" },
-//     { Select: true, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_102.nii", Remove: "" },
-//     { Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_103.nii", Remove: "" },
-//     { Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_104.nii", Remove: "" },
-//     { Select: false, Tracer:"FBP", PatientName: "Sandwich Eater", FileName: "SNUH_105.nii", Remove: ""    },
-//     { Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_101.nii", Remove: "" },
-//     { Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_102.nii", Remove: "" },
-//     { Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_103.nii", Remove: "" },
-//     { Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_104.nii", Remove: "" },
-//     { Select: false, Tracer:"FBP", PatientName: "Sandwich Eater", FileName: "SNUH_105.nii", Remove: ""    },
-// ];
 
-// const renderRemove = (props) => {
-//     return(
-//       <div className={`UploaderTable-Default ${props.record.Select && 'sel'}`} onClick={()=>console.dir(props)}>
-//         <div style={{userSelect:"none"}}>
-//             <IconDelete className="UploaderIcon-Delete"/>
-//         </div>
-//       </div>
-//     );
-// }
-// const renderClick = (props) => {
-//     return(
-//         <div className={`UploaderTable-Default ${props.record.Select && 'sel'}`} onClick={()=>{console.dir(props)}}>
-//             {props.value}
-//         </div>
-//     );
-// }
-// const renderTracer = (props) => {
-//     return(
-//       <div className={`UploaderTable-Default ${props.record.Select && 'sel'}`} onClick={()=>console.dir(props)}>
-//         <div className={`UploaderTable-Tracer ${props.value}`}>
-//             <div>&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
-//         </div>
-//       </div>
-//     );
-// }
-
-// const fields = [
-//     { render: renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
-//     { render: renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
-//     { render: renderClick, name: 'FileName', displayName: "FileName", inputFilterable: true, exactFilterable: false, sortable: true },
-//     { render: renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
-// ];
- 
 export default class UploaderTable extends Component {
   constructor(props) {
     super(props);

@@ -4,8 +4,6 @@ import Slider from "react-slick";
 import '../App.css';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import Sidebar from './components/Sidebar'
-import Headerbar from './components/Headerbar'
 import { connect } from 'react-redux';
 import * as actions from '../reduxs/actions';
 // import {useSelector, useDispatch} from 'react-redux';
@@ -38,7 +36,7 @@ class Analysis extends Component {
     ReactDOM.findDOMNode(this).removeEventListener('wheel', this.handleWheel);
   }
   render(){
-    const { counter, isLogged, increment, decrement } = this.props;
+    const { counter, isLogged, increment, decrement, listSelected } = this.props;
     // const counter = useSelector(state => state.counter);
     // const isLogged = useSelector(state => state.isLogged);
     // const dispatch = useDispatch();
@@ -57,7 +55,6 @@ class Analysis extends Component {
       slidesToScroll: 1
     };
   
-    console.log(window.location.pathname)
     return (
       <div className="content" onClick={()=>this.setState({showMenu:false})}>
         {/* <Sidebar/>
@@ -124,14 +121,15 @@ class Analysis extends Component {
             </div>
           </div>
 
-          <div className="redux-info">
+          {/* <div className="redux-info">
             <h1>isLogged: {isLogged.toString()}</h1>
             <h1>Analysis page</h1>
+            <h1>listSelected: {listSelected}</h1>
             <h1>Counter: {counter}</h1>
             <button onClick={()=> increment()}>+</button>
             <button onClick={()=> decrement()}>-</button>
+          </div> */}
             {/* {isLogged ? '' : <h3>Valueable Information I shouldn't see</h3>} */}
-          </div>
         </div>
       </div>
     );
@@ -142,6 +140,7 @@ const mapStateToProps = (state) => ({
   // storeCount: state.count.count,
   counter:state.counter,
   isLogged:state.isLogged,
+  listSelected:state.listManager,
 });
 
 const mapDispatchToProps = (dispatch) => ({

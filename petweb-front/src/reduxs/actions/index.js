@@ -32,3 +32,15 @@ export const profile = (text) =>{
     username: text
   };
 };
+export const addToList = (item) =>{
+  return {
+    type: 'ADD',
+    item: item,
+  }
+}
+export const removeFromList = (item) =>{
+  return {
+    type: 'REMOVE',
+    item: item,
+  }
+}
