@@ -386,12 +386,15 @@ input:-webkit-autofill:active {
   color: #ccccda;
   z-index: 1;
 
-  /* border: blue solid;
-  box-sizing: border-box; */
+}
+
+.Headerbar:hover {
+  border: blue solid;
+  box-sizing: border-box;
 }
 
 .redux-info {
-  display: none;
+  /* display: none; */
   position: absolute;
   top: 40%;
   left: 40%;

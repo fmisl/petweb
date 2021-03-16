@@ -3,26 +3,31 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {createStore} from 'redux'
+import {createStore, applyMiddleware, compose} from 'redux'
+import thunk from 'redux-thunk';
 import allReducer from './reduxs/reducers';
 import {Provider} from 'react-redux';
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory} from 'react-router-dom' 
 
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
-  allReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  allReducer, 
+  // applyMiddleware(thunk),
+  composeEnhancer(applyMiddleware(thunk)),
+  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
 ReactDOM.render(
-  <Router>
-    <Switch>
       <Provider store={store}>
         <React.StrictMode>
+          <Router>
+            <Switch>
               <App />
+            </Switch>
+          </Router>
         </React.StrictMode>
       </Provider>
-    </Switch>
-  </Router>,
+  ,
   document.getElementById('root')
 );
 

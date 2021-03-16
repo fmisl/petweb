@@ -55,7 +55,8 @@ function Sidebar() {
       default:
         console.log('pathname('+pathname+') is not found')
     }
-  })
+    // console.log('pathname('+pathname+') is not found')
+  },[location])
   // console.log(tab)
   // if (e.deltaY >= 0) {setTab(Math.min(menuList.length-1,tab+1))} else {setTab(Math.max(0, tab-1))}
   // onWheel={(e)=>{if (e.deltaY >= 0) {setTab(Math.min(menuList.length-1,tab+1))} else {setTab(Math.max(0, tab-1))}}}

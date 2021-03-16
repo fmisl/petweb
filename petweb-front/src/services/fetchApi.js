@@ -1,7 +1,13 @@
 import axios from 'axios';
 import {IPinUSE} from './IPs'
 
-
+export function testing(data){
+  return axios.get(IPinUSE+"testing/",{
+    headers:{
+    'Authorization':'jwt '+data.token
+    }
+  })
+}
 export function TokenVerify (data) {
   return axios.post(IPinUSE+'api/token/verify/', data);
 }
