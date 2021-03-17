@@ -1,16 +1,19 @@
 import React from 'react';
 import '../App.css'
 import {useSelector, useDispatch} from 'react-redux';
-import {changeColor, loadColor} from '../reduxs/actions';
+import {changeColor, loadItems} from '../reduxs/actions';
 
 function Headerbar() {
-  const fileLists = useSelector(state => state.fileLists);
+  const fileList = useSelector(state => state.fileList);
   const dispatch = useDispatch();
-  console.log("headerbar.js:",fileLists)
+  // console.log("headerbar.js:?")
+  // console.log("headerbar.js:",fileList)
   return (
-    <div className="Headerbar" onClick={()=>{dispatch(loadColor())}}>
+    <div className="Headerbar">
+       {/* onClick={()=>{dispatch(loadItems())}} */}
       {/* Logo */}
-      {fileLists.color}
+      {/* {fileList} */}
+      {/* {JSON.stringify(fileList)}  */}
     </div>
   );
 }

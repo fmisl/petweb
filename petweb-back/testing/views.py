@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 def index(request):
     # return HttpResponse("Hello, world. You're at the polls index.")
 
-    items = [{"id": 0, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.11, "PatientName": "Sandwich Eater",
+    items = [{"id": 0, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.21, "PatientName": "Sandwich Eater",
      "PatientID": "Sandwich Eater", "Age": 38, "Sex": "M", "Update": "20.07.15"},
     {"id": 1, "Opened": False, "Select": False, "Tracer": "FBB", "SUVR": 1.5, "PatientName": "Sandwich Eater",
      "PatientID": "Sandwich Eater", "Age": 26, "Sex": "M", "Update": "20.07.15"},

@@ -8,7 +8,7 @@ import Login from './routers/login/Login'
 import Forgot from './routers/login/Forgot'
 import Signup from './routers/login/Signup'
 import * as services from './services/fetchApi'
-import {login, logout, increment, decrement, changeColor} from './reduxs/actions';
+import {login, logout, increment, decrement, loadItems} from './reduxs/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import {Dashboard, Upload, View, Analysis, Setting} from './routers'
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
@@ -30,6 +30,8 @@ function App() {
     if (token){
       try{
         res = await services.TokenVerify({'token':token})
+        if (res.data.token == token) dispatch(loadItems())
+        else alert('Automatically Logout')
       } catch (e){
         // console.log(e.response.data.non_field_errors[0])
         console.log("Token expired")

@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react';
 import '../../App.css'
 import {useSelector, useDispatch} from 'react-redux';
 import {useHistory, Redirect} from 'react-router-dom'
-import {login,profile} from '../../reduxs/actions';
+import {login,profile,loadItems} from '../../reduxs/actions';
 import useForm from "./useForm"
 import validateLogin from "./validateLogin"
 import * as services from '../../services/fetchApi'
@@ -33,6 +33,7 @@ function Login() {
         localStorage.setItem('token', token)
         localStorage.setItem('username', values.username)
         dispatch(login())
+        dispatch(loadItems())
         if (history.location.pathname === "/"){
           history.push("/dashboard")
         } else if (history.location.pathname === "/login"){
