@@ -1,14 +1,17 @@
 import axios from "axios";
 import {IPinUSE} from '../../services/IPs'
 import * as services from '../../services/fetchApi'
-export function loadItems (){
+export function loadItems (data){
   return async dispatch => {
     try {
-      const data = await axios
+      const dataRes = await axios
       // 'https://jsonplaceholder.typicode.com/posts'
-        .get(IPinUSE+"testing/")
-        .then(res => res.data)
-        dispatch(fetchItems(data));
+        .get(IPinUSE+"testing/",{
+          headers:{
+            'Authorization':'jwt '+data.token
+            }
+        }).then(res => res.data)
+        dispatch(fetchItems(dataRes));
     } catch (err) {
 
     }

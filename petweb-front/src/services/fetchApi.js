@@ -24,6 +24,14 @@ export function getCase(data) {
     }
   })
 }
+export function uploadFile(data) {
+  return axios.post(IPinUSE+"v1/case/uploads/",data.obj,{
+    headers:{
+      'Authorization':'jwt '+data.token,
+      'content-type': 'multipart/form-data'
+    }
+  });
+}
 export function Upload(data) {
   return axios.post(IPinUSE+"v1/case/uploads/",data,{
     headers:{

@@ -30,7 +30,7 @@ function App() {
     if (token){
       try{
         res = await services.TokenVerify({'token':token})
-        if (res.data.token == token) dispatch(loadItems())
+        if (res.data.token == token) dispatch(loadItems({'token':token}))
         else alert('Automatically Logout')
       } catch (e){
         // console.log(e.response.data.non_field_errors[0])

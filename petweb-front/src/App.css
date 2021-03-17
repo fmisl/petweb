@@ -544,6 +544,7 @@ input:-webkit-autofill:active {
 }
 
 .upload-table {
+  position: relative;
   width: 1522px;
   height: 810px;
   margin-top: 50px;
