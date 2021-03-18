@@ -4,7 +4,7 @@ import Worklist from "../modal/Worklist";
 // import useWorklist from '../modal/useWorklist';
 import Uploader from "../modal/Uploader";
 import {useSelector, useDispatch} from 'react-redux';
-import {increment, decrement, addToList, removeFromList,loadItems} from '../reduxs/actions';
+import {increment, decrement, addToList, removeFromList,loadItems, fetchItems} from '../reduxs/actions';
 import IconView from '../images/IconView';
 import IconAnalysis from '../images/IconAnalysis';
 import IconDelete from '../images/IconDelete';
@@ -38,8 +38,6 @@ function Upload({history}) {
     } else {
       if (e.target.innerText == "Run"){
         runFiles()
-        const token = localStorage.getItem('token')
-        dispatch(loadItems({'token':token}))
       }
       else {
         deleteFiles()
@@ -52,6 +50,7 @@ function Upload({history}) {
     const res = await services.runFile({'token':token, 'obj':fileList})
     const putList = res.data
     console.log(putList)
+    dispatch(fetchItems(putList))
   }
   const deleteFiles = async () =>{
     const token = localStorage.getItem('token')

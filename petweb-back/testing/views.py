@@ -32,7 +32,13 @@ class uploader(APIView):
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
 
-        return Response("put post test ok", status=200)
+        filenames = os.listdir(database_path)
+        fileList = [{'id': i, 'Opened': False, 'Select': False, 'Tracer': '11C-PIB', 'SUVR': 2.21, 'FileName': filename,
+                     'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15'}
+                    for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+
+        return Response(data=fileList, status=status.HTTP_200_OK)
+        # return Response("put post test ok", status=200)
 
     def post(self, request, format=None):
         print("success")

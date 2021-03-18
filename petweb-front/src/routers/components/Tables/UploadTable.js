@@ -42,15 +42,22 @@ class UploadTable extends Component {
     componentDidUpdate(prevProps){
         // console.log('componentDidUpdate1:',prevProps.fileList)
         // console.log('componentDidUpdate2:',this.props.fileList)
-        if (prevProps.fileList.length === 0){
-            if (prevProps.fileList !== this.props.fileList){
-                console.log('componentDidUpdate3:',this.props.fileList)
-                const {fileList} = this.props;
-                this.setState({
-                    data:fileList,
-                })
-            }
+        if (prevProps.fileList !== this.props.fileList){
+            console.log('componentDidUpdate3:',this.props.fileList)
+            const {fileList} = this.props;
+            this.setState({
+                data:fileList,
+            })
         }
+        // if (prevProps.fileList.length === 0){
+        //     if (prevProps.fileList !== this.props.fileList){
+        //         console.log('componentDidUpdate3:',this.props.fileList)
+        //         const {fileList} = this.props;
+        //         this.setState({
+        //             data:fileList,
+        //         })
+        //     }
+        // }
     }
     renderSelect = (props) => {
         const {data} = this.state;
