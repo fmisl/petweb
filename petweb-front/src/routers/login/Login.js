@@ -33,7 +33,7 @@ function Login() {
         localStorage.setItem('token', token)
         localStorage.setItem('username', values.username)
         dispatch(login())
-        dispatch(loadItems())
+        // dispatch(loadItems())
         if (history.location.pathname === "/"){
           history.push("/dashboard")
         } else if (history.location.pathname === "/login"){

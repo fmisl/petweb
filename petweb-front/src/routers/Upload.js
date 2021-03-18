@@ -4,7 +4,7 @@ import Worklist from "../modal/Worklist";
 // import useWorklist from '../modal/useWorklist';
 import Uploader from "../modal/Uploader";
 import {useSelector, useDispatch} from 'react-redux';
-import {increment, decrement, addToList, removeFromList} from '../reduxs/actions';
+import {increment, decrement, addToList, removeFromList,loadItems} from '../reduxs/actions';
 import IconView from '../images/IconView';
 import IconAnalysis from '../images/IconAnalysis';
 import IconDelete from '../images/IconDelete';
@@ -21,59 +21,74 @@ function Upload({history}) {
   const [isShowingUploader, setIsShowingUploader] = useState(false);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
-  // const dropRef = useRef();
+  const [fileList, setFileList] = useState([]);
 
   function toggleWorklist() {
     setIsShowingWorklist(!isShowingWorklist);
   }
-  function toggleUploader() {
-    // alert("hi")
-    // setDragState(false);
-    setIsShowingUploader(!isShowingUploader);
-  }
-  // function handleDrop() {
-  //   alert("drop")
-  //   setIsShowingUploader(!isShowingUploader);
-  // }
-  // console.log(history.location.pathname)
-  const toggleUploader2=(e)=>{
+  const toggleUploader=(e)=>{
     //   e.preventDefault();
     setDragState(false)
-    let formData = new FormData();
-    const FilesObj = e.target.files;
-    console.dir(FilesObj)
-    // console.dir(FilesObj)
-    // formData.append("myfiles", FilesObj)
-    Array.from(FilesObj).map(myfile => formData.append("myfiles", myfile));
-    console.dir(formData)
-    // debugger;
-    uploadFiles(formData)
-    // if (FilesObj) {
-    // }
+    if (isShowingUploader==false){
+      deleteFiles()
+      let formData = new FormData();
+      const FilesObj = e.target.files;
+      Array.from(FilesObj).map(myfile => formData.append("myfiles", myfile));
+      postFiles(formData)
+    } else {
+      if (e.target.innerText == "Run"){
+        runFiles()
+        const token = localStorage.getItem('token')
+        dispatch(loadItems({'token':token}))
+      }
+      else {
+        deleteFiles()
+      }
+    }
     setIsShowingUploader(!isShowingUploader);
   };
-  const uploadFiles = async formData =>{
+  const runFiles = async () =>{
     const token = localStorage.getItem('token')
-    const res1 = await services.uploadFile({'token':token, 'obj':formData})
-    // const headers = {
-    //   Authorization: authProps.idToken // using Cognito authorizer
-    // };
-    // const response = await axios.post(
-    //   "https://MY_ENDPOINT.execute-api.us-east-1.amazonaws.com/v1/",
-    //   API_GATEWAY_POST_PAYLOAD_TEMPLATE,
-    //   { headers }
-    // );
-    // const data = await response.json();
-    // setToken(data.access_token);
+    const res = await services.runFile({'token':token, 'obj':fileList})
+    const putList = res.data
+    console.log(putList)
+  }
+  const deleteFiles = async () =>{
+    const token = localStorage.getItem('token')
+    const res = await services.deleteFile({'token':token})
+    const uploadList = res.data
+    console.log(uploadList)
+    // setFileList(uploadList)
+  }
+  const postFiles = async formData =>{
+    const token = localStorage.getItem('token')
+    const res = await services.postFile({'token':token, 'obj':formData})
+    const uploadList = res.data
+    setFileList(uploadList)
+  }
+  const removeFileList=(record)=>{
+    setFileList(
+      fileList.filter(item => item.id !== record.id)
+    )
+  }
+  const updateFileList=(record)=>{
+    setFileList(
+      fileList.map(
+        item => record.id === item.id ?
+        { ...item, ...{Select:!record.Select, Focus:true} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
+          : {...item,...{Focus:false}} // 기존의 값을 그대로 유지
+      )
+    )
   }
 
   // console.log(window.location.pathname)
+  console.log('upload:', fileList)
   return (
     <div className="content">
       {/* <Sidebar />
       <Headerbar/> */}
       <Worklist isShowing={isShowingWorklist} hide={toggleWorklist}/>
-      <Uploader isShowing={isShowingUploader} hide={toggleUploader}/>
+      <Uploader fileList={fileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>
@@ -85,14 +100,14 @@ function Upload({history}) {
           </div>
           <div style={{display:"flex", color:"white"}} >
             <label for="upload-input" className="upload-btn upload" >Upload</label>
-            <input style={{display:"none"}} multiple type="file" id="upload-input" onChange={(e)=>toggleUploader2(e)} onClick={(e)=>e.target.value=null} />
+            <input style={{display:"none"}} multiple type="file" id="upload-input" onChange={(e)=>toggleUploader(e)} onClick={(e)=>e.target.value=null} />
           </div>
         </div>
         <div className="upload-table" onDragEnter={()=>{setDragState(true);}} onDragOver={()=>{if(!dragState) {setDragState(true);}}}>
           <UploadTable/>
           {dragState && 
               <div style={{display:'flex', justifyContent:'center', alignItems:'center', background:"black", background:"rgba(0,0,0,0.8)", position:'absolute', position:'absolute', top:'0', left:'0', width:'100%', height:'100%', border:'white dashed', boxSizing:'border-box', borderRadius:'10px'}}>
-                <input type='file' multiple style={{position:'absolute', top:'0', left:'0', border:'red solid', opacity:'0', width:'100%', height:'100%'}} onDragLeave={()=>{setDragState(false);}} onChange={(e)=>toggleUploader2(e)} onPointerOver={()=>{if (dragState) setDragState(false)}}/>
+                <input type='file' multiple style={{position:'absolute', top:'0', left:'0', border:'red solid', opacity:'0', width:'100%', height:'100%'}} onDragLeave={()=>{setDragState(false);}} onChange={(e)=>toggleUploader(e)} onPointerOver={()=>{if (dragState) setDragState(false)}}/>
                 <div style={{color:'white', fontSize:'60px'}}>Drag & Drop Files</div>
               </div>
           }

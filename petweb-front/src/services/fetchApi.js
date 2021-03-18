@@ -1,13 +1,6 @@
 import axios from 'axios';
 import {IPinUSE} from './IPs'
 
-export function testing(data){
-  return axios.get(IPinUSE+"testing/",{
-    headers:{
-    'Authorization':'jwt '+data.token
-    }
-  })
-}
 export function TokenVerify (data) {
   return axios.post(IPinUSE+'api/token/verify/', data);
 }
@@ -24,18 +17,32 @@ export function getCase(data) {
     }
   })
 }
-export function uploadFile(data) {
-  return axios.post(IPinUSE+"v1/case/uploads/",data.obj,{
+export function deleteFile(data) {
+  return axios.delete(IPinUSE+"testing/uploader/",{
+    headers:{
+      'Authorization':'jwt '+data.token,
+    }
+  });
+}
+export function postFile(data) {
+  return axios.post(IPinUSE+"testing/uploader/",data.obj,{
     headers:{
       'Authorization':'jwt '+data.token,
       'content-type': 'multipart/form-data'
     }
   });
 }
-export function Upload(data) {
-  return axios.post(IPinUSE+"v1/case/uploads/",data,{
+export function runFile(data) {
+  return axios.put(IPinUSE+"testing/uploader/",data.obj,{
     headers:{
-      'content-type': 'multipart/form-data'
+      'Authorization':'jwt '+data.token,
     }
   });
+}
+export function testing(data){
+  return axios.get(IPinUSE+"testing/",{
+    headers:{
+    'Authorization':'jwt '+data.token
+    }
+  })
 }

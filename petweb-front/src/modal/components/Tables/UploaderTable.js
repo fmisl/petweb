@@ -10,30 +10,37 @@ export default class UploaderTable extends Component {
     this.renderRemove = this.renderRemove.bind(this);
     this.renderClick = this.renderClick.bind(this);
     this.renderTracer = this.renderTracer.bind(this);
-    this.state = {
-      data: [
-        { id:0, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_101.nii", Remove: "" },
-        { id:1, Focus:false, Select: true, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_102.nii", Remove: "" },
-        { id:2, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_103.nii", Remove: "" },
-        { id:3, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_104.nii", Remove: "" },
-        { id:4, Focus:false, Select: false, Tracer:"FBP", PatientName: "Sandwich Eater", FileName: "SNUH_105.nii", Remove: ""    },
-        { id:5, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_101.nii", Remove: "" },
-        { id:6, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_102.nii", Remove: "" },
-        { id:7, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_103.nii", Remove: "" },
-        { id:8, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_104.nii", Remove: "" },
-        { id:9, Focus:false, Select: false, Tracer:"FBP", PatientName: "Sandwich Eater", FileName: "SNUH_105.nii", Remove: ""    },
-      ],
-    };
+    // this.runFiles = this.runFiles.bind(this);
+    // this.state = {
+    //   data:[],
+      // data: [
+      //   { id:0, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_101.nii", Remove: "" },
+      //   { id:1, Focus:false, Select: true, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_102.nii", Remove: "" },
+      //   { id:2, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_103.nii", Remove: "" },
+      //   { id:3, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_104.nii", Remove: "" },
+      //   { id:4, Focus:false, Select: false, Tracer:"FBP", PatientName: "Sandwich Eater", FileName: "SNUH_105.nii", Remove: ""    },
+      //   { id:5, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_101.nii", Remove: "" },
+      //   { id:6, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_102.nii", Remove: "" },
+      //   { id:7, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_103.nii", Remove: "" },
+      //   { id:8, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_104.nii", Remove: "" },
+      //   { id:9, Focus:false, Select: false, Tracer:"FBP", PatientName: "Sandwich Eater", FileName: "SNUH_105.nii", Remove: ""    },
+      // ],
+    // };
   }
+  // runFiles = async () =>{
+  //   const {data} = this.state;
+  //   console.log(data)
+  // }
   renderRemove = (props) => {
-    const { data } = this.state;
+    // const { data } = this.state;
       return(
         <div className={`UploaderTable-Default ${props.record.Select && 'sel'}`} 
           onClick={()=>{
-                this.setState({
-                  data: data.filter(item => item.id !== props.record.id)
-                })
-                console.dir(props)
+                this.props.removeFileList(props.record)
+                // this.setState({
+                //   data: data.filter(item => item.id !== props.record.id)
+                // })
+                // console.dir(props)
               }
             }
           >
@@ -44,51 +51,70 @@ export default class UploaderTable extends Component {
       );
   }
   renderClick = (props) => {
-    const { data } = this.state;
+    // const { data } = this.state;
       return(
           <div className={`UploaderTable-Default ${props.record.Select && 'sel'} ${props.record.Focus && 'focus'}`} 
-            onClick={()=>{
-                  this.setState({
-                    // data:[...data, props.record]
-                    data: data.map(
-                      item => item.id === props.record.id ?
-                        { ...item, ...{Select:!props.record.Select, Focus:true} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                          : {...item,...{Focus:false}} // 기존의 값을 그대로 유지
-                    ),
-                  });
-                  console.dir(props)
+            onClick={(e)=>{
+                  this.props.updateFileList(props.record)
+                  // this.setState({
+                  //   // data:[...data, props.record]
+                  //   data: data.map(
+                  //     item => item.id === props.record.id ?
+                  //       { ...item, ...{Select:!props.record.Select, Focus:true} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
+                  //         : {...item,...{Focus:false}} // 기존의 값을 그대로 유지
+                  //   ),
+                  // });
+                  this.props.getJPGURL(props.record.FileName)
                 }
               }
             >
-              {props.value}
+              <div className="Hide-Scroll">{props.value}</div>
           </div>
       );
   }
   renderTracer = (props) => {
-    const { data } = this.state;
+    // const { data } = this.state;
       return(
         <div className={`UploaderTable-Default ${props.record.Select && 'sel'} ${props.record.Focus && 'focus'}`} 
-            onClick={()=>{
-                this.setState({
-                  // data:[...data, props.record]
-                  data: data.map(
-                    item => props.record.id === item.id ?
-                    { ...item, ...{Select:!props.record.Select, Focus:true} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                      : {...item,...{Focus:false}} // 기존의 값을 그대로 유지
-                  ),
-                });
-                console.dir(props)
+            onClick={(e)=>{
+                this.props.updateFileList(props.record)
+                // this.setState({
+                //   // data:[...data, props.record]
+                //   data: data.map(
+                //     item => props.record.id === item.id ?
+                //     { ...item, ...{Select:!props.record.Select, Focus:true} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
+                //       : {...item,...{Focus:false}} // 기존의 값을 그대로 유지
+                //   ),
+                // });
+                this.props.getJPGURL(props.record.FileName)
               }
             }
           >
-          <div className={`UploaderTable-Tracer ${props.value}`}>
+          <div className={`UploaderTable-Tracer ${props.value.slice(props.value.length-3, props.value.length)}`}>
               <div>&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
           </div>
         </div>
       );
   }
+  // componentWillUnmount(){
+  //   const {runFiles} = this;
+  //   console.log('componentWillUnmount', this.props.runCall)
+  //   if (this.props.runCall == true){
+  //     runFiles();
+  //   }
+  // }
+  // componentDidUpdate(prevProps){
+  //   if (prevProps.fileList !== this.props.fileList){
+  //     console.log('componentDidUpdate in uploaderTable')
+  //     this.setState({
+  //       data:this.props.fileList,
+  //     })
+  //   }
+  // }
   render() {
-    const {data} = this.state;
+    // const {data} = this.state;
+    const {fileList, getJPGURL} = this.props;
+    console.log("uploaderTable",fileList)
     const fields = [
       { render: this.renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
       { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
@@ -102,7 +128,7 @@ export default class UploaderTable extends Component {
           // trClassName="WorklistTable"
           namespace="UploaderTable"
           initialSort="name"
-          data={data}
+          data={fileList}
           fields={fields}
           noRecordsMessage="There are no people to display"
           noFilteredRecordsMessage="No people match your filters!"

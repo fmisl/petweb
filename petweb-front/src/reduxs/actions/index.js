@@ -4,9 +4,7 @@ import * as services from '../../services/fetchApi'
 export function loadItems (data){
   return async dispatch => {
     try {
-      const dataRes = await axios
-      // 'https://jsonplaceholder.typicode.com/posts'
-        .get(IPinUSE+"testing/",{
+      const dataRes = await axios.get(IPinUSE+"testing/",{
           headers:{
             'Authorization':'jwt '+data.token
             }

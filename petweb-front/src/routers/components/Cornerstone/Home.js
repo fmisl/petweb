@@ -170,7 +170,7 @@ export default class Home extends Component {
 
     let FilesObj = e.target.files;
     Array.from(FilesObj).map(myfile => formData.append("myfiles", myfile));
-    this._uploadFile(formData);
+    this._postFile(formData);
   }
 
   _uploadFile = async Obj => {
