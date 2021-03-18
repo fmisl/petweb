@@ -49,7 +49,7 @@ function Upload({history}) {
     const token = localStorage.getItem('token')
     const res = await services.runFile({'token':token, 'obj':fileList})
     const putList = res.data
-    console.log(putList)
+    // console.log(putList)
     dispatch(fetchItems(putList))
   }
   const deleteFiles = async () =>{
