@@ -30,7 +30,8 @@ class uploader(APIView):
 
         # delete all files in uploader
         filenames = os.listdir(uploader_path)
-        [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
+        [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames)
+         if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
 
         filenames = os.listdir(database_path)
         fileList = [{'id': i, 'Opened': False, 'Select': False, 'Tracer': '11C-PIB', 'SUVR': 2.21, 'FileName': filename,

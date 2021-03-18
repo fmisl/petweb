@@ -219,7 +219,7 @@ class UploadTable extends Component {
                 fields={fields}
                 noRecordsMessage="There are no people to display"
                 noFilteredRecordsMessage="No people match your filters!"
-                pageSize={20}
+                pageSize={100}
             />
         );
     }

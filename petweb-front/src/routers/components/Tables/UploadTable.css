@@ -22,8 +22,8 @@
     display: none;
 }
 
-.table-container {
-    /* width:100%; */
+.filterable-table-container>.table-container {
+    width: 100%;
     /* width: 80%;
     height: 80%; */
     /* border: white solid; */
@@ -221,12 +221,18 @@
     height: 100%;
     /* border: red solid; */
     box-sizing: border-box;
-    -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none; /* Safari */
-       -khtml-user-select: none; /* Konqueror HTML */
-         -moz-user-select: none; /* Old versions of Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
 }
 

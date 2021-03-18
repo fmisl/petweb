@@ -2,7 +2,9 @@
   display: flex;
   text-align: center;
   height: 100vh;
+
   background: #292D30;
+  overflow: hidden;
   /* background: white; */
 
   /* border: red solid;
@@ -1671,3 +1673,191 @@ input:-webkit-autofill:active {
   justify-content: center  !important;
   border: red solid  !important;
 } */
+/* modal css */
+
+
+.modal-right-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1040;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  opacity: .5;
+  overflow: hidden;
+
+  /* border: yellow solid;
+  box-sizing: border-box; */
+}
+
+.modal-right-wrapper:hover {
+  right: -19px;
+}
+
+.modal-right-wrapper:hover+.modal-right-overlay {
+  display: block;
+}
+
+.modal-right-wrapper {
+  display: block;
+  z-index: 100;
+  position: fixed;
+  top: 5%;
+  right: -1005px;
+  width: 1000px;
+  height: 85%;
+  /* top: 0;
+  left: 0; */
+  z-index: 1050;
+  /* width: 100%; */
+  /* height: 100%; */
+  /* overflow: hidden; */
+  /* outline: 0; */
+
+  /* border: white solid;
+  box-sizing: border-box; */
+}
+
+.modal-right {
+  display: block;
+  position: fixed;
+  z-index: 100;
+  top: 5%;
+  height: 85%;
+  /* position: fixed; */
+  /* right: -19px;
+  top: 5%; */
+
+  /* margin-top: 169px; */
+  border-radius: 20px;
+  /* max-width: 500px; */
+  padding: 2rem;
+  /* width: 1200px; */
+  background: #383C41;
+  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
+  /* border-radius: 5px; */
+  border-radius: 25px 0px 0px 25px;
+
+  /* border: red solid;
+  box-sizing: border-box; */
+}
+
+.modal-right-btn {
+  position: absolute;
+  top: 40%;
+  left: -25px;
+  width: 25px;
+  height: 200px;
+  background: #383C41;
+  border-radius: 25px 0px 0px 25px;
+  border: 1px #383C41 solid;
+  /* border: 1px red solid; */
+}
+
+.modal-right-btn>div {
+  position: absolute;
+  top: 80px;
+  left: 5px;
+  width: 4px;
+  height: 30px;
+  border-left: 2px white solid;
+  border-right: 2px white solid;
+}
+
+.modal-right-header {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  height: 50px;
+  width: 176px;
+  user-select: none;
+  /* background: #383C41; */
+  /* height: 50px; */
+
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 22px;
+  /* line-height: 27px; */
+  /* identical to box height */
+  text-align: center;
+  color: white;
+
+  /* border: blue solid;
+  box-sizing: border-box; */
+}
+
+.modal-right-body {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  height: 800px;
+  /* background: #2D3135; */
+  background: #3B3C41;
+  border-radius: 5px;
+  /* overflow: auto; */
+  /* border: red solid; */
+}
+
+.upload-right-btn {
+  margin-right: 15px;
+  width: 140px;
+  height: 42px;
+  background: #292D30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  filter: drop-shadow(0px 15px 30px rgba(25, 25, 25, 0.15));
+  color: white;
+}
+
+.upload-right-btn:hover {
+  border: 1px #118AF7 solid;
+  box-sizing: border-box;
+}
+
+.upload-right-btn:active {
+  color: #118AF7;
+}
+
+.upload-right-btn:active .upload-icon {
+  stroke: #118AF7;
+}
+
+.upload-right-btn.upload {
+  width: 160px;
+  height: 48px;
+  margin-right: 0;
+  font-weight: 500;
+  font-size: 24px;
+  background: #118AF7;
+}
+
+.upload-right-btn.upload:hover {
+  border: 1px white solid;
+  box-sizing: border-box;
+}
+
+.upload-right-btn.upload:active {
+  border: 1px #118AF7 solid;
+  background: #383C41;
+}
+
+.upload-right-btn.type1 {
+  font-weight: 400;
+  font-size: 22px;
+  background: #118AF7;
+}
+
+.upload-right-btn.type1:hover {
+  border: 1px white solid;
+  box-sizing: border-box;
+}
+
+.upload-right-btn.type1:active {
+  border: 1px #118AF7 solid;
+  background: #383C41;
+}

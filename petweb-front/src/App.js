@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import './App.css'
 import Sidebar from './components/Sidebar'
 import Headerbar from './components/Headerbar'
+import Checklist from "./modal/Checklist";
 import axios from 'axios';
 // import Sidebar from './pages/components/Sidebar'
 import Login from './routers/login/Login'
@@ -92,6 +93,7 @@ function App() {
         <div className="App" tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
           <Sidebar />
           <Headerbar />
+          <Checklist isShowing={true} />
           {/*  */}
           {/* <Headerbar/> */}
           {/* <Sidebar/> */}

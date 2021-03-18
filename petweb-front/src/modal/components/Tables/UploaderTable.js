@@ -132,7 +132,7 @@ export default class UploaderTable extends Component {
           fields={fields}
           noRecordsMessage="There are no people to display"
           noFilteredRecordsMessage="No people match your filters!"
-          pageSize={10}
+          pageSize={500}
       />
     );
   }
