@@ -1693,7 +1693,15 @@ input:-webkit-autofill:active {
 }
 
 .modal-right-wrapper:hover {
-  right: -19px;
+  animation: right-sidebar-out 0.5s forwards;
+}
+@keyframes right-sidebar-out{
+  0% {
+    right: -1005px;
+  }
+  100%{
+    right: -19px;
+  }
 }
 
 .modal-right-wrapper:hover+.modal-right-overlay {
