@@ -38,6 +38,7 @@ export const tab_location = (loc) =>{
     type: 'TAB_LOC',
     tabX: loc.tabX,
     tabY: loc.tabY,
+    fileID: loc.fileID,
   };
 };
 export const login = () =>{

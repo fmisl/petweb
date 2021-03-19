@@ -20,7 +20,7 @@ function Sidebar() {
   const listSelected = useSelector(state => state.listManager);
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
-  // const menuList = ['dashboard', 'upload', 'view/191', 'analysis/suvr', 'analysis/report', 'setting']
+  // const menuList = ['dashboard', 'upload', 'view', 'analysis/suvr', 'analysis/report', 'setting']
   // useEffect(() => {
   //   console.log(counter);
   //   console.log(menuList[counter]);
@@ -79,7 +79,7 @@ function Sidebar() {
           <div className={`sidebar-grp1-menu-title`}><IconUpload size={'40'} stroke={pathname[1] === 'upload' ? "#118AF7" : "#ccccda"}/><li>Upload</li></div>
         </div>
         <div className={'sidebar-grp1-splitter'}></div>
-        <div className={`sidebar-grp1-menu ${pathname[1] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/view/191');}}> {/* dispatch(tab_location(2)); */}
+        <div className={`sidebar-grp1-menu ${pathname[1] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/view');}}> {/* dispatch(tab_location(2)); */}
           <div className={`sidebar-grp1-menu-title`}><IconView size={'40'} stroke={pathname[1] === 'view' ? "#118AF7" : "#ccccda"}/><li>View</li></div>
         </div>
         <div className={`sidebar-grp1-menu ${pathname[1] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}> {/*  dispatch(tab_location(3)); */}

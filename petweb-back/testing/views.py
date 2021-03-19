@@ -515,20 +515,22 @@ class uploader(APIView):
         database_path = os.path.join(user_path, 'database')
         if not os.path.exists(database_path):
             os.mkdir(database_path)
-        # receivedData = json.loads(request.data)
+
         jsonData = request.data
         print(len(jsonData))
-        [mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path,v['FileName'])) for i, v in enumerate(jsonData)]
+        database_files = os.listdir(database_path)
+        NofNii = len([v for i, v in enumerate(database_files) if (v.split(".")[-1] == 'nii')])
+        [mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(NofNii+i)+".nii")) for i, v in enumerate(jsonData)]
+
+        filenames = os.listdir(database_path)
+        fileList = [{'id': i, 'Opened': False, 'Select': False, 'Tracer': '11C-PIB', 'SUVR': 2.21, 'FileName': filename, 'fileID': filename.split('.')[0],
+                     'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
+                    for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 
         # delete all files in uploader
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames)
          if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
-
-        filenames = os.listdir(database_path)
-        fileList = [{'id': i, 'Opened': False, 'Select': False, 'Tracer': '11C-PIB', 'SUVR': 2.21, 'FileName': filename,
-                     'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
-                    for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 
         # thread = threading.Thread(target=self.async_function, args=(request, Format, myfiles, caseID))
         thread = threading.Thread(target=self.async_function, args=(request, fileList))
@@ -585,7 +587,7 @@ class uploader(APIView):
                 Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
 
         filenames = os.listdir(uploader_path)
-        fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '11C-PIB', 'PatientName': 'Sandwich Eater', 'Group': 0}
+        fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '11C-PIB', 'PatientName': 'Sandwich Eater', 'Group': 0, 'fileID': None}
                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 
 
@@ -611,7 +613,7 @@ class fileList(APIView):
             os.mkdir(database_path)
 
         filenames = os.listdir(database_path)
-        fileList = [{'id': i, 'Opened': False, 'Select': False, 'Tracer': '11C-PIB', 'SUVR': 2.21, 'FileName': filename,
+        fileList = [{'id': i, 'Opened': False, 'Select': False, 'Tracer': '11C-PIB', 'SUVR': 2.21, 'FileName': filename, 'fileID': filename.split('.')[0],
                      'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 

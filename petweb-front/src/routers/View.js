@@ -15,21 +15,6 @@ import {useParams} from 'react-router-dom'
 import * as services from '../services/fetchApi'
 import Home from './components/Cornerstone/Home'
 
-const imageIdC = [...Array(108).keys()].map((v,i)=>(IPinUSE+'result/download/case100/input_coronal_100_'+i+'.png'));
-const imageIdS = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/case100/input_sagittal_100_'+i+'.png'));
-const imageIdA = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/case100/input_axial_100_'+i+'.png'));
-const stackCoronal = {
-  imageIds: imageIdC,
-  currentImageIdIndex: 50
-};
-const stackSaggital = {
-  imageIds: imageIdS,
-  currentImageIdIndex: 40
-};
-const stackAxial = {
-  imageIds: imageIdA,
-  currentImageIdIndex: 40
-};
 
 function View({}) {
   const counter = useSelector(state => state.counter);
@@ -42,29 +27,39 @@ function View({}) {
   const [isInverted, setIsInverted] = useState(true)
   const [isSNed, setIsSNed] = useState(true)
   const dispatch = useDispatch();
-  // console.log(history.location.pathname)
-  // console.log(window.location.pathname)
-  useEffect(async () => {
-    // console.log('useEffect (caseID): ',caseID)
-    // await getCase(caseID);
-    // if (!history.match.params.caseID) {
-    //   console.log('history.match.params.caseID:',history.match.params.caseID)
-  
-    //   this.setState({
-    //     caseID: history.match.params.caseID,
-    //   })
-    // }
-  }, [])
+  const username = localStorage.getItem('username')
+  const imageIdC = [...Array(108).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+caseID+'/output_coronal_100_'+i+'.png'));
+  const imageIdS = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+caseID+'/output_sagittal_100_'+i+'.png'));
+  const imageIdA = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+caseID+'/output_axial_100_'+i+'.png'));
 
-  const getCase = async (caseID) => {
-    console.log('getCase (caseID): ',caseID)
-    const token = localStorage.getItem('token')
-    // res = await services.TokenVerify({'token':token})
-    const res = await services.getCase({'token':token, id:caseID})
-    console.log('res: ', res.data[0])
-    // let slices = res.data[0].slices;
-  }
-  console.log("view: ",caseID)
+  const stackCoronal = {
+    imageIds: imageIdC,
+    currentImageIdIndex: 50
+  };
+  const stackSaggital = {
+    imageIds: imageIdS,
+    currentImageIdIndex: 40
+  };
+  const stackAxial = {
+    imageIds: imageIdA,
+    currentImageIdIndex: 40
+  };
+  useEffect(() => {
+    console.log('useEffect (fileID): ',counter.fileID)
+    console.log("imageIdC: ",imageIdC[0])
+    console.log("imageIdS: ",imageIdS[0])
+    console.log("imageIdA: ",imageIdA[0])
+  }, [counter])
+
+  // const getCase = async (caseID) => {
+  //   console.log('getCase (caseID): ',caseID)
+  //   const token = localStorage.getItem('token')
+  //   // res = await services.TokenVerify({'token':token})
+  //   const res = await services.getCase({'token':token, id:caseID})
+  //   console.log('res: ', res.data[0])
+  //   // let slices = res.data[0].slices;
+  // }
+  // console.log("imageIdC: ",imageIdC)
   return (
     <div className="content" onClick={()=>setShowMenu(false)}>
       {/* <Sidebar />

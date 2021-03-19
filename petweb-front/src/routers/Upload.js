@@ -93,7 +93,7 @@ function Upload({toggleChecklist}) {
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>
-            <div className="upload-btn" onClick={()=>{dispatch(openSelect());history.push('/view/191')}}><IconView className="upload-icon"/>View</div>
+            <div className="upload-btn" onClick={()=>{dispatch(openSelect());history.push('/view')}}><IconView className="upload-icon"/>View</div>
             <div className="upload-btn" onClick={()=>{dispatch(openSelect());history.push('/analysis/suvr')}}><IconAnalysis className="upload-icon"/>Analysis</div>
             <div className="upload-btn" onClick={toggleChecklist}><IconWorklist className="upload-icon"/>Checklist</div>
             <div className="upload-btn"><IconDelete className="upload-icon"/>Delete</div>

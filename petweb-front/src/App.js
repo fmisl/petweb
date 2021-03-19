@@ -16,7 +16,8 @@ import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams,
 
 
 function App() {
-  const fileLists = useSelector(state => state.fileLists);
+  const fileList = useSelector(state => state.fileList);
+  const OpenedFiles = fileList.filter(item => {return item.Opened==true});
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
   const [isShowingChecklist, setIsShowingChecklist] = useState(false);
@@ -24,7 +25,7 @@ function App() {
   const dispatch = useDispatch();
   const history =useHistory();
   const { caseID } = useParams();
-  const menuList = ['dashboard', 'upload', 'view/191', 'analysis/suvr', 'analysis/report', 'setting']
+  const menuList = ['dashboard', 'upload', 'view', 'analysis/suvr', 'analysis/report', 'setting']
 
   useEffect(async () => {
     const token = localStorage.getItem('token')
@@ -64,20 +65,23 @@ function App() {
       case 38:
         const keyUpPage = Math.max(0,counter.tabY-1)
         dispatch(tab_location({...counter, tabY:keyUpPage}));
-        history.push('/'+menuList[keyUpPage])
+        history.push('/'+menuList[keyUpPage]+'/'+OpenedFiles[counter.tabX].fileID);
         break;
       case 40:
         const keyDownPage = Math.min(menuList.length-1,counter.tabY+1)
         dispatch(tab_location({...counter, tabY:keyDownPage}));
-        history.push('/'+menuList[keyDownPage]);
+        history.push('/'+menuList[keyDownPage]+'/'+OpenedFiles[counter.tabX].fileID);
         break;
       case 39:
         const keyRightPage = counter.tabX+1;
-        dispatch(tab_location({...counter, tabX:keyRightPage}));
+        // , fileID:OpenedFiles[keyRightPage].File
+        dispatch(tab_location({...counter, tabX:keyRightPage, fileID:OpenedFiles[keyRightPage].fileID}));
+        history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyRightPage].fileID);
         break;
       case 37:
         const keyLeftPage = Math.max(0,counter.tabX-1)
-        dispatch(tab_location({...counter, tabX:keyLeftPage}));
+        dispatch(tab_location({...counter, tabX:keyLeftPage, fileID:OpenedFiles[keyLeftPage].fileID}));
+        history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyLeftPage].fileID);
         break;
       case 17:
         toggleChecklist()
@@ -109,7 +113,7 @@ function App() {
         // <div className="App" tabIndex={0} onKeyDown={(e)=>{if (e.keyCode == 40){dispatch(increment(menuList.length))} else if (e.keyCode == 38) {dispatch(decrement(menuList.length))};}}>
         <div className="App" tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
           <Sidebar />
-          <Headerbar />
+          <Headerbar OpenedFiles={OpenedFiles}/>
           <Checklist isShowing={isShowingChecklist} hide={toggleChecklist} lock={openChecklist}/>
           {/*  */}
           {/* <Headerbar/> */}
