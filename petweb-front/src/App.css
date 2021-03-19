@@ -373,7 +373,14 @@ input:-webkit-autofill:active {
 
   /* border: red solid; */
 }
-
+.Headerbar-tab-clock{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  width:200px;
+  height:100%;
+  border: blue solid;
+}
 .Headerbar {
   position: fixed;
   top: 0;
@@ -382,17 +389,36 @@ input:-webkit-autofill:active {
   height: 50px;
   /* width: vw; */
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: space-between;
+  /* align-items: center; */
   background: #383C41;
   color: #ccccda;
   z-index: 1;
-
+  /* overflow:hidden; */
 }
-
-.Headerbar:hover {
-  border: blue solid;
-  box-sizing: border-box;
+.Headerbar-tab-collection{
+  display: flex;
+  /* justify-content: flex-start; */
+  /* align-items: center; */
+  /* width:90%; */
+  width:100%;
+  height: 70px;
+  border: red solid;
+  overflow-x: scroll;
+  overflow-y:hidden;
+}
+.Headerbar-tab-collection>div {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px white solid;
+  box-sizing:border-box;
+  width: 100%;
+  max-width: 200px;
+  height:100%;
+  white-space: nowrap;
+  padding: 0px 5px 0px 5px;
+  /* border: red solid; */
 }
 
 .redux-info {
@@ -1283,7 +1309,18 @@ input:-webkit-autofill:active {
   /* overflow: auto; */
   /* border: red solid; */
 }
+.checklist-delete {
+  /* fill: red;
+  stroke: red; */
+  stroke: white;
+  width: 40px;
+  height: 40px;
+  /* width: 100px; */
+}
 
+.checklist-delete:hover {
+  stroke: #118AF7;
+}
 .worklist-delete {
   /* fill: red;
   stroke: red; */
@@ -1691,7 +1728,9 @@ input:-webkit-autofill:active {
   /* border: yellow solid;
   box-sizing: border-box; */
 }
-
+.modal-right-wrapper.show{
+  animation: right-sidebar-out 0.5s forwards;
+}
 .modal-right-wrapper:hover {
   animation: right-sidebar-out 0.5s forwards;
 }
@@ -1700,11 +1739,12 @@ input:-webkit-autofill:active {
     right: -1005px;
   }
   100%{
-    right: -19px;
+    /* right: -19px; */
+    right: -0px;
   }
 }
 
-.modal-right-wrapper:hover+.modal-right-overlay {
+.modal-right-wrapper:hover+.modal-right-overlay,.modal-right-wrapper.show+.modal-right-overlay {
   display: block;
 }
 
@@ -1734,6 +1774,7 @@ input:-webkit-autofill:active {
   z-index: 100;
   top: 5%;
   height: 85%;
+  width: 950px;
   /* position: fixed; */
   /* right: -19px;
   top: 5%; */
@@ -1747,9 +1788,9 @@ input:-webkit-autofill:active {
   box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.15);
   /* border-radius: 5px; */
   border-radius: 25px 0px 0px 25px;
-
-  /* border: red solid;
-  box-sizing: border-box; */
+  /* border: 1px white solid; */
+  /* border: red solid; */
+  /* box-sizing: border-box; */
 }
 
 .modal-right-btn {
@@ -1801,7 +1842,8 @@ input:-webkit-autofill:active {
   display: flex;
   justify-content: space-between;
   color: white;
-  height: 800px;
+  /* height: 800px; */
+  height:85%;
   /* background: #2D3135; */
   background: #3B3C41;
   border-radius: 5px;

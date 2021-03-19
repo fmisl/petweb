@@ -24,7 +24,7 @@ function Uploader({ fileList, isShowing, hide, removeFileList, updateFileList })
   const [currentJPGURL_head, setCurrentJPGURL_head] = useState("");
   const username = localStorage.getItem('username')
   useEffect(() => {
-    console.log("uploader useEffect", fileList)
+    // console.log("uploader useEffect", fileList)
     // setData(fileList)
   })
   const getJPGURL=(filename)=>{
@@ -72,7 +72,7 @@ function Uploader({ fileList, isShowing, hide, removeFileList, updateFileList })
                 <div className={`upload-checkbox ${isChecked && 'act'}`}>
                   <div></div>
                 </div>
-                Automatically add to worklist
+                Automatically add to checklist
               </div>
               <div style={{display: "flex"}}>
                 <div style={{}} className="upload-btn" onClick={(e)=>{hide(e);setCurrentJPGURL_head("")}}>Cancel</div>

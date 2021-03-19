@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css'
 import Sidebar from './components/Sidebar'
 import Headerbar from './components/Headerbar'
@@ -19,6 +19,7 @@ function App() {
   const fileLists = useSelector(state => state.fileLists);
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
+  const [isShowingChecklist, setIsShowingChecklist] = useState(false);
   const location = useLocation();
   const dispatch = useDispatch();
   const history =useHistory();
@@ -49,9 +50,10 @@ function App() {
       }
     }
   }, [])
-  // useEffect(()=>{
-  //   console.log("app.js: ",location)
-  // },[location])
+
+  function toggleChecklist() {
+    setIsShowingChecklist(!isShowingChecklist);
+  }
 
   const changePageByKey = (e) =>{
     switch (e.keyCode){
@@ -93,7 +95,7 @@ function App() {
         <div className="App" tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
           <Sidebar />
           <Headerbar />
-          <Checklist isShowing={true} />
+          <Checklist isShowing={isShowingChecklist} hide={toggleChecklist}/>
           {/*  */}
           {/* <Headerbar/> */}
           {/* <Sidebar/> */}
@@ -105,7 +107,8 @@ function App() {
           <Route path="/signup" exact component={Dashboard}/> */}
           {/* <Route path="/dashboard" render={(props)=> <Dashboard state={{detail:'test1'}}/>}/> */}
           <Route path="/dashboard" component={Dashboard}/>
-          <Route path="/upload" component={Upload}/>
+          {/* <Route path="/upload" component={Upload}/> */}
+          <Route path="/upload" render={()=><Upload toggleChecklist={toggleChecklist}/>}/>
           <Route path="/view/:caseID" exact component={View}/>
           <Route path="/analysis" component={Analysis}/>
           <Route path="/setting" component={Setting}/>

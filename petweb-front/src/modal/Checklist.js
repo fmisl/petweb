@@ -2,23 +2,22 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import '../App.css';
 import IconDelete from '../images/IconDelete';
-import WorklistTable from './components/Tables/WorklistTable'
+import ChecklistTable from './components/Tables/ChecklistTable'
 
 function Checklist({ isShowing, hide }) {
   // const [isShown, setIsShown] = useState(false);
   return (
-    isShowing ? 
-    ReactDOM.createPortal(
       <React.Fragment>
         {/* aria-modal aria-hidden tabIndex={-1} role="dialog"  */}
-        <div className="modal-right-wrapper"  onClick={hide}>
+        <div className={`modal-right-wrapper ${isShowing && 'show'}`}>
           <div className="modal-right" onClick={(e)=>e.stopPropagation()}>
             <div className="modal-right-btn"><div></div></div>
             <div className="modal-right-header" >
-              WORKLIST <span onClick={hide} ><IconDelete className="worklist-delete" /></span>
+              CHECKLIST 
+              {/* <span onClick={()=>hide} ><IconDelete className="checklist-delete" /></span> */}
             </div>
             <div className="modal-right-body">
-              <WorklistTable/>
+              <ChecklistTable/>
             </div>
             <div style={{display:"flex", marginTop:"21px", justifyContent:"flex-end"}}>
               <div className="upload-right-btn">Export Nifti</div>
@@ -28,9 +27,8 @@ function Checklist({ isShowing, hide }) {
 
           </div>
         </div>
-        <div className="modal-right-overlay"/>
-      </React.Fragment>, document.body
-    ) : null
+        <div className="modal-right-overlay"  onClick={hide}/>
+      </React.Fragment>
   );
 }
 export default Checklist;

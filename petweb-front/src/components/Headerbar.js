@@ -10,10 +10,23 @@ function Headerbar() {
   // console.log("headerbar.js:",fileList)
   return (
     <div className="Headerbar">
-       {/* onClick={()=>{dispatch(loadItems())}} */}
-      {/* Logo */}
-      {/* {fileList} */}
-      {/* {JSON.stringify(fileList)}  */}
+      <div className="Headerbar-tab-collection">
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+        <div>2006_SNUH.nii &nbsp;&nbsp;&nbsp;&nbsp;x</div>
+      </div>
+      <div className="Headerbar-tab-clock">time info</div>
     </div>
   );
 }

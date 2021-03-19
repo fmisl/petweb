@@ -73,3 +73,27 @@ export const changeColor = (color) =>{
     color: color,
   }
 }
+export const openItem = (itemID) =>{
+  return {
+    type: 'OPEN_ITEM',
+    itemID: itemID,
+  }
+}
+export const closeItem = (itemID) =>{
+  return {
+    type: 'CLOSE_ITEM',
+    itemID: itemID,
+  }
+}
+export const selectItem = (itemID) =>{
+  return {
+    type: 'SELECT_ITEM',
+    itemID: itemID,
+  }
+}
+export const unselectItem = (itemID) =>{
+  return {
+    type: 'UNSELECT_ITEM',
+    itemID: itemID,
+  }
+}

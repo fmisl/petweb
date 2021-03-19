@@ -100,7 +100,7 @@ function Sidebar() {
       <div className="redux-info">
         <h1>isLogged: {isLogged.toString()}</h1>
         <h1>{pathname[1]}</h1>
-        <h1>listSelected: {listSelected.toString()}</h1>
+        {/* <h1>listSelected: {listSelected.toString()}</h1> */}
         <h1>Counter: {counter}</h1>
         {/* <button onClick={()=> dispatch(increment(6))}>+</button>
         <button onClick={()=> dispatch(decrement(6))}>-</button> */}

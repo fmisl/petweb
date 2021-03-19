@@ -207,7 +207,7 @@
 /* .UploadTable-Default.sel.opened {
 } */
 
-.UploadTable-Default.opened {
+.UploadTable-Default.opened, .UploadTable-Default.sel.opened {
     /* color: #118AF7; */
     background: #292D30;
     color: #118AF7;

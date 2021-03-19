@@ -8,7 +8,7 @@ const FilterableTable = require('react-filterable-table');
 class UploadTable extends Component {
     // const dispatch = useDispatch();
     state={
-        data: this.props.fileList,
+        data: [],
         // data1: [
         //     { id:0,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.11, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 38, Sex:"M", Update:"20.07.15" },
         //     { id:1,Opened:false, Select:false, Tracer: "FBB", SUVR: 1.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 26, Sex:"M", Update:"20.07.15" },
@@ -38,41 +38,33 @@ class UploadTable extends Component {
         // ],
     }
     componentDidMount(){
+        const {fileList} = this.props;
+        this.setState({
+            data:fileList,
+        })
     }
-    componentDidUpdate(prevProps){
-        // console.log('componentDidUpdate1:',prevProps.fileList)
-        // console.log('componentDidUpdate2:',this.props.fileList)
-        if (prevProps.fileList !== this.props.fileList){
-            console.log('componentDidUpdate3:',this.props.fileList)
+    componentDidUpdate(prevProps, prevState){
+        if (prevProps.fileList != this.props.fileList){
+            console.log('componentDidUpdate')
             const {fileList} = this.props;
             this.setState({
                 data:fileList,
             })
         }
-        // if (prevProps.fileList.length === 0){
-        //     if (prevProps.fileList !== this.props.fileList){
-        //         console.log('componentDidUpdate3:',this.props.fileList)
-        //         const {fileList} = this.props;
-        //         this.setState({
-        //             data:fileList,
-        //         })
-        //     }
-        // }
     }
     renderSelect = (props) => {
         const {data} = this.state;
         return(
             <div className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                         onClick={()=>{
-                            this.setState({
-                              // data:[...data, props.record]
-                                data: data.map(
-                                item => props.record.id === item.id ?
-                                { ...item, ...{Select:!props.record.Select} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                                  : {...item} // 기존의 값을 그대로 유지
-                                ),
-                            });
-                            // console.dir(props)
+                            {props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}
+                            // this.setState({
+                            //     data: data.map(
+                            //     item => props.record.id === item.id ?
+                            //     { ...item, ...{Select:!props.record.Select} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
+                            //       : {...item} // 기존의 값을 그대로 유지
+                            //     ),
+                            // });
                         }
                     }
                 >
@@ -87,28 +79,18 @@ class UploadTable extends Component {
         return(
             <div className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                             onDoubleClick={()=>{
-                                {props.record.Opened ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
-                                // alert('double')
-                                this.setState({
-                                    // data:[...data, props.record]
-                                    data: data.map(
-                                    item => props.record.id === item.id ?
-                                    { ...item, ...{Opened:!props.record.Opened} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                                        : {...item} // 기존의 값을 그대로 유지
-                                    ),
-                                });
+                                {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                                // {props.record.Opened ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
+                                
+                                // this.setState({
+                                //     // data:[...data, props.record]
+                                //     data: data.map(
+                                //     item => props.record.id === item.id ?
+                                //     { ...item, ...{Opened:!props.record.Opened} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
+                                //         : {...item} // 기존의 값을 그대로 유지
+                                //     ),
+                                // });
                             }}
-                    //     onClick={()=>{
-                    //         {props.record.Select ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
-                    //         this.setState({
-                    //             data: data.map(
-                    //             item => props.record.id === item.id ?
-                    //             { ...item, ...{Select:!props.record.Select, Opened:true} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                    //               : {...item,...{Opened:false}} // 기존의 값을 그대로 유지
-                    //             ),
-                    //         });
-                    //     }
-                    // }
                 >
                 {props.value}
             </div>
@@ -119,30 +101,18 @@ class UploadTable extends Component {
         return(
             <div className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                            onDoubleClick={()=>{
-                                {props.record.Opened ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
-                                // alert('double')
-                                this.setState({
-                                    // data:[...data, props.record]
-                                    data: data.map(
-                                    item => props.record.id === item.id ?
-                                    { ...item, ...{Opened:!props.record.Opened} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                                        : {...item} // 기존의 값을 그대로 유지
-                                    ),
-                                });
+                                {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                                // {props.record.Opened ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
+                                
+                                // this.setState({
+                                //     // data:[...data, props.record]
+                                //     data: data.map(
+                                //     item => props.record.id === item.id ?
+                                //     { ...item, ...{Opened:!props.record.Opened} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
+                                //         : {...item} // 기존의 값을 그대로 유지
+                                //     ),
+                                // });
                            }}
-                    //     onClick={()=>{
-                    //         {props.record.Select ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
-                    //         this.setState({
-                    //           // data:[...data, props.record]
-                    //             data: data.map(
-                    //             item => props.record.id === item.id ?
-                    //             { ...item, ...{Select:!props.record.Select, Opened:true} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                    //               : {...item,...{Opened:false}} // 기존의 값을 그대로 유지
-                    //             ),
-                    //         });
-                    //         console.dir(props)
-                    //     }
-                    // }
                 >
                 <div className={`UploadTable-Tracer ${props.value}`} >
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
@@ -161,29 +131,18 @@ class UploadTable extends Component {
         return(
             <div  className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
                             onDoubleClick={()=>{
-                                {props.record.Opened ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
+                                {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                                // {props.record.Opened ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
                                 // alert('double')
-                                this.setState({
-                                    // data:[...data, props.record]
-                                    data: data.map(
-                                    item => props.record.id === item.id ?
-                                    { ...item, ...{Opened:!props.record.Opened} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                                        : {...item} // 기존의 값을 그대로 유지
-                                    ),
-                                });
+                                // this.setState({
+                                //     // data:[...data, props.record]
+                                //     data: data.map(
+                                //     item => props.record.id === item.id ?
+                                //     { ...item, ...{Opened:!props.record.Opened} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
+                                //         : {...item} // 기존의 값을 그대로 유지
+                                //     ),
+                                // });
                             }}
-                    //     onClick={()=>{
-                    //         {props.record.Select ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
-                    //         this.setState({
-                    //             // data:[...data, props.record]
-                    //                 data: data.map(
-                    //                 item => props.record.id === item.id ?
-                    //                 { ...item, ...{Select:!props.record.Select, Opened:true} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                    //                   : {...item,...{Opened:false}} // 기존의 값을 그대로 유지
-                    //             ),
-                    //         });
-                    //     }
-                    // }
                 >
                 <div className={`UploadTable-SUVR ${props.value}`}>
                     <span>{props.value}</span>
@@ -239,5 +198,9 @@ const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(actions.logout()),
   addToList: (item) => dispatch(actions.addToList(item)),
   removeFromList: (item) => dispatch(actions.removeFromList(item)),
+  openItem: (itemID) => dispatch(actions.openItem(itemID)),
+  closeItem: (itemID) => dispatch(actions.closeItem(itemID)),
+  selectItem: (itemID) => dispatch(actions.selectItem(itemID)),
+  unselectItem: (itemID) => dispatch(actions.unselectItem(itemID)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(UploadTable);
