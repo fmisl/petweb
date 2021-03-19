@@ -50,7 +50,7 @@ class ChecklistTable extends Component {
         // console.log('componentDidUpdate1:',prevProps.fileList)
         // console.log('componentDidUpdate2:',this.props.fileList)
         if (prevProps.fileList !== this.props.fileList){
-            console.log('componentDidUpdate3:',this.props.fileList)
+            // console.log('componentDidUpdate3:',this.props.fileList)
             const {fileList} = this.props;
             this.setState({
                 data:fileList.filter(item=>{return item.Group==1}),

@@ -45,10 +45,10 @@ function View({}) {
     currentImageIdIndex: 40
   };
   useEffect(() => {
-    console.log('useEffect (fileID): ',counter.fileID)
-    console.log("imageIdC: ",imageIdC[0])
-    console.log("imageIdS: ",imageIdS[0])
-    console.log("imageIdA: ",imageIdA[0])
+    // console.log('useEffect (fileID): ',counter.fileID)
+    // console.log("imageIdC: ",imageIdC[0])
+    // console.log("imageIdS: ",imageIdS[0])
+    // console.log("imageIdA: ",imageIdA[0])
   }, [counter])
 
   // const getCase = async (caseID) => {

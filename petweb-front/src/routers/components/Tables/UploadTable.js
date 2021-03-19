@@ -45,7 +45,7 @@ class UploadTable extends Component {
     }
     componentDidUpdate(prevProps, prevState){
         if (prevProps.fileList != this.props.fileList){
-            console.log('componentDidUpdate')
+            // console.log('componentDidUpdate')
             const {fileList} = this.props;
             this.setState({
                 data:fileList,

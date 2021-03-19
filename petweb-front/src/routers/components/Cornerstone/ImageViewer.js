@@ -106,6 +106,7 @@ export default class ImageViewer extends Component {
     // console.log("stackC: ", this.state.stackC, typeof(this.state.stackC.currentImageIdIndex));
     // console.log("stackS: ", this.state.stackS, typeof(this.state.stackS.currentImageIdIndex));
     // console.log("stackA: ", this.state.stackA, typeof(this.state.stackA.currentImageIdIndex));
+    // console.log('ImageViewer render')
     return (
       <div style={{position:"relative",width:"100%", height:"100%"}}>
         <div
@@ -247,6 +248,7 @@ export default class ImageViewer extends Component {
   }
 
   componentDidMount() {
+    console.log('ImageViewer componentDidMount')
     try{
       // console.log("componentDidMount")
       const elementC = this.elementC;
@@ -428,6 +430,7 @@ export default class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log('ImageViewer componentDidUpdate')
     // console.log("componentDidUpdate")
     try{
       // console.log("prevProps.isInverted, this.props.isInverted")
