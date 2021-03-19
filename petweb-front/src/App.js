@@ -9,7 +9,7 @@ import Login from './routers/login/Login'
 import Forgot from './routers/login/Forgot'
 import Signup from './routers/login/Signup'
 import * as services from './services/fetchApi'
-import {login, logout, increment, decrement, loadItems, profile} from './reduxs/actions';
+import {login, logout, increment, decrement, loadItems, profile, tab_location, groupItem} from './reduxs/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import {Dashboard, Upload, View, Analysis, Setting} from './routers'
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
@@ -51,24 +51,39 @@ function App() {
     }
   }, [])
 
+  function openChecklist() {
+    setIsShowingChecklist(true);
+  }
   function toggleChecklist() {
+    if (isShowingChecklist == false) dispatch(groupItem(1))
     setIsShowingChecklist(!isShowingChecklist);
   }
 
   const changePageByKey = (e) =>{
     switch (e.keyCode){
       case 38:
-        const keyUpPage = Math.max(0,counter-1)
-        // console.log(keyUpPage)
+        const keyUpPage = Math.max(0,counter.tabY-1)
+        dispatch(tab_location({...counter, tabY:keyUpPage}));
         history.push('/'+menuList[keyUpPage])
         break;
       case 40:
-        const keyDownPage = Math.min(menuList.length-1,counter+1)
-        // console.log(keyDownPage)
+        const keyDownPage = Math.min(menuList.length-1,counter.tabY+1)
+        dispatch(tab_location({...counter, tabY:keyDownPage}));
         history.push('/'+menuList[keyDownPage]);
         break;
+      case 39:
+        const keyRightPage = counter.tabX+1;
+        dispatch(tab_location({...counter, tabX:keyRightPage}));
+        break;
+      case 37:
+        const keyLeftPage = Math.max(0,counter.tabX-1)
+        dispatch(tab_location({...counter, tabX:keyLeftPage}));
+        break;
+      case 17:
+        toggleChecklist()
+        break;
       default:
-        console.log('press up or down key only')
+        console.log('press up or down key only', e.keyCode)
     }
     // console.log('press up or down key only:',e.keyCode)
   }
@@ -95,7 +110,7 @@ function App() {
         <div className="App" tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
           <Sidebar />
           <Headerbar />
-          <Checklist isShowing={isShowingChecklist} hide={toggleChecklist}/>
+          <Checklist isShowing={isShowingChecklist} hide={toggleChecklist} lock={openChecklist}/>
           {/*  */}
           {/* <Headerbar/> */}
           {/* <Sidebar/> */}

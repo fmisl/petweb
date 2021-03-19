@@ -43,7 +43,7 @@ class ChecklistTable extends Component {
     componentDidMount(){
         const {fileList} = this.props;
         this.setState({
-            data:fileList,
+            data:fileList.filter(item=>{return item.Group==1}),
         })
     }
     componentDidUpdate(prevProps){
@@ -53,7 +53,7 @@ class ChecklistTable extends Component {
             console.log('componentDidUpdate3:',this.props.fileList)
             const {fileList} = this.props;
             this.setState({
-                data:fileList,
+                data:fileList.filter(item=>{return item.Group==1}),
             })
         }
     }

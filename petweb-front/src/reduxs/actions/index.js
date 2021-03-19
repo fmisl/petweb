@@ -33,10 +33,11 @@ export const decrement = (max) =>{
     max: max
   };
 };
-export const tab_number = (num) =>{
+export const tab_location = (loc) =>{
   return {
-    type: 'TAB_NUMBER',
-    tabNumber: num
+    type: 'TAB_LOC',
+    tabX: loc.tabX,
+    tabY: loc.tabY,
   };
 };
 export const login = () =>{
@@ -73,6 +74,11 @@ export const changeColor = (color) =>{
     color: color,
   }
 }
+export const openSelect = () =>{
+  return {
+    type: 'OPEN_SELECT',
+  }
+}
 export const openItem = (itemID) =>{
   return {
     type: 'OPEN_ITEM',
@@ -94,6 +100,23 @@ export const selectItem = (itemID) =>{
 export const unselectItem = (itemID) =>{
   return {
     type: 'UNSELECT_ITEM',
+    itemID: itemID,
+  }
+}
+export const groupItem = (groupID) =>{
+  return {
+    type: 'GROUP_ITEM',
+    groupID: groupID,
+  }
+}
+export const ungroupItemSelect = () =>{
+  return {
+    type: 'UNGROUP_ITEM_SELECT',
+  }
+}
+export const ungroupItemIndividual = (itemID) =>{
+  return {
+    type: 'UNGROUP_ITEM_INDIVIDUAL',
     itemID: itemID,
   }
 }

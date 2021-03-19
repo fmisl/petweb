@@ -373,14 +373,26 @@ input:-webkit-autofill:active {
 
   /* border: red solid; */
 }
-.Headerbar-tab-clock{
-  display:flex;
+
+.Headerbar-tab-username {
+  display: flex;
   align-items: center;
   justify-content: center;
-  width:200px;
-  height:100%;
-  border: blue solid;
+  width: 200px;
+  height: 100%;
+  /* border-left: 1px white solid; */
+  /* border: blue solid; */
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 20px;
+  /* identical to box height */
+
+
+  color: #91919C;
 }
+
 .Headerbar {
   position: fixed;
   top: 0;
@@ -394,31 +406,80 @@ input:-webkit-autofill:active {
   background: #383C41;
   color: #ccccda;
   z-index: 1;
-  /* overflow:hidden; */
+  overflow: hidden;
 }
-.Headerbar-tab-collection{
+
+.Headerbar-tab-collection {
   display: flex;
   /* justify-content: flex-start; */
-  /* align-items: center; */
-  /* width:90%; */
-  width:100%;
-  height: 70px;
-  border: red solid;
-  overflow-x: scroll;
-  overflow-y:hidden;
-}
-.Headerbar-tab-collection>div {
-  display:flex;
   align-items: center;
-  justify-content: center;
-  border-right: 1px white solid;
-  box-sizing:border-box;
-  width: 100%;
-  max-width: 200px;
-  height:100%;
-  white-space: nowrap;
-  padding: 0px 5px 0px 5px;
+  /* width:90%; */
+  width: 1450px;
+  height: 65px;
   /* border: red solid; */
+  overflow-x: scroll;
+  overflow-y: hidden;
+
+}
+
+.Headerbar-left-arrow,
+.Headerbar-right-arrow {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  /* border: red solid; */
+}
+
+.Headerbar-vSplitter {
+  width: 0px;
+  height: 30%;
+  /* width: 1px; */
+  /* height: 40%; */
+  border-left: 2px #91919C solid;
+  /* border-right: 1px white solid; */
+  box-sizing: border-box;
+}
+
+.Headerbar-tab.act {
+  color: #118AF7;
+  background: #272A2D;
+}
+
+.Headerbar-tab:active {
+  color: #118AF7;
+  background: #272A2D;
+}
+
+.Headerbar-tab:hover {
+  border: 1px #118AF7 solid;
+  box-sizing: border-box;
+}
+
+.Headerbar-tab {
+  user-select: none;
+  display: block;
+  /* text-align: left; */
+
+  /* display: flex;
+  align-items: center;
+  justify-content: center; */
+  /* border-right: 1px white solid; */
+  min-width: 200px;
+  max-width: 200px;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 17px 5px 0px 10px;
+  /* border: red solid; */
+  box-sizing: border-box;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 20px;
+  /* identical to box height */
+  color: #91919C;
 }
 
 .redux-info {
@@ -1309,6 +1370,7 @@ input:-webkit-autofill:active {
   /* overflow: auto; */
   /* border: red solid; */
 }
+
 .checklist-delete {
   /* fill: red;
   stroke: red; */
@@ -1321,6 +1383,7 @@ input:-webkit-autofill:active {
 .checklist-delete:hover {
   stroke: #118AF7;
 }
+
 .worklist-delete {
   /* fill: red;
   stroke: red; */
@@ -1728,23 +1791,28 @@ input:-webkit-autofill:active {
   /* border: yellow solid;
   box-sizing: border-box; */
 }
-.modal-right-wrapper.show{
+
+.modal-right-wrapper.show {
   animation: right-sidebar-out 0.5s forwards;
 }
+
 .modal-right-wrapper:hover {
   animation: right-sidebar-out 0.5s forwards;
 }
-@keyframes right-sidebar-out{
+
+@keyframes right-sidebar-out {
   0% {
     right: -1005px;
   }
-  100%{
+
+  100% {
     /* right: -19px; */
     right: -0px;
   }
 }
 
-.modal-right-wrapper:hover+.modal-right-overlay,.modal-right-wrapper.show+.modal-right-overlay {
+.modal-right-wrapper:hover+.modal-right-overlay,
+.modal-right-wrapper.show+.modal-right-overlay {
   display: block;
 }
 
@@ -1755,7 +1823,7 @@ input:-webkit-autofill:active {
   top: 5%;
   right: -1005px;
   width: 1000px;
-  height: 85%;
+  height: 950px;
   /* top: 0;
   left: 0; */
   z-index: 1050;
@@ -1767,6 +1835,11 @@ input:-webkit-autofill:active {
   /* border: white solid;
   box-sizing: border-box; */
 }
+
+/* .modal-right-wrapper:hover {
+  border: 1px white solid;
+  border-radius: 3px;
+} */
 
 .modal-right {
   display: block;
@@ -1843,7 +1916,7 @@ input:-webkit-autofill:active {
   justify-content: space-between;
   color: white;
   /* height: 800px; */
-  height:85%;
+  height: 85%;
   /* background: #2D3135; */
   background: #3B3C41;
   border-radius: 5px;

@@ -2,7 +2,7 @@ import React, {useState, useEffect } from 'react';
 import '../App.css'
 import {useHistory, Redirect, Link, useLocation} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
-import {logout, increment, decrement, tab_number} from '../reduxs/actions';
+import {logout, increment, decrement, tab_location} from '../reduxs/actions';
 // import logoWhite from '../../images/logo-white.png'
 import LogoWhite from '../images/LogoWhite';
 import IconDashboard from '../images/IconDashboard';
@@ -31,26 +31,26 @@ function Sidebar() {
     const pathname = location.pathname.split('/')
     switch (pathname[1]){
       case "dashboard":
-        dispatch(tab_number(0));
+        dispatch(tab_location({...counter, tabY:0}));
         break;        
       case "upload":
-        dispatch(tab_number(1));
+        dispatch(tab_location({...counter, tabY:1}));
         break;
       case "view":
-        dispatch(tab_number(2));
+        dispatch(tab_location({...counter, tabY:2}));
         break;
       case "analysis":
         switch (pathname[2]){
           case "suvr":
-            dispatch(tab_number(3));
+            dispatch(tab_location({...counter, tabY:3}));
             break;
           case "report":
-            dispatch(tab_number(4));
+            dispatch(tab_location({...counter, tabY:4}));
             break;
         }
         break;
       case "setting":
-        dispatch(tab_number(5));
+        dispatch(tab_location({...counter, tabY:5}));
         break;
       default:
         console.log('pathname('+pathname+') is not found')
@@ -71,23 +71,23 @@ function Sidebar() {
       <ul className='sidebar-grp1' >
         {/* <div className={`sidebar-grp1-item ${history.location.pathname === '/dashboard' ? 'act' : ''}`}> */}
         {/* <div className={`sidebar-grp1-menu ${history.location.pathname.split('/')[1] == 'dashboard' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push({pathname:'/dashboard', state:{detail:'test'}});}}> */}
-        <div className={`sidebar-grp1-menu ${pathname[1] == 'dashboard' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/dashboard');}}> {/*dispatch(tab_number(0));*/}
+        <div className={`sidebar-grp1-menu ${pathname[1] == 'dashboard' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/dashboard');}}> {/*dispatch(tab_location(0));*/}
           <div className={`sidebar-grp1-menu-title`}><IconDashboard size={'40'} stroke={pathname[1] === 'dashboard' ? "#118AF7" : "#ccccda"}/><li>Dashboard</li></div>
         </div>
         {/* <div onClick={()=>history.push('/dashboard/profile')} className={`sidebar-link-contents ${history.location.pathname === '/dashboard' ? '' : ''}`}><li>profile</li></div> */}
-        <div className={`sidebar-grp1-menu ${pathname[1] == 'upload' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/upload');}}> {/*  dispatch(tab_number(1)); */}
+        <div className={`sidebar-grp1-menu ${pathname[1] == 'upload' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/upload');}}> {/*  dispatch(tab_location(1)); */}
           <div className={`sidebar-grp1-menu-title`}><IconUpload size={'40'} stroke={pathname[1] === 'upload' ? "#118AF7" : "#ccccda"}/><li>Upload</li></div>
         </div>
         <div className={'sidebar-grp1-splitter'}></div>
-        <div className={`sidebar-grp1-menu ${pathname[1] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/view/191');}}> {/* dispatch(tab_number(2)); */}
+        <div className={`sidebar-grp1-menu ${pathname[1] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/view/191');}}> {/* dispatch(tab_location(2)); */}
           <div className={`sidebar-grp1-menu-title`}><IconView size={'40'} stroke={pathname[1] === 'view' ? "#118AF7" : "#ccccda"}/><li>View</li></div>
         </div>
-        <div className={`sidebar-grp1-menu ${pathname[1] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}> {/*  dispatch(tab_number(3)); */}
+        <div className={`sidebar-grp1-menu ${pathname[1] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}> {/*  dispatch(tab_location(3)); */}
           <div className={`sidebar-grp1-menu-title`}><IconAnalysis size={'40'} stroke={pathname[1] === 'analysis' ? "#118AF7" : "#ccccda"}/><li>Analysis</li></div>
-          <div className={`sidebar-grp1-menu-item ${pathname[2] == 'suvr' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}><li>SUVR</li></div> {/* dispatch(tab_number(3)); */}
-          <div className={`sidebar-grp1-menu-item ${pathname[2] == 'report' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/report');}}><li>Report</li></div> {/* dispatch(tab_number(4)); */}
+          <div className={`sidebar-grp1-menu-item ${pathname[2] == 'suvr' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}><li>SUVR</li></div> {/* dispatch(tab_location(3)); */}
+          <div className={`sidebar-grp1-menu-item ${pathname[2] == 'report' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/report');}}><li>Report</li></div> {/* dispatch(tab_location(4)); */}
         </div>
-        <div className={`sidebar-grp1-menu ${pathname[1] == 'setting' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/setting');}}> {/* dispatch(tab_number(5)); */}
+        <div className={`sidebar-grp1-menu ${pathname[1] == 'setting' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/setting');}}> {/* dispatch(tab_location(5)); */}
           <div className={`sidebar-grp1-menu-title`}><IconSetting size={'40'} stroke={pathname[1] === 'setting' ? "#118AF7" : "#ccccda"}/><li>Setting</li></div>
         </div>
       </ul>
@@ -101,7 +101,7 @@ function Sidebar() {
         <h1>isLogged: {isLogged.toString()}</h1>
         <h1>{pathname[1]}</h1>
         {/* <h1>listSelected: {listSelected.toString()}</h1> */}
-        <h1>Counter: {counter}</h1>
+        <h1>CounterY: {counter.tabY}</h1>
         {/* <button onClick={()=> dispatch(increment(6))}>+</button>
         <button onClick={()=> dispatch(decrement(6))}>-</button> */}
       </div>

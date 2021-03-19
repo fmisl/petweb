@@ -4,13 +4,22 @@ import '../App.css';
 import IconDelete from '../images/IconDelete';
 import ChecklistTable from './components/Tables/ChecklistTable'
 
-function Checklist({ isShowing, hide }) {
+function Checklist({ isShowing, hide, lock }) {
   // const [isShown, setIsShown] = useState(false);
+  const changePageByKey = (e) =>{
+    switch (e.keyCode){
+      case 17:
+        hide()
+        break;
+      default:
+        console.log('press up or down key only', e.keyCode)
+    }
+  }
   return (
-      <React.Fragment>
+      <React.Fragment >
         {/* aria-modal aria-hidden tabIndex={-1} role="dialog"  */}
         <div className={`modal-right-wrapper ${isShowing && 'show'}`}>
-          <div className="modal-right" onClick={(e)=>e.stopPropagation()}>
+          <div className="modal-right" onClick={(e)=>e.stopPropagation()} tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}} onClick={lock}>
             <div className="modal-right-btn"><div></div></div>
             <div className="modal-right-header" >
               CHECKLIST 

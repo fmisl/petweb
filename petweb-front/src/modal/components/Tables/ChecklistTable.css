@@ -16,6 +16,8 @@
   color: #FFFFFF;
   overflow: hidden;
 
+  user-select: none;
+
   /* border: yellow solid;
   box-sizing: border-box; */
 }
@@ -206,7 +208,8 @@
 
 
 
-.ChecklistTable-Default.opened, .ChecklistTable-Default.sel.opened {
+.ChecklistTable-Default.opened,
+.ChecklistTable-Default.sel.opened {
   /* color: #118AF7; */
   background: #292D30;
   color: #118AF7;

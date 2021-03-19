@@ -4,7 +4,7 @@ import Worklist from "../modal/Worklist";
 // import useWorklist from '../modal/useWorklist';
 import Uploader from "../modal/Uploader";
 import {useSelector, useDispatch} from 'react-redux';
-import {increment, decrement, addToList, removeFromList,loadItems, fetchItems} from '../reduxs/actions';
+import {increment, decrement, addToList, removeFromList,loadItems, fetchItems, openSelect} from '../reduxs/actions';
 import IconView from '../images/IconView';
 import IconAnalysis from '../images/IconAnalysis';
 import IconDelete from '../images/IconDelete';
@@ -93,8 +93,8 @@ function Upload({toggleChecklist}) {
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>
-            <div className="upload-btn" onClick={()=>history.push('/view')}><IconView className="upload-icon"/>View</div>
-            <div className="upload-btn" onClick={()=>history.push('/analysis/suvr')}><IconAnalysis className="upload-icon"/>Analysis</div>
+            <div className="upload-btn" onClick={()=>{dispatch(openSelect());history.push('/view/191')}}><IconView className="upload-icon"/>View</div>
+            <div className="upload-btn" onClick={()=>{dispatch(openSelect());history.push('/analysis/suvr')}}><IconAnalysis className="upload-icon"/>Analysis</div>
             <div className="upload-btn" onClick={toggleChecklist}><IconWorklist className="upload-icon"/>Checklist</div>
             <div className="upload-btn"><IconDelete className="upload-icon"/>Delete</div>
             <div className="upload-btn" style={{width:"199px", marginLeft:"40px"}} >Connect to PACS</div>
