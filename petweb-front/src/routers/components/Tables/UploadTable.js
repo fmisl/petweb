@@ -196,8 +196,6 @@ const mapDispatchToProps = (dispatch) => ({
   decrement: () => dispatch(actions.decrement()),
   login: () => dispatch(actions.login()),
   logout: () => dispatch(actions.logout()),
-  addToList: (item) => dispatch(actions.addToList(item)),
-  removeFromList: (item) => dispatch(actions.removeFromList(item)),
   openItem: (itemID) => dispatch(actions.openItem(itemID)),
   closeItem: (itemID) => dispatch(actions.closeItem(itemID)),
   selectItem: (itemID) => dispatch(actions.selectItem(itemID)),

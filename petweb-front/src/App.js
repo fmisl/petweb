@@ -9,7 +9,7 @@ import Login from './routers/login/Login'
 import Forgot from './routers/login/Forgot'
 import Signup from './routers/login/Signup'
 import * as services from './services/fetchApi'
-import {login, logout, increment, decrement, loadItems, profile, tab_location, groupItem} from './reduxs/actions';
+import {login, logout, increment, decrement, loadItems, profile, tab_location, groupItem, addStack, updateStack, removeStack} from './reduxs/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import {Dashboard, Upload, View, Analysis, Setting} from './routers'
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
@@ -26,6 +26,12 @@ function App() {
   const history =useHistory();
   const { caseID } = useParams();
   const menuList = ['dashboard', 'upload', 'view', 'analysis/suvr', 'analysis/report', 'setting']
+  useEffect(() => {
+    if (OpenedFiles.length != 0){
+      console.log('OpenedFiles changed: ', OpenedFiles)
+      dispatch(addStack([...OpenedFiles.map((v,i)=>{return {fileID: v.fileID, currentC:50, currentS:50, currentA:50}})]))
+    }
+  }, [OpenedFiles.length])
 
   useEffect(async () => {
     const token = localStorage.getItem('token')

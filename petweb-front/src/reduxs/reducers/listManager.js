@@ -1,16 +1,15 @@
 const listManagerReducer = (state = [], action) => {
   switch(action.type){
-    case 'ADD':
-      // state = state.slice();
-      // return state.push(action.item);
-      // console.log("listManagerReducer: ", action.item, state)
-      return [...state, action.item];
-    case 'REMOVE':
-      // state = state.slice();
-      // return state.remove(action.item);
-      // const newState = state.filter((v, i) => v !== action.item);
-      // console.log('remove: ',newState)
-      return state.filter((v, i) => v !== action.item);
+    case 'ADD_STACK':
+      return [...action.Stack];
+    case 'UPDATE_STACK':
+      return action.Stack.map((v, i) => {
+        if (v.fileID === action.Stack.fileID) 
+          return {...v, currentC:action.Stack.currentC, currentS: action.Stack.currentS, currentA: action.Stack.currentA}
+        else return {...v}
+        });
+    case 'REMOVE_STACK':
+      return state.filter((v, i) => {return v.fileID !== action.item});
     default:
       return state;
   }

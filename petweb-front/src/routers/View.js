@@ -18,7 +18,7 @@ import Home from './components/Cornerstone/Home'
 
 function View({}) {
   const counter = useSelector(state => state.counter);
-  const listSelected = useSelector(state => state.listManager);
+  const listManager = useSelector(state => state.listManager);
   const isLogged = useSelector(state => state.isLogged);
   const [showMenu, setShowMenu] = useState(false)
   // const [caseID, setCaseID] = useState(null)
@@ -34,15 +34,15 @@ function View({}) {
 
   const stackCoronal = {
     imageIds: imageIdC,
-    currentImageIdIndex: 50
+    currentImageIdIndex: listManager.filter(v=>v.fileID==caseID.toString())[0].currentC
   };
   const stackSaggital = {
     imageIds: imageIdS,
-    currentImageIdIndex: 40
+    currentImageIdIndex: listManager.filter(v=>v.fileID==caseID.toString())[0].currentS
   };
   const stackAxial = {
     imageIds: imageIdA,
-    currentImageIdIndex: 40
+    currentImageIdIndex: listManager.filter(v=>v.fileID==caseID.toString())[0].currentA
   };
   useEffect(() => {
     // console.log('useEffect (fileID): ',counter.fileID)
@@ -67,7 +67,7 @@ function View({}) {
       <div className="content-page">
         {/* <div className="view-box"> */}
           <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-            <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
+            <ImageViewer caseID={caseID} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
             {/* <Home caseID={caseID}/> */}
           </div>
         {/* </div> */}

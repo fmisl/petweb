@@ -57,16 +57,22 @@ export const profile = (text) =>{
     username: text
   };
 };
-export const addToList = (item) =>{
+export const addStack = (Stack) =>{
   return {
-    type: 'ADD',
-    item: item,
+    type: 'ADD_STACK',
+    Stack: Stack,
   }
 }
-export const removeFromList = (item) =>{
+export const updateStack = (Stack) =>{
   return {
-    type: 'REMOVE',
-    item: item,
+    type: 'UPDATE_STACK',
+    Stack: Stack,
+  }
+}
+export const removeStack = (Stack) =>{
+  return {
+    type: 'REMOVE_STACK',
+    Stack: Stack,
   }
 }
 export const changeColor = (color) =>{
