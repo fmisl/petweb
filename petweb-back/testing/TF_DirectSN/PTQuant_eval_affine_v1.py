@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+## django integration setting
+from django.conf import settings
 
 import time
 import os, shutil
@@ -8,10 +10,10 @@ from shutil import copyfile
 
 # TODO: Change the model paths
 import tensorflow as tf
-import sntemplate.TF_DirectSN.layers_coregpy as lays
-from sntemplate.TF_DirectSN.PTQuant_utils import Dense3DSpatialTransformer, VTNAffineStem
+import testing.TF_DirectSN.layers_coregpy as lays
+from testing.TF_DirectSN.PTQuant_utils import Dense3DSpatialTransformer, VTNAffineStem
 
-from sntemplate.TF_DirectSN.PTQuant_preproc_coreg_v1_1 import coreg_mrc1 as coreg
+from testing.TF_DirectSN.PTQuant_preproc_coreg_v1_1 import coreg_mrc1 as coreg
 
 import glob
 from django.conf import settings
@@ -24,7 +26,8 @@ stages = 3
 
 def train(inout_path, caseID):
 
-    checkpoint_dir = r".\sntemplate\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
+    # checkpoint_dir = r".\testing\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
+    checkpoint_dir = os.path.join(os.getcwd(), 'testing', 'TF_DirectSN', '02_14_20_10_CascadedGAN_Unet_augment_v1',)
 
     in_file = "input_" + caseID
     out_file = "output_" + caseID
@@ -48,8 +51,8 @@ def train(inout_path, caseID):
         dgan = lays.deformedGAN()
 
         def_list = []
-        aa = np.fromfile(r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\sntemplate\TF_DirectSN\src\fMNI152_T1_2mm.img',
-                         dtype=np.int16)
+        temp_path = os.path.join(os.getcwd(), 'testing', 'TF_DirectSN', 'src', 'fMNI152_T1_2mm.img')
+        aa = np.fromfile(temp_path, dtype=np.int16)
         aa = np.reshape(aa, [91, 109, 91])
         aa = np.transpose(aa, axes=[2, 1, 0])
         aa_pad = np.pad(aa, [[10, 11], [1, 2], [10, 11]], mode='constant') / 7000
@@ -127,7 +130,7 @@ def train(inout_path, caseID):
                 # defosr = defosr.astype(dtype=np.float32)
                 # defosr.tofile(os.path.join(inout_path, 'eval_defo_' + name))
                 # inout_path = os.path.join(settings.MEDIA_ROOT, "case_66")
-                src_file_path = os.path.join(settings.BASE_DIR, "sntemplate", "TF_DirectSN", "src", "output.hdr")
+                src_file_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", "output.hdr")
                 dst_file_path = os.path.join(inout_path, "output_"+caseID+".hdr")
                 copyfile(src_file_path, dst_file_path)
                     # gxhr_tmp = xr[ii, :, :, :].flatten()

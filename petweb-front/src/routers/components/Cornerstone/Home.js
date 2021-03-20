@@ -87,8 +87,8 @@ export default class Home extends Component {
           caseID: caseID,
           Radio2: 1,
           Button: [true, true, true],
-          // downloadlink: "http://147.47.228.204:8011/result/download/case"+this.state.caseID+"/output_"+this.state.caseID+".nii",
-          downloadlink: IPinUSE+"result/download/case"+this.state.caseID+"/output_"+this.state.caseID+".nii",
+          // downloadlink: "http://147.47.228.204:8011/result/download/case"+this.state.caseID+"/input_"+this.state.caseID+".nii",
+          downloadlink: IPinUSE+"result/download/case"+this.state.caseID+"/input_"+this.state.caseID+".nii",
         });
       }
     }

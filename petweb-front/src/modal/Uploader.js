@@ -49,21 +49,21 @@ function Uploader({ fileList, isShowing, hide, removeFileList, updateFileList })
               <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41"}}>
                 <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
                   {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
-                  // src={IPinUSE+'result/download/'+username+'uploader/input_coronal_100_'+focusItem+'.png'}/>
+                  // src={IPinUSE+'result/download/'+username+'uploader/input_coronal_'+focusItem+'.png'}/>
                   src={currentJPGURL_head+'_hy.jpg'} alt=" "/>}
                 </div>
                 <div style={{...styleDiv, ...{top:"", left:"50%"}}} >
                   {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
-                  // src={IPinUSE+'result/download/'+username+'uploader/input_sagittal_100_'+focusItem+'.png'}/>
+                  // src={IPinUSE+'result/download/'+username+'uploader/input_sagittal_'+focusItem+'.png'}/>
                   src={currentJPGURL_head+'_hx.jpg'} alt=" "/>}
                 </div>
                   <div style={{...styleDiv, ...{top:"50%", left:"0"}}} >
                   {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
-                  // src={IPinUSE+'result/download/'+username+'uploader/input_axial_100_'+focusItem+'.png'}/>
+                  // src={IPinUSE+'result/download/'+username+'uploader/input_axial_'+focusItem+'.png'}/>
                   src={currentJPGURL_head+'_hz.jpg'} alt=" "/>}
                 </div>
                 <div style={{...styleDiv, ...{top:"50%", left:"50%"}}} >
-                {/* <img src={'http://localhost:8000/result/download/case100/input_axial_100_10.png'}/> */}
+                {/* <img src={'http://localhost:8000/result/download/case100/input_axial_10.png'}/> */}
                 </div>
               </div>
             </div>

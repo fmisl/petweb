@@ -1,4 +1,6 @@
 # from keras.layers.core import Layer
+## django integration setting
+from django.conf import settings
 
 # from keras.layers.core import Layer
 import tensorflow as tf

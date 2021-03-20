@@ -9,9 +9,9 @@ import time
 # Caution: numpy must be <=1.17 #
 #################################
 
-def coreg(V2, V1 = r'.\sntemplate\TF_DirectSN\src\fMNI152_T1_2mm.img'):
+def coreg(V2, V1 = r'.\testing\TF_DirectSN\src\fMNI152_T1_2mm.img'):
     # execute only if run as a script
-    V1 = r'.\sntemplate\TF_DirectSN\src\fMNI152_T1_2mm.img'
+    V1 = r'.\testing\TF_DirectSN\src\fMNI152_T1_2mm.img'
     # V1 = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_DL_v2\Downloads\pib_testfile.img'
     # V2 = 'C:\\Users\\SKKang\\Downloads\\12903102_KANGKIJEONG_C11PiB_20161123.img'
 

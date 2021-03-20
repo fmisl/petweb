@@ -27,9 +27,9 @@ function View({}) {
   const [isSNed, setIsSNed] = useState(true)
   const dispatch = useDispatch();
   const username = localStorage.getItem('username')
-  const imageIdC = [...Array(108).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/output_coronal_100_'+i+'.png'));
-  const imageIdS = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/output_sagittal_100_'+i+'.png'));
-  const imageIdA = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/output_axial_100_'+i+'.png'));
+  const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/input_coronal_'+i+'.png'));
+  const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/input_sagittal_'+i+'.png'));
+  const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/input_axial_'+i+'.png'));
 
   const stackCoronal = {
     imageIds: imageIdC,

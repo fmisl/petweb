@@ -19,7 +19,7 @@ import scipy.misc
 
 def coreg_mrc1(V2):
     # Average template
-    V1 = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\sntemplate\TF_DirectSN\src\output_averageTM2.nii'
+    V1 = r'C:\Users\dwnusa\workspace\petweb\testing\TF_DirectSN\src\output_averageTM2.nii'
     # V1 = r'D:\DNN_directSN\averageTemplate\output_averageTM2.nii'
 
     I = load(V2)
@@ -103,7 +103,7 @@ def coreg_mrc1(V2):
 #
 # def coreg_mrc1(V2):
 #     # Average template
-#     V1 = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\sntemplate\TF_DirectSN\src\output_averageTM2.nii'
+#     V1 = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\testing\TF_DirectSN\src\output_averageTM2.nii'
 #
 #     I = load(V2)
 #     if len(I.shape) == 4:

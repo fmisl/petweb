@@ -38,17 +38,17 @@ ROIS = [Frontal_L, Frontal_R, Cingulate_L, Cingulate_R, Striatum_L, Striatum_R, 
 # C:\Users\dwnusa\workspace\3_project\PET-Web\SN_DL_v2\testResults\coregpy\06_22_10_10test\eval_gimg_test.img
 def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSize=None):
 
-    crbl_path = os.path.join(settings.BASE_DIR, "sntemplate", "TF_DirectSN", "src", 'fcrbll_fnirt_thr50_wo_vermis.img')
-    aalt_path = os.path.join(settings.BASE_DIR, "sntemplate", "TF_DirectSN", "src", 'faalnumconvergion_paper.img')
+    crbl_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", 'fcrbll_fnirt_thr50_wo_vermis.img')
+    aalt_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", 'faalnumconvergion_paper.img')
 
-    crtx_centil = os.path.join(settings.BASE_DIR, "sntemplate", "TF_DirectSN", "src", 'fvoi_ctx_2mm.img')
-    crbl_centil =os.path.join(settings.BASE_DIR, "sntemplate", "TF_DirectSN", "src", 'fvoi_WhlCbl_2mm.img')
+    crtx_centil = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", 'fvoi_ctx_2mm.img')
+    crbl_centil =os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", 'fvoi_WhlCbl_2mm.img')
 
     # # For debug
-    # crbl_path = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\sntemplate\TF_DirectSN\src\fcrbll_fnirt_thr50_wo_vermis.img'
-    # aalt_path = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\sntemplate\TF_DirectSN\src\faalnumconvergion_paper.img'
-    # crtx_centil = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\sntemplate\TF_DirectSN\src\fvoi_ctx_2mm.img'
-    # crbl_centil = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\sntemplate\TF_DirectSN\src\fvoi_WhlCbl_2mm.img'
+    # crbl_path = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\testing\TF_DirectSN\src\fcrbll_fnirt_thr50_wo_vermis.img'
+    # aalt_path = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\testing\TF_DirectSN\src\faalnumconvergion_paper.img'
+    # crtx_centil = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\testing\TF_DirectSN\src\fvoi_ctx_2mm.img'
+    # crbl_centil = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\testing\TF_DirectSN\src\fvoi_WhlCbl_2mm.img'
 
     try:
         crbl_mask = nib.load(crbl_path)

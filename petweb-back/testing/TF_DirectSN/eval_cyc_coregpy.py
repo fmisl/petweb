@@ -1,14 +1,16 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+## django integration setting
+from django.conf import settings
 
 import time
 import os, shutil
 
 import tensorflow as tf
-from sntemplate.TF_DirectSN import layers_coregpy as lays
-from sntemplate.TF_DirectSN.utils import Dense3DSpatialTransformer
-from sntemplate.TF_DirectSN.spm2py_coreg import coreg
+from testing.TF_DirectSN import layers_coregpy as lays
+from testing.TF_DirectSN.utils import Dense3DSpatialTransformer
+from testing.TF_DirectSN.spm2py_coreg import coreg
 from shutil import copyfile
 import glob
 from django.conf import settings
@@ -21,8 +23,8 @@ stages = 3
 
 
 def train(inout_path, caseID):
-    checkpoint_dir = r".\sntemplate\TF_DirectSN\05_20_01_30_CascadedGAN_Unet_augment"
-    # checkpoint_dir = r".\sntemplate\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
+    checkpoint_dir = r".\testing\TF_DirectSN\05_20_01_30_CascadedGAN_Unet_augment"
+    # checkpoint_dir = r".\testing\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
     # V1 = 'C:\\Users\SKKang\Downloads\\fMNI152_T1_2mm.img'
     in_file = "input_" + caseID
     out_file = "output_" + caseID
@@ -82,7 +84,7 @@ def train(inout_path, caseID):
 
             # fname = time.strftime("%m_%d_%H_%M")
             # fname = fname + 'test'
-            # tfi = os.path.join(r'.\sntemplate\TF_DirectSN\testResults\coregpy', fname)
+            # tfi = os.path.join(r'.\testing\TF_DirectSN\testResults\coregpy', fname)
             # tfi = os.path.join(inout_path, fname)
             # if tf.gfile.Exists(tfi):
             #     tf.gfile.DeleteRecursively(tfi)
@@ -109,7 +111,7 @@ def train(inout_path, caseID):
                 # defosr = defosr.astype(dtype=np.float32)
                 # defosr.tofile(os.path.join(inout_path, 'eval_defo_' + name))
                 # inout_path = os.path.join(settings.MEDIA_ROOT, "case_66")
-                src_file_path = os.path.join(settings.BASE_DIR, "sntemplate", "TF_DirectSN", "src", "output.hdr")
+                src_file_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", "output.hdr")
                 dst_file_path = os.path.join(inout_path, "output_"+caseID+".hdr")
                 copyfile(src_file_path, dst_file_path)
                     # gxhr_tmp = xr[ii, :, :, :].flatten()

@@ -24,8 +24,8 @@ Thalamus_R = range(80,91,2)
 
 # C:\Users\dwnusa\workspace\3_project\PET-Web\SN_DL_v2\testResults\coregpy\06_22_10_10test\eval_gimg_test.img
 def quantification(sndir, maxval=100):
-    crbl_path = os.path.join(settings.BASE_DIR, "sntemplate", "TF_DirectSN", "src", 'fcrbll_fnirt_thr50_wo_vermis.img')
-    aalt_path = os.path.join(settings.BASE_DIR, "sntemplate", "TF_DirectSN", "src", 'faalnumconvergion_paper.img')
+    crbl_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", 'fcrbll_fnirt_thr50_wo_vermis.img')
+    aalt_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", 'faalnumconvergion_paper.img')
 
     t1_path = 'fTPM_2.img'
 

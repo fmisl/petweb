@@ -1,5 +1,7 @@
+## django integration setting
+from django.conf import settings
 import tensorflow as tf
-from sntemplate.TF_DirectSN.utils import Dense3DSpatialTransformer
+from testing.TF_DirectSN.utils import Dense3DSpatialTransformer
 # import TF_DirectSN.inputs as inp
 from scipy.ndimage.filters import gaussian_filter
 
@@ -18,7 +20,7 @@ tf.flags.DEFINE_integer('batch_size', 1,
                             """Number of images to process in a batch.""")
 tf.flags.DEFINE_integer('batch_size_eval', 1,
                             """Number of images to process in a batch.""")
-tf.flags.DEFINE_string('data_dir1', '.\sntemplate\TF_DirectSN\dataset_withSeg',
+tf.flags.DEFINE_string('data_dir1', '.\testing\TF_DirectSN\dataset_withSeg',
                            """Path to the training data directory.""")
 tf.flags.DEFINE_string('data_dir2', 'E:\\RT_HJAn\\trainset_cycGAN_CTw',
                            """Path to the training data directory.""")

@@ -1,2 +1,2 @@
-model_checkpoint_path: "C:\\Users\\dwnusa\\workspace\\3_project\\PET-Web\\SN_template\\sntemplate\\TF_DirectSN\\02_14_20_10_CascadedGAN_Unet_augment_v1\\model-20000"
-all_model_checkpoint_paths: "C:\\Users\\dwnusa\\workspace\\3_project\\PET-Web\\SN_template\\sntemplate\\TF_DirectSN\\02_14_20_10_CascadedGAN_Unet_augment_v1\\model-20000"
+model_checkpoint_path: "/Users/dwnusa/workspace/SNU/petweb/petweb-back/testing/TF_DirectSN/02_14_20_10_CascadedGAN_Unet_augment_v1/model-20000"
+all_model_checkpoint_paths: "/Users/dwnusa/workspace/SNU/petweb/petweb-back/testing/TF_DirectSN/02_14_20_10_CascadedGAN_Unet_augment_v1/model-20000"

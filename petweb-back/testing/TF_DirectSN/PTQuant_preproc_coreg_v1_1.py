@@ -1,3 +1,7 @@
+## django integration setting
+from django.conf import settings
+import os
+
 import scipy.ndimage.filters
 
 from nibabel import load
@@ -15,13 +19,17 @@ from dipy.align.transforms import TranslationTransform3D
 
 import scipy.misc
 
+
 #################################
 # Caution: numpy must be <=1.17 #
 #################################
 
 def coreg_mrc1(V2):
     # Average template
-    V1 = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_template\sntemplate\TF_DirectSN\src\output_averageTM2.nii'
+    # V1 = r'C:\Users\dwnusa\workspace\petweb\testing\TF_DirectSN\src\output_averageTM2.nii'
+    # V1 = r'\Users\dwnusa\workspace\SNU\petweb\petweb-back\testing\TF_DirectSN\src\output_averageTM2.nii'
+    V1 = os.path.join(os.getcwd(), 'testing', 'TF_DirectSN', 'src', 'output_averageTM2.nii')
+    # print(V1)
 
     I = load(V2)
     if len(I.shape) == 4:

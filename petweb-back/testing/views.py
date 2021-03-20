@@ -11,6 +11,9 @@ from scipy import ndimage as nd
 from PIL import Image
 from shutil import move as mv
 import threading, time
+import math
+from testing.TF_DirectSN.PTQuant_eval_affine_v1 import train
+from testing.TF_DirectSN.QuantWithSurface import _quantification
 
 
 class uploader(APIView):
@@ -32,6 +35,77 @@ class uploader(APIView):
             else:
                 print("Step2: create target folder ")
                 os.mkdir(target_folder)
+                nimg3D = nib.load(target_file) # 이미지 불러오기
+
+                # img hdr 파일을 생성해서 각 폴더에 생성하기....
+                nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "input_"+myfile['fileID']+".img"))
+
+                dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
+                img3D = np.array(nimg3D.dataobj) # numpy array로 변환
+                img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
+
+                # axial 91, coronal 109, sagittal 91 크기로 잘라내기 (crop)
+                cX, cY, cZ = [math.floor(img3D_2mm.shape[0] / 2), math.floor(img3D_2mm.shape[1] / 2) + 10,
+                              math.floor(img3D_2mm.shape[2] / 2)] # 중심 좌표 계산
+                offsetX, offsetY, offsetZ = [math.floor(91 / 2), math.floor(109 / 2), math.floor(91 / 2)]
+                img3D_crop = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1,
+                        cZ - offsetZ:cZ + offsetZ + 1]
+
+                vx, vy, vz = img3D_crop.shape # 크기는 (91, 109, 91) 이어야함
+                print(vx, vy, vz)
+                uint8_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
+                uint8_img3D = 255 * uint8_img3D
+                uint8_img3D = uint8_img3D.astype(np.uint8)
+                hx, hy, hz = [int(vx/2), int(vy/2), int(vz/2)]
+
+                print("Step3: create input image")
+                for iz in range(vz):
+                    uint8_img2D = uint8_img3D[:,:,iz]
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    # colored_image = cm1(uint8_img2D)
+                    # colored_image2 = cm2(uint8_img2D)
+                    file_name = "input_" + "axial_" + str(iz) + ".png"
+                    full_path = os.path.join(target_folder, file_name)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+
+                for iy in range(vy):
+                    uint8_img2D = uint8_img3D[:,iy,:]
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    # colored_image = cm1(uint8_img2D)
+                    # colored_image2 = cm2(uint8_img2D)
+                    file_name = "input_" + "coronal_" + str(iy) + ".png"
+                    full_path = os.path.join(target_folder, file_name)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+
+                for ix in range(vx):
+                    uint8_img2D = uint8_img3D[ix,:,:]
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    # colored_image = cm1(uint8_img2D)
+                    # colored_image2 = cm2(uint8_img2D)
+                    file_name = "input_" + "sagittal_" + str(ix) + ".png"
+                    full_path = os.path.join(target_folder, file_name)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+                print("---------complete generating input png files--------")
+
+                print("Step4: algorithm(DL)")
+                # start = time.perf_counter()
+                inout_path = os.path.join(database_path, myfile['fileID'])
+                train(inout_path, myfile['fileID'])
+
+
+                #
+                # newCase.DebugFlag = 3
+                # newCase.Step3 = True
+                # newCase.save()
+                #
+                # # Step4: quantification
+                # print("Step3: quantification, ", caseID)
+                # inout_path = os.path.join(settings.MEDIA_ROOT, "case"+str(caseID))
+                # print("Progress ("+Format+"): quantization Start")
+
+
+
+
 
                 # # target_folder = "case" + str(caseID)
                 # # case_fullpath = os.path.join(settings.MEDIA_ROOT, case_folder)
