@@ -1,6 +1,6 @@
 import React, {useState, useEffect } from 'react';
 import '../App.css'
-import {useHistory, Redirect, Link, useLocation} from 'react-router-dom'
+import {useHistory, Redirect, Link, useLocation, useParams} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
 import {logout, increment, decrement, tab_location} from '../reduxs/actions';
 // import logoWhite from '../../images/logo-white.png'
@@ -17,6 +17,7 @@ function Sidebar() {
   const location = useLocation();
   const history =useHistory();
   const dispatch = useDispatch();
+  const { caseID } = useParams();
   const listSelected = useSelector(state => state.listManager);
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
@@ -79,7 +80,7 @@ function Sidebar() {
           <div className={`sidebar-grp1-menu-title`}><IconUpload size={'40'} stroke={pathname[1] === 'upload' ? "#118AF7" : "#ccccda"}/><li>Upload</li></div>
         </div>
         <div className={'sidebar-grp1-splitter'}></div>
-        <div className={`sidebar-grp1-menu ${pathname[1] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/view');}}> {/* dispatch(tab_location(2)); */}
+        <div className={`sidebar-grp1-menu ${pathname[1] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/view/'+counter.tabX);}}> {/* dispatch(tab_location(2)); */}
           <div className={`sidebar-grp1-menu-title`}><IconView size={'40'} stroke={pathname[1] === 'view' ? "#118AF7" : "#ccccda"}/><li>View</li></div>
         </div>
         <div className={`sidebar-grp1-menu ${pathname[1] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}> {/*  dispatch(tab_location(3)); */}

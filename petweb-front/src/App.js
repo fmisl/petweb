@@ -61,27 +61,36 @@ function App() {
   }
 
   const changePageByKey = (e) =>{
+    const MaxOpenedFiles = OpenedFiles.length;
     switch (e.keyCode){
       case 38:
         const keyUpPage = Math.max(0,counter.tabY-1)
         dispatch(tab_location({...counter, tabY:keyUpPage}));
-        history.push('/'+menuList[keyUpPage]+'/'+OpenedFiles[counter.tabX].fileID);
+        if (keyUpPage <= 1) history.push('/'+menuList[keyUpPage]);
+        else if (keyUpPage > 1) history.push('/'+menuList[keyUpPage]+'/'+OpenedFiles[counter.tabX].fileID);
         break;
       case 40:
-        const keyDownPage = Math.min(menuList.length-1,counter.tabY+1)
-        dispatch(tab_location({...counter, tabY:keyDownPage}));
-        history.push('/'+menuList[keyDownPage]+'/'+OpenedFiles[counter.tabX].fileID);
+          const keyDownPage = Math.min(menuList.length-1,counter.tabY+1)
+          if (keyDownPage <= 1) history.push('/'+menuList[keyDownPage]);
+          else if (keyDownPage > 1) 
+            if (MaxOpenedFiles > 0){
+              history.push('/'+menuList[keyDownPage]+'/'+OpenedFiles[counter.tabX].fileID);
+            }
         break;
       case 39:
-        const keyRightPage = counter.tabX+1;
-        // , fileID:OpenedFiles[keyRightPage].File
-        dispatch(tab_location({...counter, tabX:keyRightPage, fileID:OpenedFiles[keyRightPage].fileID}));
-        history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyRightPage].fileID);
+        if (MaxOpenedFiles > 0){
+          const keyRightPage = Math.min(MaxOpenedFiles-1, counter.tabX+1);
+          // , fileID:OpenedFiles[keyRightPage].File
+          dispatch(tab_location({...counter, tabX:keyRightPage, fileID:OpenedFiles[keyRightPage].fileID}));
+          history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyRightPage].fileID);
+        }
         break;
       case 37:
-        const keyLeftPage = Math.max(0,counter.tabX-1)
-        dispatch(tab_location({...counter, tabX:keyLeftPage, fileID:OpenedFiles[keyLeftPage].fileID}));
-        history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyLeftPage].fileID);
+        if (MaxOpenedFiles > 0){
+          const keyLeftPage = Math.max(0,counter.tabX-1)
+          dispatch(tab_location({...counter, tabX:keyLeftPage, fileID:OpenedFiles[keyLeftPage].fileID}));
+          history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyLeftPage].fileID);
+        }
         break;
       case 17:
         toggleChecklist()

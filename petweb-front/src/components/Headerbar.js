@@ -42,7 +42,7 @@ function Headerbar({OpenedFiles}) {
       <div ref={myRef} className="Headerbar-tab-collection">
         {
           OpenedFiles.map((el, i) => (
-            <React.Fragment>
+            <React.Fragment key={i}>
               <div ref={elRefs.current[i]} onClick={()=>dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}))}
               className={`Headerbar-tab ${counter.tabX==i && 'act'}`}>
                 {el.PatientID} &nbsp;&nbsp;&nbsp;&nbsp;x

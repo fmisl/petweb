@@ -85,12 +85,12 @@ export default class ImageViewer extends Component {
       stackC: props.stackC,
       stackS: props.stackS,
       stackA: props.stackA,
-      viewportC: cornerstone.getDefaultViewport(null, undefined),
-      viewportS: cornerstone.getDefaultViewport(null, undefined),
-      viewportA: cornerstone.getDefaultViewport(null, undefined),
       imageIdC: props.stackC.imageIds,
       imageIdS: props.stackS.imageIds,
       imageIdA: props.stackA.imageIds,
+      viewportC: cornerstone.getDefaultViewport(null, undefined),
+      viewportS: cornerstone.getDefaultViewport(null, undefined),
+      viewportA: cornerstone.getDefaultViewport(null, undefined),
     };
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onImageRendered = this.onImageRendered.bind(this);
@@ -196,7 +196,7 @@ export default class ImageViewer extends Component {
     console.log("onImageRendered1")
   }
   onImageRendered() {
-    // console.log("onImageRendered")
+    console.log("onImageRendered")
     let viewportC = cornerstone.getViewport(this.elementC);
     let viewportS = cornerstone.getViewport(this.elementS);
     let viewportA = cornerstone.getViewport(this.elementA);
@@ -205,7 +205,13 @@ export default class ImageViewer extends Component {
     // cornerstone.setViewport(this.elementA, viewport);
 
     this.setState({
-      ...this.state,
+      // ...this.state,
+      stackC: this.props.stackC,
+      stackS: this.props.stackS,
+      stackA: this.props.stackA,
+      imageIdC: this.props.stackC.imageIds,
+      imageIdS: this.props.stackS.imageIds,
+      imageIdA: this.props.stackA.imageIds,
       viewportC,
       viewportS,
       viewportA,
@@ -223,6 +229,12 @@ export default class ImageViewer extends Component {
     if (enabledElementC.image!==undefined && enabledElementS.image!==undefined && enabledElementA.image!==undefined ){
       this.setState({
         ...this.state,
+      // stackC: this.props.stackC,
+      // stackS: this.props.stackS,
+      // stackA: this.props.stackA,
+      // imageIdC: this.props.stackC.imageIds,
+      // imageIdS: this.props.stackS.imageIds,
+      // imageIdA: this.props.stackA.imageIds,
         imageIdC: enabledElementC.image.imageId,
         imageIdS: enabledElementS.image.imageId,
         imageIdA: enabledElementA.image.imageId,
@@ -284,12 +296,103 @@ export default class ImageViewer extends Component {
       // cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
       // cornerstoneTools.crosshairsTouch.enable(elementA, this.synchronizer);
       // Load the first image in the stack
-      const coronalLoadImagePromise = cornerstone.loadImage(this.state.imageIdC[this.state.stackC.currentImageIdIndex]).then(image => {
-        // Display the first image
-        try {
-          cornerstone.displayImage(elementC, image);
+      this.loadImage(elementC, elementS, elementA);
+    } catch(e){
+      console.error('fast skip by wheel')
+    }
+  }
 
-        const stack = this.state.stackC;
+  componentWillUnmount() {
+    console.log('ImageViewer componentWillUnmount')
+    const elementC = this.elementC;
+    const elementS = this.elementS;
+    const elementA = this.elementA;
+    elementC.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
+    elementS.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
+    elementA.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
+    elementC.removeEventListener("cornerstonenewimage", this.onNewImage);
+    elementS.removeEventListener("cornerstonenewimage", this.onNewImage);
+    elementA.removeEventListener("cornerstonenewimage", this.onNewImage);
+    window.removeEventListener("resize", this.onWindowResize);
+    cornerstone.disable(elementC);
+    cornerstone.disable(elementS);
+    cornerstone.disable(elementA);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log('ImageViewer componentDidUpdate')
+    // console.log("componentDidUpdate")
+
+    // imageIdC: props.stackC.imageIds,
+    // imageIdS: props.stackS.imageIds,
+    // imageIdA: props.stackA.imageIds,
+    try{
+      // console.log("prevProps.isInverted, this.props.isInverted")
+      // console.log(prevProps.isInverted, this.props.isInverted)
+      // console.log(prevProps !== this.props)
+      if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
+        console.log('ImageViewer componentDidUpdate: props changed')
+        // console.log(prevProps.stackC != this.props.stackC, prevProps.stackS != this.props.stackS, prevProps.stackA != this.props.stackA)
+        // let viewportA = cornerstone.getViewport(this.elementA);
+        // viewportA.invert=!this.props.isInverted;
+        // cornerstone.setViewport(this.elementA, viewportA);
+
+        console.log(prevProps.stackC.imageIds[0])
+        console.log(this.props.stackC.imageIds[0])
+        console.log(this.state.stackC.imageIds[0])
+        // this.setState({
+        //   stackC: this.props.stackC,
+        //   stackS: this.props.stackS,
+        //   stackA: this.props.stackA,
+        //   // viewportC: cornerstone.getDefaultViewport(null, undefined),
+        //   // viewportS: cornerstone.getDefaultViewport(null, undefined),
+        //   // viewportA: cornerstone.getDefaultViewport(null, undefined),
+        //   imageIdC: this.props.stackC.imageIds,
+        //   imageIdS: this.props.stackS.imageIds,
+        //   imageIdA: this.props.stackA.imageIds,
+        // })
+        this.loadImage(this.elementC, this.elementS, this.elementA);
+        // cornerstone.reset(this.elementC);
+        // cornerstone.reset(this.elementS);
+        // cornerstone.reset(this.elementA);
+      }
+
+      // const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
+      // const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
+      // const stackDataA = cornerstoneTools.getToolState(this.elementA, "stack");
+      // const stackC = stackDataC.data[0];
+      // const stackS = stackDataS.data[0];
+      // const stackA = stackDataA.data[0];
+      // stackC.currentImageIdIndex = this.state.stackC.currentImageIdIndex;
+      // // stackS.currentImageIdIndex = 0;
+      // stackS.currentImageIdIndex = this.state.stackS.currentImageIdIndex;
+      // stackA.currentImageIdIndex = this.state.stackA.currentImageIdIndex;
+      // stackC.imageIds = this.state.stackC.imageIds;
+      // stackS.imageIds = this.state.stackS.imageIds;
+      // stackA.imageIds = this.state.stackA.imageIds;
+      // cornerstoneTools.addToolState(this.elementC, "stack", stackC);
+      // cornerstoneTools.addToolState(this.elementS, "stack", stackS);
+      // cornerstoneTools.addToolState(this.elementA, "stack", stackA);
+      
+      // const imageIdC = stackC.imageIds[stackC.currentImageIdIndex];
+      // const imageIdS = stackS.imageIds[stackS.currentImageIdIndex];
+      // const imageIdA = stackA.imageIds[stackA.currentImageIdIndex];
+      // cornerstoneTools.scrollToIndex(this.elementC, stackC.currentImageIdIndex);
+      // cornerstoneTools.scrollToIndex(this.elementS, stackS.currentImageIdIndex);
+      // cornerstoneTools.scrollToIndex(this.elementA, stackA.currentImageIdIndex);
+      console.log("ImageViewer componentDidUpdate:passed")
+    } catch(e){
+      console.error(e)
+      // console.log("componentDidUpdate:error")
+    }
+  }
+  loadImage=(elementC, elementS, elementA)=>{
+    const coronalLoadImagePromise = cornerstone.loadImage(this.props.stackC.imageIds[this.props.stackC.currentImageIdIndex]).then(image => {
+      // Display the first image
+      try {
+        cornerstone.displayImage(elementC, image);
+
+        const stack = this.props.stackC;
         // this.synchronizer.add(elementC);
         cornerstoneTools.addStackStateManager(elementC, ["stack", 'Crosshairs']);
         cornerstoneTools.addToolState(elementC, "stack", stack);
@@ -318,16 +421,17 @@ export default class ImageViewer extends Component {
         elementC.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementC.addEventListener("cornerstonenewimage", this.onNewImage);
         window.addEventListener("resize", this.onWindowResize);
+        // cornerstone.displayImage(elementC, image);
       } catch(e){
-        console.error('FastSkip')
+        console.error('FastSkip coronalLoadImagePromise')
       }
-      });
-      const sagittalLoadImagePromise = cornerstone.loadImage(this.state.imageIdS[this.state.stackS.currentImageIdIndex]).then(image => {
-        // Display the first image
-        try{
+    });
+    const sagittalLoadImagePromise = cornerstone.loadImage(this.props.stackS.imageIds[this.props.stackS.currentImageIdIndex]).then(image => {
+      // Display the first image
+      try{
         cornerstone.displayImage(elementS, image);
 
-        const stack = this.state.stackS;
+        const stack = this.props.stackS;
         // this.synchronizer.add(elementS);
         cornerstoneTools.addStackStateManager(elementS, ["stack", 'Crosshairs']);
         cornerstoneTools.addToolState(elementS, "stack", stack);
@@ -351,123 +455,64 @@ export default class ImageViewer extends Component {
         elementS.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementS.addEventListener("cornerstonenewimage", this.onNewImage);
         window.addEventListener("resize", this.onWindowResize);
+        // cornerstone.displayImage(elementS, image);
       } catch(e){
-        console.error('FastSkip')
+        console.error('FastSkip sagittalLoadImagePromise')
       }
-      });
-      const axialLoadImagePromise = cornerstone.loadImage(this.state.imageIdA[this.state.stackA.currentImageIdIndex]).then(image => {
-        // Display the first image
-        try{
-        cornerstone.displayImage(elementA, image);
+    });
+    const axialLoadImagePromise = cornerstone.loadImage(this.props.stackA.imageIds[this.props.stackA.currentImageIdIndex]).then(image => {
+      // Display the first image
+      try{
+      cornerstone.displayImage(elementA, image);
 
-        const stack = this.state.stackA;
-        // this.synchronizer.add(elementA);
-        cornerstoneTools.addStackStateManager(elementA, ["stack", 'Crosshairs']);
-        cornerstoneTools.addToolState(elementA, "stack", stack);
-        cornerstoneTools.stackScroll.activate(elementA, 1);
-        cornerstoneTools.stackScrollWheel.activate(elementA);
-        // cornerstoneTools.scrollIndicator.enable(elementA);
-        cornerstoneTools.stackPrefetch.enable(elementA, 3);
-        cornerstoneTools.wwwcRegion.activate(elementA, 4);
-        this.wwwcsynchronizer.add(elementA);
-        // Set the div to focused, so keypress events are handled
+      const stack = this.props.stackA;
+      // this.synchronizer.add(elementA);
+      cornerstoneTools.addStackStateManager(elementA, ["stack", 'Crosshairs']);
+      cornerstoneTools.addToolState(elementA, "stack", stack);
+      cornerstoneTools.stackScroll.activate(elementA, 1);
+      cornerstoneTools.stackScrollWheel.activate(elementA);
+      // cornerstoneTools.scrollIndicator.enable(elementA);
+      cornerstoneTools.stackPrefetch.enable(elementA, 3);
+      cornerstoneTools.wwwcRegion.activate(elementA, 4);
+      this.wwwcsynchronizer.add(elementA);
+      // Set the div to focused, so keypress events are handled
 
-        // Enable all tools we want to use with this element
-        cornerstoneTools.stackScrollKeyboard.activate(elementA);
-        
-        elementA.addEventListener("cornerstonetoolskeydown", this.onKeyPress);
-        elementA.addEventListener("cornerstoneimagerendered",this.onImageRendered);
-        elementA.addEventListener("cornerstonenewimage", this.onNewImage);
-        window.addEventListener("resize", this.onWindowResize);
-      } catch(e){
-        console.error('FastSkip')
-      }
-      });
-      // this.setState({
-      //   ...this.state,
-      // });
-      // After images have loaded, and our sync context has added both elements
-      Promise.all([coronalLoadImagePromise, sagittalLoadImagePromise, axialLoadImagePromise])
-      .then(() => {
-        try{
-        this.synchronizer.add(elementC);
-        this.synchronizer.add(elementS);
-
-        cornerstoneTools.crosshairs.enable(elementC, 1, this.synchronizer);
-        cornerstoneTools.crosshairs.enable(elementS, 1, this.synchronizer);
-
-        cornerstoneTools.crosshairsTouch.enable(elementC, this.synchronizer);
-        cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
-        // const tool = cornerstoneTools.CrosshairsTool;
-        // cornerstoneTools.addTool(tool);
-        // cornerstoneTools.setToolActive('Crosshairs', {
-        //   mouseButtonMask: 1,
-        //   synchronizationContext: this.synchronizer,
-        // });
-      } catch(e){
-        console.error('FastSkip')
-      }
-      });
-    } catch(e){
-      console.error('fast skip by wheel')
-    }
-  }
-
-  componentWillUnmount() {
-    const elementC = this.elementC;
-    const elementS = this.elementS;
-    const elementA = this.elementA;
-    elementC.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
-    elementS.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
-    elementA.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
-    elementC.removeEventListener("cornerstonenewimage", this.onNewImage);
-    elementS.removeEventListener("cornerstonenewimage", this.onNewImage);
-    elementA.removeEventListener("cornerstonenewimage", this.onNewImage);
-    window.removeEventListener("resize", this.onWindowResize);
-    cornerstone.disable(elementC);
-    cornerstone.disable(elementS);
-    cornerstone.disable(elementA);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log('ImageViewer componentDidUpdate')
-    // console.log("componentDidUpdate")
-    try{
-      // console.log("prevProps.isInverted, this.props.isInverted")
-      // console.log(prevProps.isInverted, this.props.isInverted)
-      // console.log(prevProps !== this.props)
-      if (prevProps !== this.props){
-        let viewportA = cornerstone.getViewport(this.elementA);
-        viewportA.invert=!this.props.isInverted;
-        cornerstone.setViewport(this.elementA, viewportA);
-      }
-      // const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
-      // const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
-      // const stackDataA = cornerstoneTools.getToolState(this.elementA, "stack");
-      // const stackC = stackDataC.data[0];
-      // const stackS = stackDataS.data[0];
-      // const stackA = stackDataA.data[0];
-      // stackC.currentImageIdIndex = this.state.stackC.currentImageIdIndex;
-      // // stackS.currentImageIdIndex = 0;
-      // stackS.currentImageIdIndex = this.state.stackS.currentImageIdIndex;
-      // stackA.currentImageIdIndex = this.state.stackA.currentImageIdIndex;
-      // stackC.imageIds = this.state.stackC.imageIds;
-      // stackS.imageIds = this.state.stackS.imageIds;
-      // stackA.imageIds = this.state.stackA.imageIds;
-      // cornerstoneTools.addToolState(this.elementC, "stack", stackC);
-      // cornerstoneTools.addToolState(this.elementS, "stack", stackS);
-      // cornerstoneTools.addToolState(this.elementA, "stack", stackA);
+      // Enable all tools we want to use with this element
+      cornerstoneTools.stackScrollKeyboard.activate(elementA);
       
-      // // const imageIdC = stackC.imageIds[stackC.currentImageIdIndex];
-      // // const imageIdS = stackS.imageIds[stackS.currentImageIdIndex];
-      // // const imageIdA = stackA.imageIds[stackA.currentImageIdIndex];
-      // cornerstoneTools.scrollToIndex(this.elementC, stackC.currentImageIdIndex);
-      // cornerstoneTools.scrollToIndex(this.elementS, stackS.currentImageIdIndex);
-      // cornerstoneTools.scrollToIndex(this.elementA, stackA.currentImageIdIndex);
-      // console.log("componentDidUpdate:passed")
+      elementA.addEventListener("cornerstonetoolskeydown", this.onKeyPress);
+      elementA.addEventListener("cornerstoneimagerendered",this.onImageRendered);
+      elementA.addEventListener("cornerstonenewimage", this.onNewImage);
+      window.addEventListener("resize", this.onWindowResize);
+      // cornerstone.displayImage(elementA, image);
     } catch(e){
-      console.error(e)
-      // console.log("componentDidUpdate:error")
+      console.error('FastSkip axialLoadImagePromise')
     }
+    });
+
+    // Promise.all([coronalLoadImagePromise, sagittalLoadImagePromise, axialLoadImagePromise])
+    // .then(() => {
+    //   try{
+    //   this.synchronizer.add(elementC);
+    //   this.synchronizer.add(elementS);
+
+    //   cornerstoneTools.crosshairs.enable(elementC, 1, this.synchronizer);
+    //   cornerstoneTools.crosshairs.enable(elementS, 1, this.synchronizer);
+
+    //   cornerstoneTools.crosshairsTouch.enable(elementC, this.synchronizer);
+    //   cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
+    //   // const tool = cornerstoneTools.CrosshairsTool;
+    //   // cornerstoneTools.addTool(tool);
+    //   // cornerstoneTools.setToolActive('Crosshairs', {
+    //   //   mouseButtonMask: 1,
+    //   //   synchronizationContext: this.synchronizer,
+    //   // });
+    //   cornerstone.updateImage(elementC);
+    //   cornerstone.updateImage(elementS);
+    //   cornerstone.updateImage(elementA);
+    // } catch(e){
+    //   console.error('FastSkip')
+    // }
+    // });
   }
 }
