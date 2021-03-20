@@ -13,12 +13,14 @@ import {login, logout, increment, decrement, loadItems, profile, tab_location, g
 import {useSelector, useDispatch} from 'react-redux';
 import {Dashboard, Upload, View, Analysis, Setting} from './routers'
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
+// import listManagerReducer from './reduxs/reducers/listManager';
 
 
 function App() {
   const fileList = useSelector(state => state.fileList);
   const OpenedFiles = fileList.filter(item => {return item.Opened==true});
   const counter = useSelector(state => state.counter);
+  const listManager = useSelector(state => state.listManager);
   const isLogged = useSelector(state => state.isLogged);
   const [isShowingChecklist, setIsShowingChecklist] = useState(false);
   const location = useLocation();
@@ -30,9 +32,19 @@ function App() {
     if (OpenedFiles.length != 0){
       console.log('OpenedFiles changed: ', OpenedFiles)
       dispatch(addStack([...OpenedFiles.map((v,i)=>{return {fileID: v.fileID, currentC:50, currentS:50, currentA:50}})]))
+      if (counter.fileID==null) dispatch(tab_location({...counter, fileID:OpenedFiles[counter.tabX].fileID}))
+      else {
+        // alert(OpenedFiles.findIndex((item)=>item.fileID == counter.fileID))
+        dispatch(tab_location({...counter, tabX:OpenedFiles.findIndex((item)=>item.fileID == counter.fileID)}))
+      }
     }
   }, [OpenedFiles.length])
 
+  // if (OpenedFiles.length !== 0){
+  //   if (counter.fileID==null) {
+  //     dispatch(tab_location({...counter, fileID:OpenedFiles[counter.tabX].fileID}))
+  //   }
+  // }
   useEffect(async () => {
     const token = localStorage.getItem('token')
     let res = null
@@ -88,14 +100,16 @@ function App() {
           const keyRightPage = Math.min(MaxOpenedFiles-1, counter.tabX+1);
           // , fileID:OpenedFiles[keyRightPage].File
           dispatch(tab_location({...counter, tabX:keyRightPage, fileID:OpenedFiles[keyRightPage].fileID}));
-          history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyRightPage].fileID);
+          if (counter.tabY <= 1) history.push('/'+menuList[counter.tabY]);
+          else if (counter.tabY > 1) history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyRightPage].fileID);
         }
         break;
       case 37:
         if (MaxOpenedFiles > 0){
           const keyLeftPage = Math.max(0,counter.tabX-1)
           dispatch(tab_location({...counter, tabX:keyLeftPage, fileID:OpenedFiles[keyLeftPage].fileID}));
-          history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyLeftPage].fileID);
+          if (counter.tabY <= 1) history.push('/'+menuList[counter.tabY]);
+          else if (counter.tabY > 1) history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyLeftPage].fileID);
         }
         break;
       case 17:

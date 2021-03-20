@@ -174,7 +174,7 @@ class ImageViewer extends Component {
       // console.log("onImageRendered: ", stackC.currentImageIdIndex, stackS.currentImageIdIndex, stackA.currentImageIdIndex)
       this.props.updateStack(this.props.listManager.map(v=>
           {
-            if (v.fileID==this.props.caseID.toString()) 
+            if (v.fileID==this.props.counter.fileID) 
               return {...v, currentC:stackC.currentImageIdIndex, currentS:stackS.currentImageIdIndex, currentA:stackA.currentImageIdIndex}
             else
               return {...v}
@@ -343,7 +343,7 @@ class ImageViewer extends Component {
     // const stackS = stackDataS.data[0];
     // const stackA = stackDataA.data[0];
     // console.log(stackC.currentImageIdIndex)
-    const currentIndex = this.props.listManager.filter((v)=>{if (v.fileID==this.props.caseID) return {currentC: v.currentC, currentS:v.currentS, currentA:v.currentA}})
+    const currentIndex = this.props.listManager.filter((v)=>{if (v.fileID==this.props.counter.fileID) return {currentC: v.currentC, currentS:v.currentS, currentA:v.currentA}})
     // console.log(currentIndex)
     const coronalLoadImagePromise = cornerstone.loadImage(this.props.stackC.imageIds[currentIndex[0].currentC]).then(image => {
       // const coronalLoadImagePromise = cornerstone.loadImage(this.props.stackC.imageIds[this.props.stackC.currentImageIdIndex]).then(image => {

@@ -22,27 +22,26 @@ function View({}) {
   const isLogged = useSelector(state => state.isLogged);
   const [showMenu, setShowMenu] = useState(false)
   // const [caseID, setCaseID] = useState(null)
-  const { caseID } = useParams();
   const [isCrosshaired, setIsCrosshaired] = useState(true)
   const [isInverted, setIsInverted] = useState(true)
   const [isSNed, setIsSNed] = useState(true)
   const dispatch = useDispatch();
   const username = localStorage.getItem('username')
-  const imageIdC = [...Array(108).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+caseID+'/output_coronal_100_'+i+'.png'));
-  const imageIdS = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+caseID+'/output_sagittal_100_'+i+'.png'));
-  const imageIdA = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+caseID+'/output_axial_100_'+i+'.png'));
+  const imageIdC = [...Array(108).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/output_coronal_100_'+i+'.png'));
+  const imageIdS = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/output_sagittal_100_'+i+'.png'));
+  const imageIdA = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/output_axial_100_'+i+'.png'));
 
   const stackCoronal = {
     imageIds: imageIdC,
-    currentImageIdIndex: listManager.filter(v=>v.fileID==caseID.toString())[0].currentC
+    currentImageIdIndex: listManager.filter(v=>v.fileID==counter.fileID.toString())[0].currentC
   };
   const stackSaggital = {
     imageIds: imageIdS,
-    currentImageIdIndex: listManager.filter(v=>v.fileID==caseID.toString())[0].currentS
+    currentImageIdIndex: listManager.filter(v=>v.fileID==counter.fileID.toString())[0].currentS
   };
   const stackAxial = {
     imageIds: imageIdA,
-    currentImageIdIndex: listManager.filter(v=>v.fileID==caseID.toString())[0].currentA
+    currentImageIdIndex: listManager.filter(v=>v.fileID==counter.fileID.toString())[0].currentA
   };
   useEffect(() => {
     // console.log('useEffect (fileID): ',counter.fileID)
@@ -67,7 +66,7 @@ function View({}) {
       <div className="content-page">
         {/* <div className="view-box"> */}
           <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-            <ImageViewer caseID={caseID} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
+            <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
             {/* <Home caseID={caseID}/> */}
           </div>
         {/* </div> */}
