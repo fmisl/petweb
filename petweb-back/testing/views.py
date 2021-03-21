@@ -95,21 +95,22 @@ class uploader(APIView):
 
                 print("Step5: Quantification")
                 aal_region, centil_suvr = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize)
-                print(aal_region, centil_suvr)
+                # print(aal_region, centil_suvr)
                 full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
                 full_path2 = os.path.join(inout_path, 'global_centil.txt')
                 np.savetxt(full_path1, aal_region[:,0,:], '%.3f')
                 np.savetxt(full_path2, centil_suvr[:,0], '%.3f')
                 print("----------complete train & quantification------------")
 
-                target_file = os.path.join(database_path, myfile['fileID'], myfile['fileID']+".img")
+                target_file = os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".img")
                 nimg3D = nib.load(target_file) # 이미지 불러오기
+                img3D = np.array(nimg3D.dataobj)
 
                 # nii 파일을 database 폴더에 생성하기....
-                nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "output_"+myfile['FileName']))
+                nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".nii"))
 
                 vx, vy, vz = img3D.shape
-                uint8_img3D = (nimg3D - nimg3D.min()) / (nimg3D.max() - nimg3D.min())
+                uint8_img3D = (img3D - img3D.min()) / (img3D.max() - img3D.min())
                 uint8_img3D = 255 * uint8_img3D
                 uint8_img3D = uint8_img3D.astype(np.uint8)
                 hz = int(vz / 2)
@@ -143,7 +144,7 @@ class uploader(APIView):
                     file_name = "output_" + "sagittal_" + str(ix) + ".png"
                     full_path = os.path.join(target_folder, file_name)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
-                print("---------complete generating input png files--------")
+                print("---------complete generating output png files--------")
 
     def put(self, request, format=None):
         username = request.user.username
@@ -159,6 +160,8 @@ class uploader(APIView):
         print(len(jsonData))
         database_files = os.listdir(database_path)
         NofNii = len([v for i, v in enumerate(database_files) if (v.split(".")[-1] == 'nii')])
+
+        [np.savetxt(os.path.join(database_path, str(NofNii+i)+"_"+",".join(v['FileName'].split(".")[:-1])+".txt"),[]) for i, v in enumerate(jsonData)]
         [mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(NofNii+i)+".nii")) for i, v in enumerate(jsonData)]
 
         filenames = os.listdir(database_path)
