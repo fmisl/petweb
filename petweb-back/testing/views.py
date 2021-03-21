@@ -42,6 +42,7 @@ class uploader(APIView):
 
                 dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
                 img3D = np.array(nimg3D.dataobj) # numpy array로 변환
+                oriSize = img3D.shape[0] * img3D.shape[1] * img3D.shape[2]
                 img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
 
                 # axial 91, coronal 109, sagittal 91 크기로 잘라내기 (crop)
@@ -91,6 +92,15 @@ class uploader(APIView):
                 # start = time.perf_counter()
                 inout_path = os.path.join(database_path, myfile['fileID'])
                 train(inout_path, myfile['fileID'])
+
+                print("Step5: Quantification")
+                aal_region, centil_suvr = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize)
+                print(aal_region, centil_suvr)
+                full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
+                full_path2 = os.path.join(inout_path, 'global_centil.txt')
+                np.savetxt(full_path1, aal_region[:,0,:], '%.3f')
+                np.savetxt(full_path2, centil_suvr[:,0], '%.3f')
+                print("----------complete train & quantification------------")
 
 
                 #
