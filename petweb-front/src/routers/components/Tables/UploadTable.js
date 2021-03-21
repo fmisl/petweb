@@ -114,7 +114,7 @@ class UploadTable extends Component {
                                 // });
                            }}
                 >
-                <div className={`UploadTable-Tracer ${props.value}`} >
+                <div className={`UploadTable-Tracer ${props.value.slice(-3)}`} >
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
                 </div>
             </div>
@@ -144,7 +144,7 @@ class UploadTable extends Component {
                                 // });
                             }}
                 >
-                <div className={`UploadTable-SUVR ${props.value}`}>
+                <div className={`UploadTable-SUVR ${props.record.Tracer.slice(-3)}`}>
                     <span>{props.value}</span>
                     {/* <progress value={props.value} min={0} max={5} /> */}
                     <div style={{width: "150px", height:"5px", borderRadius:"5px",
@@ -187,7 +187,7 @@ const mapStateToProps = (state) => ({
   // storeCount: state.count.count,
   counter:state.counter,
   isLogged:state.isLogged,
-  listManager:state.listManager,
+  stackManager:state.stackManager,
   fileList: state.fileList,
 });
 

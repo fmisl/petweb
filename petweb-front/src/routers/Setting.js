@@ -5,7 +5,7 @@ import {increment, decrement} from '../reduxs/actions';
 
 function Setting({history}) {
   const counter = useSelector(state => state.counter);
-  const listSelected = useSelector(state => state.listManager);
+  const listSelected = useSelector(state => state.stackManager);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   // console.log(history.location.pathname)

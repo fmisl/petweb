@@ -18,7 +18,7 @@ import Home from './components/Cornerstone/Home'
 
 function View({}) {
   const counter = useSelector(state => state.counter);
-  const listManager = useSelector(state => state.listManager);
+  const stackManager = useSelector(state => state.stackManager);
   const isLogged = useSelector(state => state.isLogged);
   const [showMenu, setShowMenu] = useState(false)
   // const [caseID, setCaseID] = useState(null)
@@ -27,28 +27,27 @@ function View({}) {
   const [isSNed, setIsSNed] = useState(true)
   const dispatch = useDispatch();
   const username = localStorage.getItem('username')
-  const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/input_coronal_'+i+'.png'));
-  const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/input_sagittal_'+i+'.png'));
-  const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/input_axial_'+i+'.png'));
+  const [inoutSelect, setInoutSelect] = useState("output")
+  const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
+  const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
+  const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
 
   const stackCoronal = {
     imageIds: imageIdC,
-    currentImageIdIndex: listManager.filter(v=>v.fileID==counter.fileID.toString())[0].currentC
+    currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC
   };
   const stackSaggital = {
     imageIds: imageIdS,
-    currentImageIdIndex: listManager.filter(v=>v.fileID==counter.fileID.toString())[0].currentS
+    currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS
   };
   const stackAxial = {
     imageIds: imageIdA,
-    currentImageIdIndex: listManager.filter(v=>v.fileID==counter.fileID.toString())[0].currentA
+    currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
   };
   useEffect(() => {
-    // console.log('useEffect (fileID): ',counter.fileID)
-    // console.log("imageIdC: ",imageIdC[0])
-    // console.log("imageIdS: ",imageIdS[0])
-    // console.log("imageIdA: ",imageIdA[0])
-  }, [counter])
+    if (isSNed) setInoutSelect("output")
+    else setInoutSelect("input")
+  }, [isSNed])
 
   // const getCase = async (caseID) => {
   //   console.log('getCase (caseID): ',caseID)

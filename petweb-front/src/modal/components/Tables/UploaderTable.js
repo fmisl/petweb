@@ -90,7 +90,7 @@ export default class UploaderTable extends Component {
               }
             }
           >
-          <div className={`UploaderTable-Tracer ${props.value.slice(props.value.length-3, props.value.length)}`}>
+          <div className={`UploaderTable-Tracer ${props.value.slice(-3)}`}>
               <div>&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
           </div>
         </div>

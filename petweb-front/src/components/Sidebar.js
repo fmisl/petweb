@@ -12,15 +12,16 @@ import IconAnalysis from '../images/IconAnalysis';
 import IconSetting from '../images/IconSetting';
 import IconLogout from '../images/IconLogout';
 
-function Sidebar() {
+function Sidebar({OpenedFiles}) {
   const [tab, setTab] = useState(0)
   const location = useLocation();
   const history =useHistory();
   const dispatch = useDispatch();
   const { caseID } = useParams();
-  const listSelected = useSelector(state => state.listManager);
+  const listSelected = useSelector(state => state.stackManager);
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
+  const OpenedFilesLength = OpenedFiles.length;
   // const menuList = ['dashboard', 'upload', 'view', 'analysis/suvr', 'analysis/report', 'setting']
   // useEffect(() => {
   //   console.log(counter);
@@ -80,14 +81,23 @@ function Sidebar() {
           <div className={`sidebar-grp1-menu-title`}><IconUpload size={'40'} stroke={pathname[1] === 'upload' ? "#118AF7" : "#ccccda"}/><li>Upload</li></div>
         </div>
         <div className={'sidebar-grp1-splitter'}></div>
-        <div className={`sidebar-grp1-menu ${pathname[1] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/view/'+counter.tabX);}}> {/* dispatch(tab_location(2)); */}
+        {OpenedFilesLength !==0 ? <div className={`sidebar-grp1-menu ${pathname[1] == 'view' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/view/'+counter.tabX);}}> {/* dispatch(tab_location(2)); */}
           <div className={`sidebar-grp1-menu-title`}><IconView size={'40'} stroke={pathname[1] === 'view' ? "#118AF7" : "#ccccda"}/><li>View</li></div>
         </div>
-        <div className={`sidebar-grp1-menu ${pathname[1] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}> {/*  dispatch(tab_location(3)); */}
+        :<div className={`sidebar-grp1-menu-disable`} > {/* dispatch(tab_location(2)); */}
+          <div className={`sidebar-grp1-menu-title`}><IconView size={'40'} stroke={"gray"}/><li>View</li></div>
+        </div>
+        }
+        {OpenedFilesLength !==0 ? <div className={`sidebar-grp1-menu ${pathname[1] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}> {/*  dispatch(tab_location(3)); */}
           <div className={`sidebar-grp1-menu-title`}><IconAnalysis size={'40'} stroke={pathname[1] === 'analysis' ? "#118AF7" : "#ccccda"}/><li>Analysis</li></div>
           <div className={`sidebar-grp1-menu-item ${pathname[2] == 'suvr' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr');}}><li>SUVR</li></div> {/* dispatch(tab_location(3)); */}
           <div className={`sidebar-grp1-menu-item ${pathname[2] == 'report' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/report');}}><li>Report</li></div> {/* dispatch(tab_location(4)); */}
         </div>
+        :<div className={`sidebar-grp1-menu-disable`}> {/*  dispatch(tab_location(3)); */}
+          <div className={`sidebar-grp1-menu-title`}><IconAnalysis size={'40'} stroke={"gray"}/><li>Analysis</li></div>
+        </div>
+        }
+        <div className={'sidebar-grp1-splitter'}></div>
         <div className={`sidebar-grp1-menu ${pathname[1] == 'setting' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/setting');}}> {/* dispatch(tab_location(5)); */}
           <div className={`sidebar-grp1-menu-title`}><IconSetting size={'40'} stroke={pathname[1] === 'setting' ? "#118AF7" : "#ccccda"}/><li>Setting</li></div>
         </div>

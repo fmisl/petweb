@@ -13,7 +13,7 @@ export default class AnalysisItem2 extends Component {
     this.state = {
       data: [
         { id:0, Focus:false, Select: true, SubRegion:"Composite",              SUVR: 0.85, Centiloid: 60.8},
-        { id:1, Focus:false, Select: true,  SubRegion:"Prefrontal R",           SUVR: 0.55, Centiloid: 46.8},
+        { id:1, Focus:false, Select: true, SubRegion:"Prefrontal R",           SUVR: 0.55, Centiloid: 46.8},
         { id:2, Focus:false, Select: true, SubRegion:"Prefrontal L",           SUVR: 0.33, Centiloid: 75.8},
         { id:3, Focus:false, Select: true, SubRegion:"Anterior Cingulate R",   SUVR: 0.93, Centiloid: 44.8},
         { id:4, Focus:false, Select: true, SubRegion:"Anterior Cingulate L",   SUVR: 0.93, Centiloid: 45.8},
@@ -41,7 +41,7 @@ export default class AnalysisItem2 extends Component {
       const styleDiv = {
           height: "100%",
           width: `${props.value}px`,
-          background:'white',
+          background:'red',
           borderRadius:"5px",
       }
       return(
@@ -58,7 +58,7 @@ export default class AnalysisItem2 extends Component {
                       }
                   }
               >
-              <div className={`AnalysisItem2Table-SUVR ${props.value}`}>
+              <div className={`AnalysisItem2Table-SUVR`}>
                   <span>{props.value}</span>
                   {/* <progress value={props.value} min={0} max={5} /> */}
                   <div style={{width: "100px", height:"5px", borderRadius:"5px",

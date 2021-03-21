@@ -1,4 +1,4 @@
-const listManagerReducer = (state = [], action) => {
+const stackManagerReducer = (state = [], action) => {
   switch(action.type){
     case 'ADD_STACK':
       return [...action.Stack];
@@ -14,4 +14,4 @@ const listManagerReducer = (state = [], action) => {
       return state;
   }
 }
-export default listManagerReducer;
+export default stackManagerReducer;

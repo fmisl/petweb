@@ -13,14 +13,15 @@ import {login, logout, increment, decrement, loadItems, profile, tab_location, g
 import {useSelector, useDispatch} from 'react-redux';
 import {Dashboard, Upload, View, Analysis, Setting} from './routers'
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
-// import listManagerReducer from './reduxs/reducers/listManager';
+// import stackManagerReducer from './reduxs/reducers/stackManager';
 
 
 function App() {
   const fileList = useSelector(state => state.fileList);
   const OpenedFiles = fileList.filter(item => {return item.Opened==true});
+  // const [OpenedFiles, setOpenedFiles] = useState([]);
   const counter = useSelector(state => state.counter);
-  const listManager = useSelector(state => state.listManager);
+  const stackManager = useSelector(state => state.stackManager);
   const isLogged = useSelector(state => state.isLogged);
   const [isShowingChecklist, setIsShowingChecklist] = useState(false);
   const location = useLocation();
@@ -34,8 +35,13 @@ function App() {
       dispatch(addStack([...OpenedFiles.map((v,i)=>{return {fileID: v.fileID, currentC:50, currentS:50, currentA:50}})]))
       if (counter.fileID==null) dispatch(tab_location({...counter, fileID:OpenedFiles[counter.tabX].fileID}))
       else {
-        // alert(OpenedFiles.findIndex((item)=>item.fileID == counter.fileID))
-        dispatch(tab_location({...counter, tabX:OpenedFiles.findIndex((item)=>item.fileID == counter.fileID)}))
+        const focusTab = OpenedFiles.findIndex((item)=>item.fileID == counter.fileID)
+        if (focusTab == -1 ) {
+          const lowerBoundTabIndex = Math.max(0, counter.tabX-1)
+          const focusFileID = OpenedFiles[lowerBoundTabIndex].fileID
+          dispatch(tab_location({...counter, tabX:lowerBoundTabIndex, fileID:focusFileID}))
+        }
+        else dispatch(tab_location({...counter, tabX:focusTab}))
       }
     }
   }, [OpenedFiles.length])
@@ -141,7 +147,7 @@ function App() {
       {isLogged && 
         // <div className="App" tabIndex={0} onKeyDown={(e)=>{if (e.keyCode == 40){dispatch(increment(menuList.length))} else if (e.keyCode == 38) {dispatch(decrement(menuList.length))};}}>
         <div className="App" tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
-          <Sidebar />
+          <Sidebar OpenedFiles={OpenedFiles}/>
           <Headerbar OpenedFiles={OpenedFiles}/>
           <Checklist isShowing={isShowingChecklist} hide={toggleChecklist} lock={openChecklist}/>
           {/*  */}
@@ -157,7 +163,8 @@ function App() {
           <Route path="/dashboard" component={Dashboard}/>
           {/* <Route path="/upload" component={Upload}/> */}
           <Route path="/upload" render={()=><Upload toggleChecklist={toggleChecklist}/>}/>
-          <Route path="/view/:caseID" exact component={View}/>
+          {counter.fileID != null ? <Route path="/view/:caseID" exact component={View}/>
+          : <Route path="/view/:caseID" render={()=><Redirect to="/dashboard"/>}/> }
           <Route path="/analysis" component={Analysis}/>
           <Route path="/setting" component={Setting}/>
           {/* <Route path="/" render={()=><Redirect to="dashboard"/>}/> */}

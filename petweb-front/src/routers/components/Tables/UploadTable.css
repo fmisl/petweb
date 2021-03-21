@@ -207,7 +207,8 @@
 /* .UploadTable-Default.sel.opened {
 } */
 
-.UploadTable-Default.opened, .UploadTable-Default.sel.opened {
+.UploadTable-Default.opened,
+.UploadTable-Default.sel.opened {
     /* color: #118AF7; */
     background: #292D30;
     color: #118AF7;
@@ -279,7 +280,7 @@
     width: 100%;
 }
 
-.UploadTable-Tracer.C-PIB>div {
+.UploadTable-Tracer.PIB>div {
     border-left: #118AF7 solid;
 }
 

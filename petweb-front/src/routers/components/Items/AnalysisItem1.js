@@ -12,28 +12,29 @@ let colors = colormap({
 })
 export default class AnalysisItem1 extends Component {
   render() {
+    const {subRegion} = this.props;
     // console.log(colors)
     const maxSUVR = 2;
-    const globalR = 1.60;
-    const globalL = 1.61;
-    const frontalR = 1.80;
-    const frontalL = 2;
-    const parietalR = 1.60;
-    const parietalL = 1.61;
-    const temporalR = 1.45;
-    const temporalL = 1.41;
-    const occipitalR = 1.11;
-    const occipitalL = 1;
-    const globalRPercentile = Math.round((globalR-1)*100);
-    const globalLPercentile = Math.round((globalL-1)*100);
-    const frontalRPercentile = Math.round((frontalR-1)*100);
-    const frontalLPercentile = Math.round((frontalL-1)*100);
-    const parietalRPercentile = Math.round((parietalR-1)*100);
-    const parietalLPercentile = Math.round((parietalL-1)*100);
-    const temporalRPercentile = Math.round((temporalR-1)*100);
-    const temporalLPercentile = Math.round((temporalL-1)*100);
-    const occipitalRPercentile = Math.round((occipitalR-1)*100);
-    const occipitalLPercentile = Math.round((occipitalL-1)*100);
+    const globalR = subRegion.Composite;
+    const globalL = subRegion.Composite;
+    const frontalR = subRegion.Frontal_R;
+    const frontalL = subRegion.Frontal_L;
+    const parietalR = subRegion.Parietal_R;
+    const parietalL = subRegion.Parietal_L;
+    const temporalR = subRegion.Temporal_R;
+    const temporalL = subRegion.Temporal_L;
+    const occipitalR = subRegion.Occipital_R;
+    const occipitalL = subRegion.Occipital_L;
+    const globalRPercentile = Math.round(Math.max(0,subRegion.Composite-1)*100);
+    const globalLPercentile = Math.round(Math.max(0,subRegion.Composite-1)*100);
+    const frontalRPercentile = Math.round(Math.max(0,subRegion.Frontal_R-1)*100);
+    const frontalLPercentile = Math.round(Math.max(0,subRegion.Frontal_L-1)*100);
+    const parietalRPercentile = Math.round(Math.max(0,subRegion.Parietal_R-1)*100);
+    const parietalLPercentile = Math.round(Math.max(0,subRegion.Parietal_L-1)*100);
+    const temporalRPercentile = Math.round(Math.max(0,subRegion.Temporal_R-1)*100);
+    const temporalLPercentile = Math.round(Math.max(0,subRegion.Temporal_L-1)*100);
+    const occipitalRPercentile = Math.round(Math.max(0,subRegion.Occipital_R-1)*100);
+    const occipitalLPercentile = Math.round(Math.max(0,subRegion.Occipital_L-1)*100);
     return (
       <React.Fragment>
           <div className="analysis-box1-content">
@@ -130,8 +131,15 @@ export default class AnalysisItem1 extends Component {
           </div>
           <div style={{display:"flex",flexDirection:"column", alignItems:"flex-end", width:"690px"}}>
             <JetColorMap/>
-            <div style={{}}>
-              SUVR &emsp;&emsp;&emsp;&emsp;&emsp;1.0&emsp;&emsp;&emsp;&emsp;&ensp;1.2&emsp;&emsp;&emsp;&emsp;&ensp;1.4&emsp;&emsp;&emsp;&emsp;&ensp;1.6&emsp;&emsp;&emsp;&emsp;&ensp;1.8&emsp;&emsp;&emsp;&emsp;&ensp;2.0
+            <div style={{width:"600px", display:"flex", justifyContent:"space-between"}}>
+              <div>SUVR</div>
+              <div>1.0</div>
+              <div>1.2</div>
+              <div>1.4</div>
+              <div>1.6</div>
+              <div>1.8</div>
+              <div>2.0</div>
+              {/* SUVR &emsp;&emsp;&emsp;&emsp;&emsp;1.0&emsp;&emsp;&emsp;&emsp;&ensp;1.2&emsp;&emsp;&emsp;&emsp;&ensp;1.4&emsp;&emsp;&emsp;&emsp;&ensp;1.6&emsp;&emsp;&emsp;&emsp;&ensp;1.8&emsp;&emsp;&emsp;&emsp;&ensp;2.0 */}
             </div>
         </div>
       </React.Fragment>

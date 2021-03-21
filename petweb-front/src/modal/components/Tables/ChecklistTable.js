@@ -98,7 +98,7 @@ class ChecklistTable extends Component {
                     // });
                 }}
                     >
-                <div className={`ChecklistTable-Tracer ${props.value}`}  >
+                <div className={`ChecklistTable-Tracer ${props.value.slice(-3)}`}  >
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
                 </div>
             </div>
@@ -158,7 +158,7 @@ const mapStateToProps = (state) => ({
   // storeCount: state.count.count,
   counter:state.counter,
   isLogged:state.isLogged,
-  listManager:state.listManager,
+  stackManager:state.stackManager,
   fileList: state.fileList,
 });
 

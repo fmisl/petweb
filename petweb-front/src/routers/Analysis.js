@@ -13,6 +13,24 @@ import CustomSlide from './components/Slider/CustomSlide';
 import AnalysisItem1 from './components/Items/AnalysisItem1'
 import AnalysisItem2 from './components/Items/AnalysisItem2'
 import AnalysisItem3 from './components/Items/AnalysisItem3'
+import axios from 'axios';
+import {IPinUSE} from '../services/IPs'
+const subRegionName = [
+    'Frontal_L', 'Frontal_L_C',
+    'Frontal_R', 'Frontal_R_C',
+    'Cingulate_L','Cingulate_L_C', 
+    'Cingulate_R','Cingulate_R_C', 
+    'Striatum_L','Striatum_L_C', 
+    'Striatum_R','Striatum_R_C', 
+    'Thalamus_L','Thalamus_L_C', 
+    'Thalamus_R','Thalamus_R_C', 
+    'Occipital_L','Occipital_L_C', 
+    'Occipital_R','Occipital_R_C', 
+    'Parietal_L','Parietal_L_C', 
+    'Parietal_R','Parietal_R_C', 
+    'Temporal_L','Temporal_L_C', 
+    'Temporal_R','Temporal_R_C',
+    'Composite', 'Composite_C',]
 
 // function Analysis() {
 class Analysis extends Component {
@@ -21,14 +39,52 @@ class Analysis extends Component {
     this.handleWheel = this.handleWheel.bind(this);
     this.state = {
       showMenu: false,
+      subRegion:{},
     };
   }
+
+  componentDidUpdate(prevProps) {
+    const {counter} = this.props;
+    const username = localStorage.getItem('username')
+    if (prevProps.counter.tabX != this.props.counter.tabX){
+        console.log('componentDidUpdate')
+        try {
+            axios.get(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/aal_subregion.txt')
+            .then(res => {
+                const posts = res.data.split(/\s+/)
+                const obj = posts.reduce(function(o, val, idx) { o[subRegionName[idx]] = Number(val); return o; }, {});
+                console.log(res.data,posts, typeof(posts), obj)
+                this.setState({
+                    subRegion: obj,
+                })
+            })
+        } catch (err) {
+    
+        }
+    }
+}
   handleWheel(e) {
     e.preventDefault();
     // console.log(e.deltaY)
     e.deltaY > 0 ? this.slider.slickNext() : this.slider.slickPrev();
   }
   componentDidMount() {
+    const {counter} = this.props;
+    const username = localStorage.getItem('username')
+    console.log('componentDidMount')
+    try {
+        axios.get(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/aal_subregion.txt')
+        .then(res => {
+            const posts = res.data.split(/\s+/)
+            const obj = posts.reduce(function(o, val, idx) { o[subRegionName[idx]] = Number(val); return o; }, {});
+            console.log(res.data,posts, typeof(posts), obj)
+            this.setState({
+                subRegion: obj,
+            })
+        })
+    } catch (err) {
+
+    }
     ReactDOM.findDOMNode(this).addEventListener('wheel', this.handleWheel);
   }
 
@@ -36,6 +92,8 @@ class Analysis extends Component {
     ReactDOM.findDOMNode(this).removeEventListener('wheel', this.handleWheel);
   }
   render(){
+    const {subRegion} = this.state;
+    console.log('state: ', subRegion)
     const { counter, isLogged, increment, decrement, listSelected } = this.props;
     // const counter = useSelector(state => state.counter);
     // const isLogged = useSelector(state => state.isLogged);
@@ -67,7 +125,7 @@ class Analysis extends Component {
                 <div  style={{display:"flex", whiteSpace:"nowrap", margin:"0px 0px 15px"}}>
                   <div className="analysis-box1">
                     <div className="analysis-box1-title">Regional SUVR</div>
-                    <AnalysisItem1/>
+                    <AnalysisItem1 subRegion={subRegion}/>
                   </div>
 
                   <div className="analysis-box2">
@@ -140,7 +198,7 @@ const mapStateToProps = (state) => ({
   // storeCount: state.count.count,
   counter:state.counter,
   isLogged:state.isLogged,
-  listSelected:state.listManager,
+  listSelected:state.stackManager,
 });
 
 const mapDispatchToProps = (dispatch) => ({

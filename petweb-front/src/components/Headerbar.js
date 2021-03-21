@@ -20,7 +20,6 @@ function Headerbar({OpenedFiles}) {
   // const executeScroll = () => scrollToRef(myRef)
   // console.log("headerbar.js:?")
   // console.log("headerbar.js:",fileList)
-  const focusTab = Math.min(OpenedFilesLength-1, counter.tabX)
   // useEffect(() => {
   //   if (OpenedFiles.length !== 0){
   //     if (counter.fileID==null) {
@@ -31,14 +30,24 @@ function Headerbar({OpenedFiles}) {
   useEffect(() => {
     // console.log('useEffect: counter');
     // elRefs.current[counter.tabX].current.focus()
-    if (OpenedFilesLength != 0) myRef.current.scrollLeft=elRefs.current[focusTab].current.offsetLeft-100;
+    const focusTab = counter.tabX
+    if (OpenedFilesLength != 0) {
+      // if (counter.tabX)
+      try{
+        myRef.current.scrollLeft=elRefs.current[focusTab].current.offsetLeft-100;
+      } catch (e){
+        alert('focustTab is closed: focusTab='+focusTab)
+        // console.log(focusTab)
+        // dispatch(tab_location({...counter, tabX:focusTab-1}))
+      }
+    }
   }, [counter])
   // }, [counter]) onClick={()=> {myRef.current.scrollLeft=elRefs.current[0].current.offsetLeft}}
   if (elRefs.current.length !== OpenedFilesLength) {
     // dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}))
     elRefs.current = Array(OpenedFilesLength).fill().map((_, i) => elRefs.current[i] || createRef());
   }
-
+  console.log('header', location.pathname.split('/')[1])
   return (
     <div className="Headerbar" >
       {/* <div className='Headerbar-left-arrow'>{'<<'}</div> */}
@@ -46,7 +55,18 @@ function Headerbar({OpenedFiles}) {
         {
           OpenedFiles.map((el, i) => (
             <React.Fragment key={i}>
-              <div ref={elRefs.current[i]} onClick={()=>{history.push(location.pathname+'/'+i); dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}))}}
+              <div ref={elRefs.current[i]} 
+                onClick={()=>{
+                  if(counter.tabY > 1) 
+                    {
+                      history.push('/'+location.pathname.split('/')[1]+'/'+el.fileID); 
+                      dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}));
+                    }
+                  else
+                    {
+                      dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}));
+                    }
+                }}
               className={`Headerbar-tab ${el.fileID == counter.fileID && 'act'}`}>
                 {el.PatientID} &nbsp;&nbsp;&nbsp;&nbsp;x
               </div>

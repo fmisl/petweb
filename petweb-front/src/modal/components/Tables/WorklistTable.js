@@ -77,7 +77,7 @@ export default class WorklistTable extends Component {
                             }
                         }
                     >
-                <div className={`WorklistTable-Tracer ${props.value}`}  >
+                <div className={`WorklistTable-Tracer ${props.value.slice(-3)}`}  >
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
                 </div>
             </div>

@@ -18,7 +18,7 @@ function Upload({toggleChecklist}) {
   const history =useHistory();
   const [dragState, setDragState] = useState(false);
   const counter = useSelector(state => state.counter);
-  const listSelected = useSelector(state => state.listManager);
+  const listSelected = useSelector(state => state.stackManager);
   const [isShowingWorklist, setIsShowingWorklist] = useState(false);
   const [isShowingUploader, setIsShowingUploader] = useState(false);
   const isLogged = useSelector(state => state.isLogged);
@@ -93,8 +93,8 @@ function Upload({toggleChecklist}) {
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>
-            <div className="upload-btn" onClick={()=>{dispatch(openSelect());history.push('/view')}}><IconView className="upload-icon"/>View</div>
-            <div className="upload-btn" onClick={()=>{dispatch(openSelect());history.push('/analysis/suvr')}}><IconAnalysis className="upload-icon"/>Analysis</div>
+            <div className="upload-btn" onClick={()=>{dispatch(openSelect());history.push('/view/'+counter.tabX)}}><IconView className="upload-icon"/>View</div>
+            <div className="upload-btn" onClick={()=>{dispatch(openSelect());history.push('/analysis/suvr/'+counter.tabX)}}><IconAnalysis className="upload-icon"/>Analysis</div>
             <div className="upload-btn" onClick={toggleChecklist}><IconWorklist className="upload-icon"/>Checklist</div>
             <div className="upload-btn"><IconDelete className="upload-icon"/>Delete</div>
             <div className="upload-btn" style={{width:"199px", marginLeft:"40px"}} >Connect to PACS</div>

@@ -1,45 +1,49 @@
 import React, { Component } from 'react'
+import axios from 'axios';
+import {IPinUSE} from '../../../services/IPs'
+import { connect } from 'react-redux';
+import * as actions from '../../../reduxs/actions';
 import './AnalysisItem3.css'
 // import * as services from '../../../services/fetchApi'
-import {IPinUSE} from '../../../services/IPs'
+class Analysisitem3 extends Component {
+    // state = {
+    //     subRegion:{},
+    // }
 
-export default class Analysisitem3 extends Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-                 
-        }
-
-        this.handleEvent = this.handleEvent.bind(this)
-    }
-
-    componentDidMount() {
+    // componentDidUpdate(prevProps) {
+    //     const {counter} = this.props;
+    //     const username = localStorage.getItem('username')
+    //     if (prevProps.counter.tabX != this.props.counter.tabX){
+    //         console.log('componentDidUpdate')
+    //         try {
+    //             axios.get(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/aal_subregion.txt')
+    //             .then(res => {
+    //                 const posts = res.data.split(/\s+/)
+    //                 const obj = posts.reduce(function(o, val, idx) { o[subRegionName[idx]] = val; return o; }, {});
+    //                 console.log(res.data,posts, typeof(posts), obj)
+    //                 this.setState({
+    //                     subRegion: obj,
+    //                 })
+    //             })
+    //         } catch (err) {
         
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) { if (prevState.name !== this.state.name) { this.handler() } }
-
-    componentWillUnmount() {
-        
-    }
-
-    // Prototype methods, Bind in Constructor (ES2015)
-    handleEvent() {}
-
-    // Class Properties (Stage 3 Proposal)
-    handler = () => { this.setState() }
+    //         }
+    //     }
+    // }
 
     render() {
+        const {counter} = this.props;
+        const username = localStorage.getItem('username')
         return (
             <div className="AnalysisItem3-Default">
                 <div className="AnalysisItem3-Surface" >
-                    <div><img src={IPinUSE+'result/download/case190/_llat.png'} height="220px"/>Left Lateral</div>
-                    <div><img src={IPinUSE+'result/download/case190/_rlat.png'} height="220px"/>Right Lateral</div>
+                    {/* IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png' */}
+                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_llat.png'} height="220px"/>Left Lateral</div>
+                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rlat.png'} height="220px"/>Right Lateral</div>
                 </div>
                 <div className="AnalysisItem3-Surface" >
-                    <div><img src={IPinUSE+'result/download/case190/_lmed.png'} height="220px"/>Left Medial</div>
-                    <div><img src={IPinUSE+'result/download/case190/_rmed.png'} height="220px"/>Right Medial</div>
+                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_lmed.png'} height="220px"/>Left Medial</div>
+                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rmed.png'} height="220px"/>Right Medial</div>
                 </div>
                 <div className="AnalysisItem3-Threshold">
                     <input type="range" style={{width:"35%"}}/>
@@ -48,3 +52,17 @@ export default class Analysisitem3 extends Component {
         )
     }
 }
+const mapStateToProps = (state) => ({
+    // storeCount: state.count.count,
+    counter:state.counter,
+    isLogged:state.isLogged,
+    listSelected:state.stackManager,
+  });
+  
+  const mapDispatchToProps = (dispatch) => ({
+    increment: () => dispatch(actions.increment()),
+    decrement: () => dispatch(actions.decrement()),
+    login: () => dispatch(actions.login()),
+    logout: () => dispatch(actions.logout()),
+  });
+  export default connect(mapStateToProps, mapDispatchToProps)(Analysisitem3);

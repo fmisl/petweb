@@ -172,7 +172,7 @@ class ImageViewer extends Component {
       const stackS = stackDataS.data[0];
       const stackA = stackDataA.data[0];
       // console.log("onImageRendered: ", stackC.currentImageIdIndex, stackS.currentImageIdIndex, stackA.currentImageIdIndex)
-      this.props.updateStack(this.props.listManager.map(v=>
+      this.props.updateStack(this.props.stackManager.map(v=>
           {
             if (v.fileID==this.props.counter.fileID) 
               return {...v, currentC:stackC.currentImageIdIndex, currentS:stackS.currentImageIdIndex, currentA:stackA.currentImageIdIndex}
@@ -304,7 +304,7 @@ class ImageViewer extends Component {
   componentDidUpdate(prevProps, prevState) {
     try{
       if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
-        // console.log('loadImage')
+        console.log('loadImage')
         this.loadImage(this.elementC, this.elementS, this.elementA);
       } 
       // console.log('componentDidUpdate2')
@@ -343,7 +343,7 @@ class ImageViewer extends Component {
     // const stackS = stackDataS.data[0];
     // const stackA = stackDataA.data[0];
     // console.log(stackC.currentImageIdIndex)
-    const currentIndex = this.props.listManager.filter((v)=>{if (v.fileID==this.props.counter.fileID) return {currentC: v.currentC, currentS:v.currentS, currentA:v.currentA}})
+    const currentIndex = this.props.stackManager.filter((v)=>{if (v.fileID==this.props.counter.fileID) return {currentC: v.currentC, currentS:v.currentS, currentA:v.currentA}})
     // console.log(currentIndex)
     const coronalLoadImagePromise = cornerstone.loadImage(this.props.stackC.imageIds[currentIndex[0].currentC]).then(image => {
       // const coronalLoadImagePromise = cornerstone.loadImage(this.props.stackC.imageIds[this.props.stackC.currentImageIdIndex]).then(image => {
@@ -444,7 +444,7 @@ const mapStateToProps = (state) => ({
   // storeCount: state.count.count,
   counter:state.counter,
   isLogged:state.isLogged,
-  listManager:state.listManager,
+  stackManager:state.stackManager,
 });
 
 const mapDispatchToProps = (dispatch) => ({

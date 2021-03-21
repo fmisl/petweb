@@ -1,6 +1,6 @@
 import counterReducer from './counter';
 import loggedReducer from './isLogged';
-import listManagerReducer from './listManager';
+import stackManagerReducer from './stackManager';
 import fileListReducer from './fileList';
 import {combineReducers} from 'redux';
 
@@ -8,7 +8,7 @@ import {combineReducers} from 'redux';
 const allReducers = combineReducers({
   counter: counterReducer,
   isLogged: loggedReducer,
-  listManager: listManagerReducer,
+  stackManager: stackManagerReducer,
   fileList: fileListReducer,
 })
 export default allReducers;

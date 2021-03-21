@@ -9,7 +9,7 @@ import WeeklyPie from './components/Charts/WeeklyPie'
 
 function Dashboard(props) {
   const counter = useSelector(state => state.counter);
-  const listSelected = useSelector(state => state.listManager);
+  const listSelected = useSelector(state => state.stackManager);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const history =useHistory();
