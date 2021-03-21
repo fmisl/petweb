@@ -38,7 +38,7 @@
   background: #3B3C41;
   /* border: red solid;
   box-sizing: border-box; */
-  /* overflow: auto; */
+  overflow: hidden;
 }
 
 .filterable-table-container.ChecklistTable>.table-container>div {
@@ -91,6 +91,7 @@
 
 .ChecklistTable.filterable-table>thead>tr>th:nth-child(1) {
   width: 40px;
+  height: 100%;
 }
 
 .ChecklistTable.filterable-table>thead>tr>th:nth-child(2) {
@@ -106,7 +107,7 @@
 }
 
 .ChecklistTable.filterable-table>thead>tr>th:nth-child(7) {
-  width: 180px;
+  width: 40px;
 }
 
 .ChecklistTable.filterable-table>tbody {
@@ -137,6 +138,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
+}
+
+.ChecklistTable.filterable-table>tbody>tr>td:nth-child(7) {
+  /* border: red solid; */
+  width: 40px;
 }
 
 .ChecklistTable.filterable-table>tbody>tr>td {
@@ -314,4 +321,15 @@
   width: 60px;
   margin-right: 30px;
   /* border: red solid; */
+}
+
+.ChecklistIcon-Delete {
+  stroke: white;
+  width: 40px;
+  height: 40px;
+  /* border: red solid; */
+}
+
+.ChecklistIcon-Delete:hover {
+  stroke: #118AF7;
 }

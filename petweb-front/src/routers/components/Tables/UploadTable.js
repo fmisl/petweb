@@ -120,12 +120,12 @@ class UploadTable extends Component {
             </div>
         );
     }
-    renderSUVR = (props) => {
+    renderCentiloid = (props) => {
         const {data} = this.state;
         const styleDiv = {
             height: "100%",
-            width: `${props.value /4 * 150}px`,
-            background:'white',
+            width: `${Math.max(0,props.value)}%`,
+            background:'red',
             borderRadius:"5px",
         }
         return(
@@ -145,12 +145,14 @@ class UploadTable extends Component {
                             }}
                 >
                 <div className={`UploadTable-SUVR ${props.record.Tracer.slice(-3)}`}>
-                    <span>{props.value}</span>
-                    {/* <progress value={props.value} min={0} max={5} /> */}
-                    <div style={{width: "150px", height:"5px", borderRadius:"5px",
-                    boxSizing:"border-box", background:"#383C41"}}>
+                    {props.value != 0 ? 
+                    // <span>{Number(props.value).toFixed(2)}</span>
+                    <span>{Number(props.value).toFixed(2)}</span>
+                    :<span>processing...</span>}
+                    {props.value != 0 && 
+                    <div style={{width: "150px", height:"5px", borderRadius:"5px",boxSizing:"border-box", background:"#383C41"}}>
                         <div style={styleDiv}></div>
-                    </div>
+                    </div>}
                 </div>
             </div>
         );
@@ -160,7 +162,7 @@ class UploadTable extends Component {
         const fields = [
             { render: this.renderSelect, name: 'Select', displayName: "Select", inputFilterable: true, sortable: true},
             { render: this.renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
-            { render: this.renderSUVR, name: 'SUVR', displayName: "SUVR", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderCentiloid, name: 'Centiloid', displayName: "Centiloid", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'Age', displayName: "Age", inputFilterable: true, exactFilterable: false, sortable: true },

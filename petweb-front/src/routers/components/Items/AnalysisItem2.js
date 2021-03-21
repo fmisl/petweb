@@ -88,7 +88,7 @@ export default class AnalysisItem2 extends Component {
                   }
               >
               <div className={`AnalysisItem2Table-SUVR`}>
-                  <span>{props.value}</span>
+                  <span>{Number(props.value).toFixed(2)}</span>
                   {/* <progress value={props.value} min={0} max={5} /> */}
                   <div style={{width: "100px", height:"5px", borderRadius:"5px",
                   boxSizing:"border-box", background:"#91919C"}}>

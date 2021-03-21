@@ -21,6 +21,7 @@ function Uploader({ fileList, isShowing, hide, removeFileList, updateFileList })
   const [focusItem, setFelectItem] = useState(0);
   const [runCall, setRunCall] = useState(false);
   const [isChecked, setIsChecked] = useState(true);
+  const [selectTracer, setSelectTracer] = useState('[11C]PIB');
   const [currentJPGURL_head, setCurrentJPGURL_head] = useState("");
   const username = localStorage.getItem('username')
   useEffect(() => {
@@ -44,7 +45,13 @@ function Uploader({ fileList, isShowing, hide, removeFileList, updateFileList })
             </div>
             <div className="modal-body">
               <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{console.log(Math.floor(Math.random() * 20+30));setFelectItem(Math.floor(Math.random() * 20+30))}}>
-                <UploaderTable fileList={fileList} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>
+
+              <div style={{position:'relative', minWidth:'600px', minHeight:'60px'}}>
+                <div className={`modal-header-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>setSelectTracer('[11C]PIB')}>[11C]PIB</div>
+                <div className={`modal-header-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>setSelectTracer('[18F]FBP')}>[18F]FBP</div>
+                <div className={`modal-header-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>setSelectTracer('[18F]FBB')}>[18F]FBB</div>
+              </div>
+                <UploaderTable selectTracer={selectTracer} fileList={fileList} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>
               </div>
               <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41"}}>
                 <div style={{...styleDiv, ...{top:"0", left:"0"}}} >

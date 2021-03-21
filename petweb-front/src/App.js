@@ -74,7 +74,7 @@ function App() {
         // console.log(res)
       }
     }
-  }, [])
+  }, [isLogged])
 
   function openChecklist() {
     setIsShowingChecklist(true);

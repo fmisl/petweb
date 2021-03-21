@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './ChecklistTable.css'
 import { connect } from 'react-redux';
 import * as actions from '../../../reduxs/actions';
+import IconDelete from '../../../images/IconDelete';
 
 const FilterableTable = require('react-filterable-table');
 
@@ -56,6 +57,26 @@ class ChecklistTable extends Component {
                 data:fileList.filter(item=>{return item.Group==1}),
             })
         }
+    }
+    renderRemove = (props) => {
+      // const { data } = this.state;
+        return(
+          <div className={`ChecklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
+            onClick={()=>{
+                    this.props.ungroupItemIndividual(props.record.fileID)
+                //   this.props.removeFileList(props.record)
+                  // this.setState({
+                  //   data: data.filter(item => item.id !== props.record.id)
+                  // })
+                  // console.dir(props)
+                }
+              }
+            >
+            <div style={{userSelect:"none"}}>
+                <IconDelete className="ChecklistIcon-Delete"/>
+            </div>
+          </div>
+        );
     }
     renderSelect = (props) => {
         const {data} = this.state;
@@ -136,6 +157,7 @@ class ChecklistTable extends Component {
             { render: this.renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'Age', displayName: "Age", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'Sex', displayName: "Sex", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
             // { render: this.renderClick, name: 'Update', displayName: "Update", inputFilterable: true, exactFilterable: false, sortable: true },
         ];
         return (
@@ -171,5 +193,6 @@ const mapDispatchToProps = (dispatch) => ({
   closeItem: (itemID) => dispatch(actions.closeItem(itemID)),
   selectItem: (itemID) => dispatch(actions.selectItem(itemID)),
   unselectItem: (itemID) => dispatch(actions.unselectItem(itemID)),
+  ungroupItemIndividual: (itemID) => dispatch(actions.ungroupItemIndividual(itemID)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ChecklistTable);
