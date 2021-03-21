@@ -374,6 +374,7 @@ input:-webkit-autofill:active {
   /* border: red solid; */
 }
 
+
 .Headerbar-tab-username {
   display: flex;
   align-items: center;
@@ -455,14 +456,24 @@ input:-webkit-autofill:active {
   box-sizing: border-box;
 }
 
+.HeaderbarIcon-Delete {
+  stroke: white;
+  width: 40px;
+  height: 40px;
+}
+
+.HeaderbarIcon-Delete:hover {
+  stroke: #118AF7;
+}
+
 .Headerbar-tab {
   user-select: none;
-  display: block;
+  /* display: block; */
   /* text-align: left; */
 
-  /* display: flex;
+  display: flex;
   align-items: center;
-  justify-content: center; */
+  justify-content: space-around;
   /* border-right: 1px white solid; */
   min-width: 200px;
   max-width: 200px;
@@ -470,7 +481,7 @@ input:-webkit-autofill:active {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 17px 5px 0px 10px;
+  padding: 17px 5px 10px 10px;
   /* border: red solid; */
   box-sizing: border-box;
   font-family: 'Montserrat';

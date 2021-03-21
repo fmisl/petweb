@@ -165,7 +165,8 @@ function App() {
           <Route path="/upload" render={()=><Upload toggleChecklist={toggleChecklist}/>}/>
           {counter.fileID != null ? <Route path="/view/:caseID" exact component={View}/>
           : <Route path="/view/:caseID" render={()=><Redirect to="/dashboard"/>}/> }
-          <Route path="/analysis" component={Analysis}/>
+          {counter.fileID != null ? <Route path="/analysis" component={Analysis}/>
+          : <Route path="/analysis" render={()=><Redirect to="/dashboard"/>}/> }
           <Route path="/setting" component={Setting}/>
           {/* <Route path="/" render={()=><Redirect to="dashboard"/>}/> */}
           {/* <Redirect exact path="/signup" to="/" />

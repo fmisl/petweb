@@ -1,7 +1,8 @@
 import React, {useState, useRef, useEffect,createRef} from 'react';
 import '../App.css'
+import IconDelete from '../images/IconDelete';
 import {useSelector, useDispatch} from 'react-redux';
-import {logout, increment, decrement, tab_location} from '../reduxs/actions';
+import {logout, increment, decrement, tab_location, closeItem} from '../reduxs/actions';
 import {changeColor, loadItems} from '../reduxs/actions';
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
 
@@ -55,20 +56,26 @@ function Headerbar({OpenedFiles}) {
         {
           OpenedFiles.map((el, i) => (
             <React.Fragment key={i}>
-              <div ref={elRefs.current[i]} 
+              <div ref={elRefs.current[i]}
                 onClick={()=>{
-                  if(counter.tabY > 1) 
-                    {
-                      history.push('/'+location.pathname.split('/')[1]+'/'+el.fileID); 
-                      dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}));
-                    }
+                  if(counter.tabY == 2){
+                    history.push('/'+location.pathname.split('/')[1]+'/'+el.fileID); 
+                    dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}));
+                  }
+                  else if (counter.tabY == 3){
+                    history.push('/'+location.pathname.split('/').slice(1,3).join('/')+'/'+el.fileID); 
+                    dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}));
+                  }
                   else
                     {
                       dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}));
                     }
                 }}
               className={`Headerbar-tab ${el.fileID == counter.fileID && 'act'}`}>
-                {el.PatientID} &nbsp;&nbsp;&nbsp;&nbsp;x
+                {el.PatientID} 
+                <div style={{userSelect:"none"}} onClick={(e)=>{e.stopPropagation();dispatch(closeItem(el.fileID))}}>
+                  <IconDelete className="HeaderbarIcon-Delete"/>
+                </div>
               </div>
               <div className="Headerbar-vSplitter"></div>
             </React.Fragment>
