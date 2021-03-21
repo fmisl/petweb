@@ -47,13 +47,13 @@ class Analysis extends Component {
     const {counter} = this.props;
     const username = localStorage.getItem('username')
     if (prevProps.counter.tabX != this.props.counter.tabX){
-        console.log('componentDidUpdate')
+        // console.log('componentDidUpdate')
         try {
             axios.get(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/aal_subregion.txt')
             .then(res => {
                 const posts = res.data.split(/\s+/)
                 const obj = posts.reduce(function(o, val, idx) { o[subRegionName[idx]] = Number(val); return o; }, {});
-                console.log(res.data,posts, typeof(posts), obj)
+                // console.log(res.data,posts, typeof(posts), obj)
                 this.setState({
                     subRegion: obj,
                 })
@@ -71,13 +71,13 @@ class Analysis extends Component {
   componentDidMount() {
     const {counter} = this.props;
     const username = localStorage.getItem('username')
-    console.log('componentDidMount')
+    // console.log('componentDidMount')
     try {
         axios.get(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/aal_subregion.txt')
         .then(res => {
             const posts = res.data.split(/\s+/)
             const obj = posts.reduce(function(o, val, idx) { o[subRegionName[idx]] = Number(val); return o; }, {});
-            console.log(res.data,posts, typeof(posts), obj)
+            // console.log(res.data,posts, typeof(posts), obj)
             this.setState({
                 subRegion: obj,
             })
@@ -93,7 +93,7 @@ class Analysis extends Component {
   }
   render(){
     const {subRegion} = this.state;
-    console.log('state: ', subRegion)
+    // console.log('state: ', subRegion)
     const { counter, isLogged, increment, decrement, listSelected } = this.props;
     // const counter = useSelector(state => state.counter);
     // const isLogged = useSelector(state => state.isLogged);
@@ -110,7 +110,8 @@ class Analysis extends Component {
       speed: 300,
       slidesToShow: 1,
       centerPadding: "50px",
-      slidesToScroll: 1
+      slidesToScroll: 1,
+      accessibility: false,
     };
   
     return (
@@ -130,7 +131,7 @@ class Analysis extends Component {
 
                   <div className="analysis-box2">
                     <div className="analysis-box2-title">Sub-regional SUVR</div>
-                    <AnalysisItem2/>
+                    <AnalysisItem2 subRegion={subRegion}/>
                   </div>
                 </div>
               </CustomSlide>

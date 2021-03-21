@@ -44,15 +44,15 @@ export default class AnalysisItem1 extends Component {
                 Global Lobe
               </div>
               <div style={{height:"100%", width:"480px"}}>
-                <div className="analysis-score" style={{width:`${globalRPercentile}%`, borderRight:`10px ${colors[globalRPercentile]} solid`}}>
-                  R
-                  <br/>
-                  {globalR}
-                </div>
                 <div className="analysis-score" style={{width:`${globalLPercentile}%`, borderRight:`10px ${colors[globalLPercentile]} solid`}}>
                   L
                   <br/>
                   {globalL}
+                </div>
+                <div className="analysis-score" style={{width:`${globalRPercentile}%`, borderRight:`10px ${colors[globalRPercentile]} solid`}}>
+                  R
+                  <br/>
+                  {globalR}
                 </div>
               </div>
             </div>
@@ -62,15 +62,15 @@ export default class AnalysisItem1 extends Component {
                 Frontal Lobe
               </div>
               <div style={{height:"100%", width:"480px"}}>
-                <div className="analysis-score" style={{width:`${frontalRPercentile}%`, borderRight:`10px ${colors[frontalRPercentile]} solid`}}>
-                  R
-                  <br/>
-                  {frontalR}
-                </div>
                 <div className="analysis-score" style={{width:`${frontalLPercentile}%`, borderRight:`10px ${colors[frontalLPercentile]} solid`}}>
                   L
                   <br/>
                   {frontalL}
+                </div>
+                <div className="analysis-score" style={{width:`${frontalRPercentile}%`, borderRight:`10px ${colors[frontalRPercentile]} solid`}}>
+                  R
+                  <br/>
+                  {frontalR}
                 </div>
               </div>
             </div>
@@ -80,15 +80,15 @@ export default class AnalysisItem1 extends Component {
                 Parietal Lobe
               </div>
               <div style={{height:"100%", width:"480px"}}>
-                <div className="analysis-score" style={{width:`${parietalRPercentile}%`, borderRight:`10px ${colors[parietalRPercentile]} solid`}}>
-                  R
-                  <br/>
-                  {parietalR}
-                </div>
                 <div className="analysis-score" style={{width:`${parietalLPercentile}%`, borderRight:`10px ${colors[parietalLPercentile]} solid`}}>
                   L
                   <br/>
                   {parietalL}
+                </div>
+                <div className="analysis-score" style={{width:`${parietalRPercentile}%`, borderRight:`10px ${colors[parietalRPercentile]} solid`}}>
+                  R
+                  <br/>
+                  {parietalR}
                 </div>
               </div>
             </div>
@@ -98,15 +98,15 @@ export default class AnalysisItem1 extends Component {
                 Temporal Lobe
               </div>
               <div style={{height:"100%", width:"480px"}}>
-                <div className="analysis-score" style={{width:`${temporalRPercentile}%`, borderRight:`10px ${colors[temporalRPercentile]} solid`}}>
-                  R
-                  <br/>
-                  {temporalR}
-                </div>
                 <div className="analysis-score" style={{width:`${temporalLPercentile}%`, borderRight:`10px ${colors[temporalLPercentile]} solid`}}>
                   L
                   <br/>
                   {temporalL}
+                </div>
+                <div className="analysis-score" style={{width:`${temporalRPercentile}%`, borderRight:`10px ${colors[temporalRPercentile]} solid`}}>
+                  R
+                  <br/>
+                  {temporalR}
                 </div>
               </div>
             </div>
@@ -116,15 +116,15 @@ export default class AnalysisItem1 extends Component {
                 Occipital Lobe
               </div>
               <div style={{height:"100%", width:"480px"}}>
-                <div className="analysis-score" style={{width:`${occipitalRPercentile}%`, borderRight:`10px ${colors[occipitalRPercentile]} solid`}}>
-                  R
-                  <br/>
-                  {occipitalR}
-                </div>
                 <div className="analysis-score" style={{width:`${occipitalLPercentile}%`, borderRight:`10px ${colors[occipitalLPercentile]} solid`}}>
                   L
                   <br/>
                   {occipitalL}
+                </div>
+                <div className="analysis-score" style={{width:`${occipitalRPercentile}%`, borderRight:`10px ${colors[occipitalRPercentile]} solid`}}>
+                  R
+                  <br/>
+                  {occipitalR}
                 </div>
               </div>
             </div>
