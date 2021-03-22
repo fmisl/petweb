@@ -251,6 +251,8 @@ class fileList(APIView):
     def get(self, request, format=None):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
+        if not os.path.exists(user_path):
+            os.mkdir(user_path)
         database_path = os.path.join(user_path, 'database')
         if not os.path.exists(database_path):
             os.mkdir(database_path)
