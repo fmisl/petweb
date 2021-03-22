@@ -142,7 +142,7 @@ class UploadTable extends Component {
         const {data} = this.state;
         const styleDiv = {
             height: "100%",
-            width: `${Math.max(0,props.value)}%`,
+            width: `${Math.min(100,Math.max(0,props.value))}%`,
             background:'red',
             borderRadius:"5px",
         }
