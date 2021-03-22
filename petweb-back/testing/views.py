@@ -164,8 +164,30 @@ class uploader(APIView):
         [np.savetxt(os.path.join(database_path, str(NofNii+i)+"_"+",".join(v['FileName'].split(".")[:-1])+".txt"),[]) for i, v in enumerate(jsonData)]
         [mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(NofNii+i)+".nii")) for i, v in enumerate(jsonData)]
 
+        # ########################################################################################
+
+        centiloidArray = []
+        filenames = os.listdir(database_path) # 파일목록불러오기
+        for i, filename in enumerate(filenames):
+            if filename.split(".")[-1]=='nii':
+                try:
+                    txt_file_path = os.path.join(database_path, ",".join(filename.split(".")[:-1]), 'aal_subregion.txt')
+                    file = open(txt_file_path, 'r')
+                    lines = file.read().split('\n')
+                    data = lines[-2].split(' ')[1]
+                    centiloidArray.append(data)
+                    file.close()
+                except:
+                    centiloidArray.append(0)
+
+
+        # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
+        #              'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
+        #             for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+
+        # ########################################################################################
         filenames = os.listdir(database_path)
-        fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'FileName': filename, 'fileID': filename.split('.')[0],
+        fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
                      'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 
@@ -178,6 +200,8 @@ class uploader(APIView):
         # temp = self.async_function(self, request, fileList)
         thread = threading.Thread(target=self.async_function, args=(request, fileList))
         thread.start()
+
+
 
         return Response(data=fileList, status=status.HTTP_200_OK)
         # return Response("put post test ok", status=200)

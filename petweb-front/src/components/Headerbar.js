@@ -48,7 +48,7 @@ function Headerbar({OpenedFiles}) {
     // dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}))
     elRefs.current = Array(OpenedFilesLength).fill().map((_, i) => elRefs.current[i] || createRef());
   }
-  console.log('header', location.pathname.split('/')[1])
+  // console.log('header', location.pathname.split('/')[1])
   return (
     <div className="Headerbar" >
       {/* <div className='Headerbar-left-arrow'>{'<<'}</div> */}

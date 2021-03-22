@@ -25,6 +25,9 @@ function Upload({toggleChecklist}) {
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const [uploaderFileList, setUploaderFileList] = useState([]);
+  // useEffect(() => {
+  //   console.log('useEffect called in Upload (uploaderFileList)',fileList)
+  // },[fileList.length])
 
   const toggleUploader=(e)=>{
     //   e.preventDefault();

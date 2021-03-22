@@ -118,7 +118,7 @@ function App() {
           else if (counter.tabY > 1) history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyLeftPage].fileID);
         }
         break;
-      case 17:
+      case 16:
         toggleChecklist()
         break;
       default:

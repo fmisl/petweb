@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './UploadTable.css'
 import { connect } from 'react-redux';
 import * as actions from '../../../reduxs/actions';
+import spinner from '../../../images/gif/spinner.gif'
+import * as services from '../../../services/fetchApi'
 
 const FilterableTable = require('react-filterable-table');
  
@@ -42,10 +44,26 @@ class UploadTable extends Component {
         this.setState({
             data:fileList,
         })
+        this.myTimer();
+    }
+    myTimer = async()=>{
+        this.myInterval = setInterval(async ()=>{
+            const token = localStorage.getItem('token')
+            const res = await services.testing({'token':token})
+            let data = res.data
+            // console.log("interval: ",data)
+            if (data!=this.state.data){
+                // console.log('data changed: ', this.state.data)
+                this.props.updateCentiloid(data)
+            }
+        }, 10000)
+    }
+    componentWillUnmount(){
+        clearInterval(this.myInterval);
     }
     componentDidUpdate(prevProps, prevState){
         if (prevProps.fileList != this.props.fileList){
-            // console.log('componentDidUpdate')
+            // console.log('componentDidUpdate in UploadTable(fileList):',this.props.fileList)
             const {fileList} = this.props;
             this.setState({
                 data:fileList,
@@ -149,10 +167,11 @@ class UploadTable extends Component {
                     // <span>{Number(props.value).toFixed(2)}</span>
                     <span>{Number(props.value).toFixed(2)}</span>
                     :<span>processing...</span>}
-                    {props.value != 0 && 
+                    {props.value != 0 ? 
                     <div style={{width: "150px", height:"5px", borderRadius:"5px",boxSizing:"border-box", background:"#383C41"}}>
                         <div style={styleDiv}></div>
-                    </div>}
+                    </div>
+                    :<span><img src={spinner} alt="spinner"/></span>}
                 </div>
             </div>
         );
@@ -199,6 +218,7 @@ const mapDispatchToProps = (dispatch) => ({
   login: () => dispatch(actions.login()),
   logout: () => dispatch(actions.logout()),
   openItem: (itemID) => dispatch(actions.openItem(itemID)),
+  updateCentiloid: (items) => dispatch(actions.updateCentiloid(items)),
   closeItem: (itemID) => dispatch(actions.closeItem(itemID)),
   selectItem: (itemID) => dispatch(actions.selectItem(itemID)),
   unselectItem: (itemID) => dispatch(actions.unselectItem(itemID)),

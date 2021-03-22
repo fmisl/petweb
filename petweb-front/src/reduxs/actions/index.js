@@ -33,6 +33,12 @@ export const decrement = (max) =>{
     max: max
   };
 };
+export const updateCentiloid = (items) =>{
+  return {
+    type: 'UPDATE_CENTILOID',
+    items: items
+  };
+};
 export const tab_location = (loc) =>{
   return {
     type: 'TAB_LOC',

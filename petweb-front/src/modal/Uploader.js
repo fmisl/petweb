@@ -24,10 +24,9 @@ function Uploader({ fileList, isShowing, hide, removeFileList, updateFileList })
   const [selectTracer, setSelectTracer] = useState('[11C]PIB');
   const [currentJPGURL_head, setCurrentJPGURL_head] = useState("");
   const username = localStorage.getItem('username')
-  useEffect(() => {
-    // console.log("uploader useEffect", fileList)
-    // setData(fileList)
-  })
+  // useEffect(() => {
+
+  // },[fileList])
   const getJPGURL=(filename)=>{
     const fname = filename.split('.').slice(0,-1).join()
     const tempURL_head = IPinUSE+'result/download/'+username+'/uploader/'+fname
