@@ -25,16 +25,16 @@ export default class AnalysisItem1 extends Component {
     const temporalL = subRegion.Temporal_L;
     const occipitalR = subRegion.Occipital_R;
     const occipitalL = subRegion.Occipital_L;
-    const globalRPercentile = Math.round(Math.max(0,subRegion.Composite-1)*100);
-    const globalLPercentile = Math.round(Math.max(0,subRegion.Composite-1)*100);
-    const frontalRPercentile = Math.round(Math.max(0,subRegion.Frontal_R-1)*100);
-    const frontalLPercentile = Math.round(Math.max(0,subRegion.Frontal_L-1)*100);
-    const parietalRPercentile = Math.round(Math.max(0,subRegion.Parietal_R-1)*100);
-    const parietalLPercentile = Math.round(Math.max(0,subRegion.Parietal_L-1)*100);
-    const temporalRPercentile = Math.round(Math.max(0,subRegion.Temporal_R-1)*100);
-    const temporalLPercentile = Math.round(Math.max(0,subRegion.Temporal_L-1)*100);
-    const occipitalRPercentile = Math.round(Math.max(0,subRegion.Occipital_R-1)*100);
-    const occipitalLPercentile = Math.round(Math.max(0,subRegion.Occipital_L-1)*100);
+    const globalRPercentile = Math.round(Math.max(0,subRegion.Composite-1)/maxSUVR*100);
+    const globalLPercentile = Math.round(Math.max(0,subRegion.Composite-1)/maxSUVR*100);
+    const frontalRPercentile = Math.round(Math.max(0,subRegion.Frontal_R-1)/maxSUVR*100);
+    const frontalLPercentile = Math.round(Math.max(0,subRegion.Frontal_L-1)/maxSUVR*100);
+    const parietalRPercentile = Math.round(Math.max(0,subRegion.Parietal_R-1)/maxSUVR*100);
+    const parietalLPercentile = Math.round(Math.max(0,subRegion.Parietal_L-1)/maxSUVR*100);
+    const temporalRPercentile = Math.round(Math.max(0,subRegion.Temporal_R-1)/maxSUVR*100);
+    const temporalLPercentile = Math.round(Math.max(0,subRegion.Temporal_L-1)/maxSUVR*100);
+    const occipitalRPercentile = Math.round(Math.max(0,subRegion.Occipital_R-1)/maxSUVR*100);
+    const occipitalLPercentile = Math.round(Math.max(0,subRegion.Occipital_L-1)/maxSUVR*100);
     return (
       <React.Fragment>
           <div className="analysis-box1-content">
@@ -134,11 +134,11 @@ export default class AnalysisItem1 extends Component {
             <div style={{width:"600px", display:"flex", justifyContent:"space-between"}}>
               <div>SUVR</div>
               <div>1.0</div>
-              <div>1.2</div>
               <div>1.4</div>
-              <div>1.6</div>
               <div>1.8</div>
-              <div>2.0</div>
+              <div>2.2</div>
+              <div>2.6</div>
+              <div>3.0</div>
               {/* SUVR &emsp;&emsp;&emsp;&emsp;&emsp;1.0&emsp;&emsp;&emsp;&emsp;&ensp;1.2&emsp;&emsp;&emsp;&emsp;&ensp;1.4&emsp;&emsp;&emsp;&emsp;&ensp;1.6&emsp;&emsp;&emsp;&emsp;&ensp;1.8&emsp;&emsp;&emsp;&emsp;&ensp;2.0 */}
             </div>
         </div>
