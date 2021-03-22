@@ -97,9 +97,9 @@ class uploader(APIView):
                 aal_region, centil_suvr = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize)
                 # print(aal_region, centil_suvr)
                 full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
-                full_path2 = os.path.join(inout_path, 'global_centil.txt')
-                np.savetxt(full_path1, aal_region[:,0,:], '%.3f')
-                np.savetxt(full_path2, centil_suvr[:,0], '%.3f')
+                # full_path2 = os.path.join(inout_path, 'global_centil.txt')
+                append = np.append(aal_region[:,0,:], centil_suvr[:,0].reshape(1,2), axis=0)
+                np.savetxt(full_path1, append, '%.3f')
                 print("----------complete train & quantification------------")
 
                 target_file = os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".img")
@@ -165,7 +165,7 @@ class uploader(APIView):
         [mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(NofNii+i)+".nii")) for i, v in enumerate(jsonData)]
 
         filenames = os.listdir(database_path)
-        fileList = [{'id': i, 'Opened': False, 'Select': False, 'Tracer': '11C-PIB', 'SUVR': 2.21, 'FileName': filename, 'fileID': filename.split('.')[0],
+        fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'FileName': filename, 'fileID': filename.split('.')[0],
                      'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 
@@ -175,6 +175,7 @@ class uploader(APIView):
          if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
 
         # thread = threading.Thread(target=self.async_function, args=(request, Format, myfiles, caseID))
+        # temp = self.async_function(self, request, fileList)
         thread = threading.Thread(target=self.async_function, args=(request, fileList))
         thread.start()
 
@@ -229,7 +230,7 @@ class uploader(APIView):
                 Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
 
         filenames = os.listdir(uploader_path)
-        fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '11C-PIB', 'PatientName': 'Sandwich Eater', 'Group': 0, 'fileID': None}
+        fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': 'Sandwich Eater', 'Group': 0, 'fileID': None}
                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 
 
@@ -254,8 +255,22 @@ class fileList(APIView):
         if not os.path.exists(database_path):
             os.mkdir(database_path)
 
-        filenames = os.listdir(database_path)
-        fileList = [{'id': i, 'Opened': False, 'Select': False, 'Tracer': '11C-PIB', 'SUVR': 2.21, 'FileName': filename, 'fileID': filename.split('.')[0],
+        centiloidArray = []
+        filenames = os.listdir(database_path) # 파일목록불러오기
+        for i, filename in enumerate(filenames):
+            if filename.split(".")[-1]=='nii':
+                try:
+                    txt_file_path = os.path.join(database_path, ",".join(filename.split(".")[:-1]), 'aal_subregion.txt')
+                    file = open(txt_file_path, 'r')
+                    lines = file.read().split('\n')
+                    data = lines[-2].split(' ')[1]
+                    centiloidArray.append(data)
+                    file.close()
+                except:
+                    centiloidArray.append(0)
+
+
+        fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
                      'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 
