@@ -121,7 +121,7 @@ class WorklistTable extends Component {
                 }}
                     >
                 <div className={`WorklistTable-Tracer ${props.value.slice(-3)}`}  >
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
+                    <div>&emsp;[<sup>{props.value.split(/[\[,\]]/)[1].slice(0,-1)}</sup>{props.value.split(/[\[,\]]/)[1].slice(-1)}]{props.value.split(/[\[,\]]/)[2]}</div>
                 </div>
             </div>
         );

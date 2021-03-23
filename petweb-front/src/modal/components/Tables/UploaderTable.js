@@ -91,7 +91,8 @@ export default class UploaderTable extends Component {
             }
           >
           <div className={`UploaderTable-Tracer ${this.props.selectTracer.slice(-3)}`}>
-              <div>&nbsp;&nbsp;&nbsp;&nbsp;{this.props.selectTracer}</div>
+              {/* <div>&nbsp;&nbsp;&nbsp;&nbsp;{this.props.selectTracer}</div> */}
+              <div>&emsp;[<sup>{this.props.selectTracer.split(/[\[,\]]/)[1].slice(0,-1)}</sup>{this.props.selectTracer.split(/[\[,\]]/)[1].slice(-1)}]{this.props.selectTracer.split(/[\[,\]]/)[2]}</div>
           </div>
         </div>
       );

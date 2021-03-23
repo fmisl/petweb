@@ -1337,7 +1337,6 @@ input:-webkit-autofill:active {
   /* border: white solid;
   box-sizing: border-box; */
 }
-
 .modal {
   z-index: 100;
   position: relative;
@@ -1354,6 +1353,99 @@ input:-webkit-autofill:active {
 
   /* border: red solid;
   box-sizing: border-box; */
+}
+.modal-tracer-btn:hover {
+  z-index: 1;
+  border: 1px white solid;
+}
+
+
+.modal-tracer-btn.FBB.act {
+  z-index: 2;
+  border: 3px #1AFFD6 solid;
+  background: rgb(56, 60, 65);
+  color: white;
+}
+
+.modal-tracer-btn.FBP.act {
+  z-index: 2;
+  border: 3px #FF6D4C solid;
+  background: rgb(56, 60, 65);
+  color: white;
+}
+
+.modal-tracer-btn.PIB.act {
+  z-index: 2;
+  border: 3px #118AF7 solid;
+  background: rgb(56, 60, 65);
+  color: white;
+}
+
+.modal-tracer-btn.PIB {
+  left: 30px;
+}
+
+.modal-tracer-btn.FBP {
+  left: 320px;
+}
+
+.modal-tracer-btn.FBB {
+  left: 610px;
+}
+.modal-tracer-confirm:active{
+  background: rgb(56, 60, 65);
+}
+.modal-tracer-confirm:hover{
+  border:3px white solid;
+}
+.modal-tracer-confirm{
+  position:absolute;
+  top: 240px;
+  width: 270px;
+  height: 100px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  user-select:none;
+  border:1px white solid;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background: rgb(44, 48, 51);
+}
+.modal-tracer-btn {
+  top: 0px;
+  user-select: none;
+  z-index: 0;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border: red solid; */
+  min-width: 300px;
+  max-width: 300px;
+  min-height: 140px;
+  max-height: 140px;
+  border-radius: 10px;
+  font-size: 36px;
+  /* background: rgb(56, 60, 65); */
+  color: gray;
+  background: rgb(44, 48, 51);
+  box-sizing: border-box;
+}
+.modal-Tracer-Selector{
+  position: absolute;
+  z-index:2;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  display: flex;
+  justify-content:center;
+  align-items:center;
+  font-size: 46px;
+  /* background: rgb(56, 60, 65); */
+  color: white;
+  background: rgb(56, 60, 65, 0.97);
 }
 
 .modal-header-btn:hover {
@@ -1414,7 +1506,7 @@ input:-webkit-autofill:active {
   font-size: 16px;
   /* background: rgb(56, 60, 65); */
   color: gray;
-  background: #2C3033;
+  background: rgb(44, 48, 51);
   box-sizing: border-box;
 }
 

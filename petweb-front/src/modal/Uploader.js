@@ -19,14 +19,17 @@ const styleDiv ={
 function Uploader({ fileList, isShowing, hide, removeFileList, updateFileList }) {
   const [data, setData] = useState([]);
   const [focusItem, setFelectItem] = useState(0);
-  const [runCall, setRunCall] = useState(false);
+  const [tracerModal, setTracerModal] = useState(true);
   const [isChecked, setIsChecked] = useState(true);
   const [selectTracer, setSelectTracer] = useState('[11C]PIB');
   const [currentJPGURL_head, setCurrentJPGURL_head] = useState("");
   const username = localStorage.getItem('username')
-  // useEffect(() => {
-
-  // },[fileList])
+  useEffect(() => {
+    if (isShowing) {
+      setTracerModal(true);
+      setSelectTracer('[11C]PIB');
+    }
+  },[isShowing])
   const getJPGURL=(filename)=>{
     const fname = filename.split('.').slice(0,-1).join()
     const tempURL_head = IPinUSE+'result/download/'+username+'/uploader/'+fname
@@ -85,7 +88,16 @@ function Uploader({ fileList, isShowing, hide, removeFileList, updateFileList })
                 <div style={{}} className="upload-btn type1" onClick={(e)=>{hide(e);setCurrentJPGURL_head("");}}>Run</div>
               </div>
             </div>
-
+            {tracerModal && 
+              <div className="modal-Tracer-Selector">
+                <div style={{position:'relative', minWidth:'1000px', minHeight:'200px', display:"flex", justifyContent:"center"}}>
+                  <div style={{position: 'absolute', top:'-200px'}}>Select tracer from below: </div>
+                  <div className={`modal-tracer-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>{setSelectTracer('[11C]PIB')}}>[<sup><sup>11</sup></sup>C]PIB</div>
+                  <div className={`modal-tracer-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP')}}>[<sup><sup>18</sup></sup>F]FBP</div>
+                  <div className={`modal-tracer-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB')}}>[<sup><sup>18</sup></sup>F]FBB</div>
+                  <div className={`modal-tracer-confirm`} onClick={()=>{setTracerModal(false)}}>Select</div>
+                </div>
+              </div>}
           </div>
         </div>
       </React.Fragment>, document.body
