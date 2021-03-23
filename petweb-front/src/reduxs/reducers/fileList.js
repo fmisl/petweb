@@ -3,7 +3,7 @@ const fileListReducer = (state = [], action) => {
     case 'FETCH_ITEMS':
       return [...action.items]
     case 'UPDATE_CENTILOID':
-      return state.map((v, i) => {if (v.Centiloid == 0) {return {...v, Centiloid:action.items[i].Centiloid}; } return {...v} });
+      return state.map((v, i) => {if (v.Centiloid == null) {return {...v, Centiloid:action.items[i].Centiloid}; } return {...v} });
     case 'OPEN_ITEM':
       return state.map((v, i) => {if (v.id == action.itemID) {return {...v, Opened:true}; } return {...v} });
     case 'CLOSE_ITEM':
