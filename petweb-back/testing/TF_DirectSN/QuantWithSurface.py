@@ -2,6 +2,8 @@ import os
 import shutil
 import sys
 import numpy as np
+import matplotlib
+matplotlib.use ('Agg') #<= this is required
 import matplotlib.pyplot as plt
 import nibabel as nib
 from mpl_toolkits.axes_grid1 import make_axes_locatable
