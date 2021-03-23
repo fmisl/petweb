@@ -52,7 +52,7 @@ class UploadTable extends Component {
             const token = localStorage.getItem('token')
             const res = await services.testing({'token':token})
             let data = res.data
-            console.log("interval: ",data!=this.state.data, data,this.state.data)
+            // console.log("interval: ",data!=this.state.data, data,this.state.data)
             if (data!=this.state.data){
                 // console.log('data changed: ', this.state.data)
                 this.props.updateCentiloid(data)
@@ -64,7 +64,7 @@ class UploadTable extends Component {
     }
     componentDidUpdate(prevProps, prevState){
         if (prevProps.fileList != this.props.fileList){
-            console.log('componentDidUpdate in UploadTable(fileList):',this.props.fileList)
+            // console.log('componentDidUpdate in UploadTable(fileList):',this.props.fileList)
             const {fileList} = this.props;
             this.setState({
                 data:fileList,
@@ -133,7 +133,7 @@ class UploadTable extends Component {
                                     {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 500)}
                             }}
                 >
-                    {console.log(props.record.Select && (props.record.Centiloid != null))}
+                    {/* {console.log(props.record.Select && (props.record.Centiloid != null))} */}
                 <div className={`UploadTable-SUVR ${props.record.Tracer.slice(-3)}`}>
                     {props.value != null ? 
                     // <span>{Number(props.value).toFixed(2)}</span>
