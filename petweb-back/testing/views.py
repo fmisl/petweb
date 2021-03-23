@@ -14,6 +14,7 @@ import threading, time
 import math
 from testing.TF_DirectSN.PTQuant_eval_affine_v1 import train
 from testing.TF_DirectSN.QuantWithSurface import _quantification
+import datetime
 
 
 class uploader(APIView):
@@ -40,21 +41,28 @@ class uploader(APIView):
                 # img hdr 파일을 생성해서 각 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "input_"+myfile['fileID']+".img"))
 
-                dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
-                img3D = np.array(nimg3D.dataobj) # numpy array로 변환
+                img3D = np.array(nimg3D.dataobj)  # numpy array로 변환
                 oriSize = img3D.shape[0] * img3D.shape[1] * img3D.shape[2]
+                dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
+                if nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][2] and nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][3]:
+                    dsfactor = [float(f) / w for w, f in
+                                zip([img3D.shape[0], img3D.shape[1], img3D.shape[2]], [91, 109, 91])]  # 픽셀크기 2mm로 변환용 factor
+
                 img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
 
                 # axial 91, coronal 109, sagittal 91 크기로 잘라내기 (crop)
-                cX, cY, cZ = [math.floor(img3D_2mm.shape[0] / 2), math.floor(img3D_2mm.shape[1] / 2) + 10,
-                              math.floor(img3D_2mm.shape[2] / 2)] # 중심 좌표 계산
-                offsetX, offsetY, offsetZ = [math.floor(91 / 2), math.floor(109 / 2), math.floor(91 / 2)]
-                img3D_crop = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1,
-                        cZ - offsetZ:cZ + offsetZ + 1]
-
-                vx, vy, vz = img3D_crop.shape # 크기는 (91, 109, 91) 이어야함
-                print(vx, vy, vz)
-                uint8_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
+                zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
+                # vx, vy, vz = [0, 0, 0]
+                if zoomedX >= 91 and zoomedY >= 109 and zoomedZ >= 91:
+                    cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)] # 중심 좌표 계산
+                    offsetX, offsetY, offsetZ = [math.floor(91 / 2), math.floor(109 / 2), math.floor(91 / 2)]
+                    img3D_crop = img3D_2mm[max(0, cX - offsetX):min(91, cX + offsetX + 1), max(0, cY - offsetY):min(109, cY + offsetY + 1),
+                            max(0, cZ - offsetZ):min(91, cZ + offsetZ + 1)]
+                    vx, vy, vz = img3D_crop.shape # 크기는 (91, 109, 91) 이어야함
+                    uint8_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
+                else:
+                    vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
+                    uint8_img3D = img3D_2mm
                 uint8_img3D = 255 * uint8_img3D
                 uint8_img3D = uint8_img3D.astype(np.uint8)
                 hx, hy, hz = [int(vx/2), int(vy/2), int(vz/2)]
@@ -178,7 +186,7 @@ class uploader(APIView):
                     centiloidArray.append(data)
                     file.close()
                 except:
-                    centiloidArray.append(0)
+                    centiloidArray.append(None)
 
 
         # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
@@ -293,10 +301,10 @@ class fileList(APIView):
                     centiloidArray.append(data)
                     file.close()
                 except:
-                    centiloidArray.append(0)
+                    centiloidArray.append(None)
 
 
-        fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
+        fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[18F]FBP', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
                      'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 

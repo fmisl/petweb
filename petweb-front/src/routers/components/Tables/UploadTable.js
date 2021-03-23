@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../../reduxs/actions';
 import spinner from '../../../images/gif/spinner.gif'
 import * as services from '../../../services/fetchApi'
+import { withRouter } from 'react-router-dom';
 
 const FilterableTable = require('react-filterable-table');
  
@@ -56,7 +57,7 @@ class UploadTable extends Component {
                 // console.log('data changed: ', this.state.data)
                 this.props.updateCentiloid(data)
             }
-        }, 10000)
+        }, 60000)
     }
     componentWillUnmount(){
         clearInterval(this.myInterval);
@@ -74,17 +75,7 @@ class UploadTable extends Component {
         const {data} = this.state;
         return(
             <div className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
-                        onClick={()=>{
-                            {props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}
-                            // this.setState({
-                            //     data: data.map(
-                            //     item => props.record.id === item.id ?
-                            //     { ...item, ...{Select:!props.record.Select} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                            //       : {...item} // 기존의 값을 그대로 유지
-                            //     ),
-                            // });
-                        }
-                    }
+                        onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                 >
                 <div className={`UploadTable-Select ${props.value && 'act'}`} >
                     <div></div>
@@ -95,19 +86,12 @@ class UploadTable extends Component {
     renderClick = (props) => {
         const {data} = this.state;
         return(
-            <div className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
+            <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
+                            onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
-                                {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
-                                // {props.record.Opened ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
-                                
-                                // this.setState({
-                                //     // data:[...data, props.record]
-                                //     data: data.map(
-                                //     item => props.record.id === item.id ?
-                                //     { ...item, ...{Opened:!props.record.Opened} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                                //         : {...item} // 기존의 값을 그대로 유지
-                                //     ),
-                                // });
+                                // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                                {props.record.Centiloid != null && (this.props.openItem(props.record.id))}
+                                {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300))}
                             }}
                 >
                 {props.value}
@@ -117,23 +101,17 @@ class UploadTable extends Component {
     renderTracer = (props) => {
         const {data} = this.state;
         return(
-            <div className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
-                           onDoubleClick={()=>{
-                                {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
-                                // {props.record.Opened ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
-                                
-                                // this.setState({
-                                //     // data:[...data, props.record]
-                                //     data: data.map(
-                                //     item => props.record.id === item.id ?
-                                //     { ...item, ...{Opened:!props.record.Opened} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                                //         : {...item} // 기존의 값을 그대로 유지
-                                //     ),
-                                // });
+            <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
+                            onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
+                            onDoubleClick={()=>{
+                                // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                                {props.record.Centiloid != null && this.props.openItem(props.record.id)}
+                                {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300)}
                            }}
                 >
                 <div className={`UploadTable-Tracer ${props.value.slice(-3)}`} >
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
+                    {/* {console.log(props.value, props.value.split(/[\[,\]]/)[1].slice(0,-1))} */}
+                    <div>&emsp;[<sup>{props.value.split(/[\[,\]]/)[1].slice(0,-1)}</sup>{props.value.split(/[\[,\]]/)[1].slice(-1)}] {props.value.split(/[\[,\]]/)[2]}</div>
                 </div>
             </div>
         );
@@ -147,27 +125,21 @@ class UploadTable extends Component {
             borderRadius:"5px",
         }
         return(
-            <div  className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
+            <div  className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
+                            onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
-                                {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
-                                // {props.record.Opened ? this.props.removeFromList(props.record.id):this.props.addToList(props.record.id)}
-                                // alert('double')
-                                // this.setState({
-                                //     // data:[...data, props.record]
-                                //     data: data.map(
-                                //     item => props.record.id === item.id ?
-                                //     { ...item, ...{Opened:!props.record.Opened} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                                //         : {...item} // 기존의 값을 그대로 유지
-                                //     ),
-                                // });
+                                    // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                                    {props.record.Centiloid != null && this.props.openItem(props.record.id)}
+                                    {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 500)}
                             }}
                 >
+                    {console.log(props.record.Select && (props.record.Centiloid != null))}
                 <div className={`UploadTable-SUVR ${props.record.Tracer.slice(-3)}`}>
-                    {props.value != 0 ? 
+                    {props.value != null ? 
                     // <span>{Number(props.value).toFixed(2)}</span>
                     <span>{Number(props.value).toFixed(2)}</span>
                     :<span>processing...</span>}
-                    {props.value != 0 ? 
+                    {props.value != null ? 
                     <div style={{width: "150px", height:"5px", borderRadius:"5px",boxSizing:"border-box", background:"#383C41"}}>
                         <div style={styleDiv}></div>
                     </div>
@@ -194,7 +166,7 @@ class UploadTable extends Component {
                 // tableClassName="UploadTable"
                 // trClassName="WorklistTable"
                 namespace="UploadTable"
-                initialSort="name"
+                initialSort="Update"
                 data={data}
                 fields={fields}
                 noRecordsMessage="There are no people to display"
@@ -223,4 +195,4 @@ const mapDispatchToProps = (dispatch) => ({
   selectItem: (itemID) => dispatch(actions.selectItem(itemID)),
   unselectItem: (itemID) => dispatch(actions.unselectItem(itemID)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(UploadTable);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(UploadTable));

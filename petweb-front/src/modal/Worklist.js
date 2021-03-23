@@ -3,32 +3,43 @@ import ReactDOM from 'react-dom';
 import '../App.css';
 import IconDelete from '../images/IconDelete';
 import WorklistTable from './components/Tables/WorklistTable'
+import {login, logout, increment, decrement, loadItems, profile, tab_location, groupItem, addStack, updateStack, removeStack, openSelect} from '../reduxs/actions';
+import {useSelector, useDispatch} from 'react-redux';
 
-function Worklist({ isShowing, hide }) {
+function Worklist({ isShowing, hide, lock }) {
+  const dispatch = useDispatch();
   // const [isShown, setIsShown] = useState(false);
+  const changePageByKey = (e) =>{
+    switch (e.keyCode){
+      case 17:
+        hide()
+        break;
+      default:
+        console.log('press up or down key only', e.keyCode)
+    }
+  }
   return (
-    isShowing ? 
-    ReactDOM.createPortal(
-      <React.Fragment>
-        <div className="modal-overlay"/>
-        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog"  onClick={hide}>
-          <div className="modal" onClick={(e)=>e.stopPropagation()}>
-            <div className="modal-header" >
-              WORKLIST <span onClick={hide} ><IconDelete className="worklist-delete" /></span>
+      <React.Fragment >
+        {/* aria-modal aria-hidden tabIndex={-1} role="dialog"  */}
+        <div className={`modal-right-wrapper ${isShowing && 'show'}`}>
+          <div className="modal-right" onClick={(e)=>e.stopPropagation()} tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}} onClick={lock}>
+            <div className="modal-right-btn"><div></div></div>
+            <div className="modal-right-header" >
+              WORKLIST 
             </div>
-            <div className="modal-body">
+            <div className="modal-right-body">
               <WorklistTable/>
             </div>
             <div style={{display:"flex", marginTop:"21px", justifyContent:"flex-end"}}>
-              <div className="upload-btn">Export Nifti</div>
-              <div className="upload-btn type1">Save</div>
-              <div className="upload-btn type1">Open</div>
+              <div className="upload-right-btn">Export Nifti</div>
+              <div className="upload-right-btn type1">Save</div>
+              <div className="upload-right-btn type1" onClick={()=>{dispatch(openSelect())}}>Open</div>
             </div>
 
           </div>
         </div>
-      </React.Fragment>, document.body
-    ) : null
+        <div className="modal-right-overlay"  onClick={hide}/>
+      </React.Fragment>
   );
 }
 export default Worklist;

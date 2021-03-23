@@ -1,6 +1,5 @@
 import React,{useState, useRef, useEffect,useCallback } from 'react';
 import '../App.css';
-import Worklist from "../modal/Worklist";
 // import useWorklist from '../modal/useWorklist';
 import Uploader from "../modal/Uploader";
 import {useSelector, useDispatch} from 'react-redux';
@@ -14,7 +13,7 @@ import * as services from '../services/fetchApi'
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom'
 // import { useDropzone } from "react-dropzone";
 
-function Upload({toggleChecklist}) {
+function Upload({toggleWorklist}) {
   const history =useHistory();
   const [dragState, setDragState] = useState(false);
   const fileList = useSelector(state => state.fileList);
@@ -95,8 +94,6 @@ function Upload({toggleChecklist}) {
   }
   const analysisClickHandler = async ()=>{
     dispatch(openSelect());
-    // setTimeout(() => dispatch(
-    //   tab_location({...counter, fileID:fileList.find(item=>item.Opened==true).fileID})), 500)
     setTimeout(() => history.push('/analysis/suvr/'+counter.tabX), 500)
   }
 
@@ -111,7 +108,7 @@ function Upload({toggleChecklist}) {
           <div style={{display:"flex"}}>
             <div className="upload-btn" onClick={()=>{viewClickHandler();}}><IconView className="upload-icon"/>View</div>
             <div className="upload-btn" onClick={()=>{analysisClickHandler();}}><IconAnalysis className="upload-icon"/>Analysis</div>
-            <div className="upload-btn" onClick={toggleChecklist}><IconWorklist className="upload-icon"/>Checklist</div>
+            <div className="upload-btn" onClick={toggleWorklist}><IconWorklist className="upload-icon"/>Worklist</div>
             <div className="upload-btn"><IconDelete className="upload-icon"/>Delete</div>
             <div className="upload-btn" style={{width:"199px", marginLeft:"40px"}} >Connect to PACS</div>
           </div>

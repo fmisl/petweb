@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './App.css'
 import Sidebar from './components/Sidebar'
 import Headerbar from './components/Headerbar'
-import Checklist from "./modal/Checklist";
+import Worklist from "./modal/Worklist";
 import axios from 'axios';
 // import Sidebar from './pages/components/Sidebar'
 import Login from './routers/login/Login'
@@ -23,7 +23,7 @@ function App() {
   const counter = useSelector(state => state.counter);
   const stackManager = useSelector(state => state.stackManager);
   const isLogged = useSelector(state => state.isLogged);
-  const [isShowingChecklist, setIsShowingChecklist] = useState(false);
+  const [isShowingWorklist, setIsShowingWorklist] = useState(false);
   const location = useLocation();
   const dispatch = useDispatch();
   const history =useHistory();
@@ -76,12 +76,12 @@ function App() {
     }
   }, [isLogged])
 
-  function openChecklist() {
-    setIsShowingChecklist(true);
+  function openWorklist() {
+    setIsShowingWorklist(true);
   }
-  function toggleChecklist() {
-    if (isShowingChecklist == false) dispatch(groupItem(1))
-    setIsShowingChecklist(!isShowingChecklist);
+  function toggleWorklist() {
+    if (isShowingWorklist == false) dispatch(groupItem(1))
+    setIsShowingWorklist(!isShowingWorklist);
   }
 
   const changePageByKey = (e) =>{
@@ -118,8 +118,8 @@ function App() {
           else if (counter.tabY > 1) history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyLeftPage].fileID);
         }
         break;
-      case 16:
-        toggleChecklist()
+      case 9:
+        toggleWorklist()
         break;
       default:
         console.log('press up or down key only', e.keyCode)
@@ -149,7 +149,7 @@ function App() {
         <div className="App" tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
           <Sidebar OpenedFiles={OpenedFiles}/>
           <Headerbar OpenedFiles={OpenedFiles}/>
-          <Checklist isShowing={isShowingChecklist} hide={toggleChecklist} lock={openChecklist}/>
+          <Worklist isShowing={isShowingWorklist} hide={toggleWorklist} lock={openWorklist}/>
           {/*  */}
           {/* <Headerbar/> */}
           {/* <Sidebar/> */}
@@ -162,7 +162,7 @@ function App() {
           {/* <Route path="/dashboard" render={(props)=> <Dashboard state={{detail:'test1'}}/>}/> */}
           <Route path="/dashboard" component={Dashboard}/>
           {/* <Route path="/upload" component={Upload}/> */}
-          <Route path="/upload" render={()=><Upload toggleChecklist={toggleChecklist}/>}/>
+          <Route path="/upload" render={()=><Upload toggleWorklist={toggleWorklist}/>}/>
           {counter.fileID != null ? <Route path="/view/:caseID" exact component={View}/>
           : <Route path="/view/:caseID" render={()=><Redirect to="/dashboard"/>}/> }
           {counter.fileID != null ? <Route path="/analysis" component={Analysis}/>
