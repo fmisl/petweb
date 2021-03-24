@@ -194,8 +194,8 @@ class uploader(APIView):
             newCase.fileID = str(newFileID)
             newCase.FileName = str(newFileID)+".nii"
             newCase.Tracer = "[11C]PIB"
-            newCase.PatientName = 'Sandwich Eater'
-            newCase.PatientID = '1010101010'
+            newCase.PatientName = v['FileName']
+            newCase.PatientID = str(newFileID)
             newCase.Age = 38
             newCase.Sex = 'M'
             # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[18F]FBP',
@@ -352,11 +352,40 @@ class fileList(APIView):
                     txt_file_path = os.path.join(database_path, case.fileID, 'aal_subregion.txt')
                     file = open(txt_file_path, 'r')
                     lines = file.read().split('\n')
-                    data = lines[-2].split(' ')[1]
-                    case.Centiloid = round(float(data), 2)
-                    case.Centiloid = round(float(data), 2)
+
+                    case.Frontal_L = round(float(lines[0].split(' ')[0]), 2)
+                    case.Frontal_L_C = round(float(lines[0].split(' ')[1]), 2)
+                    case.Frontal_R = round(float(lines[1].split(' ')[0]), 2)
+                    case.Frontal_R_C = round(float(lines[1].split(' ')[1]), 2)
+                    case.Cingulate_L = round(float(lines[2].split(' ')[0]), 2)
+                    case.Cingulate_L_C = round(float(lines[2].split(' ')[1]), 2)
+                    case.Cingulate_R = round(float(lines[3].split(' ')[0]), 2)
+                    case.Cingulate_R_C = round(float(lines[3].split(' ')[1]), 2)
+                    case.Striatum_L = round(float(lines[4].split(' ')[0]), 2)
+                    case.Striatum_L_C = round(float(lines[4].split(' ')[1]), 2)
+                    case.Striatum_R = round(float(lines[5].split(' ')[0]), 2)
+                    case.Striatum_R_C = round(float(lines[5].split(' ')[1]), 2)
+                    case.Thalamus_L = round(float(lines[6].split(' ')[0]), 2)
+                    case.Thalamus_L_C = round(float(lines[6].split(' ')[1]), 2)
+                    case.Thalamus_R = round(float(lines[7].split(' ')[0]), 2)
+                    case.Thalamus_R_C = round(float(lines[7].split(' ')[1]), 2)
+                    case.Occipital_L = round(float(lines[8].split(' ')[0]), 2)
+                    case.Occipital_L_C = round(float(lines[8].split(' ')[1]), 2)
+                    case.Occipital_R = round(float(lines[9].split(' ')[0]), 2)
+                    case.Occipital_R_C = round(float(lines[9].split(' ')[1]), 2)
+                    case.Parietal_L = round(float(lines[10].split(' ')[0]), 2)
+                    case.Parietal_L_C = round(float(lines[10].split(' ')[1]), 2)
+                    case.Parietal_R = round(float(lines[11].split(' ')[0]), 2)
+                    case.Parietal_R_C = round(float(lines[11].split(' ')[1]), 2)
+                    case.Temporal_L = round(float(lines[12].split(' ')[0]), 2)
+                    case.Temporal_L_C = round(float(lines[12].split(' ')[1]), 2)
+                    case.Temporal_R = round(float(lines[13].split(' ')[0]), 2)
+                    case.Temporal_R_C = round(float(lines[13].split(' ')[1]), 2)
+                    case.Composite = round(float(lines[14].split(' ')[0]), 2)
+                    case.Composite_C = round(float(lines[14].split(' ')[1]), 2)
+                    case.SUVR = round(float(lines[14].split(' ')[0]), 2)
+                    case.Centiloid = round(float(lines[14].split(' ')[1]), 2)
                     case.save()
-                    # centiloidArray.append(data)
                     file.close()
                 except:
                     print('skip centiloid from file of', case.fileID)
