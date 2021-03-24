@@ -1,32 +1,36 @@
 from django.db import models
 import os
+import datetime
+from django.utils import timezone
 
 
 class TimeStampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+    Update = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         abstract = True
+        
     def __str__(self):
-        return self.created_at
+        return self.Update
 
 
 class Case(TimeStampedModel):
-    Opened = models.BooleanField(blank=False, default=False)
-    Select = models.BooleanField(blank=False, default=False)
-    Focus = models.BooleanField(blank=False, default=False)
-    Group = models.IntegerField(blank=False, default=0)
+    Opened = models.BooleanField(blank=True, default=False)
+    Select = models.BooleanField(blank=True, default=False)
+    Focus = models.BooleanField(blank=True, default=False)
+    Group = models.IntegerField(blank=True, default=0)
 
-    fileID = models.IntegerField(blank=True, null=True)
+    fileID = models.CharField(max_length=150, blank=True, null=True)
+    OriginalFileName = models.CharField(max_length=500, blank=True, null=True)
     FileName = models.CharField(max_length=150, blank=True, null=True)
-    PatientID = models.IntegerField(blank=True)
+    PatientID = models.IntegerField(blank=True, null=True)
     PatientName = models.CharField(max_length=150, blank=True, null=True)
-    Age = models.IntegerField(blank=False, default=0)
+    Age = models.IntegerField(blank=True, default=0, null=True)
     Sex = models.CharField(max_length=3, blank=True, null=True)
 
     Tracer = models.CharField(max_length=150, blank=True, null=True)
-    SUVR = models.FloatField(blank=False, default=None)
-    Centiloid = models.FloatField(blank=False, default=None)
+    SUVR = models.FloatField(blank=True, default=None, null=True)
+    Centiloid = models.FloatField(blank=True, default=None, null=True)
 
     Composite = models.FloatField(blank=True, null=True)
     Frontal_L = models.FloatField(blank=True, null=True)
@@ -101,6 +105,6 @@ class Case(TimeStampedModel):
     #     return self.slices.all()
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-Update']
     def __str__(self):
         return self.FileName

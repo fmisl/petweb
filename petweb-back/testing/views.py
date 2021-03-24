@@ -15,6 +15,7 @@ import math
 from testing.TF_DirectSN.PTQuant_eval_affine_v1 import train
 from testing.TF_DirectSN.QuantWithSurface import _quantification
 import datetime
+from . import models, serializers
 
 
 class uploader(APIView):
@@ -169,49 +170,84 @@ class uploader(APIView):
         database_files = os.listdir(database_path)
         NofNii = len([v for i, v in enumerate(database_files) if (v.split(".")[-1] == 'nii')])
 
-        [np.savetxt(os.path.join(database_path, str(NofNii+i)+"_"+",".join(v['FileName'].split(".")[:-1])+".txt"),[]) for i, v in enumerate(jsonData)]
-        [mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(NofNii+i)+".nii")) for i, v in enumerate(jsonData)]
-
-        # ########################################################################################
-
-        centiloidArray = []
-        filenames = os.listdir(database_path) # 파일목록불러오기
-        for i, filename in enumerate(filenames):
-            if filename.split(".")[-1]=='nii':
-                try:
-                    txt_file_path = os.path.join(database_path, ",".join(filename.split(".")[:-1]), 'aal_subregion.txt')
-                    file = open(txt_file_path, 'r')
-                    lines = file.read().split('\n')
-                    data = lines[-2].split(' ')[1]
-                    centiloidArray.append(data)
-                    file.close()
-                except:
-                    centiloidArray.append(None)
-
-
-        # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
-        #              'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
-        #             for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
-
-        # ########################################################################################
-        filenames = os.listdir(database_path)
-        fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
-                     'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
-                    for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+        # [np.savetxt(os.path.join(database_path, str(NofNii+i)+"_"+",".join(v['FileName'].split(".")[:-1])+".txt"),[]) for i, v in enumerate(jsonData)]
+        for i, v in enumerate(jsonData):
+            newCase = models.Case.objects.create(
+                Opened=False,
+                Select=False,
+                Focus=False,
+                Group=0,
+                fileID=None,
+                OriginalFileName=v['FileName'],
+                FileName=None,
+                PatientID=None,
+                PatientName=None,
+                Age=None,
+                Sex=None,
+                Tracer=None,
+                SUVR=None,
+                Centiloid=None,
+            )
+            newCase.save()
+            newFileID = newCase.id
+            mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(newFileID) + ".nii"))
+            newCase.fileID = str(newFileID)
+            newCase.FileName = str(newFileID)+".nii"
+            newCase.Tracer = "[11C]PIB"
+            newCase.PatientName = 'Sandwich Eater'
+            newCase.PatientID = '1010101010'
+            newCase.Age = 38
+            newCase.Sex = 'M'
+            # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[18F]FBP',
+            #              'SUVR': 2.21, 'Centiloid': centiloidArray[int(filename.split('.')[0])], 'FileName': filename,
+            #              'fileID': filename.split('.')[0],
+            #              'PatientName': 'Sandwich Eater', 'PatientID': '1010102213', 'Age': 38, 'Sex': 'M',
+            #              'Update': '20.08.15', 'Group': 0}
+            # PatientID = None,
+            # PatientName = None,
+            # Age = None,
+            # Sex = None,
+            # Tracer = None,
+            newCase.save()
+        # [mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(NofNii+i)+".nii")) for i, v in enumerate(jsonData)]
 
         # delete all files in uploader
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames)
          if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
 
+        allCases = models.Case.objects.all().values()
+        serializer = serializers.CaseSerializer(allCases, many=True)
+
+        # centiloidArray = []
+        # filenames = os.listdir(database_path) # 파일목록불러오기
+        # for i, filename in enumerate(filenames):
+        #     if filename.split(".")[-1]=='nii':
+        #         try:
+        #             txt_file_path = os.path.join(database_path, ",".join(filename.split(".")[:-1]), 'aal_subregion.txt')
+        #             file = open(txt_file_path, 'r')
+        #             lines = file.read().split('\n')
+        #             data = lines[-2].split(' ')[1]
+        #             centiloidArray.append(data)
+        #             file.close()
+        #
+        #
+        #         except:
+        #             centiloidArray.append(None)
+        # # ########################################################################################
+        # filenames = os.listdir(database_path)
+        # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[11C]PIB', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
+        #              'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
+        #             for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+
+
+
         # thread = threading.Thread(target=self.async_function, args=(request, Format, myfiles, caseID))
         # temp = self.async_function(self, request, fileList)
-        thread = threading.Thread(target=self.async_function, args=(request, fileList))
+        thread = threading.Thread(target=self.async_function, args=(request, list(allCases)))
         thread.start()
 
-
-
-        return Response(data=fileList, status=status.HTTP_200_OK)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
         # return Response("put post test ok", status=200)
 
     def post(self, request, format=None):
@@ -261,6 +297,7 @@ class uploader(APIView):
                 uint8_img2D = np.rot90(uint8_img2D)
                 Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
 
+
         filenames = os.listdir(uploader_path)
         fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': 'Sandwich Eater', 'Group': 0, 'fileID': None}
                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
@@ -289,26 +326,43 @@ class fileList(APIView):
         if not os.path.exists(database_path):
             os.mkdir(database_path)
 
-        centiloidArray = []
-        filenames = os.listdir(database_path) # 파일목록불러오기
-        for i, filename in enumerate(filenames):
-            if filename.split(".")[-1]=='nii':
+        # centiloidArray = []
+        # filenames = os.listdir(database_path) # 파일목록불러오기
+        # for i, filename in enumerate(filenames):
+        #     if filename.split(".")[-1]=='nii':
+        #         try:
+        #             txt_file_path = os.path.join(database_path, ",".join(filename.split(".")[:-1]), 'aal_subregion.txt')
+        #             file = open(txt_file_path, 'r')
+        #             lines = file.read().split('\n')
+        #             data = lines[-2].split(' ')[1]
+        #             centiloidArray.append(data)
+        #             file.close()
+        #         except:
+        #             centiloidArray.append(None)
+        #
+        #
+        # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[18F]FBP', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
+        #              'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
+        #             for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+
+        allCases = models.Case.objects.all()
+        for i, case in enumerate(allCases):
+            if case.Centiloid == None:
                 try:
-                    txt_file_path = os.path.join(database_path, ",".join(filename.split(".")[:-1]), 'aal_subregion.txt')
+                    txt_file_path = os.path.join(database_path, case.fileID, 'aal_subregion.txt')
                     file = open(txt_file_path, 'r')
                     lines = file.read().split('\n')
                     data = lines[-2].split(' ')[1]
-                    centiloidArray.append(data)
+                    case.Centiloid = round(float(data), 2)
+                    case.Centiloid = round(float(data), 2)
+                    case.save()
+                    # centiloidArray.append(data)
                     file.close()
                 except:
-                    centiloidArray.append(None)
+                    print('skip centiloid from file of', case.fileID)
+        serializer = serializers.CaseSerializer(allCases, many=True)
 
-
-        fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[18F]FBP', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
-                     'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
-                    for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
-
-        return Response(data=fileList, status=status.HTTP_200_OK)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
         # return JsonResponse(items, safe=False)
 
         # items = [{"id": 0, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.21, "PatientName": "Sandwich Eater",
