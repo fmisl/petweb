@@ -133,3 +133,13 @@ export const ungroupItemIndividual = (itemID) =>{
     itemID: itemID,
   }
 }
+export const selectAllTrue = () =>{
+  return {
+    type: 'SELECT_ALL_TRUE',
+  }
+}
+export const selectAllFalse = () =>{
+  return {
+    type: 'SELECT_ALL_FALSE',
+  }
+}

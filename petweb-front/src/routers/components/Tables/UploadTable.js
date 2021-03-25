@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './UploadTable.css'
 import { connect } from 'react-redux';
 import * as actions from '../../../reduxs/actions';
@@ -9,36 +10,31 @@ import { withRouter } from 'react-router-dom';
 const FilterableTable = require('react-filterable-table');
  
 class UploadTable extends Component {
-    // const dispatch = useDispatch();
-    state={
-        data: [],
-        // data1: [
-        //     { id:0,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.11, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 38, Sex:"M", Update:"20.07.15" },
-        //     { id:1,Opened:false, Select:false, Tracer: "FBB", SUVR: 1.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 26, Sex:"M", Update:"20.07.15" },
-        //     { id:2,Opened:false, Select:false, Tracer: "FBB", SUVR:1.1, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 39, Sex:"M", Update:"20.07.15" },
-        //     { id:3,Opened:false, Select:false, Tracer: "FBP", SUVR: 2.1, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 33, Sex:"M", Update:"20.07.15" },
-        //     { id:4,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 34, Sex:"M", Update:"20.07.15"  },
-        //     { id:5,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.51, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 42, Sex:"M", Update:"20.07.15" },
-        //     { id:6,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 1.2, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 55, Sex:"M", Update:"20.07.15" },
-        //     { id:7,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 1.52, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 72, Sex:"M", Update:"20.07.15" },
-        //     { id:8,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 0.72, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 46, Sex:"M", Update:"20.07.15" },
-        //     { id:9,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.0, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 88, Sex:"M", Update:"20.07.15"  },
-        //     { id:10,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.2, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 56, Sex:"M", Update:"20.07.15" },
-        //     { id:11,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.8, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 47, Sex:"M", Update:"20.07.15" },
-        //     { id:12,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 3.0, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 86, Sex:"M", Update:"20.07.15" },
-        //     { id:13,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 66, Sex:"M", Update:"20.07.15" },
-        //     { id:14,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.9, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 72, Sex:"M", Update:"20.07.15"  },
-        //     { id:15,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.2, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 56, Sex:"M", Update:"20.07.15" },
-        //     { id:16,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.8, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 47, Sex:"M", Update:"20.07.15" },
-        //     { id:17,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 3.0, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 86, Sex:"M", Update:"20.07.15" },
-        //     { id:18,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 66, Sex:"M", Update:"20.07.15" },
-        //     { id:19,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.9, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 72, Sex:"M", Update:"20.07.15"  },
-        //     { id:20,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.2, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 56, Sex:"M", Update:"20.07.15" },
-        //     { id:21,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.8, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 47, Sex:"M", Update:"20.07.15" },
-        //     { id:22,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 3.0, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 86, Sex:"M", Update:"20.07.15" },
-        //     { id:23,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 66, Sex:"M", Update:"20.07.15" },
-        //     { id:24,Opened:false, Select:false, Tracer: "C-PIB", SUVR: 2.9, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 72, Sex:"M", Update:"20.07.15"  },
-        // ],
+    constructor(props) {
+      super(props);
+      this.wrapper = React.createRef();
+      this.handleSelect = this.handleSelect.bind(this);
+      this.state={
+          data: [],
+          selectAll: false,
+      }
+    }
+    handleSelect = event => {
+        const {selectAll} = this.state;
+        console.log(selectAll)
+        if (selectAll==false) {
+            this.props.selectAllTrue();
+            this.setState({
+                selectAll: true,
+            })
+        }
+        else {
+            this.props.selectAllFalse();
+            this.setState({
+                selectAll: false,
+            })
+        }
+        // console.log('Enter: ' + this.props.menuItem.caption.toUpperCase());
     }
     componentDidMount(){
         const {fileList} = this.props;
@@ -61,6 +57,7 @@ class UploadTable extends Component {
     }
     componentWillUnmount(){
         clearInterval(this.myInterval);
+        ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].removeEventListener('click', this.handleSelect);
     }
     componentDidUpdate(prevProps, prevState){
         if (prevProps.fileList != this.props.fileList){
@@ -70,6 +67,21 @@ class UploadTable extends Component {
                 data:fileList,
             })
         }
+        const temp = ReactDOM.findDOMNode(this);
+        try{
+            // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].addEventListener('click', this.handleSelect)
+        }catch(e){
+
+        }
+        // console.log(temp.children[1].children[0])
+        // console.dir(temp.children[1].children[0])
+        // console.log(temp.children[1].children[0].childNodes)
+        // console.dir(temp.children[1].children[0].childNodes)
+        // console.log(temp.children[1].children[0].childNodes[0])
+        // console.dir(temp.children[1].children[0].childNodes[0])
+        // console.log(temp.children[1].children[0].children[0].childNodes)
+        // console.dir(temp.children[1].children[0].children[0].childNodes)
     }
     renderSelect = (props) => {
         const {data} = this.state;
@@ -151,7 +163,7 @@ class UploadTable extends Component {
     render() {
         const {data} = this.state;
         const fields = [
-            { render: this.renderSelect, name: 'Select', displayName: "Select", inputFilterable: true, sortable: true},
+            { render: this.renderSelect, name: 'Select', displayName: "Select", inputFilterable: false, sortable: false},
             { render: this.renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
             { render: this.renderCentiloid, name: 'Centiloid', displayName: "Centiloid", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
@@ -162,6 +174,7 @@ class UploadTable extends Component {
         ];
         return (
             <FilterableTable
+                ref={this.wrapper}
                 // className="UploadTable"
                 // tableClassName="UploadTable"
                 // trClassName="WorklistTable"
@@ -195,5 +208,7 @@ const mapDispatchToProps = (dispatch) => ({
   closeItem: (itemID) => dispatch(actions.closeItem(itemID)),
   selectItem: (itemID) => dispatch(actions.selectItem(itemID)),
   unselectItem: (itemID) => dispatch(actions.unselectItem(itemID)),
+  selectAllTrue: () => dispatch(actions.selectAllTrue()),
+  selectAllFalse: () => dispatch(actions.selectAllFalse()),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(UploadTable));
