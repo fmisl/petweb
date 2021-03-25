@@ -66,7 +66,7 @@ class uploader(APIView):
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         database_path = os.path.join(user_path, 'database')
         for myfile in myfiles:
-            print(os.path.join(user_path, myfile['FileName']))
+            # print(os.path.join(user_path, myfile['FileName']))
             target_file = os.path.join(database_path, myfile['FileName'])
             target_folder = os.path.join(database_path, ",".join(myfile['FileName'].split('.')[:-1]))
 
@@ -207,7 +207,8 @@ class uploader(APIView):
         if not os.path.exists(database_path):
             os.mkdir(database_path)
 
-        jsonData = request.data
+        jsonData = request.data['obj']
+        selectedTracer = request.data['Tracer']
         print(len(jsonData))
         database_files = os.listdir(database_path)
         NofNii = len([v for i, v in enumerate(database_files) if (v.split(".")[-1] == 'nii')])
@@ -226,7 +227,7 @@ class uploader(APIView):
                 PatientName=None,
                 Age=None,
                 Sex=None,
-                Tracer=None,
+                Tracer=selectedTracer,
                 SUVR=None,
                 Centiloid=None,
             )
@@ -235,7 +236,7 @@ class uploader(APIView):
             mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(newFileID) + ".nii"))
             newCase.fileID = str(newFileID)
             newCase.FileName = str(newFileID)+".nii"
-            newCase.Tracer = "[11C]PIB"
+            # newCase.Tracer = "[11C]PIB"
             newCase.PatientName = v['FileName']
             newCase.PatientID = str(newFileID)
             newCase.Age = 38
