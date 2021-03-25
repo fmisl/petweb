@@ -161,7 +161,7 @@ class WorklistTable extends Component {
     render() {
         const {data} = this.state;
         const fields = [
-            { render: this.renderSelect, name: 'Select', displayName: "Select", inputFilterable: true, sortable: true},
+            { render: this.renderSelect, name: 'Select', displayName: "Select", inputFilterable: false, sortable: false},
             { render: this.renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
             // { render: this.renderSUVR, name: 'SUVR', displayName: "SUVR", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },

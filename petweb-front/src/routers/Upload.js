@@ -24,6 +24,7 @@ function Upload({toggleWorklist}) {
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const [uploaderFileList, setUploaderFileList] = useState([]);
+  const [selectTracer, setSelectTracer] = useState('[11C]PIB');
   // useEffect(() => {
   //   console.log('useEffect called in Upload (uploaderFileList)',fileList)
   // },[fileList.length])
@@ -39,7 +40,7 @@ function Upload({toggleWorklist}) {
       postFiles(formData)
     } else {
       if (e.target.innerText == "Run"){
-        runFiles()
+        runFiles(selectTracer)
       }
       else {
         deleteFiles()
@@ -48,9 +49,9 @@ function Upload({toggleWorklist}) {
     setIsShowingUploader(!isShowingUploader);
   };
 
-  const runFiles = async () =>{
+  const runFiles = async (selectTracer) =>{
     const token = localStorage.getItem('token')
-    const res = await services.runFile({'token':token, 'obj':uploaderFileList})
+    const res = await services.runFile({'token':token, 'obj':uploaderFileList, 'Tracer':selectTracer})
     const putList = res.data
     // console.log(putList)
     dispatch(fetchItems(putList))
@@ -111,7 +112,7 @@ function Upload({toggleWorklist}) {
       {/* <Sidebar />
       <Headerbar/> */}
       {/* <Worklist isShowing={isShowingWorklist} hide={toggleWorklist}/> */}
-      <Uploader fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
+      <Uploader selectTracer={selectTracer} setSelectTracer={setSelectTracer} fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>

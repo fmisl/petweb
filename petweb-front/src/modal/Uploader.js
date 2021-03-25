@@ -16,12 +16,11 @@ const styleDiv ={
   height:"46%",
   // background: "black",
 }
-function Uploader({ fileList, isShowing, hide, removeFileList, updateFileList }) {
+function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
   const [data, setData] = useState([]);
   const [focusItem, setFelectItem] = useState(0);
   const [tracerModal, setTracerModal] = useState(true);
   const [isChecked, setIsChecked] = useState(true);
-  const [selectTracer, setSelectTracer] = useState('[11C]PIB');
   const [currentJPGURL_head, setCurrentJPGURL_head] = useState("");
   const username = localStorage.getItem('username')
   useEffect(() => {

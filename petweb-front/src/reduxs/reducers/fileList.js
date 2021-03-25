@@ -21,6 +21,10 @@ const fileListReducer = (state = [], action) => {
       return state.map((v, i) => {if (v.fileID == action.itemID) {return {...v, Group:0, Select:false}; } return {...v} });
     case 'OPEN_SELECT':
       return state.map((v, i) => {if (v.Select == true) {return {...v, Opened:true}; } return {...v} });
+    case 'SELECT_ALL_TRUE':
+      return state.map((v, i) => {return {...v, Select:true}});
+    case 'SELECT_ALL_FALSE':
+      return state.map((v, i) => {return {...v, Select:false}});
     default:
       return [...state]
   }
