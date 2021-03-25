@@ -166,7 +166,8 @@ class UploadTable extends Component {
                 // tableClassName="UploadTable"
                 // trClassName="WorklistTable"
                 namespace="UploadTable"
-                initialSort="Update"
+                initialSort="PatientID"
+                initialSortDir={false}
                 data={data}
                 fields={fields}
                 noRecordsMessage="There are no people to display"

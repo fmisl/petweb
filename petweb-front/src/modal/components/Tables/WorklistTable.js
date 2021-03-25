@@ -3,11 +3,13 @@ import './WorklistTable.css'
 import { connect } from 'react-redux';
 import * as actions from '../../../reduxs/actions';
 import IconDelete from '../../../images/IconDelete';
+import * as services from '../../../services/fetchApi'
 
 const FilterableTable = require('react-filterable-table');
 
 class WorklistTable extends Component {
     state={
+        token: localStorage.getItem('token'),
         data: [],
         // data: [
         //     {id:0, Focus:false, Select:false, Tracer: "C-PIB", SUVR: 2.11, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 38, Sex:"M", Update:"20.07.15" },
@@ -58,12 +60,19 @@ class WorklistTable extends Component {
             })
         }
     }
+    ungroupAsync = async (data) =>{
+        const res = await services.ungroupIndividual(data)
+        console.log('renderRemove',res.data)
+        this.props.fetchItems(res.data)
+    }
     renderRemove = (props) => {
       // const { data } = this.state;
         return(
           <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
             onClick={()=>{
-                    this.props.ungroupItemIndividual(props.record.fileID)
+                    // this.props.ungroupItemIndividual(props.record.fileID)
+                    this.ungroupAsync({token:this.state.token, obj:{method:'ungroupIndividual', fileID:props.record.fileID}})
+                    // this.props.fetchItems(res.data)
                 //   this.props.removeFileList(props.record)
                   // this.setState({
                   //   data: data.filter(item => item.id !== props.record.id)
@@ -121,7 +130,7 @@ class WorklistTable extends Component {
                 }}
                     >
                 <div className={`WorklistTable-Tracer ${props.value.slice(-3)}`}  >
-                    <div>&emsp;[<sup>{props.value.split(/[\[,\]]/)[1].slice(0,-1)}</sup>{props.value.split(/[\[,\]]/)[1].slice(-1)}]{props.value.split(/[\[,\]]/)[2]}</div>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
                 </div>
             </div>
         );
@@ -191,6 +200,7 @@ const mapDispatchToProps = (dispatch) => ({
   decrement: () => dispatch(actions.decrement()),
   login: () => dispatch(actions.login()),
   logout: () => dispatch(actions.logout()),
+  fetchItems: (items) => dispatch(actions.fetchItems(items)),
   openItem: (itemID) => dispatch(actions.openItem(itemID)),
   closeItem: (itemID) => dispatch(actions.closeItem(itemID)),
   selectItem: (itemID) => dispatch(actions.selectItem(itemID)),

@@ -1,6 +1,13 @@
 import axios from 'axios';
 import {IPinUSE} from './IPs'
 
+export function getCase(data) {
+  return axios.get(IPinUSE+"v1/case/"+data.id+"/",{
+    headers:{
+    'Authorization':'jwt '+data.token
+    }
+  })
+}
 export function TokenVerify (data) {
   return axios.post(IPinUSE+'api/token/verify/', data);
 }
@@ -9,13 +16,6 @@ export function Registration (data) {
 }
 export function Login (data) {
   return axios.post(IPinUSE+'api/token/', data);
-}
-export function getCase(data) {
-  return axios.get(IPinUSE+"v1/case/"+data.id+"/",{
-    headers:{
-    'Authorization':'jwt '+data.token
-    }
-  })
 }
 export function deleteFile(data) {
   return axios.delete(IPinUSE+"testing/uploader/",{
@@ -45,4 +45,26 @@ export function testing(data){
     'Authorization':'jwt '+data.token
     }
   })
+}
+export function deleteSelection(data) {
+  return axios.delete(IPinUSE+"testing/",{
+    headers:{
+      'Authorization':'jwt '+data.token,
+    },
+    data: data.obj
+  });
+}
+export function groupSelection(data) {
+  return axios.put(IPinUSE+"testing/",data.obj,{
+    headers:{
+      'Authorization':'jwt '+data.token,
+    },
+  });
+}
+export function ungroupIndividual(data) {
+  return axios.put(IPinUSE+"testing/",data.obj,{
+    headers:{
+      'Authorization':'jwt '+data.token,
+    },
+  });
 }

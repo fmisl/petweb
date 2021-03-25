@@ -5,9 +5,12 @@ import IconDelete from '../images/IconDelete';
 import WorklistTable from './components/Tables/WorklistTable'
 import {login, logout, increment, decrement, loadItems, profile, tab_location, groupItem, addStack, updateStack, removeStack, openSelect} from '../reduxs/actions';
 import {useSelector, useDispatch} from 'react-redux';
+import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
 
 function Worklist({ isShowing, hide, lock }) {
   const dispatch = useDispatch();
+  const counter = useSelector(state => state.counter);
+  const history =useHistory();
   // const [isShown, setIsShown] = useState(false);
   const changePageByKey = (e) =>{
     switch (e.keyCode){
@@ -33,7 +36,10 @@ function Worklist({ isShowing, hide, lock }) {
             <div style={{display:"flex", marginTop:"21px", justifyContent:"flex-end"}}>
               <div className="upload-right-btn">Export Nifti</div>
               <div className="upload-right-btn type1">Save</div>
-              <div className="upload-right-btn type1" onClick={()=>{dispatch(openSelect())}}>Open</div>
+              <div className="upload-right-btn type1" onClick={()=>{
+                dispatch(openSelect())
+                setTimeout(() => history.push('/analysis/suvr/'+counter.tabX), 500)
+                }}>Open</div>
             </div>
 
           </div>

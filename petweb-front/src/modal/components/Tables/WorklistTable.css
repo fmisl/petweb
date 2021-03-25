@@ -132,6 +132,25 @@
   color: #118AF7;
 }
 
+.WorklistTable.filterable-table>tbody>tr>td:nth-child(3)>span{
+  display:block;
+
+  height: 56px;
+  white-space: nowrap;
+  overflow:hidden;
+  /* border: yellow solid; */
+}
+.WorklistTable.filterable-table>tbody>tr>td:nth-child(3)>span>.WorklistTable-Default {
+  width:300px;
+  height:82px;
+  display:block;
+  padding-top:12px;
+  padding-left:15px;
+  white-space: nowrap;
+  overflow-y:hidden;
+  overflow-x:scroll;
+  /* border: red solid; */
+}
 .WorklistTable.filterable-table>tbody>tr>td:nth-child(1) {
   /* width: 80px; */
   /* border: red solid; */
