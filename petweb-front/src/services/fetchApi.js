@@ -28,12 +28,12 @@ export function postFile(data) {
   return axios.post(IPinUSE+"testing/uploader/",data.obj,{
     headers:{
       'Authorization':'jwt '+data.token,
-      'content-type': 'multipart/form-data'
+      'content-type': 'multipart/form-data',
     }
   });
 }
 export function runFile(data) {
-  return axios.put(IPinUSE+"testing/uploader/",data.obj,{
+  return axios.put(IPinUSE+"testing/uploader/",{obj:data.obj, Tracer:data.Tracer},{
     headers:{
       'Authorization':'jwt '+data.token,
     }
