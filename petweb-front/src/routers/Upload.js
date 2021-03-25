@@ -97,6 +97,15 @@ function Upload({toggleWorklist}) {
     setTimeout(() => history.push('/analysis/suvr/'+counter.tabX), 500)
   }
 
+  const deleteSelections = async (record) =>{
+    const token = localStorage.getItem('token')
+    const res = await services.deleteSelection({'token':token, obj:record})
+    const uploadList = res.data
+    console.log(uploadList)
+    dispatch(fetchItems(uploadList));
+    // setFileList(uploadList)
+  }
+
   return (
     <div className="content">
       {/* <Sidebar />
@@ -107,12 +116,12 @@ function Upload({toggleWorklist}) {
         <div className="upload-title">
           <div style={{display:"flex"}}>
             <div className="upload-btn" onClick={()=>{viewClickHandler();}}><IconView className="upload-icon"/>View</div>
-            <div className="upload-btn" onClick={()=>{analysisClickHandler();}}><IconAnalysis className="upload-icon"/>Analysis</div>
+            <div className="upload-btn" onClick={()=>{analysisClickHandler(fileList.filter(items=>items.Select==true));}}><IconAnalysis className="upload-icon"/>Analysis</div>
             <div className="upload-btn" onClick={toggleWorklist}><IconWorklist className="upload-icon"/>Worklist</div>
-            <div className="upload-btn"><IconDelete className="upload-icon"/>Delete</div>
-            <div className="upload-btn" style={{width:"199px", marginLeft:"40px"}} >Connect to PACS</div>
+            <div className="upload-btn" onClick={()=>{deleteSelections(fileList.filter(items=>items.Select==true));}}><IconDelete className="upload-icon"/>Delete</div>
           </div>
-          <div style={{display:"flex", color:"white"}} >
+          <div style={{display:"flex", color:"white", alignItems:'center'}} >
+            <div className="upload-btn" style={{width:"199px", marginLeft:"40px"}} >Connect to PACS</div>
             <label for="upload-input" className="upload-btn upload" >Upload</label>
             <input style={{display:"none"}} multiple type="file" id="upload-input" onChange={(e)=>toggleUploader(e)} onClick={(e)=>e.target.value=null} />
           </div>

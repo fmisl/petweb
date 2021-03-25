@@ -11,6 +11,7 @@ from . import models
 
 class CaseSerializer(serializers.ModelSerializer):
     # slices = SliceSerializer(many=True)
+   # Update = serializers.DateTimeField(format="%d-%m-%Y %H:%M:%S")
 
     class Meta:
         model = models.Case

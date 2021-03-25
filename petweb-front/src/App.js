@@ -9,7 +9,7 @@ import Login from './routers/login/Login'
 import Forgot from './routers/login/Forgot'
 import Signup from './routers/login/Signup'
 import * as services from './services/fetchApi'
-import {login, logout, increment, decrement, loadItems, profile, tab_location, groupItem, addStack, updateStack, removeStack} from './reduxs/actions';
+import {login, logout, increment, decrement, loadItems, profile, tab_location, groupItem, addStack, updateStack, removeStack, fetchItems} from './reduxs/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import {Dashboard, Upload, View, Analysis, Setting} from './routers'
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
@@ -79,8 +79,15 @@ function App() {
   function openWorklist() {
     setIsShowingWorklist(true);
   }
-  function toggleWorklist() {
-    if (isShowingWorklist == false) dispatch(groupItem(1))
+  const toggleWorklist = async () => {
+    if (isShowingWorklist == false) {
+      const token = localStorage.getItem('token')
+      const res = await services.groupSelection({'token':token, obj:{method:'groupSelection', list:fileList.filter(item=>item.Select==true)}})
+      const groupDone = res.data
+      console.log('toggleWorklist:',groupDone)
+      dispatch(fetchItems(groupDone))
+      // dispatch(groupItem(1))
+    }
     setIsShowingWorklist(!isShowingWorklist);
   }
 

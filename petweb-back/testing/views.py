@@ -20,6 +20,47 @@ from . import models, serializers
 
 class uploader(APIView):
     # def async_function(self, request, Format, myfiles, caseID):
+    def update_quantification_DB(self, request, myfile, Qresult):
+        print(Qresult)
+        username = request.user.username
+        user_path = os.path.join(settings.MEDIA_ROOT, str(username))
+        database_path = os.path.join(user_path, 'database')
+        case = models.Case.objects.filter(fileID=myfile['fileID'])[0]
+        case.Frontal_L = round(float(Qresult[0][0]), 2)
+        case.Frontal_L_C = round(float(Qresult[0][1]), 2)
+        case.Frontal_R = round(float(Qresult[1][0]), 2)
+        case.Frontal_R_C = round(float(Qresult[1][1]), 2)
+        case.Cingulate_L = round(float(Qresult[2][0]), 2)
+        case.Cingulate_L_C = round(float(Qresult[2][1]), 2)
+        case.Cingulate_R = round(float(Qresult[3][0]), 2)
+        case.Cingulate_R_C = round(float(Qresult[3][1]), 2)
+        case.Striatum_L = round(float(Qresult[4][0]), 2)
+        case.Striatum_L_C = round(float(Qresult[4][1]), 2)
+        case.Striatum_R = round(float(Qresult[5][0]), 2)
+        case.Striatum_R_C = round(float(Qresult[5][1]), 2)
+        case.Thalamus_L = round(float(Qresult[6][0]), 2)
+        case.Thalamus_L_C = round(float(Qresult[6][1]), 2)
+        case.Thalamus_R = round(float(Qresult[7][0]), 2)
+        case.Thalamus_R_C = round(float(Qresult[7][1]), 2)
+        case.Occipital_L = round(float(Qresult[8][0]), 2)
+        case.Occipital_L_C = round(float(Qresult[8][1]), 2)
+        case.Occipital_R = round(float(Qresult[9][0]), 2)
+        case.Occipital_R_C = round(float(Qresult[9][1]), 2)
+        case.Parietal_L = round(float(Qresult[10][0]), 2)
+        case.Parietal_L_C = round(float(Qresult[10][1]), 2)
+        case.Parietal_R = round(float(Qresult[11][0]), 2)
+        case.Parietal_R_C = round(float(Qresult[11][1]), 2)
+        case.Temporal_L = round(float(Qresult[12][0]), 2)
+        case.Temporal_L_C = round(float(Qresult[12][1]), 2)
+        case.Temporal_R = round(float(Qresult[13][0]), 2)
+        case.Temporal_R_C = round(float(Qresult[13][1]), 2)
+        case.Composite = round(float(Qresult[14][0]), 2)
+        case.Composite_C = round(float(Qresult[14][1]), 2)
+        case.SUVR = round(float(Qresult[14][0]), 2)
+        case.Centiloid = round(float(Qresult[14][1]), 2)
+        case.save()
+
+
     def async_function(self, request, myfiles):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
@@ -107,8 +148,9 @@ class uploader(APIView):
                 # print(aal_region, centil_suvr)
                 full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
                 # full_path2 = os.path.join(inout_path, 'global_centil.txt')
-                append = np.append(aal_region[:,0,:], centil_suvr[:,0].reshape(1,2), axis=0)
-                np.savetxt(full_path1, append, '%.3f')
+                Qresult = np.append(aal_region[:,0,:], centil_suvr[:,0].reshape(1,2), axis=0)
+                np.savetxt(full_path1, Qresult, '%.3f')
+                self.update_quantification_DB(request, myfile, Qresult)
                 print("----------complete train & quantification------------")
 
                 target_file = os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".img")
@@ -317,6 +359,21 @@ class uploader(APIView):
 
 class fileList(APIView):
 
+    def delete(self, request, format=None):
+        username = request.user.username
+        user_path = os.path.join(settings.MEDIA_ROOT, str(username))
+        database_path = os.path.join(user_path, 'database')
+        selectedFiles = request.data
+        for selectedFile in selectedFiles:
+            targetFolder = os.path.join(database_path, selectedFile['fileID'])
+            print("fileID", selectedFile['fileID'], targetFolder)
+            models.Case.objects.filter(fileID=selectedFile['fileID']).delete()
+            # os.remove(targetFolder)
+
+        allCases = models.Case.objects.all()
+        serializer = serializers.CaseSerializer(allCases, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
     def get(self, request, format=None):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
@@ -326,121 +383,30 @@ class fileList(APIView):
         if not os.path.exists(database_path):
             os.mkdir(database_path)
 
-        # centiloidArray = []
-        # filenames = os.listdir(database_path) # 파일목록불러오기
-        # for i, filename in enumerate(filenames):
-        #     if filename.split(".")[-1]=='nii':
-        #         try:
-        #             txt_file_path = os.path.join(database_path, ",".join(filename.split(".")[:-1]), 'aal_subregion.txt')
-        #             file = open(txt_file_path, 'r')
-        #             lines = file.read().split('\n')
-        #             data = lines[-2].split(' ')[1]
-        #             centiloidArray.append(data)
-        #             file.close()
-        #         except:
-        #             centiloidArray.append(None)
-        #
-        #
-        # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[18F]FBP', 'SUVR': 2.21, 'Centiloid':centiloidArray[int(filename.split('.')[0])], 'FileName': filename, 'fileID': filename.split('.')[0],
-        #              'PatientName': 'Sandwich Eater', 'PatientID':'1010102213','Age':38,'Sex':'M', 'Update':'20.08.15', 'Group': 0}
-        #             for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
-
         allCases = models.Case.objects.all()
-        for i, case in enumerate(allCases):
-            if case.Centiloid == None:
-                try:
-                    txt_file_path = os.path.join(database_path, case.fileID, 'aal_subregion.txt')
-                    file = open(txt_file_path, 'r')
-                    lines = file.read().split('\n')
-
-                    case.Frontal_L = round(float(lines[0].split(' ')[0]), 2)
-                    case.Frontal_L_C = round(float(lines[0].split(' ')[1]), 2)
-                    case.Frontal_R = round(float(lines[1].split(' ')[0]), 2)
-                    case.Frontal_R_C = round(float(lines[1].split(' ')[1]), 2)
-                    case.Cingulate_L = round(float(lines[2].split(' ')[0]), 2)
-                    case.Cingulate_L_C = round(float(lines[2].split(' ')[1]), 2)
-                    case.Cingulate_R = round(float(lines[3].split(' ')[0]), 2)
-                    case.Cingulate_R_C = round(float(lines[3].split(' ')[1]), 2)
-                    case.Striatum_L = round(float(lines[4].split(' ')[0]), 2)
-                    case.Striatum_L_C = round(float(lines[4].split(' ')[1]), 2)
-                    case.Striatum_R = round(float(lines[5].split(' ')[0]), 2)
-                    case.Striatum_R_C = round(float(lines[5].split(' ')[1]), 2)
-                    case.Thalamus_L = round(float(lines[6].split(' ')[0]), 2)
-                    case.Thalamus_L_C = round(float(lines[6].split(' ')[1]), 2)
-                    case.Thalamus_R = round(float(lines[7].split(' ')[0]), 2)
-                    case.Thalamus_R_C = round(float(lines[7].split(' ')[1]), 2)
-                    case.Occipital_L = round(float(lines[8].split(' ')[0]), 2)
-                    case.Occipital_L_C = round(float(lines[8].split(' ')[1]), 2)
-                    case.Occipital_R = round(float(lines[9].split(' ')[0]), 2)
-                    case.Occipital_R_C = round(float(lines[9].split(' ')[1]), 2)
-                    case.Parietal_L = round(float(lines[10].split(' ')[0]), 2)
-                    case.Parietal_L_C = round(float(lines[10].split(' ')[1]), 2)
-                    case.Parietal_R = round(float(lines[11].split(' ')[0]), 2)
-                    case.Parietal_R_C = round(float(lines[11].split(' ')[1]), 2)
-                    case.Temporal_L = round(float(lines[12].split(' ')[0]), 2)
-                    case.Temporal_L_C = round(float(lines[12].split(' ')[1]), 2)
-                    case.Temporal_R = round(float(lines[13].split(' ')[0]), 2)
-                    case.Temporal_R_C = round(float(lines[13].split(' ')[1]), 2)
-                    case.Composite = round(float(lines[14].split(' ')[0]), 2)
-                    case.Composite_C = round(float(lines[14].split(' ')[1]), 2)
-                    case.SUVR = round(float(lines[14].split(' ')[0]), 2)
-                    case.Centiloid = round(float(lines[14].split(' ')[1]), 2)
-                    case.save()
-                    file.close()
-                except:
-                    print('skip centiloid from file of', case.fileID)
         serializer = serializers.CaseSerializer(allCases, many=True)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
         # return JsonResponse(items, safe=False)
 
-        # items = [{"id": 0, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.21, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 38, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 1, "Opened": False, "Select": False, "Tracer": "FBB", "SUVR": 1.5, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 26, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 2, "Opened": False, "Select": False, "Tracer": "FBB", "SUVR": 1.1, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 39, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 3, "Opened": False, "Select": False, "Tracer": "FBP", "SUVR": 2.1, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 33, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 4, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.5, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 34, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 5, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.51, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 42, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 6, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 1.2, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 55, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 7, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 1.52, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 72, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 8, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 0.72, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 46, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 9, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.0, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 88, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 10, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.2, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 56, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 11, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.8, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 47, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 12, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 3.0, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 86, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 13, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.5, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 66, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 14, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.9, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 72, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 15, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.2, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 56, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 16, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.8, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 47, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 17, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 3.0, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 86, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 18, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.5, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 66, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 19, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.9, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 72, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 20, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.2, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 56, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 21, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.8, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 47, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 22, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 3.0, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 86, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 23, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.5, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 66, "Sex": "M", "Update": "20.07.15"},
-        # {"id": 24, "Opened": False, "Select": False, "Tracer": "C-PIB", "SUVR": 2.9, "PatientName": "Sandwich Eater",
-        #  "PatientID": "Sandwich Eater", "Age": 72, "Sex": "M", "Update": "20.07.15"}]
+    def put(self, request, format=None):
+        username = request.user.username
+        user_path = os.path.join(settings.MEDIA_ROOT, str(username))
+        database_path = os.path.join(user_path, 'database')
+        if request.data['method'] == 'ungroupIndividual':
+            fileID = request.data['fileID']
+            print('ungroupIndividual', fileID)
+            selectedCase = models.Case.objects.filter(fileID=fileID)[0]
+            selectedCase.Group = 0
+            selectedCase.save()
+        elif request.data['method'] == 'groupSelection':
+            selectedFiles = request.data['list']
+            for selectedFile in selectedFiles:
+                selectedCase = models.Case.objects.filter(fileID=selectedFile['fileID'])[0]
+                selectedCase.Group = 1
+                selectedCase.save()
+                # os.remove(targetFolder)
+
+        allCases = models.Case.objects.all()
+        serializer = serializers.CaseSerializer(allCases, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
