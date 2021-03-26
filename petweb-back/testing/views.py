@@ -85,29 +85,37 @@ class uploader(APIView):
 
                 img3D = np.array(nimg3D.dataobj)  # numpy array로 변환
                 oriSize = img3D.shape[0] * img3D.shape[1] * img3D.shape[2]
-                dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
-                if nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][2] and nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][3]:
-                    dsfactor = [float(f) / w for w, f in
-                                zip([img3D.shape[0], img3D.shape[1], img3D.shape[2]], [91, 109, 91])]  # 픽셀크기 2mm로 변환용 factor
+                # dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
+                # if nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][2] and nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][3]:
+                #     dsfactor = [float(f) / w for w, f in
+                #                 zip([img3D.shape[0], img3D.shape[1], img3D.shape[2]], [91, 109, 91])]  # 픽셀크기 2mm로 변환용 factor
 
-                img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
+                # img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
 
                 # axial 91, coronal 109, sagittal 91 크기로 잘라내기 (crop)
-                zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
-                # vx, vy, vz = [0, 0, 0]
-                if zoomedX >= 91 and zoomedY >= 109 and zoomedZ >= 91:
-                    cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)] # 중심 좌표 계산
-                    offsetX, offsetY, offsetZ = [math.floor(91 / 2), math.floor(109 / 2), math.floor(91 / 2)]
-                    img3D_crop = img3D_2mm[max(0, cX - offsetX):min(91, cX + offsetX + 1), max(0, cY - offsetY):min(109, cY + offsetY + 1),
-                            max(0, cZ - offsetZ):min(91, cZ + offsetZ + 1)]
-                    vx, vy, vz = img3D_crop.shape # 크기는 (91, 109, 91) 이어야함
-                    uint8_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
-                else:
-                    vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
-                    uint8_img3D = img3D_2mm
-                uint8_img3D = 255 * uint8_img3D
+                # zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
+                # # vx, vy, vz = [0, 0, 0]
+                # if zoomedX >= 91 and zoomedY >= 109 and zoomedZ >= 91:
+                #     cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)] # 중심 좌표 계산
+                #     offsetX, offsetY, offsetZ = [math.floor(91 / 2), math.floor(109 / 2), math.floor(91 / 2)]
+                #     img3D_crop = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1,
+                #             cZ - offsetZ:cZ + offsetZ + 1]
+                #     vx, vy, vz = img3D_crop.shape # 크기는 (91, 109, 91) 이어야함
+                #     uint8_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
+                # else:
+                #     vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
+                #     uint8_img3D = img3D_2mm
+                # uint8_img3D = 255 * uint8_img3D
+                # uint8_img3D = uint8_img3D.astype(np.uint8)
+                # hx, hy, hz = [int(vx/2), int(vy/2), int(vz/2)]
+                dsfactor = [float(f) / w for f, w in
+                            zip([91, 109, 91], [img3D.shape[0], img3D.shape[1], img3D.shape[2]])]  # 픽셀크기 2mm로 변환용 factor
+
+                img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
+                vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
+
+                uint8_img3D = img3D_2mm/img3D_2mm.max()*255
                 uint8_img3D = uint8_img3D.astype(np.uint8)
-                hx, hy, hz = [int(vx/2), int(vy/2), int(vz/2)]
 
                 print("Step3: create input image")
                 for iz in range(vz):
