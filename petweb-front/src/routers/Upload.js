@@ -96,6 +96,7 @@ function Upload({toggleWorklist}) {
     // setTimeout(() => dispatch(
     //   tab_location({...counter, fileID:fileList.find(item=>item.Opened==true).fileID})), 500)
     // setTimeout(() => history.push('/view/'+counter.tabX), 500)
+    setTimeout(() => history.push('/view/'+lastIndex), 100);
   }
   const analysisClickHandler = async ()=>{
     const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
@@ -105,7 +106,8 @@ function Upload({toggleWorklist}) {
     // dispatch(addStack(fileList.filter((v,i)=>{if (v.Select == true) return })));
     dispatch(addStack(nextStackManager));
     {lastIndex >= 0 ? dispatch(tab_location({...counter, tabX:lastIndex, fileID:nextStackManager[lastIndex].fileID})):dispatch(tab_location({...counter, tabX:null, fileID:null}))}
-    // setTimeout(() => history.push('/analysis/suvr/'+counter.tabX), 500)
+    // {lastIndex >= 0 ? setTimeout(() => history.push('/analysis/suvr/'+lastIndex), 100):setTimeout(() => history.push('/analysis/suvr/'+0), 100)}
+    setTimeout(() => history.push('/analysis/suvr/'+lastIndex), 100);
   }
 
   const deleteSelections = async (record) =>{

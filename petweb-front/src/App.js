@@ -95,10 +95,11 @@ function App() {
         console.log('checkIfAnySelected: ',checkIfAnySelected)
         const token = localStorage.getItem('token')
         const res = await services.groupSelection({'token':token, obj:{method:'groupSelection', list:fileList.filter(item=>item.Select==true)}})
-        const groupDone = res.data
-        console.log('toggleWorklist:',groupDone)
+        const groupUpdated = res.data.map((v,i)=>{return {...v, Select:fileList[i].Select, Opened:fileList[i].Opened}})
+        // const groupDone = res.data
+        // console.log('toggleWorklist:',groupUpdated)
         // groupDone = groupDone.map((item,idx)=>{return item.Select = fileList.Select})
-        dispatch(fetchItems(groupDone))
+        dispatch(fetchItems(groupUpdated))
         // dispatch(groupItem(1))
       }
     }

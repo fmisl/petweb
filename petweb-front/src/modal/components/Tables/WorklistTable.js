@@ -104,8 +104,10 @@ class WorklistTable extends Component {
     }
     ungroupAsync = async (data) =>{
         const res = await services.ungroupIndividual(data)
-        console.log('renderRemove',res.data)
-        this.props.fetchItems(res.data)
+        console.log('res.data:',res.data)
+        const groupUpdated = res.data.map((v,i)=>{return {...v, Select:this.props.fileList[i].Select, Opened:this.props.fileList[i].Opened}})
+        console.log('fileList:',this.props.fileList)
+        this.props.fetchItems(groupUpdated)
     }
     renderRemove = (props) => {
       // const { data } = this.state;
@@ -159,7 +161,16 @@ class WorklistTable extends Component {
             <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
                 onClick={()=>{{props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}}}
                 onDoubleClick={()=>{
-                    {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                    const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                    const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
+                    // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                    // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+
+                    {props.record.Centiloid != null && this.props.openItem(props.record.id)}
+                    {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
+                    {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                    // {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300)}
+                    // {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
                     // alert('double')
                     // this.setState({
                     //     // data:[...data, props.record]
@@ -183,7 +194,14 @@ class WorklistTable extends Component {
             <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                         onClick={()=>{{props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}}}
                         onDoubleClick={()=>{
-                            {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                            const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                            const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
+                            // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                            // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+        
+                            {props.record.Centiloid != null && this.props.openItem(props.record.id)}
+                            {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
+                            {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
                                 // this.setState({
                                 //     // data:[...data, props.record]
                                 //     data: data.map(
@@ -243,6 +261,8 @@ const mapDispatchToProps = (dispatch) => ({
   login: () => dispatch(actions.login()),
   logout: () => dispatch(actions.logout()),
   fetchItems: (items) => dispatch(actions.fetchItems(items)),
+  tab_location: (items) => dispatch(actions.tab_location(items)),
+  addStack: (items) => dispatch(actions.addStack(items)),
   openItem: (itemID) => dispatch(actions.openItem(itemID)),
   closeItem: (itemID) => dispatch(actions.closeItem(itemID)),
   selectItem: (itemID) => dispatch(actions.selectItem(itemID)),
