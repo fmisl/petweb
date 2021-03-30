@@ -75,10 +75,10 @@ export const updateStack = (Stack) =>{
     Stack: Stack,
   }
 }
-export const removeStack = (Stack) =>{
+export const removeStack = (fileID) =>{
   return {
     type: 'REMOVE_STACK',
-    Stack: Stack,
+    fileID: fileID,
   }
 }
 export const changeColor = (color) =>{
@@ -141,5 +141,17 @@ export const selectAllTrue = () =>{
 export const selectAllFalse = () =>{
   return {
     type: 'SELECT_ALL_FALSE',
+  }
+}
+export const selectAllGroup = (groupID) =>{
+  return {
+    type: 'SELECT_ALL_GROUP',
+    groupID: groupID,
+  }
+}
+export const unSelectAllGroup = (groupID) =>{
+  return {
+    type: 'UNSELECT_ALL_GROUP',
+    groupID: groupID,
   }
 }

@@ -3,7 +3,7 @@ import '../App.css';
 // import useWorklist from '../modal/useWorklist';
 import Uploader from "../modal/Uploader";
 import {useSelector, useDispatch} from 'react-redux';
-import {increment, decrement, addToList, removeFromList,loadItems, fetchItems, openSelect, tab_location} from '../reduxs/actions';
+import {increment, decrement, addToList, removeFromList,loadItems, fetchItems, openSelect, tab_location, addStack} from '../reduxs/actions';
 import IconView from '../images/IconView';
 import IconAnalysis from '../images/IconAnalysis';
 import IconDelete from '../images/IconDelete';
@@ -18,7 +18,7 @@ function Upload({toggleWorklist}) {
   const [dragState, setDragState] = useState(false);
   const fileList = useSelector(state => state.fileList);
   const counter = useSelector(state => state.counter);
-  const listSelected = useSelector(state => state.stackManager);
+  const stackManager = useSelector(state => state.stackManager);
   const [isShowingWorklist, setIsShowingWorklist] = useState(false);
   const [isShowingUploader, setIsShowingUploader] = useState(false);
   const isLogged = useSelector(state => state.isLogged);
@@ -88,14 +88,26 @@ function Upload({toggleWorklist}) {
     )
   }
   const viewClickHandler = async ()=>{
+    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+    const lastIndex = nextStackManager.length-1;
     dispatch(openSelect());
+    dispatch(addStack(nextStackManager));
+    {lastIndex >= 0 ? dispatch(tab_location({...counter, tabX:lastIndex, fileID:nextStackManager[lastIndex].fileID})):dispatch(tab_location({...counter, tabX:null, fileID:null}))}
     // setTimeout(() => dispatch(
     //   tab_location({...counter, fileID:fileList.find(item=>item.Opened==true).fileID})), 500)
-    setTimeout(() => history.push('/view/'+counter.tabX), 500)
+    // setTimeout(() => history.push('/view/'+counter.tabX), 500)
+    setTimeout(() => history.push('/view/'+lastIndex), 100);
   }
   const analysisClickHandler = async ()=>{
+    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+    // const nextStackManager = [...stackManager, ...fileList.filter((v,i)=>{if(v.Opened == false && v.Select == true) return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})]
+    const lastIndex = nextStackManager.length-1;
     dispatch(openSelect());
-    setTimeout(() => history.push('/analysis/suvr/'+counter.tabX), 500)
+    // dispatch(addStack(fileList.filter((v,i)=>{if (v.Select == true) return })));
+    dispatch(addStack(nextStackManager));
+    {lastIndex >= 0 ? dispatch(tab_location({...counter, tabX:lastIndex, fileID:nextStackManager[lastIndex].fileID})):dispatch(tab_location({...counter, tabX:null, fileID:null}))}
+    // {lastIndex >= 0 ? setTimeout(() => history.push('/analysis/suvr/'+lastIndex), 100):setTimeout(() => history.push('/analysis/suvr/'+0), 100)}
+    setTimeout(() => history.push('/analysis/suvr/'+lastIndex), 100);
   }
 
   const deleteSelections = async (record) =>{

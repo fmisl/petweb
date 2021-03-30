@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './WorklistTable.css'
 import { connect } from 'react-redux';
 import * as actions from '../../../reduxs/actions';
@@ -11,6 +12,8 @@ class WorklistTable extends Component {
     state={
         token: localStorage.getItem('token'),
         data: [],
+        selectAll:false,
+        clickListenerState:false,
         // data: [
         //     {id:0, Focus:false, Select:false, Tracer: "C-PIB", SUVR: 2.11, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 38, Sex:"M", Update:"20.07.15" },
         //     {id:1, Focus:false, Select:false, Tracer: "FBB", SUVR: 1.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 26, Sex:"M", Update:"20.07.15" },
@@ -49,6 +52,17 @@ class WorklistTable extends Component {
             data:fileList.filter(item=>{return item.Group==1}),
         })
     }
+    componentWillUnmount(){
+        try{
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].removeEventListener('click', this.handleSelect);
+            this.setState({
+                clickListenerState:false,
+                // selectAll: false,
+            })
+        } catch(e){
+            console.log('findDOMNode error when componentWillUnmount')
+        }
+    }
     componentDidUpdate(prevProps){
         // console.log('componentDidUpdate1:',prevProps.fileList)
         // console.log('componentDidUpdate2:',this.props.fileList)
@@ -59,11 +73,41 @@ class WorklistTable extends Component {
                 data:fileList.filter(item=>{return item.Group==1}),
             })
         }
+        // console.log('clickListenerState: ',this.state.clickListenerState)
+        if (this.state.clickListenerState==false){
+            try{
+                // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].addEventListener('click', this.handleSelect);
+                this.setState({clickListenerState:true})
+            }catch(e){
+                console.log('findDOMNode error when componentDidUpdate')
+            }
+        }
+    }
+    handleSelect = event => {
+        const {selectAll} = this.state;
+        if (selectAll==false) {
+            console.log('selectAll: true')
+            this.props.selectAllGroup(1);
+            this.setState({
+                selectAll: true,
+            })
+        }
+        else {
+            console.log('selectAll: false')
+            this.props.unSelectAllGroup(1);
+            this.setState({
+                selectAll: false,
+            })
+        }
+        // console.log('Enter: ' + this.props.menuItem.caption.toUpperCase());
     }
     ungroupAsync = async (data) =>{
         const res = await services.ungroupIndividual(data)
-        console.log('renderRemove',res.data)
-        this.props.fetchItems(res.data)
+        console.log('res.data:',res.data)
+        const groupUpdated = res.data.map((v,i)=>{return {...v, Select:this.props.fileList[i].Select, Opened:this.props.fileList[i].Opened}})
+        console.log('fileList:',this.props.fileList)
+        this.props.fetchItems(groupUpdated)
     }
     renderRemove = (props) => {
       // const { data } = this.state;
@@ -117,7 +161,16 @@ class WorklistTable extends Component {
             <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
                 onClick={()=>{{props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}}}
                 onDoubleClick={()=>{
-                    {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                    const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                    const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
+                    // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                    // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+
+                    {props.record.Centiloid != null && this.props.openItem(props.record.id)}
+                    {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
+                    {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                    // {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300)}
+                    // {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
                     // alert('double')
                     // this.setState({
                     //     // data:[...data, props.record]
@@ -141,7 +194,14 @@ class WorklistTable extends Component {
             <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                         onClick={()=>{{props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}}}
                         onDoubleClick={()=>{
-                            {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                            const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                            const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
+                            // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                            // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+        
+                            {props.record.Centiloid != null && this.props.openItem(props.record.id)}
+                            {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
+                            {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
                                 // this.setState({
                                 //     // data:[...data, props.record]
                                 //     data: data.map(
@@ -201,10 +261,14 @@ const mapDispatchToProps = (dispatch) => ({
   login: () => dispatch(actions.login()),
   logout: () => dispatch(actions.logout()),
   fetchItems: (items) => dispatch(actions.fetchItems(items)),
+  tab_location: (items) => dispatch(actions.tab_location(items)),
+  addStack: (items) => dispatch(actions.addStack(items)),
   openItem: (itemID) => dispatch(actions.openItem(itemID)),
   closeItem: (itemID) => dispatch(actions.closeItem(itemID)),
   selectItem: (itemID) => dispatch(actions.selectItem(itemID)),
   unselectItem: (itemID) => dispatch(actions.unselectItem(itemID)),
+  selectAllGroup: (groupID) => dispatch(actions.selectAllGroup(groupID)),
+  unSelectAllGroup: (groupID) => dispatch(actions.unSelectAllGroup(groupID)),
   ungroupItemIndividual: (itemID) => dispatch(actions.ungroupItemIndividual(itemID)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(WorklistTable);

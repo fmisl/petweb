@@ -9,7 +9,7 @@ const stackManagerReducer = (state = [], action) => {
         else return {...v}
         });
     case 'REMOVE_STACK':
-      return state.filter((v, i) => {return v.fileID !== action.item});
+      return state.filter((v, i) => {return v.fileID !== action.fileID});
     default:
       return state;
   }

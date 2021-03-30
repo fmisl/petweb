@@ -1,4 +1,4 @@
-const counterReducer = (state = {tabX:0, tabY:0, fileID:null}, action) => {
+const counterReducer = (state = {tabX:null, tabY:0, fileID:null}, action) => {
   switch(action.type){
     // case 'INCREMENT':
     //   return Math.min(action.max-1, state + 1);

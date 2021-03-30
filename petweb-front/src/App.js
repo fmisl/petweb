@@ -18,8 +18,8 @@ import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams,
 
 function App() {
   const fileList = useSelector(state => state.fileList);
-  const OpenedFiles = fileList.filter(item => {return item.Opened==true});
-  // const [OpenedFiles, setOpenedFiles] = useState([]);
+  // const stackManager = fileList.filter(item => {return item.Opened==true});
+  // const [stackManager, setstackManager] = useState([]);
   const counter = useSelector(state => state.counter);
   const stackManager = useSelector(state => state.stackManager);
   const isLogged = useSelector(state => state.isLogged);
@@ -30,25 +30,33 @@ function App() {
   const { caseID } = useParams();
   const menuList = ['dashboard', 'upload', 'view', 'analysis/suvr', 'analysis/report', 'setting']
   useEffect(() => {
-    if (OpenedFiles.length != 0){
-      console.log('OpenedFiles changed: ', OpenedFiles)
-      dispatch(addStack([...OpenedFiles.map((v,i)=>{return {fileID: v.fileID, currentC:50, currentS:50, currentA:50}})]))
-      if (counter.fileID==null) dispatch(tab_location({...counter, fileID:OpenedFiles[counter.tabX].fileID}))
-      else {
-        const focusTab = OpenedFiles.findIndex((item)=>item.fileID == counter.fileID)
-        if (focusTab == -1 ) {
-          const lowerBoundTabIndex = Math.max(0, counter.tabX-1)
-          const focusFileID = OpenedFiles[lowerBoundTabIndex].fileID
-          dispatch(tab_location({...counter, tabX:lowerBoundTabIndex, fileID:focusFileID}))
-        }
-        else dispatch(tab_location({...counter, tabX:focusTab}))
-      }
-    }
-  }, [OpenedFiles.length])
+    console.log('counter in app.js: ', counter)
+    // this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID})
+    // // {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 500)}
+    // this.props.history.push('/analysis/suvr/'+props.record.fileID)
+  }, [counter])
 
-  // if (OpenedFiles.length !== 0){
+    // if (stackManager.length == 0){
+    //   // dispatch(addStack([...stackManager, fileList.map((v,i)=>{if (v.Opened == true) return {fileID: v.fileID, currentC:50, currentS:50, currentA:50}})]))
+    // } else {
+    //   // {props.record.Centiloid != null && this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID})};
+    //   // console.log('stackManager changed: ', stackManager)
+    //   // dispatch(addStack([...stackManager, stackManager.map((v,i)=>{return {fileID: v.fileID, currentC:50, currentS:50, currentA:50}})]))
+    //   // if (counter.fileID==null) dispatch(tab_location({...counter, fileID:stackManager[counter.tabX].fileID}))
+    //   // else {
+    //   //   const focusTab = stackManager.findIndex((item)=>item.fileID == counter.fileID)
+    //   //   if (focusTab == -1 ) {
+    //   //     const lowerBoundTabIndex = Math.max(0, counter.tabX-1)
+    //   //     const focusFileID = stackManager[lowerBoundTabIndex].fileID
+    //   //     dispatch(tab_location({...counter, tabX:lowerBoundTabIndex, fileID:focusFileID}))
+    //   //   }
+    //   //   else dispatch(tab_location({...counter, tabX:focusTab}))
+    //   // }
+    // }
+
+  // if (stackManager.length !== 0){
   //   if (counter.fileID==null) {
-  //     dispatch(tab_location({...counter, fileID:OpenedFiles[counter.tabX].fileID}))
+  //     dispatch(tab_location({...counter, fileID:stackManager[counter.tabX].fileID}))
   //   }
   // }
   useEffect(async () => {
@@ -81,48 +89,55 @@ function App() {
   }
   const toggleWorklist = async () => {
     if (isShowingWorklist == false) {
-      const token = localStorage.getItem('token')
-      const res = await services.groupSelection({'token':token, obj:{method:'groupSelection', list:fileList.filter(item=>item.Select==true)}})
-      const groupDone = res.data
-      console.log('toggleWorklist:',groupDone)
-      dispatch(fetchItems(groupDone))
-      // dispatch(groupItem(1))
+      // check if any items have selected
+      const checkIfAnySelected = fileList.find(item=>{return item.Select == true && item.Group==0});
+      if (checkIfAnySelected !== undefined) {
+        console.log('checkIfAnySelected: ',checkIfAnySelected)
+        const token = localStorage.getItem('token')
+        const res = await services.groupSelection({'token':token, obj:{method:'groupSelection', list:fileList.filter(item=>item.Select==true)}})
+        const groupUpdated = res.data.map((v,i)=>{return {...v, Select:fileList[i].Select, Opened:fileList[i].Opened}})
+        // const groupDone = res.data
+        // console.log('toggleWorklist:',groupUpdated)
+        // groupDone = groupDone.map((item,idx)=>{return item.Select = fileList.Select})
+        dispatch(fetchItems(groupUpdated))
+        // dispatch(groupItem(1))
+      }
     }
     setIsShowingWorklist(!isShowingWorklist);
   }
 
   const changePageByKey = (e) =>{
-    const MaxOpenedFiles = OpenedFiles.length;
+    const MaxstackManager = stackManager.length;
     switch (e.keyCode){
       case 38:
         const keyUpPage = Math.max(0,counter.tabY-1)
         dispatch(tab_location({...counter, tabY:keyUpPage}));
         if (keyUpPage <= 1) history.push('/'+menuList[keyUpPage]);
-        else if (keyUpPage > 1) history.push('/'+menuList[keyUpPage]+'/'+OpenedFiles[counter.tabX].fileID);
+        else if (keyUpPage > 1) history.push('/'+menuList[keyUpPage]+'/'+stackManager[counter.tabX].fileID);
         break;
       case 40:
           const keyDownPage = Math.min(menuList.length-1,counter.tabY+1)
           if (keyDownPage <= 1) history.push('/'+menuList[keyDownPage]);
           else if (keyDownPage > 1) 
-            if (MaxOpenedFiles > 0){
-              history.push('/'+menuList[keyDownPage]+'/'+OpenedFiles[counter.tabX].fileID);
+            if (MaxstackManager > 0){
+              history.push('/'+menuList[keyDownPage]+'/'+stackManager[counter.tabX].fileID);
             }
         break;
       case 39:
-        if (MaxOpenedFiles > 0){
-          const keyRightPage = Math.min(MaxOpenedFiles-1, counter.tabX+1);
-          // , fileID:OpenedFiles[keyRightPage].File
-          dispatch(tab_location({...counter, tabX:keyRightPage, fileID:OpenedFiles[keyRightPage].fileID}));
+        if (MaxstackManager > 0){
+          const keyRightPage = Math.min(MaxstackManager-1, counter.tabX+1);
+          // , fileID:stackManager[keyRightPage].File
+          dispatch(tab_location({...counter, tabX:keyRightPage, fileID:stackManager[keyRightPage].fileID}));
           if (counter.tabY <= 1) history.push('/'+menuList[counter.tabY]);
-          else if (counter.tabY > 1) history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyRightPage].fileID);
+          else if (counter.tabY > 1) history.push('/'+menuList[counter.tabY]+'/'+stackManager[keyRightPage].fileID);
         }
         break;
       case 37:
-        if (MaxOpenedFiles > 0){
+        if (MaxstackManager > 0){
           const keyLeftPage = Math.max(0,counter.tabX-1)
-          dispatch(tab_location({...counter, tabX:keyLeftPage, fileID:OpenedFiles[keyLeftPage].fileID}));
+          dispatch(tab_location({...counter, tabX:keyLeftPage, fileID:stackManager[keyLeftPage].fileID}));
           if (counter.tabY <= 1) history.push('/'+menuList[counter.tabY]);
-          else if (counter.tabY > 1) history.push('/'+menuList[counter.tabY]+'/'+OpenedFiles[keyLeftPage].fileID);
+          else if (counter.tabY > 1) history.push('/'+menuList[counter.tabY]+'/'+stackManager[keyLeftPage].fileID);
         }
         break;
       case 9:
@@ -154,8 +169,8 @@ function App() {
       {isLogged && 
         // <div className="App" tabIndex={0} onKeyDown={(e)=>{if (e.keyCode == 40){dispatch(increment(menuList.length))} else if (e.keyCode == 38) {dispatch(decrement(menuList.length))};}}>
         <div className="App" tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
-          <Sidebar OpenedFiles={OpenedFiles}/>
-          <Headerbar OpenedFiles={OpenedFiles}/>
+          <Sidebar stackManager={stackManager}/>
+          <Headerbar/>
           <Worklist isShowing={isShowingWorklist} hide={toggleWorklist} lock={openWorklist}/>
           {/*  */}
           {/* <Headerbar/> */}

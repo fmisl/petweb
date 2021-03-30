@@ -10,6 +10,8 @@ import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams,
 function Worklist({ isShowing, hide, lock }) {
   const dispatch = useDispatch();
   const counter = useSelector(state => state.counter);
+  const stackManager = useSelector(state => state.stackManager);
+  const fileList = useSelector(state => state.fileList);
   const history =useHistory();
   // const [isShown, setIsShown] = useState(false);
   const changePageByKey = (e) =>{
@@ -37,8 +39,13 @@ function Worklist({ isShowing, hide, lock }) {
               <div className="upload-right-btn">Export Nifti</div>
               <div className="upload-right-btn type1">Save</div>
               <div className="upload-right-btn type1" onClick={()=>{
-                dispatch(openSelect())
-                setTimeout(() => history.push('/analysis/suvr/'+counter.tabX), 500)
+                const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                // const nextStackManager = [...stackManager, ...fileList.filter((v,i)=>{if(v.Opened == false && v.Select == true) return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})]
+                const lastIndex = nextStackManager.length-1;
+                dispatch(openSelect());
+                dispatch(addStack(nextStackManager));
+                {lastIndex >= 0 ? dispatch(tab_location({...counter, tabX:lastIndex, fileID:nextStackManager[lastIndex].fileID})):dispatch(tab_location({...counter, tabX:null, fileID:null}))}
+                setTimeout(() => history.push('/analysis/suvr/'+lastIndex), 100);
                 }}>Open</div>
             </div>
 
