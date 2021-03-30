@@ -56,13 +56,13 @@ export default class AnalysisItem2 extends Component {
     };
   }
   componentDidUpdate(prevProps){
-    console.log('componentDidUpdate in analysis2')
+    // console.log('componentDidUpdate in analysis2')
     if (prevProps.subRegion !== this.props.subRegion){
       const data=subRegionName.map((v,i)=>{return {id:i, Focus:false, Select: false, SubRegion:v, SUVR:this.props.subRegion[v], Centiloid:this.props.subRegion[v+'_C']}});
       this.setState({
         data,
       })
-      console.log(data)
+      // console.log(data)
     }
   }
   renderCentiloid = (props) => {

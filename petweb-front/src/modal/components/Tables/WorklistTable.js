@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './WorklistTable.css'
 import { connect } from 'react-redux';
 import * as actions from '../../../reduxs/actions';
@@ -11,6 +12,8 @@ class WorklistTable extends Component {
     state={
         token: localStorage.getItem('token'),
         data: [],
+        selectAll:false,
+        clickListenerState:false,
         // data: [
         //     {id:0, Focus:false, Select:false, Tracer: "C-PIB", SUVR: 2.11, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 38, Sex:"M", Update:"20.07.15" },
         //     {id:1, Focus:false, Select:false, Tracer: "FBB", SUVR: 1.5, PatientName: "Sandwich Eater", PatientID: "Sandwich Eater", Age: 26, Sex:"M", Update:"20.07.15" },
@@ -49,6 +52,17 @@ class WorklistTable extends Component {
             data:fileList.filter(item=>{return item.Group==1}),
         })
     }
+    componentWillUnmount(){
+        try{
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].removeEventListener('click', this.handleSelect);
+            this.setState({
+                clickListenerState:false,
+                // selectAll: false,
+            })
+        } catch(e){
+            console.log('findDOMNode error when componentWillUnmount')
+        }
+    }
     componentDidUpdate(prevProps){
         // console.log('componentDidUpdate1:',prevProps.fileList)
         // console.log('componentDidUpdate2:',this.props.fileList)
@@ -59,6 +73,34 @@ class WorklistTable extends Component {
                 data:fileList.filter(item=>{return item.Group==1}),
             })
         }
+        // console.log('clickListenerState: ',this.state.clickListenerState)
+        if (this.state.clickListenerState==false){
+            try{
+                // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].addEventListener('click', this.handleSelect);
+                this.setState({clickListenerState:true})
+            }catch(e){
+                console.log('findDOMNode error when componentDidUpdate')
+            }
+        }
+    }
+    handleSelect = event => {
+        const {selectAll} = this.state;
+        if (selectAll==false) {
+            console.log('selectAll: true')
+            this.props.selectAllGroup(1);
+            this.setState({
+                selectAll: true,
+            })
+        }
+        else {
+            console.log('selectAll: false')
+            this.props.unSelectAllGroup(1);
+            this.setState({
+                selectAll: false,
+            })
+        }
+        // console.log('Enter: ' + this.props.menuItem.caption.toUpperCase());
     }
     ungroupAsync = async (data) =>{
         const res = await services.ungroupIndividual(data)
@@ -205,6 +247,8 @@ const mapDispatchToProps = (dispatch) => ({
   closeItem: (itemID) => dispatch(actions.closeItem(itemID)),
   selectItem: (itemID) => dispatch(actions.selectItem(itemID)),
   unselectItem: (itemID) => dispatch(actions.unselectItem(itemID)),
+  selectAllGroup: (groupID) => dispatch(actions.selectAllGroup(groupID)),
+  unSelectAllGroup: (groupID) => dispatch(actions.unSelectAllGroup(groupID)),
   ungroupItemIndividual: (itemID) => dispatch(actions.ungroupItemIndividual(itemID)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(WorklistTable);

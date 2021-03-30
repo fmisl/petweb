@@ -17,6 +17,7 @@ class UploadTable extends Component {
       this.state={
           data: [],
           selectAll: false,
+          clickListenerState: false,
       }
     }
     handleSelect = event => {
@@ -57,7 +58,12 @@ class UploadTable extends Component {
     }
     componentWillUnmount(){
         clearInterval(this.myInterval);
-        ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].removeEventListener('click', this.handleSelect);
+        try{
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].removeEventListener('click', this.handleSelect);
+            this.setState({clickListenerState:false})
+        } catch(e){
+            console.log('findDOMNode error when componentWillUnmount')
+        }
     }
     componentDidUpdate(prevProps, prevState){
         if (prevProps.fileList != this.props.fileList){
@@ -67,12 +73,14 @@ class UploadTable extends Component {
                 data:fileList,
             })
         }
-        const temp = ReactDOM.findDOMNode(this);
-        try{
-            // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
-            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].addEventListener('click', this.handleSelect)
-        }catch(e){
-
+        if (this.state.clickListenerState==false){
+            try{
+                // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].addEventListener('click', this.handleSelect);
+                this.setState({clickListenerState:true})
+            }catch(e){
+                console.log('findDOMNode error when componentDidUpdate')
+            }
         }
         // console.log(temp.children[1].children[0])
         // console.dir(temp.children[1].children[0])
@@ -101,9 +109,20 @@ class UploadTable extends Component {
             <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                             onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
+                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                                const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                                 {props.record.Centiloid != null && (this.props.openItem(props.record.id))}
-                                {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300))}
+                                // {console.log('counter: ',this.props.counter, props.record.fileID)}
+                                // ...fileList.filter((v,i)=>{if(v.Opened == false && v.Select == true) return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})
+                                {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
+                                {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                                // {console.log('stackManager: ', nextStackManager.length)}
+                                // {props.record.Centiloid != null && this.props.tab_location({...this.props.counter, tabX:this.props.stackManger.length-1, fileID: props.record.fileID})}
+                                // this.props.tab_location({...this.props.counter, tabX:0, fileID:props.record.fileID});
+                                // {props.record.Centiloid != null && (this.props.tab_location({...this.props.counter, tabX: this.props.counter.tabX+1, fileID:props.record.fileID}))}
+
+                                {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
                             }}
                 >
                 {props.value}
@@ -116,9 +135,14 @@ class UploadTable extends Component {
             <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                             onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
+                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                                const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                                 {props.record.Centiloid != null && this.props.openItem(props.record.id)}
-                                {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300)}
+                                {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
+                                {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                                // {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300)}
+                                {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
                            }}
                 >
                 <div className={`UploadTable-Tracer ${props.value.slice(-3)}`} >
@@ -140,9 +164,14 @@ class UploadTable extends Component {
             <div  className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
                             onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
-                                    // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
-                                    {props.record.Centiloid != null && this.props.openItem(props.record.id)}
-                                    {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 500)}
+                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                                const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
+                                // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
+                                {props.record.Centiloid != null && this.props.openItem(props.record.id)}
+                                {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
+                                {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                                // {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 500)}
+                                {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
                             }}
                 >
                     {/* {console.log(props.record.Select && (props.record.Centiloid != null))} */}
@@ -203,6 +232,8 @@ const mapDispatchToProps = (dispatch) => ({
   decrement: () => dispatch(actions.decrement()),
   login: () => dispatch(actions.login()),
   logout: () => dispatch(actions.logout()),
+  tab_location: (items) => dispatch(actions.tab_location(items)),
+  addStack: (items) => dispatch(actions.addStack(items)),
   openItem: (itemID) => dispatch(actions.openItem(itemID)),
   updateCentiloid: (items) => dispatch(actions.updateCentiloid(items)),
   closeItem: (itemID) => dispatch(actions.closeItem(itemID)),

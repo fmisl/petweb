@@ -57,7 +57,7 @@ function View({}) {
   //   console.log('res: ', res.data[0])
   //   // let slices = res.data[0].slices;
   // }
-  // console.log("imageIdC: ",imageIdC)
+  console.log("imageIdC: ",imageIdC)
   return (
     <div className="content" onClick={()=>setShowMenu(false)}>
       {/* <Sidebar />
