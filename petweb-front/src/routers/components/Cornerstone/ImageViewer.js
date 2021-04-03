@@ -113,14 +113,14 @@ class ImageViewer extends Component {
           ref={input => {
             this.elementC = input;
           }}
-          onClick={(e)=>{
-              console.dir(e); 
-              console.log("x:",e.pageX," y:",e.pageY);
-              console.log("x - 300:",e.pageX - 300," y - 170 + 89:",-e.pageY + 170 - 89);
-              console.log("(x - 300)/775*90:",(e.pageX - 300)/775*90," y - 170 + 89:",-e.pageY + 170 - 89);
+          // onClick={(e)=>{
+          //     console.dir(e); 
+          //     console.log("x:",e.pageX," y:",e.pageY);
+          //     console.log("x - 300:",e.pageX - 300," y - 170 + 89:",-e.pageY + 170 - 89);
+          //     console.log("(x - 300)/775*90:",(e.pageX - 300)/775*90," y - 170 + 89:",-e.pageY + 170 - 89);
               
-            }
-          }
+          //   }
+          // }
         >
 
           <canvas className="cornerstone-canvas" />
@@ -131,8 +131,8 @@ class ImageViewer extends Component {
           ref={input => {
             this.elementS = input;
           }}
-          onClick={(e)=>{
-          }}
+          // onClick={(e)=>{
+          // }}
         >
           <canvas className="cornerstone-canvas" />
         </div>
@@ -142,8 +142,8 @@ class ImageViewer extends Component {
           ref={input => {
             this.elementA = input;
           }}
-          onClick={(e)=>{
-          }}
+          // onClick={(e)=>{
+          // }}
         >
           <canvas className="cornerstone-canvas" />
         </div>
@@ -302,7 +302,7 @@ class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('componentDidUpdate')
+    // console.log('componentDidUpdate')
     try{
       // if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
       if (prevProps.counter !== this.props.counter || prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
@@ -354,13 +354,17 @@ class ImageViewer extends Component {
         cornerstone.displayImage(elementC, image);
 
         const stack = this.props.stackC;
-        cornerstoneTools.addStackStateManager(elementC, ["stack", 'Crosshairs']);
+        cornerstoneTools.addStackStateManager(elementC, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementC, "stack", stack);
         cornerstoneTools.stackScroll.activate(elementC, 1);
         cornerstoneTools.stackScrollWheel.activate(elementC);
         cornerstoneTools.stackPrefetch.enable(elementC, 3);
         cornerstoneTools.wwwcRegion.activate(elementC, 4);
         this.wwwcsynchronizer.add(elementC);
+        this.synchronizer.add(elementC);
+
+        // enable reference Lines tool
+        cornerstoneTools.referenceLines.tool.enable(elementC, this.synchronizer);
         cornerstoneTools.stackScrollKeyboard.activate(elementC);
         elementC.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementC.addEventListener("cornerstonenewimage", this.onNewImage);
@@ -376,13 +380,17 @@ class ImageViewer extends Component {
         cornerstone.displayImage(elementS, image);
 
         const stack = this.props.stackS;
-        cornerstoneTools.addStackStateManager(elementS, ["stack", 'Crosshairs']);
+        cornerstoneTools.addStackStateManager(elementS, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementS, "stack", stack);
         cornerstoneTools.stackScroll.activate(elementS, 1);
         cornerstoneTools.stackScrollWheel.activate(elementS);
         cornerstoneTools.stackPrefetch.enable(elementS, 3);
         cornerstoneTools.wwwcRegion.activate(elementS, 4);
         this.wwwcsynchronizer.add(elementS);
+        this.synchronizer.add(elementS);
+
+        // enable reference Lines tool
+        cornerstoneTools.referenceLines.tool.enable(elementS, this.synchronizer);
         cornerstoneTools.stackScrollKeyboard.activate(elementS);
         elementS.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementS.addEventListener("cornerstonenewimage", this.onNewImage);
@@ -395,50 +403,51 @@ class ImageViewer extends Component {
     const axialLoadImagePromise = cornerstone.loadImage(this.props.stackA.imageIds[currentIndex[0].currentA]).then(image => {
       // Display the first image
       try{
-      cornerstone.displayImage(elementA, image);
+        cornerstone.displayImage(elementA, image);
 
-      const stack = this.props.stackA;
-      cornerstoneTools.addStackStateManager(elementA, ["stack", 'Crosshairs']);
-      cornerstoneTools.addToolState(elementA, "stack", stack);
-      cornerstoneTools.stackScroll.activate(elementA, 1);
-      cornerstoneTools.stackScrollWheel.activate(elementA);
-      cornerstoneTools.stackPrefetch.enable(elementA, 3);
-      cornerstoneTools.wwwcRegion.activate(elementA, 4);
-      this.wwwcsynchronizer.add(elementA);
-      cornerstoneTools.stackScrollKeyboard.activate(elementA);
-      elementA.addEventListener("cornerstoneimagerendered",this.onImageRendered);
-      elementA.addEventListener("cornerstonenewimage", this.onNewImage);
-      window.addEventListener("resize", this.onWindowResize);
-      // cornerstone.displayImage(elementA, image);
-    } catch(e){
-      console.error('FastSkip axialLoadImagePromise')
-    }
+        const stack = this.props.stackA;
+        cornerstoneTools.addStackStateManager(elementA, ["stack", 'referenceLines', 'Croscrosshairsshairs']);
+        cornerstoneTools.addToolState(elementA, "stack", stack);
+        cornerstoneTools.stackScroll.activate(elementA, 1);
+        cornerstoneTools.stackScrollWheel.activate(elementA);
+        cornerstoneTools.stackPrefetch.enable(elementA, 3);
+        cornerstoneTools.wwwcRegion.activate(elementA, 4);
+        this.wwwcsynchronizer.add(elementA);
+        this.synchronizer.add(elementA);
+
+        // enable reference Lines tool
+        cornerstoneTools.referenceLines.tool.enable(elementA, this.synchronizer);
+        cornerstoneTools.stackScrollKeyboard.activate(elementA);
+        elementA.addEventListener("cornerstoneimagerendered",this.onImageRendered);
+        elementA.addEventListener("cornerstonenewimage", this.onNewImage);
+        window.addEventListener("resize", this.onWindowResize);
+        // cornerstone.displayImage(elementA, image);
+      } catch(e){
+        console.error('FastSkip axialLoadImagePromise')
+      }
     });
-
-    // Promise.all([coronalLoadImagePromise, sagittalLoadImagePromise, axialLoadImagePromise])
-    // .then(() => {
-    //   try{
-    //   this.synchronizer.add(elementC);
-    //   this.synchronizer.add(elementS);
-
-    //   cornerstoneTools.crosshairs.enable(elementC, 1, this.synchronizer);
-    //   cornerstoneTools.crosshairs.enable(elementS, 1, this.synchronizer);
-
-    //   cornerstoneTools.crosshairsTouch.enable(elementC, this.synchronizer);
-    //   cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
-    //   // const tool = cornerstoneTools.CrosshairsTool;
-    //   // cornerstoneTools.addTool(tool);
-    //   // cornerstoneTools.setToolActive('Crosshairs', {
-    //   //   mouseButtonMask: 1,
-    //   //   synchronizationContext: this.synchronizer,
-    //   // });
-    //   cornerstone.updateImage(elementC);
-    //   cornerstone.updateImage(elementS);
-    //   cornerstone.updateImage(elementA);
-    // } catch(e){
-    //   console.error('FastSkip')
-    // }
-    // });
+    Promise.all([coronalLoadImagePromise, sagittalLoadImagePromise, axialLoadImagePromise]).then(() => {
+      // Add the enabled elements to the synchronization context
+      try{
+        this.synchronizer.add(elementC);
+        this.synchronizer.add(elementS);
+        this.synchronizer.add(elementA);
+  
+        // cornerstoneTools.referenceLines.tool.enable(coronalElement, synchronizer);
+        // cornerstoneTools.referenceLines.tool.enable(sagittalElement, synchronizer);
+        // cornerstoneTools.referenceLines.tool.enable(axialElement, synchronizer);
+  
+        cornerstoneTools.crosshairs.enable(elementC, 1, this.synchronizer);
+        cornerstoneTools.crosshairs.enable(elementS, 1, this.synchronizer);
+        cornerstoneTools.crosshairs.enable(elementA, 1, this.synchronizer);
+  
+        cornerstoneTools.crosshairsTouch.enable(elementC, this.synchronizer);
+        cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
+        cornerstoneTools.crosshairsTouch.enable(elementA, this.synchronizer);
+      } catch(e){
+        console.error('FastSkip Promise',e)
+      }
+    });
   }
 }
 

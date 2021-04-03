@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import * as actions from '../reduxs/actions';
+import * as cornerstone from "cornerstone-core";
 import '../App.css';
 import {useSelector, useDispatch} from 'react-redux';
 import IconCrosshair from '../images/IconCrosshair';
@@ -24,7 +25,7 @@ class View extends Component {
   state = {
     username: localStorage.getItem('username'),
     showMenu: false,
-    isCrosshaired: true,
+    isCrosshaired: false,
     isInverted: true,
     isSNed: true,
     inoutSelect: 'output',
@@ -34,6 +35,9 @@ class View extends Component {
     stackCoronal:{},
     stackSaggital:{},
     stackAxial:{},
+    petCStack: {},
+    petSStack: {},
+    petAStack: {},
   };
   componentDidMount(){
     const {username, inoutSelect} = this.state;
@@ -53,6 +57,49 @@ class View extends Component {
       imageIds: imageIdA,
       currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
     };
+
+    const petCStack = {
+      // patient: "anonymous",
+      // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
+      imageIds: [...Array(109).keys()].map((v,i)=>("pet:coronal/"+i)),
+      currentImageIdIndex: 10,
+      // options: {
+      //   opacity: 1,
+      //   visible: true,
+      //   viewport: {
+      //     colormap: 'hot',
+      //   },
+      //   name: 'PET'
+      // }
+    };
+    const petSStack = {
+      // patient: "anonymous",
+      // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
+      imageIds: [...Array(91).keys()].map((v,i)=>("pet:sagittal/"+i)),
+      currentImageIdIndex: 10,
+      // options: {
+      //   opacity: 1,
+      //   visible: true,
+      //   viewport: {
+      //     colormap: 'hot',
+      //   },
+      //   name: 'PET'
+      // }
+    };
+    const petAStack = {
+      // patient: "anonymous",
+      // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
+      imageIds: [...Array(91).keys()].map((v,i)=>("pet:axial/"+i)),
+      currentImageIdIndex: 10,
+      // options: {
+      //   opacity: 1,
+      //   visible: true,
+      //   viewport: {
+      //     colormap: 'hot',
+      //   },
+      //   name: 'PET'
+      // }
+    };
     this.setState({
       imageIdC,
       imageIdS,
@@ -60,6 +107,9 @@ class View extends Component {
       stackCoronal,
       stackSaggital,
       stackAxial,
+      petCStack,
+      petSStack,
+      petAStack,
     })
   }
   setShowMenu = (value) =>{ this.setState({showMenu:value}) }
@@ -74,7 +124,8 @@ class View extends Component {
   // const [inoutSelect, setInoutSelect] = useState("output")
   componentDidUpdate(prevProps, prevState){
     const {isSNed, username} = this.state;
-    const {counter, stackManager} = this.props;
+    const {counter, stackManager, sliceList} = this.props;
+    const {imageLoader, metaDataLoader} = this;
     const inoutSelect = isSNed ? "output":"input"
     if (prevProps.counter != counter || prevState.isSNed != isSNed){
       const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
@@ -92,6 +143,26 @@ class View extends Component {
         imageIds: imageIdA,
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
       };
+      const petCStack = {
+        imageIds: [...Array(109).keys()].map((v,i)=>("pet:coronal/"+i)),
+        currentImageIdIndex: 10,
+      };
+      const petSStack = {
+        imageIds: [...Array(91).keys()].map((v,i)=>("pet:sagittal/"+i)),
+        currentImageIdIndex: 10,
+      };
+      const petAStack = {
+        imageIds: [...Array(91).keys()].map((v,i)=>("pet:axial/"+i)),
+        currentImageIdIndex: 10,
+      };
+
+      if (sliceList.length != 0) {
+        console.log('imageLoader update from sliceList B64Data')
+        imageLoader();
+        metaDataLoader();
+      }
+      // console.log("2");
+      // this.metaDataLoader();
       this.setState({
         inoutSelect,
         imageIdC,
@@ -100,15 +171,18 @@ class View extends Component {
         stackCoronal,
         stackSaggital,
         stackAxial,
+        petCStack,
+        petSStack,
+        petAStack,
       })
     }
   }
 
   render() {
     const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect} = this;
-    const {isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, stackCoronal,stackSaggital,stackAxial} = this.state;
+    const {isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack} = this.state;
     const {counter, stackManager} = this.props;
-    console.log(this.state)
+    // console.log(this.state)
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
         {/* <Sidebar />
@@ -116,7 +190,7 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-              <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...stackCoronal }} stackS={{ ...stackSaggital }} stackA={{ ...stackAxial }}/>
+              <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }}/>
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
@@ -186,12 +260,195 @@ class View extends Component {
       </div>
     );
   }
+  imageLoader = async () => {
+
+    "use strict";
+
+    // console.log("imageLoader called");
+
+
+    function pixelData2str(buf) {
+      var bufView = new Uint16Array(buf);
+      var len = bufView.length;
+      var str = '';
+
+      for(var i = 0; i < len; i++) {
+
+
+        var word = bufView[i];
+        var lower = word & 0xFF;
+        var upper = (word >> 8) & 0xFF;
+        str += String.fromCharCode(lower) + String.fromCharCode(upper);
+      }
+
+      return str;
+    }
+
+    function encodePixelData(pixelData) {
+      var pixelDataAsString = pixelData2str(pixelData);
+      var base64str = window.btoa(pixelDataAsString);
+      return base64str;
+    }
+
+    function str2pixelData(str) {
+      var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+      var bufView = new Int16Array(buf);
+      var index = 0;
+      for (var i=0, strLen=str.length; i<strLen; i+=2) {
+        var lower = str.charCodeAt(i);
+        var upper = str.charCodeAt(i+1);
+        // debugger;
+        bufView[index] = lower + (upper <<8);
+        index++;
+      }
+      return bufView;
+    }
+
+    var min1 = 0;
+    var max1 = 0;
+    function getPixelData(base64PixelData)
+    {
+      if(!base64PixelData) debugger;
+      var pixelDataAsString = window.atob(base64PixelData);
+      var pixelData = str2pixelData(pixelDataAsString);
+      // console.log("min:", pixelData.length);
+      return pixelData;
+    }
+
+    var petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[0].B64.filter(v=>v.Direction=='axial')[i].B64Data)));
+    var petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[0].B64.filter(v=>v.Direction=='coronal')[i].B64Data)));
+    var petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[0].B64.filter(v=>v.Direction=='sagittal')[i].B64Data)));
+
+    function getPETImage(imageId) {
+      let identifier=imageId.split(/[:,/]+/)
+      let device = identifier[0]
+      let direction=identifier[1]
+      let id=Number(identifier[2])
+      var width = 91;
+      var height = 91;
+      if(direction === 'coronal') {width=91; height=91}
+      else if(direction === 'sagittal') {width=109; height=91}
+      else if(direction === 'axial') {width=91; height=109}
+      // console.log("ID: ", ID, " Direction: ", Direction, " w/h: ", width,"/",height)
+
+      var image = {
+        imageId: imageId,
+
+        minPixelValue : 0,
+        maxPixelValue : 32767,
+        slope: 1.0,
+        intercept: 0,
+        windowCenter : 16384,
+        windowWidth : 32767,
+        getPixelData: getPixelData,
+        rows: height,
+        columns: width,
+        height: height,
+        width: width,
+        color: false,
+        columnPixelSpacing: 2,
+        rowPixelSpacing: 2,
+        sizeInBytes: width * height * 2,
+      };
+
+      function getPixelData()
+      {
+        if (direction === "axial"){return petAxialOutputData[id]}
+        else if (direction === "coronal"){return petCoronalOutputData[id]}
+        else if (direction === "sagittal"){return petSagittalOutputData[id]}
+
+        throw "unknown imageId";
+      }
+
+      return {
+        promise: new Promise((resolve) => {
+          resolve(image);
+        }),
+        cancelFn: undefined
+      };
+    }
+
+    cornerstone.registerImageLoader('pet', getPETImage);
+  };
+
+  metaDataLoader = async () => {
+
+    "use strict";
+
+    // console.log("2.5");
+    function metaDataProvider(type, imageId) {
+      let identifier=imageId.split(/[:,/]+/)
+      let device=identifier[0]
+      let direction=identifier[1]
+      let id=Number(identifier[2])
+      let scale = 1;
+      let cX = 1;
+      let cY = 1;
+      let cZ = 1;
+
+      // let identifier=imageId.split('/')
+      // // console.log(identifier)
+      // let Device = identifier[0].substr(0,identifier[0].length-1)
+      // let Type = identifier[identifier.length-3]
+      // let Direction = identifier[identifier.length-2]
+      // let ID = identifier[identifier.length-1]
+      let width = 91;
+      let height = 91;
+      if (direction === "axial"){width = 91; height = 109}
+      else if (direction === "coronal"){width = 91; height = 91}
+      else if (direction === "sagittal"){width = 109; height = 91}
+
+      // console.log(identifier, type)
+      if(type === 'imagePlaneModule') {
+          if (direction === 'coronal'){
+              return {
+                  frameOfReferenceUID: '1.2.3.4.5',
+                  rows: 91,
+                  columns: 91,
+                  rowCosines:     [ 0,  1,  0], 
+                  columnCosines:  [ 0,  0,  1],
+                  imagePositionPatient: [scale*id+cY, cX, cZ], //coronal plane에서 [xxx, sagittal line, axial line]
+                  columnPixelSpacing: 1,
+                  rowPixelSpacing: 1,
+              }
+          }
+          else if (direction === 'sagittal'){
+              return {
+                  frameOfReferenceUID: '1.2.3.4.5',
+                  rows: 91,
+                  columns: 109,
+                  rowCosines:     [1,  0,  0], 
+                  columnCosines:  [ 0,  0, 1],
+                  imagePositionPatient: [cY, scale*id+cX, cZ], //sagittal plane에서 [coroanl line, xxx, axial line]
+                  columnPixelSpacing: 1,
+                  rowPixelSpacing: 1,
+              }
+          }
+          else if (direction === 'axial'){
+              return {
+                  frameOfReferenceUID: '1.2.3.4.5',
+                  rows: 109,
+                  columns: 91,
+                  rowCosines:     [ 0, 1,  0], 
+                  columnCosines:  [ -1,  0,  0],
+                  imagePositionPatient: [cY+109, cX, -scale*id+cZ+91], //axial plane에서  [coronal line, sagittal line, xxx]
+                  columnPixelSpacing: 1,
+                  rowPixelSpacing: 1,
+              }
+          }
+      }
+    }
+
+    cornerstone.metaData.addProvider(metaDataProvider);
+
+  };
 }
 const mapStateToProps = (state) => ({
   // storeCount: state.count.count,
   counter:state.counter,
   isLogged:state.isLogged,
   stackManager:state.stackManager,
+  sliceList: state.sliceList,
 });
 
 const mapDispatchToProps = (dispatch) => ({
