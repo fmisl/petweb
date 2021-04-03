@@ -302,12 +302,14 @@ class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // console.log('componentDidUpdate')
+    console.log('componentDidUpdate in ImageViewer for prevProps.dataReady and dataReady',prevProps.dataReady, this.props.dataReady )
     try{
       // if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
-      if (prevProps.counter !== this.props.counter || prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
-        console.log('loadImage')
+      if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
+        console.log('loadImage with counter',this.props.counter)
         this.loadImage(this.elementC, this.elementS, this.elementA);
+        // this.props.resetDataReady(false)
+        // console.log('resetDataReady',false)
       } 
       // console.log('componentDidUpdate2')
       // if (prevProps !== this.props){

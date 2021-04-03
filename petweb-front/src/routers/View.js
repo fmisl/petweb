@@ -61,8 +61,8 @@ class View extends Component {
     const petCStack = {
       // patient: "anonymous",
       // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
-      imageIds: [...Array(109).keys()].map((v,i)=>("pet:coronal/"+i)),
-      currentImageIdIndex: 10,
+      imageIds: [...Array(109).keys()].map((v,i)=>("pet:output/0/coronal/"+i)),
+      currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
       // options: {
       //   opacity: 1,
       //   visible: true,
@@ -75,8 +75,8 @@ class View extends Component {
     const petSStack = {
       // patient: "anonymous",
       // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
-      imageIds: [...Array(91).keys()].map((v,i)=>("pet:sagittal/"+i)),
-      currentImageIdIndex: 10,
+      imageIds: [...Array(91).keys()].map((v,i)=>("pet:output/0/sagittal/"+i)),
+      currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
       // options: {
       //   opacity: 1,
       //   visible: true,
@@ -89,8 +89,8 @@ class View extends Component {
     const petAStack = {
       // patient: "anonymous",
       // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
-      imageIds: [...Array(91).keys()].map((v,i)=>("pet:axial/"+i)),
-      currentImageIdIndex: 10,
+      imageIds: [...Array(91).keys()].map((v,i)=>("pet:output/0/axial/"+i)),
+      currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
       // options: {
       //   opacity: 1,
       //   visible: true,
@@ -127,7 +127,10 @@ class View extends Component {
     const {counter, stackManager, sliceList} = this.props;
     const {imageLoader, metaDataLoader} = this;
     const inoutSelect = isSNed ? "output":"input"
-    if (prevProps.counter != counter || prevState.isSNed != isSNed){
+    const IdxSlice = sliceList.findIndex(v=>v.fileID==counter.fileID)
+    // console.log('prevProps.stackManager.length != stackManager.length', prevProps.stackManager.length != stackManager.length)
+    if (prevProps.counter != counter || prevState.isSNed != isSNed || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
+      console.log('componentDidUpdate with counter', counter)
       const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
       const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
       const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
@@ -144,45 +147,50 @@ class View extends Component {
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
       };
       const petCStack = {
-        imageIds: [...Array(109).keys()].map((v,i)=>("pet:coronal/"+i)),
-        currentImageIdIndex: 10,
+        imageIds: [...Array(109).keys()].map((v,i)=>("pet:output/"+IdxSlice+"/coronal/"+i)),
+        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
       };
       const petSStack = {
-        imageIds: [...Array(91).keys()].map((v,i)=>("pet:sagittal/"+i)),
-        currentImageIdIndex: 10,
+        imageIds: [...Array(91).keys()].map((v,i)=>("pet:output/"+IdxSlice+"/sagittal/"+i)),
+        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
       };
       const petAStack = {
-        imageIds: [...Array(91).keys()].map((v,i)=>("pet:axial/"+i)),
-        currentImageIdIndex: 10,
+        imageIds: [...Array(91).keys()].map((v,i)=>("pet:output/"+IdxSlice+"/axial/"+i)),
+        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
       };
 
-      if (sliceList.length != 0) {
+      try{
         console.log('imageLoader update from sliceList B64Data')
-        imageLoader();
-        metaDataLoader();
+        const isExistSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
+        if (sliceList.length != 0 && stackManager.length != 0 && isExistSlice >= 0){
+          console.log('isExistSlice ',isExistSlice)
+          imageLoader();
+          metaDataLoader();
+          this.setState({
+            inoutSelect,
+            imageIdC,
+            imageIdS,
+            imageIdA,
+            stackCoronal,
+            stackSaggital,
+            stackAxial,
+            petCStack,
+            petSStack,
+            petAStack,
+          })
+        }
+      } catch (e){
+        console.log('imageLoader metaDataLoader fail')
       }
       // console.log("2");
       // this.metaDataLoader();
-      this.setState({
-        inoutSelect,
-        imageIdC,
-        imageIdS,
-        imageIdA,
-        stackCoronal,
-        stackSaggital,
-        stackAxial,
-        petCStack,
-        petSStack,
-        petAStack,
-      })
     }
   }
 
   render() {
-    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect} = this;
-    const {isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack} = this.state;
+    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady} = this;
+    const {dataReady, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack} = this.state;
     const {counter, stackManager} = this.props;
-    // console.log(this.state)
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
         {/* <Sidebar />
@@ -190,7 +198,7 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-              <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }}/>
+              <ImageViewer dataReady={dataReady} resetDataReady={resetDataReady} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }}/>
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
@@ -314,16 +322,19 @@ class View extends Component {
       // console.log("min:", pixelData.length);
       return pixelData;
     }
-
-    var petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[0].B64.filter(v=>v.Direction=='axial')[i].B64Data)));
-    var petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[0].B64.filter(v=>v.Direction=='coronal')[i].B64Data)));
-    var petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[0].B64.filter(v=>v.Direction=='sagittal')[i].B64Data)));
+    const IdxSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
+    console.log('imageLoader with counter and IdxSlice',this.props.counter,IdxSlice)
+    var petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial')[i].B64Data)));
+    var petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal')[i].B64Data)));
+    var petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal')[i].B64Data)));
 
     function getPETImage(imageId) {
       let identifier=imageId.split(/[:,/]+/)
-      let device = identifier[0]
-      let direction=identifier[1]
-      let id=Number(identifier[2])
+      let device = identifier[0]//pet
+      let inout = identifier[1]//output
+      let slice = identifier[2] //0
+      let direction=identifier[3]
+      let id=Number(identifier[4])
       var width = 91;
       var height = 91;
       if(direction === 'coronal') {width=91; height=91}
@@ -378,9 +389,11 @@ class View extends Component {
     // console.log("2.5");
     function metaDataProvider(type, imageId) {
       let identifier=imageId.split(/[:,/]+/)
-      let device=identifier[0]
-      let direction=identifier[1]
-      let id=Number(identifier[2])
+      let device = identifier[0]//pet
+      let inout = identifier[1]//output
+      let slice = identifier[2] //0
+      let direction=identifier[3]
+      let id=Number(identifier[4])
       let scale = 1;
       let cX = 1;
       let cY = 1;
