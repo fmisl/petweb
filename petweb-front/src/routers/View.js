@@ -25,7 +25,7 @@ class View extends Component {
   state = {
     username: localStorage.getItem('username'),
     showMenu: false,
-    isCrosshaired: false,
+    isCrosshaired: true,
     isInverted: true,
     isSNed: true,
     inoutSelect: 'output',
@@ -61,44 +61,44 @@ class View extends Component {
     const petCStack = {
       // patient: "anonymous",
       // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
-      imageIds: [...Array(109).keys()].map((v,i)=>("pet:output/0/coronal/"+i)),
+      imageIds: [],
       currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
-      // options: {
-      //   opacity: 1,
-      //   visible: true,
-      //   viewport: {
-      //     colormap: 'hot',
-      //   },
-      //   name: 'PET'
-      // }
+      options: {
+        opacity: 1,
+        visible: true,
+        viewport: {
+          colormap: 'gray',
+        },
+        name: 'PET'
+      }
     };
     const petSStack = {
       // patient: "anonymous",
       // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
-      imageIds: [...Array(91).keys()].map((v,i)=>("pet:output/0/sagittal/"+i)),
+      imageIds: [],
       currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
-      // options: {
-      //   opacity: 1,
-      //   visible: true,
-      //   viewport: {
-      //     colormap: 'hot',
-      //   },
-      //   name: 'PET'
-      // }
+      options: {
+        opacity: 1,
+        visible: true,
+        viewport: {
+          colormap: 'gray',
+        },
+        name: 'PET'
+      }
     };
     const petAStack = {
       // patient: "anonymous",
       // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
-      imageIds: [...Array(91).keys()].map((v,i)=>("pet:output/0/axial/"+i)),
+      imageIds: [],
       currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
-      // options: {
-      //   opacity: 1,
-      //   visible: true,
-      //   viewport: {
-      //     colormap: 'hot',
-      //   },
-      //   name: 'PET'
-      // }
+      options: {
+        opacity: 1,
+        visible: true,
+        viewport: {
+          colormap: 'gray',
+        },
+        name: 'PET'
+      }
     };
     this.setState({
       imageIdC,
@@ -147,15 +147,15 @@ class View extends Component {
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
       };
       const petCStack = {
-        imageIds: [...Array(109).keys()].map((v,i)=>("pet:output/"+IdxSlice+"/coronal/"+i)),
+        imageIds: [...Array(109).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+i)),
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
       };
       const petSStack = {
-        imageIds: [...Array(91).keys()].map((v,i)=>("pet:output/"+IdxSlice+"/sagittal/"+i)),
+        imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+i)),
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
       };
       const petAStack = {
-        imageIds: [...Array(91).keys()].map((v,i)=>("pet:output/"+IdxSlice+"/axial/"+i)),
+        imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/axial/"+i)),
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
       };
 
@@ -164,8 +164,8 @@ class View extends Component {
         const isExistSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
         if (sliceList.length != 0 && stackManager.length != 0 && isExistSlice >= 0){
           console.log('isExistSlice ',isExistSlice)
-          imageLoader();
-          metaDataLoader();
+          imageLoader(inoutSelect);
+          metaDataLoader(inoutSelect);
           this.setState({
             inoutSelect,
             imageIdC,
@@ -198,7 +198,7 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-              <ImageViewer dataReady={dataReady} resetDataReady={resetDataReady} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }}/>
+              <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }}/>
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
@@ -268,7 +268,7 @@ class View extends Component {
       </div>
     );
   }
-  imageLoader = async () => {
+  imageLoader = async (inoutSelect) => {
 
     "use strict";
 
@@ -324,9 +324,9 @@ class View extends Component {
     }
     const IdxSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
     console.log('imageLoader with counter and IdxSlice',this.props.counter,IdxSlice)
-    var petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial')[i].B64Data)));
-    var petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal')[i].B64Data)));
-    var petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal')[i].B64Data)));
+    var petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial' && v.Type==inoutSelect)[i].B64Data)));
+    var petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].B64Data)));
+    var petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
 
     function getPETImage(imageId) {
       let identifier=imageId.split(/[:,/]+/)
@@ -382,7 +382,7 @@ class View extends Component {
     cornerstone.registerImageLoader('pet', getPETImage);
   };
 
-  metaDataLoader = async () => {
+  metaDataLoader = async (inoutSelect) => {
 
     "use strict";
 

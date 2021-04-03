@@ -30,42 +30,6 @@ cornerstoneTools.external.Hammer = Hammer;
 // cornerstoneTools.init();
 // const LengthTool = cornerstoneTools.LengthTool;
 
-const divStyleC = {
-  // width: "512px",
-  // height: "512px",
-  top:"0",
-  left:"0",
-  width:"775px",
-  height:"425px",
-  position: "absolute",
-  color: "white",
-  // border:"1px red solid",
-  // boxSizing:"border-box",
-};
-const divStyleS = {
-  // width: "512px",
-  // height: "512px",
-  top:"0",
-  left:"50%",
-  width:"775px",
-  height:"425px",
-  position: "absolute",
-  color: "white",
-  // border:"1px red solid",
-  // boxSizing:"border-box",
-};
-const divStyleA = {
-  // width: "512px",
-  // height: "512px",
-  top:"50%",
-  left:"0",
-  width:"775px",
-  height:"425px",
-  position: "absolute",
-  color: "white",
-  // border:"1px red solid",
-  // boxSizing:"border-box",
-};
 
 const bottomLeftStyle = {
   bottom: "5px",
@@ -105,8 +69,55 @@ class ImageViewer extends Component {
   }
 
   render() {
+    const { isInverted } = this.props;
+    const divStyleC = {
+      // width: "512px",
+      // height: "512px",
+      top:"0",
+      left:"0",
+      width:"775px",
+      height:"425px",
+      position: "absolute",
+      color: "white",
+      filter: isInverted ? "invert(1)":"invert(0)",
+      // border:"1px red solid",
+      // boxSizing:"border-box",
+    };
+    const divStyleS = {
+      // width: "512px",
+      // height: "512px",
+      top:"0",
+      left:"50%",
+      width:"775px",
+      height:"425px",
+      position: "absolute",
+      color: "white",
+      filter: isInverted ? "invert(1)":"invert(0)",
+      // border:"1px red solid",
+      // boxSizing:"border-box",
+    };
+    const divStyleA = {
+      // width: "512px",
+      // height: "512px",
+      top:"50%",
+      left:"0",
+      width:"775px",
+      height:"425px",
+      position: "absolute",
+      color: "white",
+      filter: isInverted ? "invert(1)":"invert(0)",
+      // border:"1px red solid",
+      // boxSizing:"border-box",
+      // background:"white !important",
+    };
+    const divWrapper = {
+      position:"relative",
+      width:"100%", 
+      height:"100%", 
+      background: isInverted ? "white":"black",
+    };
     return (
-      <div style={{position:"relative",width:"100%", height:"100%"}}>
+      <div style={divWrapper}>
         <div
           className="viewportElement coronal"
           style={divStyleC}
@@ -147,12 +158,12 @@ class ImageViewer extends Component {
         >
           <canvas className="cornerstone-canvas" />
         </div>
-        {this.props.isCrosshaired && <div className="coronal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.props.stackC.currentImageIdIndex/108*50}%`,left:"0%", width:"50%", height:"0%"}}></div>}
+        {/* {this.props.isCrosshaired && <div className="coronal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.props.stackC.currentImageIdIndex/108*50}%`,left:"0%", width:"50%", height:"0%"}}></div>}
         {this.props.isCrosshaired && <div className="coronal-sagittal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",top:"0%",left:`${this.props.stackC.currentImageIdIndex/108*50+50}%`, width:"0%", height:"50%"}}></div>}
         {this.props.isCrosshaired && <div className="sagittal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.props.stackS.currentImageIdIndex/90*50}%`, height:"50%"}}></div>}
         {this.props.isCrosshaired && <div className="sagittal-coronal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.props.stackS.currentImageIdIndex/90*50}%`, top:"50%", height:"50%"}}></div>}
         {this.props.isCrosshaired && <div className="axial-coronal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:"0%", bottom:`${this.props.stackA.currentImageIdIndex/90*50+50}%`, width:"50%"}}></div>}
-        {this.props.isCrosshaired && <div className="axial-sagittal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:"50%", bottom:`${this.props.stackA.currentImageIdIndex/90*50+50}%`, width:"50%"}}></div>}
+        {this.props.isCrosshaired && <div className="axial-sagittal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:"50%", bottom:`${this.props.stackA.currentImageIdIndex/90*50+50}%`, width:"50%"}}></div>} */}
       </div>
     );
   }
@@ -302,43 +313,23 @@ class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log('componentDidUpdate in ImageViewer for prevProps.dataReady and dataReady',prevProps.dataReady, this.props.dataReady )
+    const { isInverted, isCrosshaired } = this.props;
     try{
       // if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
       if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
         console.log('loadImage with counter',this.props.counter)
         this.loadImage(this.elementC, this.elementS, this.elementA);
-        // this.props.resetDataReady(false)
-        // console.log('resetDataReady',false)
       } 
-      // console.log('componentDidUpdate2')
-      // if (prevProps !== this.props){
-      // if (true){
-        // this.props.updateStack()
-        // this.props.updateStack({fileID:this.props.caseID, currentC:stackC.currentImageIdIndex,currentS:stackS.currentImageIdIndex,currentA:stackA.currentImageIdIndex})
-
-        // stackC.currentImageIdIndex = this.state.stackC.currentImageIdIndex;
-        // stackS.currentImageIdIndex = this.state.stackS.currentImageIdIndex;
-        // stackA.currentImageIdIndex = this.state.stackA.currentImageIdIndex;
-        // // // stackC.imageIds = this.state.stackC.imageIds;
-        // // // stackS.imageIds = this.state.stackS.imageIds;
-        // // // stackA.imageIds = this.state.stackA.imageIds;
-        // cornerstoneTools.addToolState(this.elementC, "stack", stackC);
-        // cornerstoneTools.addToolState(this.elementS, "stack", stackS);
-        // cornerstoneTools.addToolState(this.elementA, "stack", stackA);
-        
-        // cornerstoneTools.scrollToIndex(this.elementC, stackC.currentImageIdIndex);
-        // cornerstoneTools.scrollToIndex(this.elementS, stackS.currentImageIdIndex);
-        // cornerstoneTools.scrollToIndex(this.elementA, stackA.currentImageIdIndex);
-        // console.log("props: ", this.props.stackC.currentImageIdIndex, this.props.stackS.currentImageIdIndex, this.props.stackA.currentImageIdIndex)
-        // console.log("state: ", this.state.stackC.currentImageIdIndex, this.state.stackS.currentImageIdIndex, this.state.stackA.currentImageIdIndex)
-      // }
+      if (prevProps.isCrosshaired != isCrosshaired){
+        this.controlViewport();
+      }
     } catch(e){
       console.error(e)
       // console.log("componentDidUpdate:error")
     }
   }
   loadImage=(elementC, elementS, elementA)=>{
+    const { isCrosshaired } = this.props;
     // console.log('loadImage')
     // const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
     // const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
@@ -366,7 +357,7 @@ class ImageViewer extends Component {
         this.synchronizer.add(elementC);
 
         // enable reference Lines tool
-        cornerstoneTools.referenceLines.tool.enable(elementC, this.synchronizer);
+        {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementC, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementC)}
         cornerstoneTools.stackScrollKeyboard.activate(elementC);
         elementC.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementC.addEventListener("cornerstonenewimage", this.onNewImage);
@@ -392,7 +383,7 @@ class ImageViewer extends Component {
         this.synchronizer.add(elementS);
 
         // enable reference Lines tool
-        cornerstoneTools.referenceLines.tool.enable(elementS, this.synchronizer);
+        {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementS, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementS)}
         cornerstoneTools.stackScrollKeyboard.activate(elementS);
         elementS.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementS.addEventListener("cornerstonenewimage", this.onNewImage);
@@ -408,7 +399,7 @@ class ImageViewer extends Component {
         cornerstone.displayImage(elementA, image);
 
         const stack = this.props.stackA;
-        cornerstoneTools.addStackStateManager(elementA, ["stack", 'referenceLines', 'Croscrosshairsshairs']);
+        cornerstoneTools.addStackStateManager(elementA, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementA, "stack", stack);
         cornerstoneTools.stackScroll.activate(elementA, 1);
         cornerstoneTools.stackScrollWheel.activate(elementA);
@@ -418,7 +409,7 @@ class ImageViewer extends Component {
         this.synchronizer.add(elementA);
 
         // enable reference Lines tool
-        cornerstoneTools.referenceLines.tool.enable(elementA, this.synchronizer);
+        {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementA, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementA)}
         cornerstoneTools.stackScrollKeyboard.activate(elementA);
         elementA.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementA.addEventListener("cornerstonenewimage", this.onNewImage);
@@ -450,6 +441,45 @@ class ImageViewer extends Component {
         console.error('FastSkip Promise',e)
       }
     });
+  }
+
+  controlViewport=()=>{
+    const { isInverted, isCrosshaired } = this.props;
+    const Celement = this.elementC;
+    const Selement = this.elementS;
+    const Aelement = this.elementA;
+    console.log('constrolViewport isCrosshaired: ',isCrosshaired)
+    if (isCrosshaired==false){
+      // cornerstoneTools.crosshairs.disable(Celement);
+      // cornerstoneTools.crosshairs.disable(Selement);
+      // cornerstoneTools.crosshairs.disable(Aelement);
+      // cornerstoneTools.crosshairsTouch.disable(Celement);
+      // cornerstoneTools.crosshairsTouch.disable(Selement);
+      // cornerstoneTools.crosshairsTouch.disable(Aelement);
+      cornerstoneTools.referenceLines.tool.disable(Celement);
+      cornerstoneTools.referenceLines.tool.disable(Selement);
+      cornerstoneTools.referenceLines.tool.disable(Aelement);
+    }else{
+      // cornerstoneTools.crosshairs.enable(Celement, 1, this.synchronizer);
+      // cornerstoneTools.crosshairs.enable(Selement, 1, this.synchronizer);
+      // cornerstoneTools.crosshairs.enable(Aelement, 1, this.synchronizer);
+      // cornerstoneTools.crosshairsTouch.enable(Celement, this.synchronizer);
+      // cornerstoneTools.crosshairsTouch.enable(Selement, this.synchronizer);
+      // cornerstoneTools.crosshairsTouch.enable(Aelement, this.synchronizer);
+      cornerstoneTools.referenceLines.tool.enable(Celement, this.synchronizer);
+      cornerstoneTools.referenceLines.tool.enable(Selement, this.synchronizer);
+      cornerstoneTools.referenceLines.tool.enable(Aelement, this.synchronizer);
+    }
+    // let viewportC = cornerstone.getViewport(Celement);
+    // let viewportS = cornerstone.getViewport(Selement);
+    // let viewportA = cornerstone.getViewport(Aelement);
+    // console.log('viewportC:',viewportC)
+    // viewportC.colormap = "gray";
+    // viewportS.colormap = "jet";
+    // viewportA.colormap = "hot";
+    // cornerstone.setViewport(Celement, viewportC);
+    // cornerstone.setViewport(Selement, viewportS);
+    // cornerstone.setViewport(Aelement, viewportA);
   }
 }
 
