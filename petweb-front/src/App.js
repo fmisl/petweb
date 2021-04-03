@@ -9,7 +9,7 @@ import Login from './routers/login/Login'
 import Forgot from './routers/login/Forgot'
 import Signup from './routers/login/Signup'
 import * as services from './services/fetchApi'
-import {login, logout, increment, decrement, loadItems, profile, tab_location, groupItem, addStack, updateStack, removeStack, fetchItems} from './reduxs/actions';
+import {loadSlices, login, logout, increment, decrement, loadItems, profile, tab_location, groupItem, addStack, updateStack, removeStack, fetchItems} from './reduxs/actions';
 import {useSelector, useDispatch} from 'react-redux';
 import {Dashboard, Upload, View, Analysis, Setting} from './routers'
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
@@ -18,6 +18,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams,
 
 function App() {
   const fileList = useSelector(state => state.fileList);
+  const sliceList = useSelector(state => state.sliceList);
   // const stackManager = fileList.filter(item => {return item.Opened==true});
   // const [stackManager, setstackManager] = useState([]);
   const counter = useSelector(state => state.counter);
@@ -30,12 +31,30 @@ function App() {
   const { caseID } = useParams();
   const menuList = ['dashboard', 'upload', 'view', 'analysis/suvr', 'analysis/report', 'setting']
   useEffect(() => {
-    console.log('counter in app.js: ', counter)
+    // console.log('counter in app.js: ', counter)
     // this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID})
     // // {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 500)}
     // this.props.history.push('/analysis/suvr/'+props.record.fileID)
   }, [counter])
 
+  useEffect( async ()=>{
+    const token = localStorage.getItem('token')
+    Promise.all(stackManager.map((v,i)=>{ 
+      // console.log('stackManager:', v.fileID)
+      try{
+        const foundItem = sliceList.find((value,index)=>value.fileID == v.fileID)
+        console.log(foundItem.fileID + ' is already exist in sliceList')
+      } catch(e){
+        console.log(v.fileID + ' is not found in sliceList, so fetch')
+        dispatch(loadSlices({'token':token, 'fileID':v.fileID}))
+      }
+    }))
+  },[stackManager.length])
+
+  // const fetchSlices = async () =>{
+  //   const token = localStorage.getItem('token')
+  //   dispatch(loadSlices({'token':token}))
+  // }
     // if (stackManager.length == 0){
     //   // dispatch(addStack([...stackManager, fileList.map((v,i)=>{if (v.Opened == true) return {fileID: v.fileID, currentC:50, currentS:50, currentA:50}})]))
     // } else {

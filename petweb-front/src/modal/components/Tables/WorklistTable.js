@@ -80,7 +80,7 @@ class WorklistTable extends Component {
                 ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].addEventListener('click', this.handleSelect);
                 this.setState({clickListenerState:true})
             }catch(e){
-                console.log('findDOMNode error when componentDidUpdate')
+                // console.log('findDOMNode error when componentDidUpdate')
             }
         }
     }

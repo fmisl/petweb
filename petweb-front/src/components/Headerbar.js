@@ -2,8 +2,8 @@ import React, {useState, useRef, useEffect,createRef} from 'react';
 import '../App.css'
 import IconDelete from '../images/IconDelete';
 import {useSelector, useDispatch} from 'react-redux';
-import {logout, increment, decrement, tab_location, closeItem, removeStack} from '../reduxs/actions';
-import {changeColor, loadItems} from '../reduxs/actions';
+import {logout, increment, decrement, loadSlices, tab_location, closeItem, removeStack} from '../reduxs/actions';
+import * as services from '../services/fetchApi'
 import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams, useLocation} from 'react-router-dom' 
 
 function Headerbar({OpenedFiles}) {
@@ -44,6 +44,23 @@ function Headerbar({OpenedFiles}) {
       }
     }
   }, [counter])
+  // useEffect( async ()=>{
+  //   if (stackManager.length > 0){
+  //     const token = localStorage.getItem('token')
+  //     let res = null
+  //     if (token){
+  //       try{
+  //         res = await services.TokenVerify({'token':token})
+  //         if (res.data.token == token) {
+  //           dispatch(loadSlices({'token':token}))
+  //           // dispatch(profile())
+  //         }
+  //       }catch(e){
+  //         console.log('error')
+  //       }
+  //     }
+  //   }
+  // },[stackManager.length])
   // }, [counter]) onClick={()=> {myRef.current.scrollLeft=elRefs.current[0].current.offsetLeft}}
   if (elRefs.current.length !== OpenedFilesLength) {
     // dispatch(tab_location({...counter, tabX:i, fileID:el.fileID}))
