@@ -132,32 +132,44 @@
   color: #118AF7;
 }
 
-.WorklistTable.filterable-table>tbody>tr>td:nth-child(3)>span{
-  display:block;
+.WorklistTable.filterable-table>tbody>tr>td:nth-child(3)>span {
+  display: block;
 
-  height: 56px;
+  height: 100%;
   white-space: nowrap;
-  overflow:hidden;
+  overflow: hidden;
   /* border: yellow solid; */
 }
+
 .WorklistTable.filterable-table>tbody>tr>td:nth-child(3)>span>.WorklistTable-Default {
-  width:300px;
-  height:82px;
-  display:block;
-  padding-top:12px;
-  padding-left:15px;
+  width: 300px;
+  height: 130%;
+  display: block;
+  padding-top: 18px;
+  padding-left: 15px;
   white-space: nowrap;
-  overflow-y:hidden;
-  overflow-x:scroll;
+  overflow-y: hidden;
+  overflow-x: scroll;
   /* border: red solid; */
 }
+
 .WorklistTable.filterable-table>tbody>tr>td:nth-child(1) {
   /* width: 80px; */
-  /* border: red solid; */
-  display: flex;
+  /* border: 1px red solid; */
+  /* display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100%;
+  align-items: center; */
+  /* height: 100%; */
+}
+
+.WorklistTable.filterable-table>tbody>tr>td:nth-child(1)>span {
+  /* border: 1px red solid; */
+  /* height: 100%; */
+}
+
+.WorklistTable.filterable-table>tbody>tr>td:nth-child(1)>span>.WorklistTable-Default {
+  /* border: 1px red solid; */
+  /* height: 100%; */
 }
 
 .WorklistTable.filterable-table>tbody>tr>td:nth-child(7) {
@@ -174,6 +186,7 @@
   line-height: 24px;
   text-align: center;
   height: 56px;
+  /* border: 1px white solid; */
 }
 
 .WorklistTable.filterable-table>tbody>tr>td>span {
