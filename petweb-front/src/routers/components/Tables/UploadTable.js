@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './UploadTable.css'
 import { connect } from 'react-redux';
 import * as actions from '../../../reduxs/actions';
-import spinner from '../../../images/gif/spinner.gif'
+import spinner from '../../../images/gif/spinner5.gif'
 import * as services from '../../../services/fetchApi'
 import { withRouter } from 'react-router-dom';
 
@@ -179,12 +179,12 @@ class UploadTable extends Component {
                     {props.value != null ? 
                     // <span>{Number(props.value).toFixed(2)}</span>
                     <span>{Number(props.value).toFixed(2)}</span>
-                    :<span>processing...</span>}
+                    :<span>processing... &emsp;</span>}
                     {props.value != null ? 
                     <div style={{width: "150px", height:"5px", borderRadius:"5px",boxSizing:"border-box", background:"#383C41"}}>
                         <div style={styleDiv}></div>
                     </div>
-                    :<span><img src={spinner} alt="spinner"/></span>}
+                    :<span>&emsp;<img src={spinner} style={{width:"60px", height:"60px"}} alt="spinner"/></span>}
                 </div>
             </div>
         );
