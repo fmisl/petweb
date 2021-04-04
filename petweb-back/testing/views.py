@@ -531,3 +531,19 @@ class fileList(APIView):
         allCases = models.Case.objects.all()
         serializer = serializers.CaseSerializer(allCases, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class viewer(APIView):
+    def get(self, request, fileID, format=None):
+        username = request.user.username
+        # user_path = os.path.join(settings.MEDIA_ROOT, str(username))
+        # if not os.path.exists(user_path):
+        #     os.mkdir(user_path)
+        # database_path = os.path.join(user_path, 'database')
+        # if not os.path.exists(database_path):
+        #     os.mkdir(database_path)
+        # temp = 8
+        allSlices = models.Slice.objects.filter(CaseID=fileID)
+        serializer = serializers.SliceSerializer(allSlices, many=True)
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
