@@ -104,7 +104,33 @@ class Case(TimeStampedModel):
     # def image_list(self):
     #     return self.slices.all()
 
+    @property
+    def image_count(self):
+        return self.slices.all().count()
+
+    @property
+    def image_list(self):
+        return self.slices.all()
+
     class Meta:
         ordering = ['-Update']
+
     def __str__(self):
         return self.FileName
+
+
+class Slice(TimeStampedModel):
+    Type = models.CharField(max_length=150, blank=True, null=True)
+    ImageID = models.IntegerField(blank=True, null=True)
+    # Format = models.CharField(max_length=150, blank=True, null=True)
+    Direction = models.CharField(max_length=150, blank=True, null=True)
+    # File = models.FileField(upload_to=caseID_path, max_length=150, null=True)
+    Width = models.IntegerField(blank=True, null=True)
+    Height = models.IntegerField(blank=True, null=True)
+    Depth = models.IntegerField(blank=True, null=True)
+    # SizeZ = models.CharField(max_length=5, blank=True, null=True)
+    CaseID = models.ForeignKey(Case, blank=True, null=True, on_delete=models.CASCADE, related_name='slices')
+    B64Data = models.TextField(max_length=5000, blank=True, null=True)
+
+    class Meta:
+        ordering = ['pk']

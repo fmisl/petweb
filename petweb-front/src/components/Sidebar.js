@@ -12,13 +12,14 @@ import IconAnalysis from '../images/IconAnalysis';
 import IconSetting from '../images/IconSetting';
 import IconLogout from '../images/IconLogout';
 
-function Sidebar({stackManager}) {
+function Sidebar() {
   const [tab, setTab] = useState(0)
   const location = useLocation();
   const history =useHistory();
   const dispatch = useDispatch();
   const { caseID } = useParams();
-  const listSelected = useSelector(state => state.stackManager);
+  const stackManager = useSelector(state => state.stackManager);
+  const sliceList = useSelector(state => state.sliceList);
   const counter = useSelector(state => state.counter);
   const isLogged = useSelector(state => state.isLogged);
   const stackManagerLength = stackManager.length;
@@ -112,7 +113,12 @@ function Sidebar({stackManager}) {
         <h1>isLogged: {isLogged.toString()}</h1>
         <h1>{pathname[1]}</h1>
         {/* <h1>listSelected: {listSelected.toString()}</h1> */}
+        <h1>CounterX: {counter.tabX}</h1>
         <h1>CounterY: {counter.tabY}</h1>
+        <h1>CounterFileID: {counter.fileID}</h1>
+        <h1>sliceIndex: {sliceList.findIndex(v=>v.fileID==counter.fileID)}</h1>
+        <h1>slice: {sliceList.map(v=><span> {v.fileID} </span>)}</h1>
+        {/* {sliceList.length != 0 && <h1>sliceList: {sliceList[0].B64[0]}</h1>} */}
         {/* <button onClick={()=> dispatch(increment(6))}>+</button>
         <button onClick={()=> dispatch(decrement(6))}>-</button> */}
       </div>

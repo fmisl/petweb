@@ -15,6 +15,34 @@ export function loadItems (data){
     }
   }
 }
+// const res3 = await service.getCase({'token':token, id:caseID})
+export function loadSlices (data){
+  return async dispatch => {
+    try {
+      const dataRes = await axios.get(IPinUSE+"testing/viewer/"+data.fileID+"/",{
+          headers:{
+            'Authorization':'jwt '+data.token
+            }
+        }).then(res => res.data)
+        dispatch(addSlices(dataRes,data.fileID));
+    } catch (err) {
+
+    }
+  }
+}
+export const addSlices = (slices,fileID) =>{
+  return{
+    type: 'ADD_SLICES',
+    slices: slices,
+    fileID: fileID,
+  }
+}
+// export const removeSlices = (fileID) =>{
+//   return{
+//     type: 'REMOVE_SLICES',
+//     fileID: fileID,
+//   }
+// }
 export const fetchItems = (items) =>{
   return{
     type: 'FETCH_ITEMS',

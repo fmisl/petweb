@@ -16,6 +16,8 @@ from testing.TF_DirectSN.PTQuant_eval_affine_v1 import train
 from testing.TF_DirectSN.QuantWithSurface import _quantification
 import datetime
 from . import models, serializers
+import cv2
+import base64
 
 
 class uploader(APIView):
@@ -70,7 +72,7 @@ class uploader(APIView):
             target_file = os.path.join(database_path, myfile['FileName'])
             target_folder = os.path.join(database_path, ",".join(myfile['FileName'].split('.')[:-1]))
 
-            # newCase = models.Case.objects.filter(pk=caseID)[0]
+            #
             # Step1: File save (hdr, img, nii)
             print("Step1: process list check: ", myfile['FileName'])
             if os.path.exists(target_folder):
@@ -114,10 +116,18 @@ class uploader(APIView):
                 img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
                 vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
 
-                uint8_img3D = img3D_2mm/img3D_2mm.max()*255
+                # uint8_img3D = img3D_2mm/img3D_2mm.max()*255
+
+                uint8_img3D = (img3D_2mm - img3D_2mm.min()) / (img3D_2mm.max() - img3D_2mm.min())
+                uint8_img3D = 255 * uint8_img3D
                 uint8_img3D = uint8_img3D.astype(np.uint8)
 
+                uint16_img3D = (img3D_2mm-img3D_2mm.min()) / (img3D_2mm.max()-img3D_2mm.min())
+                uint16_img3D = 32767 * uint16_img3D
+                uint16_img3D = uint16_img3D.astype(np.uint16)
+
                 print("Step3: create input image")
+                getCase = models.Case.objects.filter(fileID=myfile['fileID'])[0]
                 for iz in range(vz):
                     uint8_img2D = uint8_img3D[:,:,iz]
                     uint8_img2D = np.rot90(uint8_img2D)
@@ -126,6 +136,23 @@ class uploader(APIView):
                     file_name = "input_" + "axial_" + str(iz) + ".png"
                     full_path = os.path.join(target_folder, file_name)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+
+                    uint16_img2D = uint16_img3D[:,:,iz]
+                    uint16_img2D = np.rot90(uint16_img2D)
+                    width, height = 91, 109
+                    resized_img = cv2.resize(uint16_img2D, (width, height))
+                    b64 = base64.b64encode(resized_img).decode('utf-8')
+                    b64Slice = models.Slice.objects.create(
+                        Type="input",
+                        ImageID=str(iz),
+                        Direction="axial",
+                        Width=width,
+                        Height=height,
+                        Depth=32767,
+                        CaseID=getCase,
+                        B64Data=b64,
+                    )
+                    b64Slice.save()
 
                 for iy in range(vy):
                     uint8_img2D = uint8_img3D[:,iy,:]
@@ -136,6 +163,23 @@ class uploader(APIView):
                     full_path = os.path.join(target_folder, file_name)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
+                    uint16_img2D = uint16_img3D[:,iy,:]
+                    uint16_img2D = np.rot90(uint16_img2D)
+                    width, height = 91, 91
+                    resized_img = cv2.resize(uint16_img2D, (width, height))
+                    b64 = base64.b64encode(resized_img).decode('utf-8')
+                    b64Slice = models.Slice.objects.create(
+                        Type="input",
+                        ImageID=str(iy),
+                        Direction="coronal",
+                        Width=width,
+                        Height=height,
+                        Depth=32767,
+                        CaseID=getCase,
+                        B64Data=b64,
+                    )
+                    b64Slice.save()
+
                 for ix in range(vx):
                     uint8_img2D = uint8_img3D[ix,:,:]
                     uint8_img2D = np.rot90(uint8_img2D)
@@ -144,6 +188,23 @@ class uploader(APIView):
                     file_name = "input_" + "sagittal_" + str(ix) + ".png"
                     full_path = os.path.join(target_folder, file_name)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+
+                    uint16_img2D = uint16_img3D[ix,:,:]
+                    uint16_img2D = np.rot90(uint16_img2D)
+                    width, height = 109, 91
+                    resized_img = cv2.resize(uint16_img2D, (width, height))
+                    b64 = base64.b64encode(resized_img).decode('utf-8')
+                    b64Slice = models.Slice.objects.create(
+                        Type="input",
+                        ImageID=str(ix),
+                        Direction="sagittal",
+                        Width=width,
+                        Height=height,
+                        Depth=32767,
+                        CaseID=getCase,
+                        B64Data=b64,
+                    )
+                    b64Slice.save()
                 print("---------complete generating input png files--------")
 
                 print("Step4: algorithm(DL)")
@@ -172,10 +233,10 @@ class uploader(APIView):
                 uint8_img3D = (img3D - img3D.min()) / (img3D.max() - img3D.min())
                 uint8_img3D = 255 * uint8_img3D
                 uint8_img3D = uint8_img3D.astype(np.uint8)
-                hz = int(vz / 2)
-                hx = int(vx / 2)
-                hy = int(vy / 2)
 
+                uint16_img3D = (img3D-img3D.min()) / (img3D.max()-img3D.min())
+                uint16_img3D = 32767 * uint16_img3D
+                uint16_img3D = uint16_img3D.astype(np.uint16)
                 print("Step6: create output image")
                 for iz in range(vz):
                     uint8_img2D = uint8_img3D[:,:,iz]
@@ -186,6 +247,23 @@ class uploader(APIView):
                     full_path = os.path.join(target_folder, file_name)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
+                    uint16_img2D = uint16_img3D[:,:,iz]
+                    uint16_img2D = np.rot90(uint16_img2D)
+                    width, height = 91, 109
+                    resized_img = cv2.resize(uint16_img2D, (width, height))
+                    b64 = base64.b64encode(resized_img).decode('utf-8')
+                    b64Slice = models.Slice.objects.create(
+                        Type="output",
+                        ImageID=str(iz),
+                        Direction="axial",
+                        Width=width,
+                        Height=height,
+                        Depth=32767,
+                        CaseID=getCase,
+                        B64Data=b64,
+                    )
+                    b64Slice.save()
+
                 for iy in range(vy):
                     uint8_img2D = uint8_img3D[:,iy,:]
                     uint8_img2D = np.rot90(uint8_img2D)
@@ -195,6 +273,23 @@ class uploader(APIView):
                     full_path = os.path.join(target_folder, file_name)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
+                    uint16_img2D = uint16_img3D[:,iy,:]
+                    uint16_img2D = np.rot90(uint16_img2D)
+                    width, height = 91, 91
+                    resized_img = cv2.resize(uint16_img2D, (width, height))
+                    b64 = base64.b64encode(resized_img).decode('utf-8')
+                    b64Slice = models.Slice.objects.create(
+                        Type="output",
+                        ImageID=str(iy),
+                        Direction="coronal",
+                        Width=width,
+                        Height=height,
+                        Depth=32767,
+                        CaseID=getCase,
+                        B64Data=b64,
+                    )
+                    b64Slice.save()
+
                 for ix in range(vx):
                     uint8_img2D = uint8_img3D[ix,:,:]
                     uint8_img2D = np.rot90(uint8_img2D)
@@ -203,6 +298,23 @@ class uploader(APIView):
                     file_name = "output_" + "sagittal_" + str(ix) + ".png"
                     full_path = os.path.join(target_folder, file_name)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+
+                    uint16_img2D = uint16_img3D[ix,:,:]
+                    uint16_img2D = np.rot90(uint16_img2D)
+                    width, height = 109, 91
+                    resized_img = cv2.resize(uint16_img2D, (width, height))
+                    b64 = base64.b64encode(resized_img).decode('utf-8')
+                    b64Slice = models.Slice.objects.create(
+                        Type="output",
+                        ImageID=str(ix),
+                        Direction="sagittal",
+                        Width=width,
+                        Height=height,
+                        Depth=32767,
+                        CaseID=getCase,
+                        B64Data=b64,
+                    )
+                    b64Slice.save()
                 print("---------complete generating output png files--------")
 
     def put(self, request, format=None):
@@ -418,4 +530,20 @@ class fileList(APIView):
 
         allCases = models.Case.objects.all()
         serializer = serializers.CaseSerializer(allCases, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class viewer(APIView):
+    def get(self, request, fileID, format=None):
+        username = request.user.username
+        # user_path = os.path.join(settings.MEDIA_ROOT, str(username))
+        # if not os.path.exists(user_path):
+        #     os.mkdir(user_path)
+        # database_path = os.path.join(user_path, 'database')
+        # if not os.path.exists(database_path):
+        #     os.mkdir(database_path)
+        # temp = 8
+        allSlices = models.Slice.objects.filter(CaseID=fileID)
+        serializer = serializers.SliceSerializer(allSlices, many=True)
+
         return Response(data=serializer.data, status=status.HTTP_200_OK)
