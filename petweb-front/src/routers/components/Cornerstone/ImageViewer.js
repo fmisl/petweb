@@ -314,6 +314,11 @@ class ImageViewer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { isInverted, isCrosshaired } = this.props;
+    const elementC = this.elementC;
+    // const elementS = this.elementS;
+    // const elementA = this.elementA;
+    // let viewportS = cornerstone.getViewport(elementS);
+    // let viewportA = cornerstone.getViewport(elementA);
     try{
       // if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
       if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
@@ -322,12 +327,44 @@ class ImageViewer extends Component {
       } 
       if (prevProps.isCrosshaired != isCrosshaired){
         this.controlViewport();
+        console.log('constrolViewport isCrosshaired: ',isCrosshaired)
+        // console.log('viewport.colormap', this.props.stackC.options.viewport.colormap)
+        // let viewportC = cornerstone.getViewport(this.elementC);
+        // viewportC.colormap = this.props.stackC.options.viewport.colormap;
+        // cornerstone.setViewport(this.elementC, viewportC);
       }
     } catch(e){
       console.error(e)
       // console.log("componentDidUpdate:error")
     }
+    const viewportC = cornerstone.getViewport(this.elementC);
+    const viewportS = cornerstone.getViewport(this.elementS);
+    const viewportA = cornerstone.getViewport(this.elementA);
+    try{
+      // console.log('viewportC', viewportC)
+      // console.log('stackC.options.viewport', this.props.stackC.options.viewport)
+      // console.log('New viewportC', {...viewportC, ...this.props.stackC.options.viewport})
+      // viewportC.colormap = this.props.stackC.options.viewport.colromap;
+      // viewportS.colormap = this.props.stackS.options.viewport.colromap;
+      // viewportA.colormap = this.props.stackA.options.viewport.colromap;
+      // let newViewportC = {...viewportC, ...this.props.stackC.options.viewport}
+      // let newViewportS = {...viewportS, ...this.props.stackS.options.viewport}
+      // let newViewportA = {...viewportA, ...this.props.stackA.options.viewport}
+      // cornerstone.setViewport(this.elementC, viewportC);
+      // cornerstone.setViewport(this.elementS, viewportS);
+      // cornerstone.setViewport(this.elementA, viewportA);
+    }catch(e){
+
+    }
+    // viewportC.colormap = "jet";
+    // viewportS.colormap = "jet";
+    // viewportA.colormap = "jet";
+    // cornerstone.setViewport(this.elementC, newViewportC);
+    // cornerstone.setViewport(this.elementS, newViewportS);
+    // cornerstone.setViewport(this.elementA, newViewportA);
   }
+
+
   loadImage=(elementC, elementS, elementA)=>{
     const { isCrosshaired } = this.props;
     // console.log('loadImage')
@@ -347,6 +384,7 @@ class ImageViewer extends Component {
         cornerstone.displayImage(elementC, image);
 
         const stack = this.props.stackC;
+        console.log('stackC', stack)
         cornerstoneTools.addStackStateManager(elementC, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementC, "stack", stack);
         cornerstoneTools.stackScroll.activate(elementC, 1);
@@ -448,7 +486,6 @@ class ImageViewer extends Component {
     const Celement = this.elementC;
     const Selement = this.elementS;
     const Aelement = this.elementA;
-    console.log('constrolViewport isCrosshaired: ',isCrosshaired)
     if (isCrosshaired==false){
       // cornerstoneTools.crosshairs.disable(Celement);
       // cornerstoneTools.crosshairs.disable(Selement);

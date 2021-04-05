@@ -149,14 +149,38 @@ class View extends Component {
       const petCStack = {
         imageIds: [...Array(109).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+i)),
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
+        options: {
+          opacity: 1,
+          visible: true,
+          viewport: {
+            colormap: this.state.isCrosshaired ? 'hot':'jet',
+          },
+          name: 'PET'
+        }
       };
       const petSStack = {
         imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+i)),
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
+        options: {
+          opacity: 1,
+          visible: true,
+          viewport: {
+            colormap: 'hot',
+          },
+          name: 'PET'
+        }
       };
       const petAStack = {
         imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/axial/"+i)),
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
+        options: {
+          opacity: 1,
+          visible: true,
+          viewport: {
+            colormap: 'gray',
+          },
+          name: 'PET'
+        }
       };
 
       try{
