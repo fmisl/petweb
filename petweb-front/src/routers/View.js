@@ -46,7 +46,7 @@ class View extends Component {
     const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
     const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
     const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
-    const imageIdM = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'));
+    const imageIdM = [...Array(45).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'));
     const stackCoronal = {
       imageIds: imageIdC,
       currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC
@@ -61,7 +61,7 @@ class View extends Component {
     };
     const stackMip = {
       imageIds: imageIdM,
-      currentImageIdIndex: 40
+      currentImageIdIndex: 0
     };
 
     const petCStack = {
@@ -110,7 +110,7 @@ class View extends Component {
       // patient: "anonymous",
       // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
       imageIds: [],
-      currentImageIdIndex: 40,
+      currentImageIdIndex: 0,
       options: {
         opacity: 1,
         visible: true,
@@ -171,7 +171,7 @@ class View extends Component {
       };
       const stackMip = {
         imageIds: imageIdM,
-        currentImageIdIndex: 40
+        currentImageIdIndex: 0
       };
       const petCStack = {
         imageIds: [...Array(109).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+i)),
@@ -211,7 +211,7 @@ class View extends Component {
       };
       const petMStack = {
         // IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'
-        imageIds: [...Array(90).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/mip/"+i)),
+        imageIds: [...Array(45).keys()].map((v,i)=>("pet:output/"+IdxSlice+"/mip/"+i)),
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
         options: {
           opacity: 1,
@@ -393,7 +393,7 @@ class View extends Component {
     var petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial' && v.Type==inoutSelect)[i].B64Data)));
     var petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].B64Data)));
     var petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
-    var petMipOutputData = [...Array(90).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
+    var petMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type=="output")[i].B64Data)));
 
     function getPETImage(imageId) {
       let identifier=imageId.split(/[:,/]+/)

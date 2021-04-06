@@ -319,10 +319,10 @@ class uploader(APIView):
                     b64Slice.save()
 
 
-                maxStep = 90
+                maxStep = 45
                 for i in range(maxStep):
                     print(i)
-                    angle=i*4/180*np.pi
+                    angle=i*8/180*np.pi
                     c=np.cos(angle)
                     s=np.sin(angle)
 
