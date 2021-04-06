@@ -18,6 +18,7 @@ import datetime
 from . import models, serializers
 import cv2
 import base64
+import imageio
 
 
 class uploader(APIView):
@@ -118,9 +119,9 @@ class uploader(APIView):
 
                 # uint8_img3D = img3D_2mm/img3D_2mm.max()*255
 
-                uint8_img3D = (img3D_2mm - img3D_2mm.min()) / (img3D_2mm.max() - img3D_2mm.min())
-                uint8_img3D = 255 * uint8_img3D
-                uint8_img3D = uint8_img3D.astype(np.uint8)
+                # uint8_img3D = (img3D_2mm - img3D_2mm.min()) / (img3D_2mm.max() - img3D_2mm.min())
+                # uint8_img3D = 255 * uint8_img3D
+                # uint8_img3D = uint8_img3D.astype(np.uint8)
 
                 uint16_img3D = (img3D_2mm-img3D_2mm.min()) / (img3D_2mm.max()-img3D_2mm.min())
                 uint16_img3D = 32767 * uint16_img3D
@@ -129,13 +130,13 @@ class uploader(APIView):
                 print("Step3: create input image")
                 getCase = models.Case.objects.filter(fileID=myfile['fileID'])[0]
                 for iz in range(vz):
-                    uint8_img2D = uint8_img3D[:,:,iz]
-                    uint8_img2D = np.rot90(uint8_img2D)
-                    # colored_image = cm1(uint8_img2D)
-                    # colored_image2 = cm2(uint8_img2D)
-                    file_name = "input_" + "axial_" + str(iz) + ".png"
-                    full_path = os.path.join(target_folder, file_name)
-                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+                    # uint8_img2D = uint8_img3D[:,:,iz]
+                    # uint8_img2D = np.rot90(uint8_img2D)
+                    # # colored_image = cm1(uint8_img2D)
+                    # # colored_image2 = cm2(uint8_img2D)
+                    # file_name = "input_" + "axial_" + str(iz) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
                     uint16_img2D = uint16_img3D[:,:,iz]
                     uint16_img2D = np.rot90(uint16_img2D)
@@ -155,13 +156,13 @@ class uploader(APIView):
                     b64Slice.save()
 
                 for iy in range(vy):
-                    uint8_img2D = uint8_img3D[:,iy,:]
-                    uint8_img2D = np.rot90(uint8_img2D)
-                    # colored_image = cm1(uint8_img2D)
-                    # colored_image2 = cm2(uint8_img2D)
-                    file_name = "input_" + "coronal_" + str(iy) + ".png"
-                    full_path = os.path.join(target_folder, file_name)
-                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+                    # uint8_img2D = uint8_img3D[:,iy,:]
+                    # uint8_img2D = np.rot90(uint8_img2D)
+                    # # colored_image = cm1(uint8_img2D)
+                    # # colored_image2 = cm2(uint8_img2D)
+                    # file_name = "input_" + "coronal_" + str(iy) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
                     uint16_img2D = uint16_img3D[:,iy,:]
                     uint16_img2D = np.rot90(uint16_img2D)
@@ -181,13 +182,13 @@ class uploader(APIView):
                     b64Slice.save()
 
                 for ix in range(vx):
-                    uint8_img2D = uint8_img3D[ix,:,:]
-                    uint8_img2D = np.rot90(uint8_img2D)
-                    # colored_image = cm1(uint8_img2D)
-                    # colored_image2 = cm2(uint8_img2D)
-                    file_name = "input_" + "sagittal_" + str(ix) + ".png"
-                    full_path = os.path.join(target_folder, file_name)
-                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+                    # uint8_img2D = uint8_img3D[ix,:,:]
+                    # uint8_img2D = np.rot90(uint8_img2D)
+                    # # colored_image = cm1(uint8_img2D)
+                    # # colored_image2 = cm2(uint8_img2D)
+                    # file_name = "input_" + "sagittal_" + str(ix) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
                     uint16_img2D = uint16_img3D[ix,:,:]
                     uint16_img2D = np.rot90(uint16_img2D)
@@ -205,6 +206,7 @@ class uploader(APIView):
                         B64Data=b64,
                     )
                     b64Slice.save()
+
                 print("---------complete generating input png files--------")
 
                 print("Step4: algorithm(DL)")
@@ -231,21 +233,21 @@ class uploader(APIView):
 
                 vx, vy, vz = img3D.shape
                 uint8_img3D = (img3D - img3D.min()) / (img3D.max() - img3D.min())
-                uint8_img3D = 255 * uint8_img3D
-                uint8_img3D = uint8_img3D.astype(np.uint8)
+                uint8_img3D = 100 * uint8_img3D
+                # uint8_img3D = uint8_img3D.astype(np.uint8)
 
                 uint16_img3D = (img3D-img3D.min()) / (img3D.max()-img3D.min())
                 uint16_img3D = 32767 * uint16_img3D
                 uint16_img3D = uint16_img3D.astype(np.uint16)
                 print("Step6: create output image")
                 for iz in range(vz):
-                    uint8_img2D = uint8_img3D[:,:,iz]
-                    uint8_img2D = np.rot90(uint8_img2D)
-                    # colored_image = cm1(uint8_img2D)
-                    # colored_image2 = cm2(uint8_img2D)
-                    file_name = "output_" + "axial_" + str(iz) + ".png"
-                    full_path = os.path.join(target_folder, file_name)
-                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+                    # uint8_img2D = uint8_img3D[:,:,iz]
+                    # uint8_img2D = np.rot90(uint8_img2D)
+                    # # colored_image = cm1(uint8_img2D)
+                    # # colored_image2 = cm2(uint8_img2D)
+                    # file_name = "output_" + "axial_" + str(iz) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
                     uint16_img2D = uint16_img3D[:,:,iz]
                     uint16_img2D = np.rot90(uint16_img2D)
@@ -265,13 +267,13 @@ class uploader(APIView):
                     b64Slice.save()
 
                 for iy in range(vy):
-                    uint8_img2D = uint8_img3D[:,iy,:]
-                    uint8_img2D = np.rot90(uint8_img2D)
-                    # colored_image = cm1(uint8_img2D)
-                    # colored_image2 = cm2(uint8_img2D)
-                    file_name = "output_" + "coronal_" + str(iy) + ".png"
-                    full_path = os.path.join(target_folder, file_name)
-                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+                    # uint8_img2D = uint8_img3D[:,iy,:]
+                    # uint8_img2D = np.rot90(uint8_img2D)
+                    # # colored_image = cm1(uint8_img2D)
+                    # # colored_image2 = cm2(uint8_img2D)
+                    # file_name = "output_" + "coronal_" + str(iy) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
                     uint16_img2D = uint16_img3D[:,iy,:]
                     uint16_img2D = np.rot90(uint16_img2D)
@@ -291,13 +293,13 @@ class uploader(APIView):
                     b64Slice.save()
 
                 for ix in range(vx):
-                    uint8_img2D = uint8_img3D[ix,:,:]
-                    uint8_img2D = np.rot90(uint8_img2D)
-                    # colored_image = cm1(uint8_img2D)
-                    # colored_image2 = cm2(uint8_img2D)
-                    file_name = "output_" + "sagittal_" + str(ix) + ".png"
-                    full_path = os.path.join(target_folder, file_name)
-                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
+                    # uint8_img2D = uint8_img3D[ix,:,:]
+                    # uint8_img2D = np.rot90(uint8_img2D)
+                    # # colored_image = cm1(uint8_img2D)
+                    # # colored_image2 = cm2(uint8_img2D)
+                    # file_name = "output_" + "sagittal_" + str(ix) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
                     uint16_img2D = uint16_img3D[ix,:,:]
                     uint16_img2D = np.rot90(uint16_img2D)
@@ -315,6 +317,58 @@ class uploader(APIView):
                         B64Data=b64,
                     )
                     b64Slice.save()
+
+
+                maxStep = 45
+                for i in range(maxStep):
+                    print(i)
+                    angle=i*8/180*np.pi
+                    c=np.cos(angle)
+                    s=np.sin(angle)
+
+                    c_in=0.5*np.array(img3D.shape)
+                    c_out=np.array(img3D.shape)
+                    transform1=np.array([[c,-s,0],[s,c,0],[0,0,1]])
+                    transform2=np.array([[c,0,-s],[0,1,0],[s,0,c]])
+                    offset1=c_in-c_out.dot(transform1)
+                    dst1=nd.interpolation.affine_transform(uint8_img3D,transform1.T,order=3,offset=offset1,output_shape=2*c_out,cval=0.0,output=np.float32)
+                    offset2=c_in-c_out.dot(transform2)
+                    dst2=nd.interpolation.affine_transform(uint8_img3D,transform2.T,order=3,offset=offset2,output_shape=2*c_out,cval=0.0,output=np.float32)
+
+                    column_proj1 = np.rot90(dst1[:, :, :].sum(axis=0)) # row
+                    width, height = 109, 91
+                    # column_proj2 = np.rot90(dst2[:, :, :].sum(axis=0)) # row
+
+                    file_name = "mip_output_axial_" + str(i) + ".png"
+                    full_path = os.path.join(target_folder, file_name)
+                    reg_img = (column_proj1 - column_proj1.min()) / (column_proj1.max() - column_proj1.min())
+                    reg_img = 32767 * reg_img
+                    reg_img = reg_img.astype(np.uint16)
+                    width, height = 109, 91
+                    resized_img = cv2.resize(reg_img, (width, height))
+
+                    # Image.fromarray(resized_img).save(full_path)
+
+                    b64 = base64.b64encode(resized_img).decode('utf-8')
+                    b64Slice = models.Slice.objects.create(
+                        Type="output",
+                        ImageID=str(i),
+                        Direction="mip",
+                        Width=width,
+                        Height=height,
+                        Depth=32767,
+                        CaseID=getCase,
+                        B64Data=b64,
+                    )
+                    b64Slice.save()
+                    # imageio.imwrite(full_path,reg_img.astype(np.uint16))
+
+                    # file_name = "mip_output_sagittal_" + str(i) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # reg_img = (column_proj2 - column_proj2.min()) / (column_proj2.max() - column_proj2.min())
+                    # reg_img = 65535 * reg_img
+                    # Image.fromarray(reg_img.astype(np.uint16)).save(full_path)
+                    # # imageio.imwrite(full_path,reg_img.astype(np.uint16))
                 print("---------complete generating output png files--------")
 
     def put(self, request, format=None):

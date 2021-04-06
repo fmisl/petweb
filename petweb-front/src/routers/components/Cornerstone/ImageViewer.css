@@ -29,6 +29,12 @@
   box-sizing: border-box !important;
 }
 
+.viewportElement.mip:hover~.mip-coronal,
+.viewportElement.mip:hover~.mip-sagittal {
+  /* z-index: 100000; */
+  border: 1px #118AF7 solid !important;
+  box-sizing: border-box !important;
+}
 .coronal-axial,
 .coronal-sagittal,
 .sagittal-axial,
