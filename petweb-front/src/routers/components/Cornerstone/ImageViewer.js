@@ -214,7 +214,7 @@ class ImageViewer extends Component {
       this.props.updateStack(this.props.stackManager.map(v=>
           {
             if (v.fileID==this.props.counter.fileID) 
-              return {...v, currentC:stackC.currentImageIdIndex, currentS:stackS.currentImageIdIndex, currentA:stackA.currentImageIdIndex, currentA:stackM.currentImageIdIndex}
+              return {...v, currentC:stackC.currentImageIdIndex, currentS:stackS.currentImageIdIndex, currentA:stackA.currentImageIdIndex}
             else
               return {...v}
           }
@@ -513,7 +513,7 @@ class ImageViewer extends Component {
 
         // enable reference Lines tool
         // {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementM, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementM)}
-        cornerstoneTools.stackScrollKeyboard.activate(elementM);
+        // cornerstoneTools.stackScrollKeyboard.activate(elementM);
         elementM.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementM.addEventListener("cornerstonenewimage", this.onNewImage);
         window.addEventListener("resize", this.onWindowResize);

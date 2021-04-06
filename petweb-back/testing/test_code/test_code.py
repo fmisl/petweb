@@ -7,8 +7,8 @@ import matplotlib.cm as cm
 from scipy import ndimage as nd
 import cv2
 # filepath=r'C:\Users\dwnusa\workspace\petweb\petweb-back\uploads\dwnusa\database\8\input_8.img'
-# filepath=r'C:\Users\dwnusa\workspace\petweb\petweb-back\uploads\dwnusa\database\10\output_10.nii'
-filepath=r'C:\Users\dwnusa\workspace\petweb\petweb-back\testing\test_code\MNI152_T1_2mm.nii'
+filepath=r'C:\Users\dwnusa\workspace\petweb\petweb-back\uploads\dwnusa\database\10\output_10.nii'
+# filepath=r'C:\Users\dwnusa\workspace\petweb\petweb-back\testing\test_code\MNI152_T1_2mm.nii'
 target_folder=r'C:\Users\dwnusa\workspace\petweb\petweb-back\testing\test_code'
 
 nimg3D = nib.load(filepath)  # 이미지 불러오기
@@ -35,14 +35,21 @@ for i in range(maxStep):
     c_out=np.array(img3D.shape)
     transform1=np.array([[c,-s,0],[s,c,0],[0,0,1]])
     transform2=np.array([[c,0,-s],[0,1,0],[s,0,c]])
+    # transform3=np.array([[1,0,0],[0,1,0],[0,0,1]])
     offset1=c_in-c_out.dot(transform1)
     dst1=nd.interpolation.affine_transform(uint8_img3D,transform1.T,order=3,offset=offset1,output_shape=2*c_out,cval=0.0,output=np.float32)
     offset2=c_in-c_out.dot(transform2)
     dst2=nd.interpolation.affine_transform(uint8_img3D,transform2.T,order=3,offset=offset2,output_shape=2*c_out,cval=0.0,output=np.float32)
-
+    # offset2=c_in-c_out.dot(transform3)
+    # dst2=nd.interpolation.affine_transform(uint8_img3D,transform3.T,order=3,offset=offset2,output_shape=2*c_out,cval=0.0,output=np.float32)
+    # dst1 = nd.interpolation.zoom(np.squeeze(dst1), zoom=dsfactor)  # 2mm 픽셀로 스케일 변환
+    [sx, sy, sz] = dst1.shape
+    [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/4)
+    crop1 = dst1[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
+    crop2 = dst2[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
     # row_proj = np.rot90(dst[:, :, :].sum(axis=0)) # row
-    column_proj1 = np.rot90(dst1[:, :, :].sum(axis=0)) # row
-    column_proj2 = np.rot90(dst2[:, :, :].sum(axis=0)) # row
+    column_proj1 = np.rot90(crop1[:, :, :].sum(axis=0)) # row
+    column_proj2 = np.rot90(crop2[:, :, :].sum(axis=0)) # row
     # depth_proj = np.rot90(dst[:, :, :].sum(axis=2)) # row
     # axarr[0,i].imshow(row_proj, interpolation='nearest', origin=origin,cmap=cm.gray);axarr[0,i].axis('off');
     # axarr[1,i].imshow(column_proj, interpolation='nearest', origin=origin,cmap=cm.gray);axarr[1,i].axis('off');
