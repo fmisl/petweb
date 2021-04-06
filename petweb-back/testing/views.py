@@ -332,11 +332,17 @@ class uploader(APIView):
                     transform2=np.array([[c,0,-s],[0,1,0],[s,0,c]])
                     offset1=c_in-c_out.dot(transform1)
                     dst1=nd.interpolation.affine_transform(uint8_img3D,transform1.T,order=3,offset=offset1,output_shape=2*c_out,cval=0.0,output=np.float32)
-                    offset2=c_in-c_out.dot(transform2)
-                    dst2=nd.interpolation.affine_transform(uint8_img3D,transform2.T,order=3,offset=offset2,output_shape=2*c_out,cval=0.0,output=np.float32)
 
-                    column_proj1 = np.rot90(dst1[:, :, :].sum(axis=0)) # row
-                    width, height = 109, 91
+                    [sx, sy, sz] = dst1.shape
+                    [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/4)
+                    crop1 = dst1[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
+                    column_proj1 = np.rot90(crop1[:, :, :].sum(axis=0)) # row
+
+                    # offset2=c_in-c_out.dot(transform2)
+                    # dst2=nd.interpolation.affine_transform(uint8_img3D,transform2.T,order=3,offset=offset2,output_shape=2*c_out,cval=0.0,output=np.float32)
+
+                    # column_proj1 = np.rot90(dst1[:, :, :].sum(axis=0)) # row
+                    width, height = 91, 109
                     # column_proj2 = np.rot90(dst2[:, :, :].sum(axis=0)) # row
 
                     file_name = "mip_output_axial_" + str(i) + ".png"
