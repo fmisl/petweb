@@ -322,19 +322,24 @@ class uploader(APIView):
                 maxStep = 45
                 for i in range(maxStep):
                     print(i)
-                    angle=i*8/180*np.pi
-                    c=np.cos(angle)
-                    s=np.sin(angle)
+                    angle1=i*8/180*np.pi
+                    c1=np.cos(angle1)
+                    s1=np.sin(angle1)
+
+                    # angle2=8/180*np.pi
+                    # c2=np.cos(angle2)
+                    # s2=np.sin(angle2)
 
                     c_in=0.5*np.array(img3D.shape)
                     c_out=np.array(img3D.shape)
-                    transform1=np.array([[c,-s,0],[s,c,0],[0,0,1]])
-                    transform2=np.array([[c,0,-s],[0,1,0],[s,0,c]])
-                    offset1=c_in-c_out.dot(transform1)
-                    dst1=nd.interpolation.affine_transform(uint8_img3D,transform1.T,order=3,offset=offset1,output_shape=2*c_out,cval=0.0,output=np.float32)
+                    transform=np.array([[c1,-s1,0],[s1,c1,0],[0,0,1]])
+                    # transform2=np.array([[c2,0,-s2],[0,1,0],[s2,0,c2]])
+                    # transform=transform1 # np.dot(transform1, transform2)
+                    offset=c_in-c_out.dot(transform)
+                    dst1=nd.interpolation.affine_transform(uint8_img3D,transform.T,order=3,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
 
                     [sx, sy, sz] = dst1.shape
-                    [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/4)
+                    [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/6)
                     crop1 = dst1[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
                     column_proj1 = np.rot90(crop1[:, :, :].sum(axis=0)) # row
 
@@ -342,7 +347,6 @@ class uploader(APIView):
                     # dst2=nd.interpolation.affine_transform(uint8_img3D,transform2.T,order=3,offset=offset2,output_shape=2*c_out,cval=0.0,output=np.float32)
 
                     # column_proj1 = np.rot90(dst1[:, :, :].sum(axis=0)) # row
-                    width, height = 91, 109
                     # column_proj2 = np.rot90(dst2[:, :, :].sum(axis=0)) # row
 
                     file_name = "mip_output_axial_" + str(i) + ".png"
