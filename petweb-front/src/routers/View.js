@@ -521,18 +521,20 @@ class View extends Component {
                   rowPixelSpacing: 1,
               }
           }
-          else if (direction === 'mip'){
-              return {
-                  frameOfReferenceUID: '1.2.3.4.5',
-                  rows: 91,
-                  columns: 109,
-                  rowCosines:     [1,  0,  0], 
-                  columnCosines:  [ 0,  0, 1],
-                  imagePositionPatient: [cY, scale*id+cX, cZ], //sagittal plane에서 [coroanl line, xxx, axial line]
-                  columnPixelSpacing: 1,
-                  rowPixelSpacing: 1,
-              }
-          }
+          // else if (direction === 'mip'){
+          //     return {
+          //         frameOfReferenceUID: '1.2.3.4.5.6',
+          //         rows: 91,//91/2,
+          //         columns: 109,//109/2,
+          //         rowCosines:     [0,  0,  0], 
+          //         columnCosines:  [ 0,  0, 0],
+          //         // -(Math.sin(scale*id*8/180*Math.PI)+Math.cos(scale*id*8/180*Math.PI)) //sagittal plane에서 [coroanl line, xxx, axial line]
+          //         // 109*id*8/360+109/2
+          //         imagePositionPatient: [cY, cX, cZ], //sagittal plane에서 [coroanl line, xxx, axial line]
+          //         columnPixelSpacing: 1,
+          //         rowPixelSpacing: 1,
+          //     }
+          // }
       }
     }
 

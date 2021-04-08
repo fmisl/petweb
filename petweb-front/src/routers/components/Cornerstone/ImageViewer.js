@@ -504,14 +504,16 @@ class ImageViewer extends Component {
         const stack = this.props.stackM;
         cornerstoneTools.addStackStateManager(elementM, ["stack"]);
         cornerstoneTools.addToolState(elementM, "stack", stack);
+        // cornerstoneTools.pan.activate(elementM, 1);
         cornerstoneTools.stackScroll.activate(elementM, 1);
         cornerstoneTools.stackScrollWheel.activate(elementM);
-        cornerstoneTools.stackPrefetch.enable(elementM, 3);
+        // cornerstoneTools.stackPrefetch.enable(elementM, 3);
+        cornerstoneTools.zoom.activate(elementM, 3);
         cornerstoneTools.wwwcRegion.activate(elementM, 4);
         this.wwwcsynchronizer.add(elementM);
         // this.synchronizer.add(elementM);
 
-        // enable reference Lines tool
+        // // enable reference Lines tool
         // {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementM, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementM)}
         // cornerstoneTools.stackScrollKeyboard.activate(elementM);
         elementM.addEventListener("cornerstoneimagerendered",this.onImageRendered);
