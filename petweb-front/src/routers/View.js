@@ -211,8 +211,8 @@ class View extends Component {
       };
       const petMStack = {
         // IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'
-        imageIds: [...Array(45).keys()].map((v,i)=>("pet:output/"+IdxSlice+"/mip/"+i)),
-        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
+        imageIds: [...Array(45).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/mip/"+i)),
+        currentImageIdIndex: 0,
         options: {
           opacity: 1,
           visible: true,
@@ -393,7 +393,8 @@ class View extends Component {
     var petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial' && v.Type==inoutSelect)[i].B64Data)));
     var petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].B64Data)));
     var petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
-    var petMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type=="output")[i].B64Data)));
+    // var petMipInputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type=='input')[i].B64Data)));
+    var petMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
 
     function getPETImage(imageId) {
       let identifier=imageId.split(/[:,/]+/)
@@ -407,8 +408,8 @@ class View extends Component {
       if(direction === 'coronal') {width=91; height=91}
       else if(direction === 'sagittal') {width=109; height=91}
       else if(direction === 'axial') {width=91; height=109}
-      // else if (direction === "mip"){width = 91; height = 109}
-      else if(direction === 'mip') {width=109; height=91}
+      // else if (direction === "mip"){width = 109; height = 91}
+      else if(direction === 'mip'){width = 69; height = 51}
       // console.log("ID: ", ID, " Direction: ", Direction, " w/h: ", width,"/",height)
 
       var image = {
@@ -437,6 +438,7 @@ class View extends Component {
         else if (direction === "sagittal"){return petSagittalOutputData[id]}
         else if (direction === "axial"){return petAxialOutputData[id]}
         else if (direction === "mip"){return petMipOutputData[id]}
+        // else if (direction === "mip" && inout === "output"){return petMipOutputData[id]}
 
         throw "unknown imageId";
       }
@@ -480,8 +482,8 @@ class View extends Component {
       if (direction === "coronal"){width = 91; height = 91}
       else if (direction === "sagittal"){width = 109; height = 91}
       else if (direction === "axial"){width = 91; height = 109}
-      // else if (direction === "mip"){width = 91; height = 109}
-      else if (direction === "mip"){width = 109; height = 91}
+      // else if (direction === "mip"){width = 109; height = 91}
+      else if (direction === "mip"){width = 69; height = 51}
 
       // console.log(identifier, type)
       if(type === 'imagePlaneModule') {

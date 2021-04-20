@@ -92,7 +92,7 @@ function Sidebar() {
         {stackManagerLength !==0 ? <div className={`sidebar-grp1-menu ${pathname[1] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr/'+counter.fileID);}}> {/*  dispatch(tab_location(3)); */}
           <div className={`sidebar-grp1-menu-title`}><IconAnalysis size={'40'} stroke={pathname[1] === 'analysis' ? "#118AF7" : "#ccccda"}/><li>Analysis</li></div>
           <div className={`sidebar-grp1-menu-item ${pathname[2] == 'suvr' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr/'+counter.fileID);}}><li>SUVR</li></div> {/* dispatch(tab_location(3)); */}
-          <div className={`sidebar-grp1-menu-item ${pathname[2] == 'report' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/report/'+counter.fileID);}}><li>Report</li></div> {/* dispatch(tab_location(4)); */}
+          {/* <div className={`sidebar-grp1-menu-item ${pathname[2] == 'report' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/report/'+counter.fileID);}}><li>Report</li></div> dispatch(tab_location(4)); */}
         </div>
         :<div className={`sidebar-grp1-menu-disable`}> {/*  dispatch(tab_location(3)); */}
           <div className={`sidebar-grp1-menu-title`}><IconAnalysis size={'40'} stroke={"gray"}/><li>Analysis</li></div>

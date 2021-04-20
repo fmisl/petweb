@@ -48,25 +48,28 @@ function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, re
               <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{console.log(Math.floor(Math.random() * 20+30));setFelectItem(Math.floor(Math.random() * 20+30))}}>
 
               <div style={{position:'relative', minWidth:'600px', minHeight:'60px'}}>
-                <div className={`modal-header-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>setSelectTracer('[11C]PIB')}>[<sup><sup>11</sup></sup>C]PIB</div>
-                <div className={`modal-header-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>setSelectTracer('[18F]FBP')}>[<sup><sup>18</sup></sup>F]FBP</div>
-                <div className={`modal-header-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>setSelectTracer('[18F]FBB')}>[<sup><sup>18</sup></sup>F]FBB</div>
+                <div className={`modal-header-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>{setSelectTracer('[11C]PIB'); alert(`Selected: [\u00B9\u00B9C] `+`Pittsburg compound B`)}}>[<sup><sup>11</sup></sup>C]PIB</div>
+                <div className={`modal-header-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP'); alert(`Selected: [\u00B9\u2078F] `+`Florbetapir`)}}>[<sup><sup>18</sup></sup>F]FBP</div>
+                <div className={`modal-header-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB'); alert(`Selected: [\u00B9\u2078F] `+`Florbetaben`)}}>[<sup><sup>18</sup></sup>F]FBB</div>
               </div>
                 <UploaderTable selectTracer={selectTracer} fileList={fileList} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>
               </div>
               <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41"}}>
                 <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
-                  {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
+                  {/* {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}}  */}
+                  {currentJPGURL_head !== "" && <img width={'400px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
                   // src={IPinUSE+'result/download/'+username+'uploader/input_coronal_'+focusItem+'.png'}/>
                   src={currentJPGURL_head+'_hy.jpg'} alt=" "/>}
                 </div>
                 <div style={{...styleDiv, ...{top:"", left:"50%"}}} >
-                  {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
+                  {/* {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}}  */}
+                  {currentJPGURL_head !== "" && <img width={'400px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
                   // src={IPinUSE+'result/download/'+username+'uploader/input_sagittal_'+focusItem+'.png'}/>
                   src={currentJPGURL_head+'_hx.jpg'} alt=" "/>}
                 </div>
                   <div style={{...styleDiv, ...{top:"50%", left:"0"}}} >
-                  {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
+                  {/* {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}}  */}
+                  {currentJPGURL_head !== "" && <img width={'400px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
                   // src={IPinUSE+'result/download/'+username+'uploader/input_axial_'+focusItem+'.png'}/>
                   src={currentJPGURL_head+'_hz.jpg'} alt=" "/>}
                 </div>
@@ -91,9 +94,9 @@ function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, re
               <div className="modal-Tracer-Selector">
                 <div style={{position:'relative', minWidth:'1000px', minHeight:'200px', display:"flex", justifyContent:"center"}}>
                   <div style={{position: 'absolute', top:'-200px'}}>Select tracer from below: </div>
-                  <div className={`modal-tracer-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>{setSelectTracer('[11C]PIB')}}>[<sup><sup>11</sup></sup>C]PIB</div>
-                  <div className={`modal-tracer-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP')}}>[<sup><sup>18</sup></sup>F]FBP</div>
-                  <div className={`modal-tracer-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB')}}>[<sup><sup>18</sup></sup>F]FBB</div>
+                  <div className={`modal-tracer-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>{setSelectTracer('[11C]PIB'); alert(`Selected: [\u00B9\u00B9C] `+`Pittsburg compound B`)}}>[<sup><sup>11</sup></sup>C]PIB</div>
+                  <div className={`modal-tracer-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP'); alert(`Selected: [\u00B9\u2078F] `+`Florbetapir`)}}>[<sup><sup>18</sup></sup>F]FBP</div>
+                  <div className={`modal-tracer-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB'); alert(`Selected: [\u00B9\u2078F] `+`Florbetaben`)}}>[<sup><sup>18</sup></sup>F]FBB</div>
                   <div className={`modal-tracer-confirm`} onClick={()=>{setTracerModal(false)}}>Select</div>
                 </div>
               </div>}

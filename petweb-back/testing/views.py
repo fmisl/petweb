@@ -19,6 +19,7 @@ from . import models, serializers
 import cv2
 import base64
 import imageio
+import dicom2nifti
 
 
 class uploader(APIView):
@@ -68,6 +69,8 @@ class uploader(APIView):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         database_path = os.path.join(user_path, 'database')
+        # target_mip_size=[45,54,45]
+        target_mip_size=[51,69,51]
         for myfile in myfiles:
             # print(os.path.join(user_path, myfile['FileName']))
             target_file = os.path.join(database_path, myfile['FileName'])
@@ -88,34 +91,21 @@ class uploader(APIView):
 
                 img3D = np.array(nimg3D.dataobj)  # numpy array로 변환
                 oriSize = img3D.shape[0] * img3D.shape[1] * img3D.shape[2]
-                # dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
+                dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
                 # if nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][2] and nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][3]:
                 #     dsfactor = [float(f) / w for w, f in
                 #                 zip([img3D.shape[0], img3D.shape[1], img3D.shape[2]], [91, 109, 91])]  # 픽셀크기 2mm로 변환용 factor
 
-                # img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
-
-                # axial 91, coronal 109, sagittal 91 크기로 잘라내기 (crop)
-                # zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
-                # # vx, vy, vz = [0, 0, 0]
-                # if zoomedX >= 91 and zoomedY >= 109 and zoomedZ >= 91:
-                #     cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)] # 중심 좌표 계산
-                #     offsetX, offsetY, offsetZ = [math.floor(91 / 2), math.floor(109 / 2), math.floor(91 / 2)]
-                #     img3D_crop = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1,
-                #             cZ - offsetZ:cZ + offsetZ + 1]
-                #     vx, vy, vz = img3D_crop.shape # 크기는 (91, 109, 91) 이어야함
-                #     uint8_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
-                # else:
-                #     vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
-                #     uint8_img3D = img3D_2mm
-                # uint8_img3D = 255 * uint8_img3D
-                # uint8_img3D = uint8_img3D.astype(np.uint8)
-                # hx, hy, hz = [int(vx/2), int(vy/2), int(vz/2)]
-                dsfactor = [float(f) / w for f, w in
-                            zip([91, 109, 91], [img3D.shape[0], img3D.shape[1], img3D.shape[2]])]  # 픽셀크기 2mm로 변환용 factor
-
                 img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
-                vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
+                zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
+                cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)]  # 중심 좌표 계산
+                offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2), math.floor(min(109, zoomedY) / 2), math.floor(min(91, zoomedZ) / 2)]
+                img3D_crop = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1, cZ - offsetZ:cZ + offsetZ + 1]
+
+                dsfactor2 = [float(f) / w for w, f in zip([img3D_crop.shape[0], img3D_crop.shape[1], img3D_crop.shape[2]], [91, 109, 91])] # 픽셀크기 2mm로 변환용 factor
+                img3D_crop = nd.interpolation.zoom(np.squeeze(img3D_crop), zoom=dsfactor2) # 2mm 픽셀로 스케일 변환
+                # img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
+                vx, vy, vz = img3D_crop.shape # 크기는 (91, 109, 91) 이어야함
 
                 # uint8_img3D = img3D_2mm/img3D_2mm.max()*255
 
@@ -123,12 +113,85 @@ class uploader(APIView):
                 # uint8_img3D = 255 * uint8_img3D
                 # uint8_img3D = uint8_img3D.astype(np.uint8)
 
-                uint16_img3D = (img3D_2mm-img3D_2mm.min()) / (img3D_2mm.max()-img3D_2mm.min())
-                uint16_img3D = 32767 * uint16_img3D
-                uint16_img3D = uint16_img3D.astype(np.uint16)
-
                 print("Step3: create input image")
                 getCase = models.Case.objects.filter(fileID=myfile['fileID'])[0]
+                reg_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
+                scale_img3D = 32767 * reg_img3D
+                uint16_img3D = scale_img3D.astype(np.uint16)
+                ####################################################################################
+
+                dsfactor_sampled = [float(f) / w for w, f in zip(scale_img3D.shape,target_mip_size)]
+                mip_img3D_crop = nd.interpolation.zoom(scale_img3D, zoom=dsfactor_sampled)
+                maxStep = 45
+                # uniformImg = np.ones(mip_img3D_crop.shape)
+                uniformImg = mip_img3D_crop > 1
+                for i in range(maxStep):
+                    print(i)
+                    angle1=i*8/180*np.pi
+                    c1=np.cos(angle1)
+                    s1=np.sin(angle1)
+
+                    # angle2=8/180*np.pi
+                    # c2=np.cos(angle2)
+                    # s2=np.sin(angle2)
+
+                    c_in=0.5*np.array(mip_img3D_crop.shape)
+                    c_out=np.array(mip_img3D_crop.shape)
+                    transform=np.array([[c1,-s1,0],[s1,c1,0],[0,0,1]])
+                    # transform2=np.array([[c2,0,-s2],[0,1,0],[s2,0,c2]])
+                    # transform=transform1 # np.dot(transform1, transform2)
+                    offset=c_in-c_out.dot(transform)
+                    dst1=nd.interpolation.affine_transform(mip_img3D_crop,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
+                    # dst1=dst1-np.min(dst1)
+                    RotatedUniformImg = nd.interpolation.affine_transform(uniformImg,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
+
+                    [sx, sy, sz] = dst1.shape
+                    [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/6)
+                    crop1 = dst1[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
+                    cropedRotatedUniformImg = RotatedUniformImg[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
+                    proj = crop1[:, :, :].sum(axis=0)
+                    temp = cropedRotatedUniformImg[:, :, :].sum(axis=0)
+                    column_proj1 = np.rot90(proj*1.5 / (temp + (temp==0)))
+                    column_proj1 = np.clip(column_proj1,0,32767)
+                    # column_proj1 = 32767 * (column_proj1-column_proj1.min()) / (column_proj1.max()-column_proj1.min())
+                    column_proj1 = column_proj1.astype(np.uint16)
+                    # column_proj1 = np.rot90(crop1[:, :, :].sum(axis=0))
+
+                    # offset2=c_in-c_out.dot(transform2)
+                    # dst2=nd.interpolation.affine_transform(uint8_img3D,transform2.T,order=3,offset=offset2,output_shape=2*c_out,cval=0.0,output=np.float32)
+
+                    # column_proj1 = np.rot90(dst1[:, :, :].sum(axis=0)) # row
+                    # column_proj2 = np.rot90(dst2[:, :, :].sum(axis=0)) # row
+
+                    file_name = "mip_input_axial_" + str(i) + ".png"
+                    full_path = os.path.join(target_folder, file_name)
+                    # reg_img = (column_proj1 - column_proj1.min()) / (column_proj1.max() - column_proj1.min())
+                    # reg_img = 32767 * reg_img
+                    reg_img = column_proj1.astype(np.uint16)
+                    # width, height = 109, 91
+                    width, height = target_mip_size[1:3]
+                    resized_img = cv2.resize(reg_img, (width, height))
+
+                    # Image.fromarray(resized_img).save(full_path)
+
+                    b64 = base64.b64encode(resized_img).decode('utf-8')
+                    b64Slice = models.Slice.objects.create(
+                        Type="input",
+                        ImageID=str(i),
+                        Direction="mip",
+                        Width=width,
+                        Height=height,
+                        Depth=32767,
+                        CaseID=getCase,
+                        B64Data=b64,
+                    )
+                    b64Slice.save()
+                ####################################################################################
+
+
+
+
+
                 for iz in range(vz):
                     # uint8_img2D = uint8_img3D[:,:,iz]
                     # uint8_img2D = np.rot90(uint8_img2D)
@@ -232,8 +295,7 @@ class uploader(APIView):
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".nii"))
 
                 vx, vy, vz = img3D.shape
-                uint8_img3D = (img3D - img3D.min()) / (img3D.max() - img3D.min())
-                uint8_img3D = 100 * uint8_img3D
+                float_img3D = 32767 * (img3D - img3D.min()) / (img3D.max() - img3D.min())
                 # uint8_img3D = uint8_img3D.astype(np.uint8)
 
                 uint16_img3D = (img3D-img3D.min()) / (img3D.max()-img3D.min())
@@ -320,6 +382,13 @@ class uploader(APIView):
 
 
                 maxStep = 45
+                # uniformImg = np.ones(float_img3D.shape)
+
+
+                dsfactor_sampled = [float(f) / w for w, f in zip(float_img3D.shape,target_mip_size)]
+                float_img3D = nd.interpolation.zoom(float_img3D, zoom=dsfactor_sampled)
+
+                uniformImg = float_img3D > 1
                 for i in range(maxStep):
                     print(i)
                     angle1=i*8/180*np.pi
@@ -330,18 +399,27 @@ class uploader(APIView):
                     # c2=np.cos(angle2)
                     # s2=np.sin(angle2)
 
-                    c_in=0.5*np.array(img3D.shape)
-                    c_out=np.array(img3D.shape)
+                    c_in=0.5*np.array(float_img3D.shape)
+                    c_out=np.array(float_img3D.shape)
                     transform=np.array([[c1,-s1,0],[s1,c1,0],[0,0,1]])
                     # transform2=np.array([[c2,0,-s2],[0,1,0],[s2,0,c2]])
                     # transform=transform1 # np.dot(transform1, transform2)
                     offset=c_in-c_out.dot(transform)
-                    dst1=nd.interpolation.affine_transform(uint8_img3D,transform.T,order=3,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
+                    dst1=nd.interpolation.affine_transform(float_img3D,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
+                    # dst1=dst1-np.min(dst1)
+                    RotatedUniformImg = nd.interpolation.affine_transform(uniformImg,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
 
                     [sx, sy, sz] = dst1.shape
                     [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/6)
                     crop1 = dst1[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
-                    column_proj1 = np.rot90(crop1[:, :, :].sum(axis=0)) # row
+                    cropedRotatedUniformImg = RotatedUniformImg[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
+                    proj = crop1[:, :, :].sum(axis=0)
+                    temp = cropedRotatedUniformImg[:, :, :].sum(axis=0)
+                    column_proj1 = np.rot90(proj*1.5 / (temp + (temp==0)))
+                    column_proj1 = np.clip(column_proj1,0,32767)
+                    # column_proj1 = 32767 * (column_proj1-column_proj1.min()) / (column_proj1.max()-column_proj1.min())
+                    column_proj1 = column_proj1.astype(np.uint16)
+                    # column_proj1 = np.rot90(crop1[:, :, :].sum(axis=0))
 
                     # offset2=c_in-c_out.dot(transform2)
                     # dst2=nd.interpolation.affine_transform(uint8_img3D,transform2.T,order=3,offset=offset2,output_shape=2*c_out,cval=0.0,output=np.float32)
@@ -351,10 +429,11 @@ class uploader(APIView):
 
                     file_name = "mip_output_axial_" + str(i) + ".png"
                     full_path = os.path.join(target_folder, file_name)
-                    reg_img = (column_proj1 - column_proj1.min()) / (column_proj1.max() - column_proj1.min())
-                    reg_img = 32767 * reg_img
-                    reg_img = reg_img.astype(np.uint16)
-                    width, height = 109, 91
+                    # reg_img = (column_proj1 - column_proj1.min()) / (column_proj1.max() - column_proj1.min())
+                    # reg_img = 32767 * reg_img
+                    reg_img = column_proj1.astype(np.uint16)
+                    # width, height = 109, 91
+                    width, height = target_mip_size[1:3]
                     resized_img = cv2.resize(reg_img, (width, height))
 
                     # Image.fromarray(resized_img).save(full_path)
@@ -489,40 +568,125 @@ class uploader(APIView):
         if not myfiles:
             return Response(data="Files are not attached correctly", status=status.HTTP_400_BAD_REQUEST)
 
-        # Save files in user_path/uploader
-        fs = FileSystemStorage()
-        # [fs.save(os.path.join(uploader_path, f.name), f) for i, f in enumerate(myfiles) if (f.name.split(".")[-1]=='nii')]
+        file_name = myfiles[0].name
+        # print(file_name)
+        file_format = file_name.split('.')
 
-        for i, f in enumerate(myfiles):
-            saveNiiPath = os.path.join(uploader_path, f.name)
-            if (f.name.split(".")[-1]=='nii'):
-                # Save nii files
-                fs.save(saveNiiPath, f)
-                nimg3D = nib.load(saveNiiPath)
-                img3D = np.squeeze(np.array(nimg3D.dataobj))
-                vx, vy, vz = img3D.shape
-                # Save jpg files
-                hz = int(vz/2)
-                hy = int(vy/2)
-                hx = int(vx/2)
-                saveJPGPath_hz = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hz.jpg")
-                saveJPGPath_hy = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hy.jpg")
-                saveJPGPath_hx = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hx.jpg")
-                uint8_img2D = img3D[:,:,hz]
-                uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
-                uint8_img2D = 255 * uint8_img2D
-                uint8_img2D = np.rot90(uint8_img2D)
-                Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hz)
-                uint8_img2D = img3D[:,hy,:]
-                uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
-                uint8_img2D = 255 * uint8_img2D
-                uint8_img2D = np.rot90(uint8_img2D)
-                Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hy)
-                uint8_img2D = img3D[hx,:,:]
-                uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
-                uint8_img2D = 255 * uint8_img2D
-                uint8_img2D = np.rot90(uint8_img2D)
-                Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
+        # Input Dicom
+        if file_format[-1].lower() == "dcm" or file_format[-1].lower() == "ima":
+            Format = "dcm"
+            if len(myfiles) <= 50:
+                return Response(data="Error1: the number of dcm files is not enough (>=50)", status=status.HTTP_400_BAD_REQUEST)
+        # Input hdr/img
+        elif file_format[-1] == "img" or file_format[-1] == "hdr":
+            Format = "analyze"
+            if len(myfiles) != 2:
+                return Response(data="Error1: a pair of .hdr and .img is required", status=status.HTTP_400_BAD_REQUEST)
+        # Input Nifti
+        elif file_format[-1] == "nii":
+            Format = "nifti"
+            if len(myfiles) < 1:
+                return Response(data="Error1: Must be uploaded more than one", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(data="Error1: File format is not supported. (dcm, hdr/img, nii formats are only supported)",
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Save files in user_path/uploader
+        if Format == "dcm":
+            print('dcm')
+            dcm_folder_path = os.path.join(uploader_path, file_format[0])
+            if not os.path.exists(dcm_folder_path):
+                os.mkdir(dcm_folder_path)
+            for idx, myfile in enumerate(myfiles):
+                # dcm file name template: {Type}_{Direction}_{CaseID}_{SliceID}.{Format}
+                filename = myfile.name
+                # fs = FileSystemStorage(location=folderPath)  # defaults to   MEDIA_ROOT
+                # fout = fs.save(filename, myfile)
+                # mydcm_path = os.path.join("uploads", "case_" + str(caseID), "dcm")
+                # dcm_folder_path = os.path.join(file_path, "dcm")
+                # myfile.name = filename
+                fs = FileSystemStorage(location=dcm_folder_path)  # defaults to   MEDIA_ROOT
+                fs.save(filename, myfile)
+                # print("dcm: ", idx)
+                # dcmpath = os.path.join(dcm_folder_path, filename)
+                # dataset = pydicom.dcmread(dcmpath)
+            dicom2nifti.convert_directory(dcm_folder_path, uploader_path, reorient=True, compression=False)
+            database_files = os.listdir(uploader_path)
+            for idx, myfile in enumerate(database_files):
+                if (myfile.split(".")[-1] == 'nii'):
+                    print(myfile)
+                    NiiPath = os.path.join(uploader_path, myfile)
+                    nimg3D = nib.load(NiiPath)
+                    np.array(nimg3D.header['pixdim'][1:4])
+                    dsfactor = [float(f) / w for w, f in
+                                zip([2, 2, 2], nimg3D.header['pixdim'][1:4])]  # 픽셀크기 2mm로 변환용 factor
+                    img3D = np.squeeze(np.array(nimg3D.dataobj))
+                    img3D = nd.interpolation.zoom(img3D, zoom=dsfactor)  # 2mm 픽셀로 스케일 변환
+                    # vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
+                    vx, vy, vz = img3D.shape
+                    # Save jpg files
+                    hz = int(vz / 2)
+                    hy = int(vy / 2)
+                    hx = int(vx / 2)
+                    saveJPGPath_hz = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hz.jpg")
+                    saveJPGPath_hy = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hy.jpg")
+                    saveJPGPath_hx = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hx.jpg")
+                    uint8_img2D = img3D[:, :, hz]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hz)
+                    uint8_img2D = img3D[:, hy, :]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hy)
+                    uint8_img2D = img3D[hx, :, :]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
+        elif Format == "analyze":
+            print('analyze')
+        elif Format == "nifti":
+            print('nifti')
+            fs = FileSystemStorage()
+            # [fs.save(os.path.join(uploader_path, f.name), f) for i, f in enumerate(myfiles) if (f.name.split(".")[-1]=='nii')]
+
+            for i, f in enumerate(myfiles):
+                saveNiiPath = os.path.join(uploader_path, f.name)
+                if (f.name.split(".")[-1]=='nii'):
+                    # Save nii files
+                    fs.save(saveNiiPath, f)
+                    nimg3D = nib.load(saveNiiPath)
+                    np.array(nimg3D.header['pixdim'][1:4])
+                    dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
+                    img3D = np.squeeze(np.array(nimg3D.dataobj))
+                    img3D = nd.interpolation.zoom(img3D, zoom=dsfactor) # 2mm 픽셀로 스케일 변환
+                    # vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
+                    vx, vy, vz = img3D.shape
+                    # Save jpg files
+                    hz = int(vz/2)
+                    hy = int(vy/2)
+                    hx = int(vx/2)
+                    saveJPGPath_hz = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hz.jpg")
+                    saveJPGPath_hy = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hy.jpg")
+                    saveJPGPath_hx = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hx.jpg")
+                    uint8_img2D = img3D[:,:,hz]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hz)
+                    uint8_img2D = img3D[:,hy,:]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hy)
+                    uint8_img2D = img3D[hx,:,:]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
 
 
         filenames = os.listdir(uploader_path)

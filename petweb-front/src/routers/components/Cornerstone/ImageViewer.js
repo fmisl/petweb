@@ -335,6 +335,8 @@ class ImageViewer extends Component {
     const elementS = this.elementS;
     const elementA = this.elementA;
     const elementM = this.elementM;
+
+
     elementC.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
     elementS.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
     elementA.removeEventListener("cornerstoneimagerendered",this.onImageRendered);
@@ -366,6 +368,13 @@ class ImageViewer extends Component {
       if (prevProps.isCrosshaired != isCrosshaired){
         this.controlViewport();
         console.log('constrolViewport isCrosshaired: ',isCrosshaired)
+        if (isCrosshaired==true) {
+          cornerstoneTools.playClip(this.elementM, 5);
+        }
+        else {
+          cornerstoneTools.stopClip(this.elementM, 5);
+        }
+        
         // console.log('viewport.colormap', this.props.stackC.options.viewport.colormap)
         // let viewportC = cornerstone.getViewport(this.elementC);
         // viewportC.colormap = this.props.stackC.options.viewport.colormap;
@@ -496,13 +505,24 @@ class ImageViewer extends Component {
         console.error('FastSkip axialLoadImagePromise')
       }
     });
-    const mipLoadImagePromise = cornerstone.loadImage(this.props.stackM.imageIds[40]).then(image => {
+    const mipLoadImagePromise = cornerstone.loadImage(this.props.stackM.imageIds[0]).then(image => {
       // Display the first image
       try{
+        try{//데이터가 없으면 if문에서 stack.data[0] 호출할때 에러나서 catch로 이동
+          let temp = cornerstoneTools.getElementToolStateManager(elementM)
+          if (temp.toolState.stack.data[0]){ //데이터가 존재하면 돌리던건 멈춘다
+            cornerstoneTools.stopClip(elementM, 5);
+            // alert('데이터 있음->기존데이터 멈춤: stopClip')
+          }
+        } catch(e){
+          // alert('데이터 없음->: nothing')
+        }
+        // var toolStateManager = cornerstoneTools.getElementToolStateManager(elementM);
+        // cornerstone.clearToolState(elementM, 'stack')
         cornerstone.displayImage(elementM, image);
 
         const stack = this.props.stackM;
-        cornerstoneTools.addStackStateManager(elementM, ["stack"]);
+        cornerstoneTools.addStackStateManager(elementM, ["stack", 'playClip']);
         cornerstoneTools.addToolState(elementM, "stack", stack);
         // cornerstoneTools.pan.activate(elementM, 1);
         cornerstoneTools.stackScroll.activate(elementM, 1);
@@ -510,6 +530,32 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackPrefetch.enable(elementM, 3);
         cornerstoneTools.zoom.activate(elementM, 3);
         cornerstoneTools.wwwcRegion.activate(elementM, 4);
+
+        try{
+          let temp = cornerstoneTools.getElementToolStateManager(elementM)
+          if (temp.toolState.stack.data[0]){ //데이터가 존재하면 돌리던건 멈춘다
+            if (isCrosshaired) cornerstoneTools.playClip(elementM, 5);
+            else cornerstoneTools.stopClip(elementM, 5);
+            // alert('새로운 데이터 회전->: playClip')
+          }
+        } catch(e){
+          console.log('error')
+        }
+        // try{
+        //   let temp = cornerstoneTools.getElementToolStateManager(elementM)
+        //   if (temp.toolState.stack.data[0]){
+        //     cornerstoneTools.stopClip(elementM, 5);
+        //     alert('data exist: stopClip')
+        //   } else {
+        //     cornerstoneTools.playClip(elementM, 5);
+        //     alert('data not exist: playClip')
+        //   }
+        //   console.dir(temp)
+        //   console.dir(temp.toolState.stack.data[0])
+        // } catch(e){
+        //   console.log('error')
+        // }
+
         this.wwwcsynchronizer.add(elementM);
         // this.synchronizer.add(elementM);
 
@@ -524,7 +570,7 @@ class ImageViewer extends Component {
         console.error('FastSkip axialLoadImagePromise')
       }
     });
-    Promise.all([coronalLoadImagePromise, sagittalLoadImagePromise, axialLoadImagePromise]).then(() => {
+    Promise.all([coronalLoadImagePromise, sagittalLoadImagePromise, axialLoadImagePromise, mipLoadImagePromise]).then(() => {
       // Add the enabled elements to the synchronization context
       try{
         this.synchronizer.add(elementC);
@@ -542,6 +588,7 @@ class ImageViewer extends Component {
         cornerstoneTools.crosshairsTouch.enable(elementC, this.synchronizer);
         cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
         cornerstoneTools.crosshairsTouch.enable(elementA, this.synchronizer);
+
       } catch(e){
         console.error('FastSkip Promise',e)
       }
