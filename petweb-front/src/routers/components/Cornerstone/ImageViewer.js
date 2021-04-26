@@ -102,7 +102,8 @@ class ImageViewer extends Component {
       top:"50%",
       left:"0",
       width:"775px",
-      height:"425px",
+      // height:"425px",
+      height:"510px",
       position: "absolute",
       color: "white",
       filter: isInverted ? "invert(1)":"invert(0)",
@@ -116,7 +117,8 @@ class ImageViewer extends Component {
       top:"50%",
       left:"50%",
       width:"775px",
-      height:"425px",
+      // height:"425px",
+      height:"510px",
       position: "absolute",
       color: "white",
       filter: isInverted ? "invert(1)":"invert(0)",
@@ -183,12 +185,21 @@ class ImageViewer extends Component {
         >
           <canvas className="cornerstone-canvas" />
         </div>
-        {/* {this.props.isCrosshaired && <div className="coronal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.props.stackC.currentImageIdIndex/108*50}%`,left:"0%", width:"50%", height:"0%"}}></div>}
-        {this.props.isCrosshaired && <div className="coronal-sagittal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",top:"0%",left:`${this.props.stackC.currentImageIdIndex/108*50+50}%`, width:"0%", height:"50%"}}></div>}
-        {this.props.isCrosshaired && <div className="sagittal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.props.stackS.currentImageIdIndex/90*50}%`, height:"50%"}}></div>}
-        {this.props.isCrosshaired && <div className="sagittal-coronal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.props.stackS.currentImageIdIndex/90*50}%`, top:"50%", height:"50%"}}></div>}
-        {this.props.isCrosshaired && <div className="axial-coronal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:"0%", bottom:`${this.props.stackA.currentImageIdIndex/90*50+50}%`, width:"50%"}}></div>}
-        {this.props.isCrosshaired && <div className="axial-sagittal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:"50%", bottom:`${this.props.stackA.currentImageIdIndex/90*50+50}%`, width:"50%"}}></div>} */}
+        {/* {this.props.isCrosshaired && <div className="coronal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.props.stackC.currentImageIdIndex/108*50}%`,left:"0%", width:"50%", height:"0%"}}></div>} */}
+        {/* {this.props.isCrosshaired && <div className="coronal-sagittal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",top:"0%",left:`${this.props.stackC.currentImageIdIndex/108*50+50}%`, width:"0%", height:"50%"}}></div>} */}
+        {/* {this.props.isCrosshaired && <div className="sagittal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.props.stackS.currentImageIdIndex/90*50}%`, height:"50%"}}></div>} */}
+        {/* {this.props.isCrosshaired && <div className="sagittal-coronal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:`${this.props.stackS.currentImageIdIndex/90*50}%`, top:"50%", height:"50%"}}></div>} */}
+        {/* {this.props.isCrosshaired && <div className="axial-coronal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",left:"0%", bottom:`${this.props.stackA.currentImageIdIndex/90*50+50}%`, width:"50%"}}></div>} */}
+        {/* {this.props.isCrosshaired && <div className="axial-sagittal" style={{position:"absolute", border:"1px red solid", boxSizing:"border-box",left:"50%", bottom:`${this.props.stackA.currentImageIdIndex/90*50+50}%`, width:"50%"}}></div>} */}
+        {/* {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"0%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}
+        {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}
+        {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}
+        {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>} */}
+
+        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"25%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>R</div><div>L</div></div>}
+        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"50%",top:"25%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>P</div><div>A</div></div>}
+        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>R</div><div>L</div></div>}
+        {/* {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between'}}>Superior</div>} */}
       </div>
     );
   }
@@ -353,7 +364,7 @@ class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { isInverted, isCrosshaired } = this.props;
+    const { isInverted, isCrosshaired, isPlayed } = this.props;
     const elementC = this.elementC;
     // const elementS = this.elementS;
     // const elementA = this.elementA;
@@ -365,15 +376,15 @@ class ImageViewer extends Component {
         console.log('loadImage with counter',this.props.counter)
         this.loadImage(this.elementC, this.elementS, this.elementA, this.elementM);
       } 
+      if (isPlayed==true) {
+        cornerstoneTools.playClip(this.elementM, 5);
+      }
+      else {
+        cornerstoneTools.stopClip(this.elementM, 5);
+      }
       if (prevProps.isCrosshaired != isCrosshaired){
         this.controlViewport();
         console.log('constrolViewport isCrosshaired: ',isCrosshaired)
-        if (isCrosshaired==true) {
-          cornerstoneTools.playClip(this.elementM, 5);
-        }
-        else {
-          cornerstoneTools.stopClip(this.elementM, 5);
-        }
         
         // console.log('viewport.colormap', this.props.stackC.options.viewport.colormap)
         // let viewportC = cornerstone.getViewport(this.elementC);
@@ -414,7 +425,7 @@ class ImageViewer extends Component {
 
 
   loadImage=(elementC, elementS, elementA, elementM)=>{
-    const { isCrosshaired } = this.props;
+    const { isCrosshaired, isPlayed } = this.props;
     // console.log('loadImage')
     // const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
     // const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
@@ -534,7 +545,7 @@ class ImageViewer extends Component {
         try{
           let temp = cornerstoneTools.getElementToolStateManager(elementM)
           if (temp.toolState.stack.data[0]){ //데이터가 존재하면 돌리던건 멈춘다
-            if (isCrosshaired) cornerstoneTools.playClip(elementM, 5);
+            if (isPlayed) cornerstoneTools.playClip(elementM, 5);
             else cornerstoneTools.stopClip(elementM, 5);
             // alert('새로운 데이터 회전->: playClip')
           }

@@ -5,6 +5,8 @@ import * as actions from '../reduxs/actions';
 import * as cornerstone from "cornerstone-core";
 import '../App.css';
 import {useSelector, useDispatch} from 'react-redux';
+import IconPlay from '../images/IconPlay';
+import IconPlayPNG from '../images/play.png';
 import IconCrosshair from '../images/IconCrosshair';
 import IconCrosshairOff from '../images/IconCrosshairOff';
 import IconInvert from '../images/IconInvert';
@@ -25,6 +27,7 @@ class View extends Component {
   state = {
     username: localStorage.getItem('username'),
     showMenu: false,
+    isPlayed: true,
     isCrosshaired: true,
     isInverted: true,
     isSNed: true,
@@ -135,6 +138,7 @@ class View extends Component {
     })
   }
   setShowMenu = (value) =>{ this.setState({showMenu:value}) }
+  setIsPlayed = (value) =>{ this.setState({isPlayed:value}) }
   setIsCrosshaired = (value) =>{ this.setState({isCrosshaired:value}) }
   setIsInverted = (value) =>{ this.setState({isInverted:value}) }
   setIsSNed = (value) =>{ this.setState({isSNed:value}) }
@@ -254,8 +258,8 @@ class View extends Component {
   }
 
   render() {
-    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady} = this;
-    const {dataReady, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack} = this.state;
+    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed} = this;
+    const {dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack} = this.state;
     const {counter, stackManager} = this.props;
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
@@ -264,7 +268,7 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-              <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
+              <ImageViewer isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
@@ -289,6 +293,11 @@ class View extends Component {
               </div>
             </div>
             <div style={{display:"flex", color:"white"}}>
+              <div className="view-btn" onClick={()=>setIsPlayed(!isPlayed)}><img src={IconPlayPNG} width={'42px'}  className="view-icon"/></div>
+              <div className="view-btn opacity-bar" >
+                Speed:&nbsp;
+                <input type="range" style={{height:"100%", width:"100%"}} value="5" step="1" min="0" max="20"/>
+              </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsInverted(!isInverted)}>{isInverted ? <IconInvert className="view-icon"/>:<IconInvertOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsSNed(!isSNed)}>{isSNed ? <IconSN className="view-icon"/>:<IconSNOff className="view-icon"/>}</div>
@@ -408,8 +417,8 @@ class View extends Component {
       if(direction === 'coronal') {width=91; height=91}
       else if(direction === 'sagittal') {width=109; height=91}
       else if(direction === 'axial') {width=91; height=109}
-      // else if (direction === "mip"){width = 109; height = 91}
-      else if(direction === 'mip'){width = 69; height = 51}
+      else if (direction === "mip"){width = 109; height = 91}
+      // else if(direction === 'mip'){width = 69; height = 51}
       // console.log("ID: ", ID, " Direction: ", Direction, " w/h: ", width,"/",height)
 
       var image = {
@@ -482,8 +491,8 @@ class View extends Component {
       if (direction === "coronal"){width = 91; height = 91}
       else if (direction === "sagittal"){width = 109; height = 91}
       else if (direction === "axial"){width = 91; height = 109}
-      // else if (direction === "mip"){width = 109; height = 91}
-      else if (direction === "mip"){width = 69; height = 51}
+      else if (direction === "mip"){width = 109; height = 91}
+      // else if (direction === "mip"){width = 69; height = 51}
 
       // console.log(identifier, type)
       if(type === 'imagePlaneModule') {

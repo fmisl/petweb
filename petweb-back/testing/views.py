@@ -70,7 +70,8 @@ class uploader(APIView):
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         database_path = os.path.join(user_path, 'database')
         # target_mip_size=[45,54,45]
-        target_mip_size=[51,69,51]
+        # target_mip_size=[51,69,51]
+        target_mip_size=[91,109,91]
         for myfile in myfiles:
             # print(os.path.join(user_path, myfile['FileName']))
             target_file = os.path.join(database_path, myfile['FileName'])
@@ -149,9 +150,11 @@ class uploader(APIView):
                     [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/6)
                     crop1 = dst1[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
                     cropedRotatedUniformImg = RotatedUniformImg[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
-                    proj = crop1[:, :, :].sum(axis=0)
-                    temp = cropedRotatedUniformImg[:, :, :].sum(axis=0)
-                    column_proj1 = np.rot90(proj*1.5 / (temp + (temp==0)))
+                    # proj = crop1[:, :, :].sum(axis=0)
+                    proj = np.max(crop1, axis=0)
+                    # temp = cropedRotatedUniformImg[:, :, :].sum(axis=0)
+                    # column_proj1 = np.rot90(proj*1.5 / (temp + (temp==0)))
+                    column_proj1 = np.rot90(proj)
                     column_proj1 = np.clip(column_proj1,0,32767)
                     # column_proj1 = 32767 * (column_proj1-column_proj1.min()) / (column_proj1.max()-column_proj1.min())
                     column_proj1 = column_proj1.astype(np.uint16)
@@ -413,9 +416,11 @@ class uploader(APIView):
                     [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/6)
                     crop1 = dst1[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
                     cropedRotatedUniformImg = RotatedUniformImg[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
-                    proj = crop1[:, :, :].sum(axis=0)
-                    temp = cropedRotatedUniformImg[:, :, :].sum(axis=0)
-                    column_proj1 = np.rot90(proj*1.5 / (temp + (temp==0)))
+                    # proj = crop1[:, :, :].sum(axis=0)
+                    proj = np.max(crop1, axis=0)
+                    # temp = cropedRotatedUniformImg[:, :, :].sum(axis=0)
+                    # column_proj1 = np.rot90(proj*1.5 / (temp + (temp==0)))
+                    column_proj1 = np.rot90(proj)
                     column_proj1 = np.clip(column_proj1,0,32767)
                     # column_proj1 = 32767 * (column_proj1-column_proj1.min()) / (column_proj1.max()-column_proj1.min())
                     column_proj1 = column_proj1.astype(np.uint16)
