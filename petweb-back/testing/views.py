@@ -1,5 +1,6 @@
 # from django.http import HttpResponse
-import os
+import os, shutil
+import subprocess
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -471,9 +472,13 @@ class uploader(APIView):
         uploader_path = os.path.join(user_path, 'uploader')
         if not os.path.exists(uploader_path):
             os.mkdir(uploader_path)
+
+
+
         database_path = os.path.join(user_path, 'database')
         if not os.path.exists(database_path):
             os.mkdir(database_path)
+
 
         jsonData = request.data['obj']
         selectedTracer = request.data['Tracer']
@@ -526,6 +531,16 @@ class uploader(APIView):
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames)
          if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
+
+        for filename in os.listdir(uploader_path):
+            file_path = os.path.join(uploader_path, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
 
         allCases = models.Case.objects.all().values()
         serializer = serializers.CaseSerializer(allCases, many=True)
@@ -602,6 +617,21 @@ class uploader(APIView):
             dcm_folder_path = os.path.join(uploader_path, file_format[0])
             if not os.path.exists(dcm_folder_path):
                 os.mkdir(dcm_folder_path)
+            else:
+                for filename in os.listdir(uploader_path):
+                    file_path = os.path.join(uploader_path, filename)
+                    try:
+                        if os.path.isfile(file_path) or os.path.islink(file_path):
+                            os.unlink(file_path)
+                        elif os.path.isdir(file_path):
+                            shutil.rmtree(file_path)
+                    except Exception as e:
+                        print('Failed to delete %s. Reason: %s' % (file_path, e))
+                while len(os.listdir(uploader_path)) != 0:
+                    print("Directory is not empty")
+                os.mkdir(dcm_folder_path)
+
+
             for idx, myfile in enumerate(myfiles):
                 # dcm file name template: {Type}_{Direction}_{CaseID}_{SliceID}.{Format}
                 filename = myfile.name
@@ -615,7 +645,10 @@ class uploader(APIView):
                 # print("dcm: ", idx)
                 # dcmpath = os.path.join(dcm_folder_path, filename)
                 # dataset = pydicom.dcmread(dcmpath)
-            dicom2nifti.convert_directory(dcm_folder_path, uploader_path, reorient=True, compression=False)
+            # dicom2nifti.convert_directory(dcm_folder_path, uploader_path, reorient=True, compression=False)
+            dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')
+            subprocess.run([dcm2niix_path, "-o", r'uploads\dwnusa\uploader', "-f", "%p_%s", dcm_folder_path])
+
             database_files = os.listdir(uploader_path)
             for idx, myfile in enumerate(database_files):
                 if (myfile.split(".")[-1] == 'nii'):
