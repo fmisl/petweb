@@ -6,6 +6,8 @@ import * as actions from '../../../reduxs/actions';
 import spinner from '../../../images/gif/spinner5.gif'
 import * as services from '../../../services/fetchApi'
 import { withRouter } from 'react-router-dom';
+// import IconQuestion from '../../../images/IconQuestion'
+import IconQuestion from '../../../images/IconQuestion.png'
 
 const FilterableTable = require('react-filterable-table');
  
@@ -194,7 +196,8 @@ class UploadTable extends Component {
         const fields = [
             { render: this.renderSelect, name: 'Select', displayName: "Select", inputFilterable: false, sortable: false},
             { render: this.renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
-            { render: this.renderCentiloid, name: 'Centiloid', displayName: "Centiloid", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderCentiloid, name: 'Centiloid', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Centiloid &nbsp;&nbsp;&nbsp;<img className='UploadTable-IconQuestion' src={IconQuestion} width={'30px'} height={'30px'}/><span className="UploadTable-msg" >Centiloid composite ROI relative to whole cerebellum</span></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            // { render: this.renderCentiloid, name: 'Centiloid', displayName: <div>Centiloid<IconQuestion width={'25px'} height={'25px'}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'Age', displayName: "BirthDate", inputFilterable: true, exactFilterable: false, sortable: true },

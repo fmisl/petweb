@@ -61,7 +61,7 @@
 .table.table-condensed.table-hover.filterable-table>thead>tr>th {
     /* background: yellow; */
     width: 270px;
-    height: 60px;
+    height: 90px;
     /* opacity: 1; */
 }
 
@@ -77,6 +77,7 @@
 .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(3) {
     width: 300px;
 }
+
 .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(5) {
     width: 150px;
 }
@@ -88,6 +89,7 @@
 .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(7) {
     width: 80px;
 }
+
 .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(8) {
     width: 150px;
 }
@@ -149,9 +151,10 @@
     overflow-x: scroll;
     /* border: red solid; */
 }
+
 .table.table-condensed.table-hover.filterable-table>tbody>tr>td:nth-child(8)>span {
     display: block;
-    
+
     width: 150px;
     height: 100%;
     white-space: nowrap;
@@ -324,6 +327,7 @@
 .UploadTable-Tracer.PIB>div {
     border-left: #118AF7 solid;
 }
+
 .UploadTable-Tracer.FMM>div {
     border-left: #118AF7 solid;
 }
@@ -355,4 +359,30 @@
     width: 60px;
     margin-right: 30px;
     /* border: red solid; */
+}
+
+.UploadTable-IconQuestion {
+    /* border: 1px red solid; */
+}
+
+.UploadTable-IconQuestion:hover {
+    /* border: 1px red solid; */
+}
+
+.UploadTable-msg {
+    visibility: hidden;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 30px;
+    border: 1px white solid;
+    border-radius: 20px;
+    top: -30px;
+    left: 5px;
+}
+
+.UploadTable-IconQuestion:hover~.UploadTable-msg {
+    visibility: visible;
 }

@@ -39,7 +39,8 @@ function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, i
   useEffect(() => {
     if (alarm) {
       setAlarm(false);
-      alert(`Selected: [\u00B9\u2078F] `+tracer);
+      // alert(`Selected: [\u00B9\u2078F] `+tracer);
+      setTimeout(() => alert(`Selected: [\u00B9\u2078F] `+tracer), 100);
     }
   },[alarm])
   console.log(selectTracer.slice(-3) == 'FMM')
