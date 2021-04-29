@@ -15,20 +15,28 @@ class TimeStampedModel(models.Model):
 
 
 class Case(TimeStampedModel):
+    # System Info
     Opened = models.BooleanField(blank=True, default=False)
     Select = models.BooleanField(blank=True, default=False)
     Focus = models.BooleanField(blank=True, default=False)
     Group = models.IntegerField(blank=True, default=0)
-
+    # File & Image Info
     fileID = models.CharField(max_length=150, blank=True, null=True)
     OriginalFileName = models.CharField(max_length=500, blank=True, null=True)
     FileName = models.CharField(max_length=150, blank=True, null=True)
+    InputAffineParamsX0 = models.FloatField(max_length=100, blank=True, null=True)
+    InputAffineParamsY1 = models.FloatField(max_length=100, blank=True, null=True)
+    InputAffineParamsZ2 = models.FloatField(max_length=100, blank=True, null=True)
+    OutputAffineParamsX0 = models.FloatField(max_length=100, blank=True, null=True)
+    OutputAffineParamsY1 = models.FloatField(max_length=100, blank=True, null=True)
+    OutputAffineParamsZ2 = models.FloatField(max_length=100, blank=True, null=True)
+    # Patient Info
     PatientID = models.CharField(max_length=150, blank=True, null=True)
     PatientName = models.CharField(max_length=150, blank=True, null=True)
     Age = models.CharField(max_length=20, blank=True, null=True)
     Sex = models.CharField(max_length=3, blank=True, null=True)
     AcquisitionDateTime = models.CharField(max_length=100, blank=True, null=True, default=None)
-
+    # Quantification Info
     Tracer = models.CharField(max_length=150, blank=True, null=True)
     SUVR = models.FloatField(blank=True, default=None, null=True)
     Centiloid = models.FloatField(blank=True, default=None, null=True)

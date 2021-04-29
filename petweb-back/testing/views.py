@@ -88,6 +88,9 @@ class uploader(APIView):
                 print("Step2: create target folder ")
                 os.mkdir(target_folder)
                 nimg3D = nib.load(target_file) # 이미지 불러오기
+                InputAffineX0 = nimg3D.affine[0][0]
+                InputAffineY1 = nimg3D.affine[1][1]
+                InputAffineZ2 = nimg3D.affine[2][2]
 
                 # img hdr 파일을 생성해서 각 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "input_"+myfile['fileID']+".img"))
@@ -118,6 +121,10 @@ class uploader(APIView):
 
                 print("Step3: create input image")
                 getCase = models.Case.objects.filter(fileID=myfile['fileID'])[0]
+                getCase.InputAffineParamsX0=InputAffineX0
+                getCase.InputAffineParamsY1=InputAffineY1
+                getCase.InputAffineParamsZ2=InputAffineZ2
+                getCase.save()
                 reg_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
                 scale_img3D = 32767 * reg_img3D
                 uint16_img3D = scale_img3D.astype(np.uint16)
@@ -294,6 +301,14 @@ class uploader(APIView):
 
                 target_file = os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".img")
                 nimg3D = nib.load(target_file) # 이미지 불러오기
+                OutputAffineX0 = nimg3D.affine[0][0]
+                OutputAffineY1 = nimg3D.affine[1][1]
+                OutputAffineZ2 = nimg3D.affine[2][2]
+                getCase = models.Case.objects.filter(fileID=myfile['fileID'])[0]
+                getCase.OutputAffineParamsX0=OutputAffineX0
+                getCase.OutputAffineParamsY1=OutputAffineY1
+                getCase.OutputAffineParamsZ2=OutputAffineZ2
+                getCase.save()
                 img3D = np.array(nimg3D.dataobj)
 
                 # nii 파일을 database 폴더에 생성하기....
