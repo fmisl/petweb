@@ -24,7 +24,7 @@ function Upload({toggleWorklist}) {
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const [uploaderFileList, setUploaderFileList] = useState([]);
-  const [selectTracer, setSelectTracer] = useState('[11C]PIB');
+  const [selectTracer, setSelectTracer] = useState('[18F]FBP');
   // useEffect(() => {
   //   console.log('useEffect called in Upload (uploaderFileList)',fileList)
   // },[fileList.length])
@@ -122,7 +122,7 @@ function Upload({toggleWorklist}) {
     dispatch(fetchItems(uploadList));
     // setFileList(uploadList)
   }
-
+  console.log("upload: ", selectTracer)
   return (
     <div className="content">
       {/* <Sidebar />

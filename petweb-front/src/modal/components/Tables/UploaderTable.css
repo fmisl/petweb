@@ -339,10 +339,14 @@
   text-align: left;
   border-left: white solid;
   /* margin-left: 0px; */
-  width: 90%;
-  /* border: white solid; */
+  width: 100%;
+  /* border: 1px blue solid; */
 }
 
+.UploaderTable-Tracer.FMM>div {
+  border-left: #118AF7 solid;
+  /* border: red solid; */
+}
 .UploaderTable-Tracer.PIB>div {
   border-left: #118AF7 solid;
   /* border: red solid; */

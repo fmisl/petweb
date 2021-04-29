@@ -324,6 +324,9 @@
 .UploadTable-Tracer.PIB>div {
     border-left: #118AF7 solid;
 }
+.UploadTable-Tracer.FMM>div {
+    border-left: #118AF7 solid;
+}
 
 .UploadTable-Tracer.FBP>div {
     border-left: #1AFFD6 solid;
