@@ -11,6 +11,8 @@ import * as cornerstoneTools from "cornerstone-tools";
 import Hammer from "hammerjs";
 import * as cornerstoneWebImageLoader from "cornerstone-web-image-loader";
 import { CartesianGrid } from 'recharts';
+import graycmap from "../../../images/graycmap.png"
+import invertedgraycmap from "../../../images/invertedgraycmap.png"
 
 // Listing the dependencies for reference later
 cornerstoneTools.external.cornerstone = cornerstone;
@@ -199,6 +201,10 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"25%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
         {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"50%",top:"25%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
         {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        
+        <div style={{border:"0px red solid", position:"absolute",height:'45%', width:'20px', boxSizing:"border-box",left:"0%",top:"0%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}><div style={{border:"0px red solid", display:"flex", flexDirection:"column", justifyContent:"space-between"}}><span>3.0</span><span>0</span></div>{isInverted ? <img src={invertedgraycmap} />:<img src={graycmap}/>}</div> {/* Coronal Plane  */}
+        <div style={{border:"0px red solid", position:"absolute",height:'45%', width:'20px', boxSizing:"border-box",left:"50%",top:"0%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}><div style={{border:"0px red solid", display:"flex", flexDirection:"column", justifyContent:"space-between"}}><span>3.0</span><span>0</span></div>{isInverted ? <img src={invertedgraycmap} />:<img src={graycmap}/>}</div> {/* Sagittal Plane this.AxialRightSide */}
+        <div style={{border:"0px red solid", position:"absolute",height:'50%', width:'20px', boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}><div style={{border:"0px red solid", display:"flex", flexDirection:"column", justifyContent:"space-between"}}><span>3.0</span><span>0</span></div>{isInverted ? <img src={invertedgraycmap} />:<img src={graycmap}/>}</div> {/* Axial Plane this.AxialRightSide */}
         {/* {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between'}}>Superior</div>} */}
       </div>
     );
