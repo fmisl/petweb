@@ -77,6 +77,9 @@
 .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(3) {
     width: 300px;
 }
+.table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(5) {
+    width: 150px;
+}
 
 .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(6) {
     width: 80px;
@@ -84,6 +87,9 @@
 
 .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(7) {
     width: 80px;
+}
+.table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(8) {
+    width: 150px;
 }
 
 /* .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(8) {
@@ -132,7 +138,7 @@
 }
 
 .table.table-condensed.table-hover.filterable-table>tbody>tr>td:nth-child(4)>span>.UploadTable-Default {
-    width: 600px;
+    /* width: 300px; */
     height: 130%;
     /* height: 85px; */
     display: block;
@@ -142,6 +148,15 @@
     overflow-y: hidden;
     overflow-x: scroll;
     /* border: red solid; */
+}
+.table.table-condensed.table-hover.filterable-table>tbody>tr>td:nth-child(8)>span {
+    display: block;
+    
+    width: 150px;
+    height: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    /* border: yellow solid; */
 }
 
 .table.table-condensed.table-hover.filterable-table>tbody>tr>td {

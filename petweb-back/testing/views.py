@@ -21,6 +21,7 @@ import cv2
 import base64
 import imageio
 import dicom2nifti
+import json
 
 
 class uploader(APIView):
@@ -500,20 +501,43 @@ class uploader(APIView):
                 PatientName=None,
                 Age=None,
                 Sex=None,
+                AcquisitionDateTime=None,
                 Tracer=selectedTracer,
                 SUVR=None,
                 Centiloid=None,
             )
             newCase.save()
+
             newFileID = newCase.id
+
+            try:
+                json_filename = v['FileName'][:-3]+"json"
+                json_path = os.path.join(uploader_path, json_filename)
+                with open(json_path) as json_file:
+                    json_data = json.load(json_file)
+
+                newCase.fileID = str(newFileID)
+                newCase.FileName = str(newFileID)+".nii"
+                # newCase.Tracer = "[11C]PIB"
+                newCase.PatientName = json_data['PatientName']
+                newCase.PatientID = json_data['PatientID']
+                newCase.Age = json_data['PatientBirthDate']
+                newCase.Sex = json_data['PatientSex']
+                newCase.AcquisitionDateTime = json_data['AcquisitionDateTime'].split('T')[0]
+                mv(os.path.join(uploader_path, v['FileName'][:-3]+"json"), os.path.join(database_path, str(newFileID) + ".json"))
+            except:
+                print('there is no json file')
+                newCase.fileID = str(newFileID)
+                newCase.FileName = str(newFileID)+".nii"
+                # newCase.Tracer = "[11C]PIB"
+                # newCase.PatientName = v['FileName']
+                newCase.PatientName = 'Anonymous (nifti)'
+                newCase.PatientID = '-'
+                newCase.Age = '-'
+                newCase.Sex = '-'
+                newCase.AcquisitionDateTime = '-'
+
             mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(newFileID) + ".nii"))
-            newCase.fileID = str(newFileID)
-            newCase.FileName = str(newFileID)+".nii"
-            # newCase.Tracer = "[11C]PIB"
-            newCase.PatientName = v['FileName']
-            newCase.PatientID = str(newFileID)
-            newCase.Age = 38
-            newCase.Sex = 'M'
             # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[18F]FBP',
             #              'SUVR': 2.21, 'Centiloid': centiloidArray[int(filename.split('.')[0])], 'FileName': filename,
             #              'fileID': filename.split('.')[0],
@@ -615,20 +639,20 @@ class uploader(APIView):
         if Format == "dcm":
             print('dcm')
             dcm_folder_path = os.path.join(uploader_path, file_format[0])
+
+            for filename in os.listdir(uploader_path):
+                file_path = os.path.join(uploader_path, filename)
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    print('Failed to delete %s. Reason: %s' % (file_path, e))
+            while len(os.listdir(uploader_path)) != 0:
+                print("Directory is not empty")
+
             if not os.path.exists(dcm_folder_path):
-                os.mkdir(dcm_folder_path)
-            else:
-                for filename in os.listdir(uploader_path):
-                    file_path = os.path.join(uploader_path, filename)
-                    try:
-                        if os.path.isfile(file_path) or os.path.islink(file_path):
-                            os.unlink(file_path)
-                        elif os.path.isdir(file_path):
-                            shutil.rmtree(file_path)
-                    except Exception as e:
-                        print('Failed to delete %s. Reason: %s' % (file_path, e))
-                while len(os.listdir(uploader_path)) != 0:
-                    print("Directory is not empty")
                 os.mkdir(dcm_folder_path)
 
 
@@ -647,7 +671,8 @@ class uploader(APIView):
                 # dataset = pydicom.dcmread(dcmpath)
             # dicom2nifti.convert_directory(dcm_folder_path, uploader_path, reorient=True, compression=False)
             dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')
-            subprocess.run([dcm2niix_path, "-o", r'uploads\dwnusa\uploader', "-f", "%p_%s", dcm_folder_path])
+            # subprocess.run([dcm2niix_path, "-o", r'uploads\dwnusa\uploader', "-f", "%t_%p_%s", dcm_folder_path])
+            subprocess.run([dcm2niix_path, "-o", uploader_path, "-b", "y", "-ba", "n", "-f", "%t_%p_%s", dcm_folder_path])
 
             database_files = os.listdir(uploader_path)
             for idx, myfile in enumerate(database_files):
@@ -741,6 +766,17 @@ class uploader(APIView):
 
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
+
+        for filename in os.listdir(uploader_path):
+            file_path = os.path.join(uploader_path, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
         return Response("delete test ok", status=200)
 
 
