@@ -6,6 +6,9 @@ import * as actions from '../../../reduxs/actions';
 import './AnalysisItem3.css'
 // import * as services from '../../../services/fetchApi'
 class Analysisitem3 extends Component {
+    state = {
+        currentStepIndex: 1.6,
+    }
     // state = {
     //     subRegion:{},
     // }
@@ -30,23 +33,29 @@ class Analysisitem3 extends Component {
     //         }
     //     }
     // }
+    handleInputChange = e => {
+        this.setState({ currentStepIndex: e.currentTarget.value });
+    };
 
     render() {
         const {counter} = this.props;
+        const {currentStepIndex} = this.state;
         const username = localStorage.getItem('username')
         return (
             <div className="AnalysisItem3-Default">
                 <div className="AnalysisItem3-Surface" >
                     {/* IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png' */}
-                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_llat.png'} height="220px"/>Left Lateral</div>
-                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rlat.png'} height="220px"/>Right Lateral</div>
+                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rlat_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>Right Lateral</div>
+                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_llat_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>Left Lateral</div>
                 </div>
                 <div className="AnalysisItem3-Surface" >
-                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_lmed.png'} height="220px"/>Left Medial</div>
-                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rmed.png'} height="220px"/>Right Medial</div>
+                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rmed_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>Right Medial</div>
+                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_lmed_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>Left Medial</div>
                 </div>
                 <div className="AnalysisItem3-Threshold">
-                    <input type="range" style={{width:"35%"}}/>
+                    <span>SUVR &nbsp;</span>
+                    <input type="range" min="0.6" max="2.8" value={this.state.currentStepIndex} step="0.2" onInput={this.handleInputChange} style={{width:"35%"}}/>
+                    <span> &nbsp;{parseFloat(currentStepIndex).toFixed(1)}</span>
                 </div>
             </div>
         )

@@ -364,7 +364,7 @@ class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { isInverted, isCrosshaired, isPlayed, isSNed } = this.props;
+    const { isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex } = this.props;
     const elementC = this.elementC;
     // const elementS = this.elementS;
     // const elementA = this.elementA;
@@ -401,11 +401,13 @@ class ImageViewer extends Component {
         console.log('loadImage with counter',this.props.counter)
         this.loadImage(this.elementC, this.elementS, this.elementA, this.elementM);
       } 
+      // console.log(isPlayed==true && prevProps.currentStepIndex !== currentStepIndex)
+      // console.log(prevProps.currentStepIndex)
       if (isPlayed==true) {
-        cornerstoneTools.playClip(this.elementM, 5);
+        cornerstoneTools.playClip(this.elementM, currentStepIndex);
       }
       else {
-        cornerstoneTools.stopClip(this.elementM, 5);
+        cornerstoneTools.stopClip(this.elementM, currentStepIndex);
       }
       if (prevProps.isCrosshaired != isCrosshaired){
         this.controlViewport();

@@ -25,6 +25,7 @@ import {login, logout, increment, decrement, loadItems, loadSlices, profile, tab
 // function View({}) {
 class View extends Component {
   state = {
+    currentStepIndex: 20,
     username: localStorage.getItem('username'),
     showMenu: false,
     isPlayed: true,
@@ -257,9 +258,12 @@ class View extends Component {
     }
   }
 
+  handleInputChange = e => {
+    this.setState({ currentStepIndex: e.currentTarget.value });
+  };
   render() {
     const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed} = this;
-    const {dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack} = this.state;
+    const {dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
     const {counter, stackManager} = this.props;
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
@@ -268,7 +272,7 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{background:"black",position: "absolute", top:"150px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-              <ImageViewer isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
+              <ImageViewer currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
@@ -295,8 +299,8 @@ class View extends Component {
             <div style={{display:"flex", color:"white"}}>
               <div className="view-btn" onClick={()=>setIsPlayed(!isPlayed)}><img src={IconPlayPNG} width={'42px'}  className="view-icon"/></div>
               <div className="view-btn opacity-bar" >
-                Speed:&nbsp;
-                <input type="range" style={{height:"100%", width:"100%"}} value="5" step="1" min="0" max="20"/>
+                MIP({currentStepIndex}):&nbsp;
+                <input type="range" style={{height:"100%", width:"100%"}} value={this.state.currentStepIndex} onInput={this.handleInputChange} step="1" min="0" max="50"/>
               </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsInverted(!isInverted)}>{isInverted ? <IconInvert className="view-icon"/>:<IconInvertOff className="view-icon"/>}</div>
