@@ -267,7 +267,7 @@ class View extends Component {
         <Headerbar/> */}
         <div className="content-page">
           {/* <div className="view-box"> */}
-            <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
+            <div style={{background:"black",position: "absolute", top:"150px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
               <ImageViewer isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
               {/* <Home caseID={caseID}/> */}
             </div>

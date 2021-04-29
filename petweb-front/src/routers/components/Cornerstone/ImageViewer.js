@@ -99,7 +99,7 @@ class ImageViewer extends Component {
     const divStyleA = {
       // width: "512px",
       // height: "512px",
-      top:"50%",
+      top:"46%",
       left:"0",
       width:"775px",
       // height:"425px",
@@ -114,7 +114,7 @@ class ImageViewer extends Component {
     const divStyleM = {
       // width: "512px",
       // height: "512px",
-      top:"50%",
+      top:"46%",
       left:"50%",
       width:"775px",
       // height:"425px",
