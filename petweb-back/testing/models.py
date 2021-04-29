@@ -23,10 +23,11 @@ class Case(TimeStampedModel):
     fileID = models.CharField(max_length=150, blank=True, null=True)
     OriginalFileName = models.CharField(max_length=500, blank=True, null=True)
     FileName = models.CharField(max_length=150, blank=True, null=True)
-    PatientID = models.IntegerField(blank=True, null=True)
+    PatientID = models.CharField(max_length=150, blank=True, null=True)
     PatientName = models.CharField(max_length=150, blank=True, null=True)
-    Age = models.IntegerField(blank=True, default=0, null=True)
+    Age = models.CharField(max_length=20, blank=True, null=True)
     Sex = models.CharField(max_length=3, blank=True, null=True)
+    AcquisitionDateTime = models.CharField(max_length=100, blank=True, null=True, default=None)
 
     Tracer = models.CharField(max_length=150, blank=True, null=True)
     SUVR = models.FloatField(blank=True, default=None, null=True)
