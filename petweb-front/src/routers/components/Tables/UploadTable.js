@@ -197,9 +197,10 @@ class UploadTable extends Component {
             { render: this.renderCentiloid, name: 'Centiloid', displayName: "Centiloid", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Age', displayName: "Age", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Age', displayName: "BirthDate", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'Sex', displayName: "Sex", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Update', displayName: "Update", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'AcquisitionDateTime', displayName: "ScanDate", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Update', displayName: "Update", inputFilterable: true, exactFilterable: false, sortable: true, visible: true },
         ];
         return (
             <FilterableTable
@@ -208,7 +209,7 @@ class UploadTable extends Component {
                 // tableClassName="UploadTable"
                 // trClassName="WorklistTable"
                 namespace="UploadTable"
-                initialSort="PatientID"
+                initialSort="Update"
                 initialSortDir={false}
                 data={data}
                 fields={fields}

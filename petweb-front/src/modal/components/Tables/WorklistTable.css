@@ -320,6 +320,9 @@
   width: 100%;
 }
 
+.WorklistTable-Tracer.FMM>div {
+  border-left: #118AF7 solid;
+}
 .WorklistTable-Tracer.PIB>div {
   border-left: #118AF7 solid;
 }

@@ -18,6 +18,8 @@ const styleDiv ={
 }
 function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
   const [data, setData] = useState([]);
+  const [alarm, setAlarm] = useState(false);
+  const [tracer, setTracer] = useState('');
   const [focusItem, setFelectItem] = useState(0);
   const [tracerModal, setTracerModal] = useState(true);
   const [isChecked, setIsChecked] = useState(true);
@@ -26,7 +28,7 @@ function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, re
   useEffect(() => {
     if (isShowing) {
       setTracerModal(true);
-      setSelectTracer('[11C]PIB');
+      // setSelectTracer('[18F]FMM');
     }
   },[isShowing])
   const getJPGURL=(filename)=>{
@@ -34,6 +36,13 @@ function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, re
     const tempURL_head = IPinUSE+'result/download/'+username+'/uploader/'+fname
     setCurrentJPGURL_head(tempURL_head)
   }
+  useEffect(() => {
+    if (alarm) {
+      setAlarm(false);
+      alert(`Selected: [\u00B9\u2078F] `+tracer);
+    }
+  },[alarm])
+  console.log(selectTracer.slice(-3) == 'FMM')
   return (
     isShowing ? 
     ReactDOM.createPortal(
@@ -48,9 +57,9 @@ function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, re
               <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{console.log(Math.floor(Math.random() * 20+30));setFelectItem(Math.floor(Math.random() * 20+30))}}>
 
               <div style={{position:'relative', minWidth:'600px', minHeight:'60px'}}>
-                <div className={`modal-header-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>{setSelectTracer('[11C]PIB'); alert(`Selected: [\u00B9\u00B9C] `+`Pittsburg compound B`)}}>[<sup><sup>11</sup></sup>C]PIB</div>
-                <div className={`modal-header-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP'); alert(`Selected: [\u00B9\u2078F] `+`Florbetapir`)}}>[<sup><sup>18</sup></sup>F]FBP</div>
-                <div className={`modal-header-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB'); alert(`Selected: [\u00B9\u2078F] `+`Florbetaben`)}}>[<sup><sup>18</sup></sup>F]FBB</div>
+                <div className={`modal-header-btn FMM ${selectTracer.slice(-3) == 'FMM' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FMM'); setTracer('Flutemetamol(FMM)'); setAlarm(true);}}>[<sup><sup>18</sup></sup>F]FMM</div>
+                <div className={`modal-header-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP'); setTracer('Florbetapir(FBP)'); setAlarm(true);}}>[<sup><sup>18</sup></sup>F]FBP</div>
+                <div className={`modal-header-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB'); setTracer('Florbetaben(FBB)'); setAlarm(true);}}>[<sup><sup>18</sup></sup>F]FBB</div>
               </div>
                 <UploaderTable selectTracer={selectTracer} fileList={fileList} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>
               </div>
@@ -94,9 +103,30 @@ function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, re
               <div className="modal-Tracer-Selector">
                 <div style={{position:'relative', minWidth:'1000px', minHeight:'200px', display:"flex", justifyContent:"center"}}>
                   <div style={{position: 'absolute', top:'-200px'}}>Select tracer from below: </div>
-                  <div className={`modal-tracer-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>{setSelectTracer('[11C]PIB'); alert(`Selected: [\u00B9\u00B9C] `+`Pittsburg compound B`)}}>[<sup><sup>11</sup></sup>C]PIB</div>
-                  <div className={`modal-tracer-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP'); alert(`Selected: [\u00B9\u2078F] `+`Florbetapir`)}}>[<sup><sup>18</sup></sup>F]FBP</div>
-                  <div className={`modal-tracer-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB'); alert(`Selected: [\u00B9\u2078F] `+`Florbetaben`)}}>[<sup><sup>18</sup></sup>F]FBB</div>
+                  <div className={`modal-tracer-btn FMM ${selectTracer.slice(-3) == 'FMM' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FMM'); 
+                  setTracer('Flutemetamol(FMM)'); setAlarm(true);// alert(`Selected: [\u00B9\u00B9C] `+`Pittsburg compound B`)
+                  }}>
+                    <div>[<sup>18</sup>F]Flutemetamol (FMM)</div>
+                    <br/>
+                    <div style={{fontSize:'26px'}}>Trade names: Vizamyl</div>
+                    <div style={{fontSize:'26px'}}>Trader: GE Healthcare</div>
+                  </div>
+                  <div className={`modal-tracer-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP'); 
+                  setTracer('Florbetapir(FBP)'); setAlarm(true);// alert(`Selected: [\u00B9\u2078F] `+`Florbetapir`)
+                  }}>
+                    <div>[<sup>18</sup>F]Florbetapir (FBP)</div>
+                    <br/>
+                    <div style={{fontSize:'26px'}}>Trade names: Amyvid (AV-45)</div>
+                    <div style={{fontSize:'26px'}}>Company: Lilly</div>
+                  </div>
+                  <div className={`modal-tracer-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB'); 
+                  setTracer('Florbetaben(FBB)'); setAlarm(true);// alert(`Selected: [\u00B9\u2078F] `+`Florbetaben`)
+                  }}>
+                    <div>[<sup>18</sup>F]Florbetaben (FBB)</div>
+                    <br/>
+                    <div style={{fontSize:'26px'}}>Trade names: Nuraceq (BAY-949172)</div>
+                    <div style={{fontSize:'26px'}}>Company: Bayer</div>
+                  </div>
                   <div className={`modal-tracer-confirm`} onClick={()=>{setTracerModal(false)}}>Select</div>
                 </div>
               </div>}

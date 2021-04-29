@@ -1,5 +1,6 @@
 # from django.http import HttpResponse
-import os
+import os, shutil
+import subprocess
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -20,6 +21,7 @@ import cv2
 import base64
 import imageio
 import dicom2nifti
+import json
 
 
 class uploader(APIView):
@@ -86,6 +88,9 @@ class uploader(APIView):
                 print("Step2: create target folder ")
                 os.mkdir(target_folder)
                 nimg3D = nib.load(target_file) # 이미지 불러오기
+                InputAffineX0 = nimg3D.affine[0][0]
+                InputAffineY1 = nimg3D.affine[1][1]
+                InputAffineZ2 = nimg3D.affine[2][2]
 
                 # img hdr 파일을 생성해서 각 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "input_"+myfile['fileID']+".img"))
@@ -116,6 +121,10 @@ class uploader(APIView):
 
                 print("Step3: create input image")
                 getCase = models.Case.objects.filter(fileID=myfile['fileID'])[0]
+                getCase.InputAffineParamsX0=InputAffineX0
+                getCase.InputAffineParamsY1=InputAffineY1
+                getCase.InputAffineParamsZ2=InputAffineZ2
+                getCase.save()
                 reg_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
                 scale_img3D = 32767 * reg_img3D
                 uint16_img3D = scale_img3D.astype(np.uint16)
@@ -292,6 +301,14 @@ class uploader(APIView):
 
                 target_file = os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".img")
                 nimg3D = nib.load(target_file) # 이미지 불러오기
+                OutputAffineX0 = nimg3D.affine[0][0]
+                OutputAffineY1 = nimg3D.affine[1][1]
+                OutputAffineZ2 = nimg3D.affine[2][2]
+                getCase = models.Case.objects.filter(fileID=myfile['fileID'])[0]
+                getCase.OutputAffineParamsX0=OutputAffineX0
+                getCase.OutputAffineParamsY1=OutputAffineY1
+                getCase.OutputAffineParamsZ2=OutputAffineZ2
+                getCase.save()
                 img3D = np.array(nimg3D.dataobj)
 
                 # nii 파일을 database 폴더에 생성하기....
@@ -471,9 +488,13 @@ class uploader(APIView):
         uploader_path = os.path.join(user_path, 'uploader')
         if not os.path.exists(uploader_path):
             os.mkdir(uploader_path)
+
+
+
         database_path = os.path.join(user_path, 'database')
         if not os.path.exists(database_path):
             os.mkdir(database_path)
+
 
         jsonData = request.data['obj']
         selectedTracer = request.data['Tracer']
@@ -495,20 +516,43 @@ class uploader(APIView):
                 PatientName=None,
                 Age=None,
                 Sex=None,
+                AcquisitionDateTime=None,
                 Tracer=selectedTracer,
                 SUVR=None,
                 Centiloid=None,
             )
             newCase.save()
+
             newFileID = newCase.id
+
+            try:
+                json_filename = v['FileName'][:-3]+"json"
+                json_path = os.path.join(uploader_path, json_filename)
+                with open(json_path) as json_file:
+                    json_data = json.load(json_file)
+
+                newCase.fileID = str(newFileID)
+                newCase.FileName = str(newFileID)+".nii"
+                # newCase.Tracer = "[11C]PIB"
+                newCase.PatientName = json_data['PatientName']
+                newCase.PatientID = json_data['PatientID']
+                newCase.Age = json_data['PatientBirthDate']
+                newCase.Sex = json_data['PatientSex']
+                newCase.AcquisitionDateTime = json_data['AcquisitionDateTime'].split('T')[0]
+                mv(os.path.join(uploader_path, v['FileName'][:-3]+"json"), os.path.join(database_path, str(newFileID) + ".json"))
+            except:
+                print('there is no json file')
+                newCase.fileID = str(newFileID)
+                newCase.FileName = str(newFileID)+".nii"
+                # newCase.Tracer = "[11C]PIB"
+                # newCase.PatientName = v['FileName']
+                newCase.PatientName = 'Anonymous (nifti)'
+                newCase.PatientID = '-'
+                newCase.Age = '-'
+                newCase.Sex = '-'
+                newCase.AcquisitionDateTime = '-'
+
             mv(os.path.join(uploader_path, v['FileName']), os.path.join(database_path, str(newFileID) + ".nii"))
-            newCase.fileID = str(newFileID)
-            newCase.FileName = str(newFileID)+".nii"
-            # newCase.Tracer = "[11C]PIB"
-            newCase.PatientName = v['FileName']
-            newCase.PatientID = str(newFileID)
-            newCase.Age = 38
-            newCase.Sex = 'M'
             # fileList = [{'id': int(filename.split('.')[0]), 'Opened': False, 'Select': False, 'Tracer': '[18F]FBP',
             #              'SUVR': 2.21, 'Centiloid': centiloidArray[int(filename.split('.')[0])], 'FileName': filename,
             #              'fileID': filename.split('.')[0],
@@ -526,6 +570,16 @@ class uploader(APIView):
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames)
          if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
+
+        for filename in os.listdir(uploader_path):
+            file_path = os.path.join(uploader_path, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
 
         allCases = models.Case.objects.all().values()
         serializer = serializers.CaseSerializer(allCases, many=True)
@@ -600,8 +654,23 @@ class uploader(APIView):
         if Format == "dcm":
             print('dcm')
             dcm_folder_path = os.path.join(uploader_path, file_format[0])
+
+            for filename in os.listdir(uploader_path):
+                file_path = os.path.join(uploader_path, filename)
+                try:
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                except Exception as e:
+                    print('Failed to delete %s. Reason: %s' % (file_path, e))
+            while len(os.listdir(uploader_path)) != 0:
+                print("Directory is not empty")
+
             if not os.path.exists(dcm_folder_path):
                 os.mkdir(dcm_folder_path)
+
+
             for idx, myfile in enumerate(myfiles):
                 # dcm file name template: {Type}_{Direction}_{CaseID}_{SliceID}.{Format}
                 filename = myfile.name
@@ -615,7 +684,11 @@ class uploader(APIView):
                 # print("dcm: ", idx)
                 # dcmpath = os.path.join(dcm_folder_path, filename)
                 # dataset = pydicom.dcmread(dcmpath)
-            dicom2nifti.convert_directory(dcm_folder_path, uploader_path, reorient=True, compression=False)
+            # dicom2nifti.convert_directory(dcm_folder_path, uploader_path, reorient=True, compression=False)
+            dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')
+            # subprocess.run([dcm2niix_path, "-o", r'uploads\dwnusa\uploader', "-f", "%t_%p_%s", dcm_folder_path])
+            subprocess.run([dcm2niix_path, "-o", uploader_path, "-b", "y", "-ba", "n", "-f", "%t_%p_%s", dcm_folder_path])
+
             database_files = os.listdir(uploader_path)
             for idx, myfile in enumerate(database_files):
                 if (myfile.split(".")[-1] == 'nii'):
@@ -708,6 +781,17 @@ class uploader(APIView):
 
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
+
+        for filename in os.listdir(uploader_path):
+            file_path = os.path.join(uploader_path, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
         return Response("delete test ok", status=200)
 
 

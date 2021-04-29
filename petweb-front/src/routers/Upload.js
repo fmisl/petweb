@@ -24,7 +24,7 @@ function Upload({toggleWorklist}) {
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const [uploaderFileList, setUploaderFileList] = useState([]);
-  const [selectTracer, setSelectTracer] = useState('[11C]PIB');
+  const [selectTracer, setSelectTracer] = useState('[18F]FBP');
   // useEffect(() => {
   //   console.log('useEffect called in Upload (uploaderFileList)',fileList)
   // },[fileList.length])
@@ -88,7 +88,9 @@ function Upload({toggleWorklist}) {
     )
   }
   const viewClickHandler = async ()=>{
-    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, 
+      inputAffineX0:v.InputAffineParamsX0, inputAffineY1:v.InputAffineParamsY1, inputAffineZ2:v.InputAffineParamsZ2, 
+      outputAffineX0:v.OutputAffineParamsX0, outputAffineY1:v.OutputAffineParamsY1, outputAffineZ2:v.OutputAffineParamsZ2,currentC:50, currentS:50, currentA:50}})];
     const lastIndex = nextStackManager.length-1;
     dispatch(openSelect());
     dispatch(addStack(nextStackManager));
@@ -99,7 +101,9 @@ function Upload({toggleWorklist}) {
     setTimeout(() => history.push('/view/'+lastIndex), 100);
   }
   const analysisClickHandler = async ()=>{
-    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, 
+      inputAffineX0:v.InputAffineParamsX0, inputAffineY1:v.InputAffineParamsY1, inputAffineZ2:v.InputAffineParamsZ2, 
+      outputAffineX0:v.OutputAffineParamsX0, outputAffineY1:v.OutputAffineParamsY1, outputAffineZ2:v.OutputAffineParamsZ2, currentC:50, currentS:50, currentA:50}})];
     // const nextStackManager = [...stackManager, ...fileList.filter((v,i)=>{if(v.Opened == false && v.Select == true) return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})]
     const lastIndex = nextStackManager.length-1;
     dispatch(openSelect());
@@ -118,7 +122,7 @@ function Upload({toggleWorklist}) {
     dispatch(fetchItems(uploadList));
     // setFileList(uploadList)
   }
-
+  console.log("upload: ", selectTracer)
   return (
     <div className="content">
       {/* <Sidebar />

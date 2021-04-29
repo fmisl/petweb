@@ -139,36 +139,48 @@ def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSi
             texture = surface.vol_to_surf(new_image, fsaverage.pial_right)
 
             plt.rcParams["figure.figsize"] = (4, 3)
-            fig = plotting.plot_surf(fsaverage.infl_right, texture, hemi='right',
-                                     threshold=threshold, bg_map=fsaverage.sulc_right, vmax=vmax, vmin=0, title=None,
-                                     cmap='black_red', view='lateral')
-            full_path = os.path.join(case_fullpath, '_rlat.png')
-            fig.savefig(full_path, format='png', transparent=True)
-            plt.close(fig)
+            for th in np.arange(0.6, 3.0, 0.2):
+                # [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]:
+                float_th=round(th,1)
+                fig = plotting.plot_surf(fsaverage.infl_right, texture, hemi='right',
+                                         threshold=float_th, bg_map=fsaverage.sulc_right, vmax=vmax, vmin=0, title=None,
+                                         cmap='black_red', view='lateral')
+                full_path = os.path.join(case_fullpath, '_rlat_'+str(float_th)+'.png')
+                fig.savefig(full_path, format='png', transparent=True)
+            plt.close('all')
 
             plt.rcParams["figure.figsize"] = (4, 3)
-            fig = plotting.plot_surf(fsaverage.infl_left, texture, hemi='left',
-                                     threshold=threshold, bg_map=fsaverage.sulc_left, vmax=vmax, vmin=0, title=None,
-                                     cmap='black_red', view='lateral')
-            full_path = os.path.join(case_fullpath, '_llat.png')
-            fig.savefig(full_path, format='png', transparent=True)
-            plt.close(fig)
+            for th in np.arange(0.6, 3.0, 0.2):
+                # [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]:
+                float_th=round(th,1)
+                fig = plotting.plot_surf(fsaverage.infl_left, texture, hemi='left',
+                                         threshold=float_th, bg_map=fsaverage.sulc_left, vmax=vmax, vmin=0, title=None,
+                                         cmap='black_red', view='lateral')
+                full_path = os.path.join(case_fullpath, '_llat_'+str(float_th)+'.png')
+                fig.savefig(full_path, format='png', transparent=True)
+            plt.close('all')
 
             plt.rcParams["figure.figsize"] = (4, 3)
-            fig = plotting.plot_surf(fsaverage.infl_right, texture, hemi='right',
-                                     threshold=threshold, bg_map=fsaverage.sulc_right, vmax=vmax, vmin=0, title=None,
-                                     cmap='black_red', view = 'medial')
-            full_path = os.path.join(case_fullpath, '_rmed.png')
-            fig.savefig(full_path, format='png', transparent=True)
-            plt.close(fig)
+            for th in np.arange(0.6, 3.0, 0.2):
+                # [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]:
+                float_th=round(th,1)
+                fig = plotting.plot_surf(fsaverage.infl_right, texture, hemi='right',
+                                         threshold=float_th, bg_map=fsaverage.sulc_right, vmax=vmax, vmin=0, title=None,
+                                         cmap='black_red', view = 'medial')
+                full_path = os.path.join(case_fullpath, '_rmed_'+str(float_th)+'.png')
+                fig.savefig(full_path, format='png', transparent=True)
+            plt.close('all')
 
             plt.rcParams["figure.figsize"] = (4, 3)
-            fig = plotting.plot_surf(fsaverage.infl_left, texture, hemi='left',
-                                     threshold=threshold, bg_map=fsaverage.sulc_left, vmax=vmax, vmin=0, title=None,
-                                     cmap='black_red', view = 'medial')
-            full_path = os.path.join(case_fullpath, '_lmed.png')
-            fig.savefig(full_path, format='png', transparent=True)
-            plt.close(fig)
+            for th in np.arange(0.6, 3.0, 0.2):
+                # [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]:
+                float_th=round(th,1)
+                fig = plotting.plot_surf(fsaverage.infl_left, texture, hemi='left',
+                                         threshold=float_th, bg_map=fsaverage.sulc_left, vmax=vmax, vmin=0, title=None,
+                                         cmap='black_red', view = 'medial')
+                full_path = os.path.join(case_fullpath, '_lmed_'+str(float_th)+'.png')
+                fig.savefig(full_path, format='png', transparent=True)
+            plt.close('all')
 
             # Centil Scale for PIB: 100*(pib_ctx_val- 1.009)/1.067;
 
