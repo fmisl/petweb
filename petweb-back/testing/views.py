@@ -498,6 +498,10 @@ class uploader(APIView):
 
         jsonData = request.data['obj']
         selectedTracer = request.data['Tracer']
+        if request.data['addToWorklist']:
+            Group = 1
+        else:
+            Group = 0
         print(len(jsonData))
         database_files = os.listdir(database_path)
         NofNii = len([v for i, v in enumerate(database_files) if (v.split(".")[-1] == 'nii')])
@@ -508,7 +512,7 @@ class uploader(APIView):
                 Opened=False,
                 Select=False,
                 Focus=False,
-                Group=0,
+                Group=Group,
                 fileID=None,
                 OriginalFileName=v['FileName'],
                 FileName=None,

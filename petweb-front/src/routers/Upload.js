@@ -25,6 +25,7 @@ function Upload({toggleWorklist}) {
   const dispatch = useDispatch();
   const [uploaderFileList, setUploaderFileList] = useState([]);
   const [selectTracer, setSelectTracer] = useState('[18F]FBP');
+  const [addToWorklist, setaddToWorklist] = useState(true);
   // useEffect(() => {
   //   console.log('useEffect called in Upload (uploaderFileList)',fileList)
   // },[fileList.length])
@@ -40,7 +41,7 @@ function Upload({toggleWorklist}) {
       postFiles(formData)
     } else {
       if (e.target.innerText == "Run"){
-        runFiles(selectTracer)
+        runFiles(selectTracer, addToWorklist)
       }
       else {
         deleteFiles()
@@ -49,9 +50,9 @@ function Upload({toggleWorklist}) {
     setIsShowingUploader(!isShowingUploader);
   };
 
-  const runFiles = async (selectTracer) =>{
+  const runFiles = async (selectTracer, addToWorklist) =>{
     const token = localStorage.getItem('token')
-    const res = await services.runFile({'token':token, 'obj':uploaderFileList, 'Tracer':selectTracer})
+    const res = await services.runFile({'token':token, 'obj':uploaderFileList, 'Tracer':selectTracer, 'addToWorklist':addToWorklist})
     const putList = res.data
     // console.log(putList)
     dispatch(fetchItems(putList))
@@ -128,7 +129,7 @@ function Upload({toggleWorklist}) {
       {/* <Sidebar />
       <Headerbar/> */}
       {/* <Worklist isShowing={isShowingWorklist} hide={toggleWorklist}/> */}
-      <Uploader selectTracer={selectTracer} setSelectTracer={setSelectTracer} fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
+      <Uploader selectTracer={selectTracer} setSelectTracer={setSelectTracer} setaddToWorklist={setaddToWorklist} fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>

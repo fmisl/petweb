@@ -16,7 +16,7 @@ const styleDiv ={
   height:"46%",
   // background: "black",
 }
-function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
+function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
   const [data, setData] = useState([]);
   const [alarm, setAlarm] = useState(false);
   const [tracer, setTracer] = useState('');
@@ -88,7 +88,7 @@ function Uploader({ selectTracer, setSelectTracer, fileList, isShowing, hide, re
               </div>
             </div>
             <div style={{display:"flex", marginTop:"21px", justifyContent:"space-between", alignItems:"center"}}>
-              <div className="upload-checkbox-label" onClick={()=>{setIsChecked(!isChecked);console.log("isChecked:", isChecked.toString())}}>
+              <div className="upload-checkbox-label" onClick={()=>{setaddToWorklist(!isChecked); setIsChecked(!isChecked);console.log("isChecked:", isChecked.toString())}}>
                 <div className={`upload-checkbox ${isChecked && 'act'}`}>
                   <div></div>
                 </div>

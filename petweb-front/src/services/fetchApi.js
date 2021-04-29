@@ -33,7 +33,7 @@ export function postFile(data) {
   });
 }
 export function runFile(data) {
-  return axios.put(IPinUSE+"testing/uploader/",{obj:data.obj, Tracer:data.Tracer},{
+  return axios.put(IPinUSE+"testing/uploader/",{obj:data.obj, Tracer:data.Tracer, addToWorklist:data.addToWorklist},{
     headers:{
       'Authorization':'jwt '+data.token,
     }
