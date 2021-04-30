@@ -550,7 +550,7 @@ class uploader(APIView):
                 newCase.FileName = str(newFileID)+".nii"
                 # newCase.Tracer = "[11C]PIB"
                 # newCase.PatientName = v['FileName']
-                newCase.PatientName = 'Anonymous (nifti)'
+                newCase.PatientName = 'Anonymous ('+v['FileName']+')'
                 newCase.PatientID = '-'
                 newCase.Age = '-'
                 newCase.Sex = '-'

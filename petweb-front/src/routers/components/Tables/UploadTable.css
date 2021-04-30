@@ -77,6 +77,10 @@
 .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(3) {
     width: 300px;
 }
+/* .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(4) {
+    width: 300px;
+    border: red solid;
+} */
 
 .table.table-condensed.table-hover.filterable-table>thead>tr>th:nth-child(5) {
     width: 150px;
@@ -140,7 +144,7 @@
 }
 
 .table.table-condensed.table-hover.filterable-table>tbody>tr>td:nth-child(4)>span>.UploadTable-Default {
-    /* width: 300px; */
+    width: 300px;
     height: 130%;
     /* height: 85px; */
     display: block;
