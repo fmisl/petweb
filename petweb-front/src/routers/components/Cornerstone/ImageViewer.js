@@ -134,6 +134,10 @@ class ImageViewer extends Component {
       height:"100%", 
       background: isInverted ? "white":"black",
     };
+    const viewportC = this.elementC && cornerstone.getViewport(this.elementC);
+    // const viewportS = cornerstone.getViewport(this.elementS);
+    // const viewportA = cornerstone.getViewport(this.elementA);
+    // const viewportM = cornerstone.getViewport(this.elementM);
     return (
       <div style={divWrapper}>
         <div
@@ -153,6 +157,10 @@ class ImageViewer extends Component {
         >
 
           <canvas className="cornerstone-canvas" />
+          <div style={{position:"absolute", top:"0px"}}>
+              WW/WC: {(viewportC !== undefined) && viewportC.voi.windowWidth} /{" "}
+              {(viewportC !== undefined) && viewportC.voi.windowCenter}
+          </div>
         </div>
         <div
           className="viewportElement sagittal"
