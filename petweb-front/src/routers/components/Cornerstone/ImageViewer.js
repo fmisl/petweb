@@ -211,19 +211,21 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
         <div style={{position:"absolute",top:"25%", left:"1%", color:'red', fontSize:"25px", userSelect:'none'}}>32768(max)</div>
         {(viewportC !== undefined) && 
-          <div style={{overflow:'hidden', border:"0px red solid", position:"relative", width:'100px', height:'45%', boxSizing:"border-box",left:"0%",top:"30%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}>
+          <div style={{overflow:'hidden', border:"0px red solid", position:"relative", width:'30px', height:'45%', boxSizing:"border-box",left:"1%",top:"30%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}>
             
-            <div style={{border:`1px ${isInverted ? 'black':'white'} solid`, width: '68px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>
+            <div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>
             {isInverted ? 
-                <img style={{position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={invertedgraycmap} />
+                <img style={{boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px black solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={invertedgraycmap} />
                 :
-                <img style={{position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={graycmap}/>
+                <img style={{boxSizing:'border-box', borderTop:'1px black solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={graycmap}/>
             }
-            <div style={{border:`1px ${isInverted ? 'black':'white'} solid`, width: '68px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>
-            <div style={{borderTop:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(80, Math.max(-1, 90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div>
-            {/* <div style={{borderTop:"1px red solid", position:'absolute', width:'68px', top:`${90-(viewportC.voi.windowCenter)/32768*100}%`}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div> */}
-            <div style={{border:"1px yellow solid", position:'absolute', width:'68px', top:`${96-(viewportC.voi.windowCenter)/32768*100}%`, height:'10px'}}></div>
-            <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(10, Math.max(10, viewportC.voi.windowWidth/32768*100)+90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}>{Math.floor(viewportC.voi.windowCenter-viewportC.voi.windowWidth/2)}</div>
+            <div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>
+              {/* <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(80, Math.max(-1, 90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div> */}
+            {/* <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(-1, 90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}></div>*/}
+              {/* <div style={{borderTop:"1px red solid", position:'absolute', width:'68px', top:`${90-(viewportC.voi.windowCenter)/32768*100}%`}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div> */}
+            <div style={{border:"1px yellow solid", position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`}}></div>
+              {/* <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(10, Math.max(10, viewportC.voi.windowWidth/32768*100)+90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}>{Math.floor(viewportC.voi.windowCenter-viewportC.voi.windowWidth/2)}</div> */}
+            {/* <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(10, Math.max(10, viewportC.voi.windowWidth/32768*100)+90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}></div> */} 
           </div>
         }
         <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"25px", userSelect:'none'}}>0(min)</div>
