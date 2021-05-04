@@ -156,7 +156,7 @@ class ImageViewer extends Component {
           // }
         >
 
-          <canvas className="cornerstone-canvas" />
+          <canvas className="cornerstone-canvas" onContextMenu={(e)=> {e.preventDefault()}}/>
           <div style={{position:"absolute", top:"0px"}}>
               WW/WC: {(viewportC !== undefined) && viewportC.voi.windowWidth} /{" "}
               {(viewportC !== undefined) && viewportC.voi.windowCenter}
@@ -171,7 +171,7 @@ class ImageViewer extends Component {
           // onClick={(e)=>{
           // }}
         >
-          <canvas className="cornerstone-canvas" />
+          <canvas className="cornerstone-canvas" onContextMenu={(e)=> {e.preventDefault()}}/>
         </div>
         <div
           className="viewportElement axial"
@@ -182,7 +182,7 @@ class ImageViewer extends Component {
           // onClick={(e)=>{
           // }}
         >
-          <canvas className="cornerstone-canvas" />
+          <canvas className="cornerstone-canvas" onContextMenu={(e)=> {e.preventDefault()}}/>
         </div>
         <div
           className="viewportElement mip"
@@ -193,7 +193,7 @@ class ImageViewer extends Component {
           // onClick={(e)=>{
           // }}
         >
-          <canvas className="cornerstone-canvas" />
+          <canvas className="cornerstone-canvas" onContextMenu={(e)=> {e.preventDefault()}}/>
         </div>
         {/* {this.props.isCrosshaired && <div className="coronal-axial" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",bottom:`${this.props.stackC.currentImageIdIndex/108*50}%`,left:"0%", width:"50%", height:"0%"}}></div>} */}
         {/* {this.props.isCrosshaired && <div className="coronal-sagittal" style={{position:"absolute", border:"1px white solid", boxSizing:"border-box",top:"0%",left:`${this.props.stackC.currentImageIdIndex/108*50+50}%`, width:"0%", height:"50%"}}></div>} */}
@@ -206,11 +206,28 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>} */}
 
-        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"25%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
-        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"50%",top:"25%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
+        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"50%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
         {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        
-        <div style={{border:"0px red solid", position:"absolute",height:'45%', width:'20px', boxSizing:"border-box",left:"0%",top:"25%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}><div style={{border:"0px red solid", display:"flex", flexDirection:"column", justifyContent:"space-between"}}><span>3.0</span><span>0</span></div>{isInverted ? <img src={invertedgraycmap} />:<img src={graycmap}/>}</div> {/* Coronal Plane  */}
+        <div style={{position:"absolute",top:"25%", left:"1%", color:'red', fontSize:"25px", userSelect:'none'}}>32768(max)</div>
+        {(viewportC !== undefined) && 
+          <div style={{overflow:'hidden', border:"0px red solid", position:"relative", width:'100px', height:'45%', boxSizing:"border-box",left:"0%",top:"30%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}>
+            
+            <div style={{border:`1px ${isInverted ? 'black':'white'} solid`, width: '68px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>
+            {isInverted ? 
+                <img style={{position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={invertedgraycmap} />
+                :
+                <img style={{position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={graycmap}/>
+            }
+            <div style={{border:`1px ${isInverted ? 'black':'white'} solid`, width: '68px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>
+            <div style={{borderTop:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(80, Math.max(-1, 90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div>
+            {/* <div style={{borderTop:"1px red solid", position:'absolute', width:'68px', top:`${90-(viewportC.voi.windowCenter)/32768*100}%`}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div> */}
+            <div style={{border:"1px yellow solid", position:'absolute', width:'68px', top:`${96-(viewportC.voi.windowCenter)/32768*100}%`, height:'10px'}}></div>
+            <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(10, Math.max(10, viewportC.voi.windowWidth/32768*100)+90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}>{Math.floor(viewportC.voi.windowCenter-viewportC.voi.windowWidth/2)}</div>
+          </div>
+        }
+        <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"25px", userSelect:'none'}}>0(min)</div>
+        {/* Coronal Plane  */}
         {/* <div style={{border:"0px red solid", position:"absolute",height:'45%', width:'20px', boxSizing:"border-box",left:"50%",top:"0%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}><div style={{border:"0px red solid", display:"flex", flexDirection:"column", justifyContent:"space-between"}}><span>3.0</span><span>0</span></div>{isInverted ? <img src={invertedgraycmap} />:<img src={graycmap}/>}</div> {/* Sagittal Plane this.AxialRightSide */}
         {/* <div style={{border:"0px red solid", position:"absolute",height:'50%', width:'20px', boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}><div style={{border:"0px red solid", display:"flex", flexDirection:"column", justifyContent:"space-between"}}><span>3.0</span><span>0</span></div>{isInverted ? <img src={invertedgraycmap} />:<img src={graycmap}/>}</div> Axial Plane this.AxialRightSide */} */}
         {/* {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between'}}>Superior</div>} */}
@@ -467,6 +484,7 @@ class ImageViewer extends Component {
 
   loadImage=(elementC, elementS, elementA, elementM)=>{
     const { isCrosshaired, isPlayed } = this.props;
+    console.log('promise')
     // console.log('loadImage')
     // const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
     // const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
@@ -487,10 +505,13 @@ class ImageViewer extends Component {
         console.log('stackC', stack)
         cornerstoneTools.addStackStateManager(elementC, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementC, "stack", stack);
-        cornerstoneTools.stackScroll.activate(elementC, 1);
+        // cornerstoneTools.stackScroll.activate(elementC, 1);
+        
+        // cornerstoneTools.stackScroll.activate(elementS, 1);
         cornerstoneTools.stackScrollWheel.activate(elementC);
         cornerstoneTools.stackPrefetch.enable(elementC, 3);
-        cornerstoneTools.wwwcRegion.activate(elementC, 4);
+        cornerstoneTools.wwwc.activate(elementC, 4);
+        cornerstoneTools.wwwcRegion.activate(elementC, 2);
         this.wwwcsynchronizer.add(elementC);
         this.synchronizer.add(elementC);
 
@@ -513,10 +534,11 @@ class ImageViewer extends Component {
         const stack = this.props.stackS;
         cornerstoneTools.addStackStateManager(elementS, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementS, "stack", stack);
-        cornerstoneTools.stackScroll.activate(elementS, 1);
+        // cornerstoneTools.stackScroll.activate(elementS, 1);
         cornerstoneTools.stackScrollWheel.activate(elementS);
         cornerstoneTools.stackPrefetch.enable(elementS, 3);
-        cornerstoneTools.wwwcRegion.activate(elementS, 4);
+        cornerstoneTools.wwwc.activate(elementS, 4);
+        cornerstoneTools.wwwcRegion.activate(elementS, 2);
         this.wwwcsynchronizer.add(elementS);
         this.synchronizer.add(elementS);
 
@@ -539,10 +561,11 @@ class ImageViewer extends Component {
         const stack = this.props.stackA;
         cornerstoneTools.addStackStateManager(elementA, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementA, "stack", stack);
-        cornerstoneTools.stackScroll.activate(elementA, 1);
+        // cornerstoneTools.stackScroll.activate(elementA, 1);
         cornerstoneTools.stackScrollWheel.activate(elementA);
         cornerstoneTools.stackPrefetch.enable(elementA, 3);
-        cornerstoneTools.wwwcRegion.activate(elementA, 4);
+        cornerstoneTools.wwwc.activate(elementA, 4);
+        cornerstoneTools.wwwcRegion.activate(elementA, 2);
         this.wwwcsynchronizer.add(elementA);
         this.synchronizer.add(elementA);
 
@@ -580,8 +603,9 @@ class ImageViewer extends Component {
         cornerstoneTools.stackScroll.activate(elementM, 1);
         cornerstoneTools.stackScrollWheel.activate(elementM);
         // cornerstoneTools.stackPrefetch.enable(elementM, 3);
-        cornerstoneTools.zoom.activate(elementM, 3);
-        cornerstoneTools.wwwcRegion.activate(elementM, 4);
+        // cornerstoneTools.zoom.activate(elementM, 3);
+        cornerstoneTools.wwwc.activate(elementM, 4);
+        cornerstoneTools.wwwcRegion.activate(elementM, 2);
 
         try{
           let temp = cornerstoneTools.getElementToolStateManager(elementM)
@@ -623,6 +647,7 @@ class ImageViewer extends Component {
       }
     });
     Promise.all([coronalLoadImagePromise, sagittalLoadImagePromise, axialLoadImagePromise, mipLoadImagePromise]).then(() => {
+      const { isCrosshaired, isPlayed } = this.props;
       // Add the enabled elements to the synchronization context
       try{
         this.synchronizer.add(elementC);
@@ -632,7 +657,8 @@ class ImageViewer extends Component {
         // cornerstoneTools.referenceLines.tool.enable(coronalElement, synchronizer);
         // cornerstoneTools.referenceLines.tool.enable(sagittalElement, synchronizer);
         // cornerstoneTools.referenceLines.tool.enable(axialElement, synchronizer);
-  
+        
+        // {!isCrosshaired ? cornerstoneTools.wwwc.activate(elementC, 1):
         cornerstoneTools.crosshairs.enable(elementC, 1, this.synchronizer);
         cornerstoneTools.crosshairs.enable(elementS, 1, this.synchronizer);
         cornerstoneTools.crosshairs.enable(elementA, 1, this.synchronizer);
@@ -662,6 +688,7 @@ class ImageViewer extends Component {
       cornerstoneTools.referenceLines.tool.disable(Celement);
       cornerstoneTools.referenceLines.tool.disable(Selement);
       cornerstoneTools.referenceLines.tool.disable(Aelement);
+      // cornerstoneTools.wwwc.activate(Celement, 1);
     }else{
       // cornerstoneTools.crosshairs.enable(Celement, 1, this.synchronizer);
       // cornerstoneTools.crosshairs.enable(Selement, 1, this.synchronizer);
@@ -672,6 +699,8 @@ class ImageViewer extends Component {
       cornerstoneTools.referenceLines.tool.enable(Celement, this.synchronizer);
       cornerstoneTools.referenceLines.tool.enable(Selement, this.synchronizer);
       cornerstoneTools.referenceLines.tool.enable(Aelement, this.synchronizer);
+      // cornerstoneTools.wwwc.activate(Celement, 1);
+      // cornerstoneTools.crosshairs.enable(Celement);
     }
     // let viewportC = cornerstone.getViewport(Celement);
     // let viewportS = cornerstone.getViewport(Selement);
