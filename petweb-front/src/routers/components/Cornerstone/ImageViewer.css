@@ -43,3 +43,25 @@
 .axial-sagittal {
   pointer-events: none;
 }
+.colorbar1{
+  overflow:hidden;
+  position:relative;
+  width:50px;
+  height:45%;
+  box-sizing:border-box;
+  left:1%;
+  top:30%;
+  color:red;
+  font-size:25px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
+  user-select:none;
+  padding-left:10px;
+  padding-right:10px;
+}
+/* .colorbar1:hover{
+  border:1px red solid;
+  user-select: none;
+} */

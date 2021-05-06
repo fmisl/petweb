@@ -13,8 +13,10 @@ import * as cornerstoneWebImageLoader from "cornerstone-web-image-loader";
 import { CartesianGrid } from 'recharts';
 import graycmap from "../../../images/graycmap.png"
 import invertedgraycmap from "../../../images/invertedgraycmap.png"
+// import InputRange from 'react-input-range';
+// import "react-input-range/lib/css/index.css";
 
-// Listing the dependencies for reference later
+// Listing the dependencies for reference laterInput
 cornerstoneTools.external.cornerstone = cornerstone;
 cornerstoneTools.external.cornerstoneMath = cornerstoneMath;
 cornerstoneWebImageLoader.external.cornerstone = cornerstone;
@@ -50,7 +52,11 @@ const bottomRightStyle = {
 class ImageViewer extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
+    this.state = {
+      value5: {
+        min: 3,
+        max: 7,
+      },
     //   stackC: props.stackC,
     //   stackS: props.stackS,
     //   stackA: props.stackA,
@@ -60,7 +66,7 @@ class ImageViewer extends Component {
     //   viewportC: cornerstone.getDefaultViewport(null, undefined),
     //   viewportS: cornerstone.getDefaultViewport(null, undefined),
     //   viewportA: cornerstone.getDefaultViewport(null, undefined),
-    // };
+    };
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onImageRendered = this.onImageRendered.bind(this);
     this.onNewImage = this.onNewImage.bind(this);
@@ -211,15 +217,17 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
         <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>
         {(viewportC !== undefined) && 
-          <div style={{overflow:'hidden', border:"0px red solid", position:"relative", width:'50px', height:'45%', boxSizing:"border-box",left:"1%",top:"30%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}>
+          <div class='colorbar1' >
             
             <div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>
             {isInverted ? 
-                <img style={{boxSizing:'border-box', borderTop:'0px white solid', borderBottom:'0px black solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={invertedgraycmap} />
+                <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px black solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={invertedgraycmap} />
                 :
-                <img style={{boxSizing:'border-box', borderTop:'0px black solid', borderBottom:'0px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={graycmap}/>
+                <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px black solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={graycmap}/>
             }
-            <div style={{border:"1px yellow solid", position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`}}></div>
+            <div style={{borderTop:"0px white solid", position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100-viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div>
+            <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{Math.floor(viewportC.voi.windowCenter)}</div>
+            <div style={{borderBottom:"0px black solid", position:'absolute', width:'68px', top:`${100-4-(viewportC.voi.windowCenter)/32768*100+viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{Math.floor(viewportC.voi.windowCenter-viewportC.voi.windowWidth/2)}</div>
             <div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>
             {/* <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(-1, 90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}></div> */}
               {/* <div style={{borderTop:"1px red solid", position:'absolute', width:'68px', top:`${90-(viewportC.voi.windowCenter)/32768*100}%`}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div> */}
@@ -229,6 +237,9 @@ class ImageViewer extends Component {
         }
         {/* {(viewportC !== undefined) && <div  style={{overflow:'hidden', border:"1px red solid", position:"absolute", width:'30px', height:`${viewportC.voi.windowWidth/32768*100*0.45}%`, boxSizing:"border-box",left:"3%",top:`${30+30-(viewportC.voi.windowCenter)/32768*30-(viewportC.voi.windowWidth/32768*50*0.3)}%`, color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}></div>} */}
         <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>0(min)</div>
+
+
+
         {/* Coronal Plane  */}
         {/* <div style={{border:"0px red solid", position:"absolute",height:'45%', width:'20px', boxSizing:"border-box",left:"50%",top:"0%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}><div style={{border:"0px red solid", display:"flex", flexDirection:"column", justifyContent:"space-between"}}><span>3.0</span><span>0</span></div>{isInverted ? <img src={invertedgraycmap} />:<img src={graycmap}/>}</div> {/* Sagittal Plane this.AxialRightSide */}
         {/* <div style={{border:"0px red solid", position:"absolute",height:'50%', width:'20px', boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}><div style={{border:"0px red solid", display:"flex", flexDirection:"column", justifyContent:"space-between"}}><span>3.0</span><span>0</span></div>{isInverted ? <img src={invertedgraycmap} />:<img src={graycmap}/>}</div> Axial Plane this.AxialRightSide */} */}
@@ -397,7 +408,7 @@ class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex } = this.props;
+    const { isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex, value5 } = this.props;
     const elementC = this.elementC;
     // const elementS = this.elementS;
     // const elementA = this.elementA;
@@ -438,18 +449,31 @@ class ImageViewer extends Component {
       // console.log(prevProps.currentStepIndex)
       if (isPlayed==true) {
         cornerstoneTools.playClip(this.elementM, currentStepIndex);
+        // let viewportC = cornerstone.getViewport(this.elementC);
+        // viewportC.voi.windowCenter = 16384/2;
+        // cornerstone.setViewport(this.elementC, viewportC);
       }
       else {
         cornerstoneTools.stopClip(this.elementM, currentStepIndex);
+        // let viewportC = cornerstone.getViewport(this.elementC);
+        // viewportC.voi.windowCenter = 16384;
+        // cornerstone.setViewport(this.elementC, viewportC);
       }
       if (prevProps.isCrosshaired != isCrosshaired){
         this.controlViewport();
         console.log('constrolViewport isCrosshaired: ',isCrosshaired)
         
+        
         // console.log('viewport.colormap', this.props.stackC.options.viewport.colormap)
         // let viewportC = cornerstone.getViewport(this.elementC);
         // viewportC.colormap = this.props.stackC.options.viewport.colormap;
         // cornerstone.setViewport(this.elementC, viewportC);
+      }
+      if (prevProps.value5 != value5){
+        let viewportC = cornerstone.getViewport(this.elementC);
+        viewportC.voi.windowCenter = (value5.max+value5.min)/2;
+        viewportC.voi.windowWidth = (value5.max-value5.min);
+        cornerstone.setViewport(this.elementC, viewportC);
       }
     } catch(e){
       console.error(e)

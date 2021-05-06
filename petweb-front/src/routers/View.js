@@ -21,10 +21,16 @@ import * as services from '../services/fetchApi'
 import Home from './components/Cornerstone/Home'
 import {login, logout, increment, decrement, loadItems, loadSlices, profile, tab_location, groupItem, addStack, updateStack, removeStack, fetchItems} from '../reduxs/actions';
 
+import InputRange from 'react-input-range';
+import "react-input-range/lib/css/index.css";
 
 // function View({}) {
 class View extends Component {
   state = {
+    value5: {
+      min: 3,
+      max: 30000,
+    },
     currentStepIndex: 20,
     username: localStorage.getItem('username'),
     showMenu: false,
@@ -263,7 +269,7 @@ class View extends Component {
   };
   render() {
     const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed} = this;
-    const {dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
+    const {value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
     const {counter, stackManager} = this.props;
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
@@ -272,31 +278,41 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{background:"black",position: "absolute", top:"150px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-              <ImageViewer currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
+              <ImageViewer value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
 
           <div  className="content-title">
-            <div className="content-info" >
-              <div style={{marginRight:"25px"}}>
+            <div className="content-info" style={{border:'0px red solid'}}>
+              <div style={{marginRight:"20px"}}>
                 Patient Name
                 <div className="content-var">Daewoon Kim</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
+              <div style={{margin: "0px 20px"}}>
                 Patient ID
                 <div className="content-var" >2020-0000</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
+              <div style={{margin: "0px 20px"}}>
                 Age
                 <div className="content-var" >50</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
+              <div style={{margin: "0px 20px"}}>
                 Sex
                 <div className="content-var" >Male</div>
               </div>
             </div>
-            <div style={{display:"flex", color:"white"}}>
+            <div style={{display:"flex", color:"white", border:'0px red solid'}}>
+              <div className="view-btn opacity-bar" >
+                <InputRange
+                  draggableTrack
+                  maxValue={32768}
+                  minValue={0}
+                  value={this.state.value5}
+                  onChange={value => this.setState({ value5: value })}
+                  // orientation="vertical"
+                />
+              </div>
               <div className="view-btn" onClick={()=>setIsPlayed(!isPlayed)}><img src={IconPlayPNG} width={'42px'}  className="view-icon"/></div>
               <div className="view-btn opacity-bar" >
                 MIP({currentStepIndex}):&nbsp;
