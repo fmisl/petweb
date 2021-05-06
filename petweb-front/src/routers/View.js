@@ -306,6 +306,7 @@ class View extends Component {
               <div className="view-btn opacity-bar" >
                 <InputRange
                   draggableTrack
+                  step={1000}
                   maxValue={32768}
                   minValue={0}
                   value={this.state.value5}

@@ -107,7 +107,7 @@ class ImageViewer extends Component {
     const divStyleA = {
       // width: "512px",
       // height: "512px",
-      top:"46%",
+      top:"50%",
       left:"0",
       width:"775px",
       // height:"425px",
@@ -122,7 +122,7 @@ class ImageViewer extends Component {
     const divStyleM = {
       // width: "512px",
       // height: "512px",
-      top:"46%",
+      top:"50%",
       left:"50%",
       width:"775px",
       // height:"425px",
@@ -215,7 +215,7 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
         {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"50%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
         {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>
+        {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
             
@@ -236,7 +236,7 @@ class ImageViewer extends Component {
           </div>
         }
         {/* {(viewportC !== undefined) && <div  style={{overflow:'hidden', border:"1px red solid", position:"absolute", width:'30px', height:`${viewportC.voi.windowWidth/32768*100*0.45}%`, boxSizing:"border-box",left:"3%",top:`${30+30-(viewportC.voi.windowCenter)/32768*30-(viewportC.voi.windowWidth/32768*50*0.3)}%`, color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}></div>} */}
-        <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>0(min)</div>
+        {(viewportC !== undefined) && <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>0(min)</div>}
 
 
 
