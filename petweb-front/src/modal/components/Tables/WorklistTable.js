@@ -135,19 +135,8 @@ class WorklistTable extends Component {
         const {data} = this.state;
         return(
             <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
-                    onClick={()=>{
-                        {props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}
-                        // this.setState({
-                        // // data:[...data, props.record]
-                        //     data: data.map(
-                        //     item => props.record.id === item.id ?
-                        //     { ...item, ...{Select:!props.record.Select} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                        //     : {...item} // 기존의 값을 그대로 유지
-                        //     ),
-                        // });
-                        // console.dir(props)
-                    }
-                }
+                    onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
+                    // onClick={()=>{{props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}}}
                     >
                 <div className={`WorklistTable-Select ${props.value && 'act'}`}>
                     <div></div>
@@ -242,7 +231,7 @@ class WorklistTable extends Component {
                 fields={fields}
                 noRecordsMessage="There are no people to display"
                 noFilteredRecordsMessage="No people match your filters!"
-                pageSize={20}
+                pageSize={100}
             />
         );
     }

@@ -13,6 +13,7 @@ function Headerbar({OpenedFiles}) {
   const dispatch = useDispatch();
   const counter = useSelector(state => state.counter);
   const myRef = useRef(null);
+  const username = localStorage.getItem('username');
   // const OpenedFiles = fileList.filter(item => {return item.Opened==true});
   const OpenedFilesLength = stackManager.length;
   const history =useHistory();
@@ -90,7 +91,7 @@ function Headerbar({OpenedFiles}) {
                   }
                 }}
               className={`Headerbar-tab ${el.fileID == counter.fileID && 'act'}`}>
-                <div style={{width:"70%"}}>{el.PatientID}</div>
+                <div className='Headerbar-name'>{el.PatientName}</div>
                 <div style={{userSelect:"none"}} onClick={(e)=>{
                     const nextStackManager = stackManager.filter((v,i)=>v.fileID !== el.fileID);
                     const lastIndex = nextStackManager.length-1;
@@ -110,7 +111,7 @@ function Headerbar({OpenedFiles}) {
       </div>
       {/* <div className='Headerbar-right-arrow'>{'>>'}</div> */}
       <div className="Headerbar-tab-username">
-        Daewoon Kim
+        {username}
       </div>
     </div>
   );

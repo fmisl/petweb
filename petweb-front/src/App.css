@@ -433,7 +433,7 @@ input:-webkit-autofill:active {
 
 .Headerbar-vSplitter {
   width: 0px;
-  height: 40%;
+  height: 80%;
   /* width: 1px; */
   /* height: 40%; */
   border-left: 2px #91919C solid;
@@ -465,7 +465,15 @@ input:-webkit-autofill:active {
 .HeaderbarIcon-Delete:hover {
   stroke: #118AF7;
 }
-
+.Headerbar-tab > .Headerbar-name {
+  width: 80%;
+  margin-top: 35px;
+  height: 56px;
+  /* border: 1px red solid; */
+  white-space: nowrap;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
 .Headerbar-tab {
   user-select: none;
   /* display: block; */
@@ -816,7 +824,7 @@ input:-webkit-autofill:active {
   /* display: block; */
   /* padding-top:100px; */
   position: absolute;
-  top: 150px;
+  top: 120px;
   left: 300px;
   width: 1545px;
   display: flex;
@@ -1724,8 +1732,8 @@ input:-webkit-autofill:active {
   /* height: 28px; */
   border-radius: 3px;
   background: #383C41;
-  /* border: 1px white solid;
-  box-sizing: border-box; */
+  border: 1px #118AF7 solid;
+  box-sizing: border-box;
 }
 
 .view-btn>.view-menu>div {

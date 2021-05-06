@@ -2,7 +2,7 @@
   position:relative;
 } */
 .cornerstone-canvas:hover {
-  border: 1px #118AF7 solid !important;
+  border: 2px #118AF7 solid !important;
   box-sizing: border-box !important;
 }
 

@@ -3,6 +3,8 @@
   height: 670px;
   /* border: red solid; */
   background: #383C41;
+  position: relative;
+  top: -80px;
 }
 
 .filterable-table-container.AnalysisItem2Table>.table-container {
