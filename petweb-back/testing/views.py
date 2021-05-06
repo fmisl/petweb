@@ -85,6 +85,8 @@ class uploader(APIView):
             if os.path.exists(target_folder):
                 print("---------"+myfile['FileName']+" is already done"+"---------")
             else:
+
+
                 print("Step2: create target folder ")
                 os.mkdir(target_folder)
                 nimg3D = nib.load(target_file) # 이미지 불러오기
@@ -95,12 +97,28 @@ class uploader(APIView):
                 # img hdr 파일을 생성해서 각 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "input_"+myfile['fileID']+".img"))
 
+
+
                 img3D = np.array(nimg3D.dataobj)  # numpy array로 변환
                 oriSize = img3D.shape[0] * img3D.shape[1] * img3D.shape[2]
                 dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
                 # if nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][2] and nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][3]:
                 #     dsfactor = [float(f) / w for w, f in
                 #                 zip([img3D.shape[0], img3D.shape[1], img3D.shape[2]], [91, 109, 91])]  # 픽셀크기 2mm로 변환용 factor
+                print("Step4: algorithm(DL)----------------------------------------------------------------------")
+                # start = time.perf_counter()
+                inout_path = os.path.join(database_path, myfile['fileID'])
+                train(inout_path, myfile['fileID'])
+
+                print("Step5: Quantification")
+                aal_region, centil_suvr = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize)
+                # print(aal_region, centil_suvr)
+                full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
+                # full_path2 = os.path.join(inout_path, 'global_centil.txt')
+                Qresult = np.append(aal_region[:,0,:], centil_suvr[:,0].reshape(1,2), axis=0)
+                np.savetxt(full_path1, Qresult, '%.3f')
+                self.update_quantification_DB(request, myfile, Qresult)
+                print("----------complete train & quantification--------------------------------------------------------------")
 
                 img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
                 zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
@@ -283,21 +301,21 @@ class uploader(APIView):
                     b64Slice.save()
 
                 print("---------complete generating input png files--------")
-
-                print("Step4: algorithm(DL)")
-                # start = time.perf_counter()
-                inout_path = os.path.join(database_path, myfile['fileID'])
-                train(inout_path, myfile['fileID'])
-
-                print("Step5: Quantification")
-                aal_region, centil_suvr = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize)
-                # print(aal_region, centil_suvr)
-                full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
-                # full_path2 = os.path.join(inout_path, 'global_centil.txt')
-                Qresult = np.append(aal_region[:,0,:], centil_suvr[:,0].reshape(1,2), axis=0)
-                np.savetxt(full_path1, Qresult, '%.3f')
-                self.update_quantification_DB(request, myfile, Qresult)
-                print("----------complete train & quantification------------")
+                #
+                # print("Step4: algorithm(DL)")
+                # # start = time.perf_counter()
+                # inout_path = os.path.join(database_path, myfile['fileID'])
+                # train(inout_path, myfile['fileID'])
+                #
+                # print("Step5: Quantification")
+                # aal_region, centil_suvr = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize)
+                # # print(aal_region, centil_suvr)
+                # full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
+                # # full_path2 = os.path.join(inout_path, 'global_centil.txt')
+                # Qresult = np.append(aal_region[:,0,:], centil_suvr[:,0].reshape(1,2), axis=0)
+                # np.savetxt(full_path1, Qresult, '%.3f')
+                # self.update_quantification_DB(request, myfile, Qresult)
+                # print("----------complete train & quantification------------")
 
                 target_file = os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".img")
                 nimg3D = nib.load(target_file) # 이미지 불러오기
