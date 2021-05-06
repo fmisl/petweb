@@ -473,7 +473,7 @@ input:-webkit-autofill:active {
 
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   /* border-right: 1px white solid; */
   min-width: 200px;
   max-width: 200px;
@@ -481,8 +481,8 @@ input:-webkit-autofill:active {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 17px 5px 10px 10px;
-  /* border: red solid; */
+  padding: 4px 0px 15px 10px;
+  /* border: 1px red solid; */
   box-sizing: border-box;
   font-family: 'Montserrat';
   font-style: normal;
@@ -660,6 +660,7 @@ input:-webkit-autofill:active {
 .dashboard-title {
   height: 180px;
   display: flex;
+  margin: 0px 50px;
   justify-content: space-between;
   align-items: center;
 
@@ -690,7 +691,7 @@ input:-webkit-autofill:active {
 
 .dashboard-box {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   white-space: nowrap;
   height: 750px;
@@ -827,6 +828,10 @@ input:-webkit-autofill:active {
   /* border: green solid;
   box-sizing: border-box; */
 }
+/* .analysis-box:hover{
+  border:1px red solid;
+  box-sizing: border-box;
+} */
 
 .analysis-box1 {
   /* position: absolute; */
@@ -1665,6 +1670,10 @@ input:-webkit-autofill:active {
 
   color: white;
   font-weight: 500;
+  white-space: nowrap;
+  overflow-x:scroll;
+  height:80px;
+  /* border: 1px red solid; */
 }
 
 .view-title {

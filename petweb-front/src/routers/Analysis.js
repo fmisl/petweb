@@ -94,7 +94,7 @@ class Analysis extends Component {
   render(){
     const {subRegion} = this.state;
     // console.log('state: ', subRegion)
-    const { counter, isLogged, increment, decrement, listSelected } = this.props;
+    const { counter, isLogged, increment, decrement, listSelected, stackManager } = this.props;
     // const counter = useSelector(state => state.counter);
     // const isLogged = useSelector(state => state.isLogged);
     // const dispatch = useDispatch();
@@ -113,7 +113,6 @@ class Analysis extends Component {
       slidesToScroll: 1,
       accessibility: false,
     };
-  
     return (
       <div className="content" onClick={()=>this.setState({showMenu:false})}>
         {/* <Sidebar/>
@@ -147,22 +146,22 @@ class Analysis extends Component {
           </div>
 
           <div  className="content-title">
-            <div className="content-info" >
-              <div style={{marginRight:"25px"}}>
+            <div className="content-info" style={{border:'0px red solid'}}>
+              <div style={{marginRight:"10px", maxWidth:'1200px', height:"60px"}}>
                 Patient Name
-                <div className="content-var">Daewoon Kim</div>
+                <div className="content-var">{stackManager?.[counter.tabX].PatientName}</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
+              <div style={{margin: "0px 10px"}}>
                 Patient ID
-                <div className="content-var" >2020-0000</div>
+                <div className="content-var" >{stackManager?.[counter.tabX].PatientID}</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
-                Age
-                <div className="content-var" >50</div>
+              <div style={{margin: "0px 10px"}}>
+                Birth Date
+                <div className="content-var" >{stackManager?.[counter.tabX].Age}</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
+              <div style={{margin: "0px 10px"}}>
                 Sex
-                <div className="content-var" >Male</div>
+                <div className="content-var" >{stackManager?.[counter.tabX].Sex}</div>
               </div>
             </div>
 
@@ -199,7 +198,7 @@ const mapStateToProps = (state) => ({
   // storeCount: state.count.count,
   counter:state.counter,
   isLogged:state.isLogged,
-  listSelected:state.stackManager,
+  stackManager:state.stackManager,
 });
 
 const mapDispatchToProps = (dispatch) => ({

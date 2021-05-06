@@ -90,7 +90,7 @@ function Headerbar({OpenedFiles}) {
                   }
                 }}
               className={`Headerbar-tab ${el.fileID == counter.fileID && 'act'}`}>
-                {el.fileID} 
+                <div style={{width:"70%"}}>{el.PatientID}</div>
                 <div style={{userSelect:"none"}} onClick={(e)=>{
                     const nextStackManager = stackManager.filter((v,i)=>v.fileID !== el.fileID);
                     const lastIndex = nextStackManager.length-1;

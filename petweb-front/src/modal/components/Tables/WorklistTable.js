@@ -183,7 +183,7 @@ class WorklistTable extends Component {
                 }}
                     >
                 <div className={`WorklistTable-Tracer ${props.value.slice(-3)}`}  >
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
+                    <div>&emsp;[<sup>{props.value.split(/[\[,\]]/)[1].slice(0,-1)}</sup>{props.value.split(/[\[,\]]/)[1].slice(-1)}]{props.value.split(/[\[,\]]/)[2]}</div>
                 </div>
             </div>
         );
@@ -226,7 +226,7 @@ class WorklistTable extends Component {
             // { render: this.renderSUVR, name: 'SUVR', displayName: "SUVR", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Age', displayName: "Age", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Age', displayName: "Birth Date", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'Sex', displayName: "Sex", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
             // { render: this.renderClick, name: 'Update', displayName: "Update", inputFilterable: true, exactFilterable: false, sortable: true },

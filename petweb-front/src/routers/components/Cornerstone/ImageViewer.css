@@ -61,7 +61,13 @@
   padding-left:10px;
   padding-right:10px;
 }
-/* .colorbar1:hover{
-  border:1px red solid;
-  user-select: none;
-} */
+.input-range__track{
+  height:6px !important;
+}
+.input-range__track--active{
+  background:#2675ff !important;
+}
+.input-range__slider{
+  background:#2675ff !important;
+  border:1px solid #2675ff !important;
+}

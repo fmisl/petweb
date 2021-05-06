@@ -111,7 +111,7 @@ class UploadTable extends Component {
             <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                             onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
-                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex}})];
                                 const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                                 {props.record.Centiloid != null && (this.props.openItem(props.record.id))}
@@ -137,7 +137,7 @@ class UploadTable extends Component {
             <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                             onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
-                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex}})];
                                 const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                                 {props.record.Centiloid != null && this.props.openItem(props.record.id)}
@@ -149,7 +149,7 @@ class UploadTable extends Component {
                 >
                 <div className={`UploadTable-Tracer ${props.value.slice(-3)}`} >
                     {/* {console.log(props.value, props.value.split(/[\[,\]]/)[1].slice(0,-1))} */}
-                    <div>&emsp;[<sup>{props.value.split(/[\[,\]]/)[1].slice(0,-1)}</sup>{props.value.split(/[\[,\]]/)[1].slice(-1)}] {props.value.split(/[\[,\]]/)[2]}</div>
+                    <div>&emsp;[<sup>{props.value.split(/[\[,\]]/)[1].slice(0,-1)}</sup>{props.value.split(/[\[,\]]/)[1].slice(-1)}]{props.value.split(/[\[,\]]/)[2]}</div>
                 </div>
             </div>
         );
@@ -166,7 +166,7 @@ class UploadTable extends Component {
             <div  className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
                             onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
-                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex}})];
                                 const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                                 {props.record.Centiloid != null && this.props.openItem(props.record.id)}
@@ -200,7 +200,7 @@ class UploadTable extends Component {
             // { render: this.renderCentiloid, name: 'Centiloid', displayName: <div>Centiloid<IconQuestion width={'25px'} height={'25px'}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Age', displayName: "BirthDate", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Age', displayName: "Birth Date", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'Sex', displayName: "Sex", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'AcquisitionDateTime', displayName: "ScanDate", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'Update', displayName: "Update", inputFilterable: true, exactFilterable: false, sortable: true, visible: true },

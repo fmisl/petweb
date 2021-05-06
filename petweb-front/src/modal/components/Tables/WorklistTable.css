@@ -83,23 +83,33 @@
 
 .WorklistTable.filterable-table>thead>tr>th {
   /* background: yellow; */
-  width: 270px;
-  height: 70px;
+  /* width: 270px;
+  height: 70px; */
   /* border: white solid; */
   /* opacity: 1; */
 }
 
 .WorklistTable.filterable-table>thead>tr>th:nth-child(1) {
   width: 40px;
-  height: 100%;
+  /* height: 100%; */
 }
-
 .WorklistTable.filterable-table>thead>tr>th:nth-child(2) {
-  width: 150px;
+  min-width: 120px;
+  /* border:#1AFFD6 1px solid; */
+}
+.WorklistTable.filterable-table>thead>tr>th:nth-child(3) {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  /* border: 1px red solid;
+  box-sizing: border-box; */
+}
+.WorklistTable.filterable-table>thead>tr>th:nth-child(4) {
+  width: 100px;
 }
 
 .WorklistTable.filterable-table>thead>tr>th:nth-child(5) {
-  width: 80px;
+  width: 100px;
 }
 
 .WorklistTable.filterable-table>thead>tr>th:nth-child(6) {
@@ -121,6 +131,7 @@
 .WorklistTable.filterable-table>tbody>tr {
   /* background:rgba(0,0,0,0.3); */
   /* height: 67px; */
+  /* border: 1px white solid; */
   /* background:#292D30; */
 }
 
@@ -131,37 +142,34 @@
   box-sizing: border-box; */
   color: #118AF7;
 }
-
-.WorklistTable.filterable-table>tbody>tr>td:nth-child(3)>span {
-  display: block;
-
+.WorklistTable.filterable-table>tbody>tr>td {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: normal;
+  font-weight: 100;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
   height: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  /* border: yellow solid; */
+  /* height: 56px; */
+  /* border: 1px yellow solid; */
 }
 
-.WorklistTable.filterable-table>tbody>tr>td:nth-child(3)>span>.WorklistTable-Default {
-  width: 300px;
-  height: 130%;
-  display: block;
-  padding-top: 18px;
-  padding-left: 15px;
-  white-space: nowrap;
-  overflow-y: hidden;
-  overflow-x: scroll;
-  /* border: red solid; */
+.WorklistTable.filterable-table>tbody>tr>td>span {
+  /* background: white; */
+  /* display: block; */
+  width: 100%;
+  height: 100%;
 }
 
 .WorklistTable.filterable-table>tbody>tr>td:nth-child(1) {
-  /* width: 80px; */
+  width: 180px;
   /* border: 1px red solid; */
   /* display: flex;
   justify-content: center;
   align-items: center; */
   /* height: 100%; */
 }
-
 .WorklistTable.filterable-table>tbody>tr>td:nth-child(1)>span {
   /* border: 1px red solid; */
   /* height: 100%; */
@@ -172,12 +180,7 @@
   /* height: 100%; */
 }
 
-.WorklistTable.filterable-table>tbody>tr>td:nth-child(7) {
-  /* border: red solid; */
-  width: 40px;
-}
-
-.WorklistTable.filterable-table>tbody>tr>td {
+.WorklistTable.filterable-table>tbody>tr>td:nth-child(3) {
   font-family: "Montserrat";
   font-style: normal;
   font-weight: normal;
@@ -186,15 +189,30 @@
   line-height: 24px;
   text-align: center;
   height: 56px;
-  /* border: 1px white solid; */
 }
 
-.WorklistTable.filterable-table>tbody>tr>td>span {
-  /* background: white; */
+.WorklistTable.filterable-table>tbody>tr>td:nth-child(3)>span {
   display: block;
-  width: 100%;
+  width: 430px;
   height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  /* border: yellow solid;*/
 }
+
+.WorklistTable.filterable-table>tbody>tr>td:nth-child(3)>span>.WorklistTable-Default {
+  
+  width: 430px;
+  height: 130%;
+  /* height: 85px; */
+  display: block;
+  padding-top: 18px;
+  padding-left: 15px;
+  white-space: nowrap;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+
 
 .pagination {
   width: 100%;
@@ -252,6 +270,8 @@
   /* color: #118AF7; */
   background: #292D30;
   color: #118AF7;
+  height:67px;
+  /* border:#1AFFD6 1px solid; */
 }
 
 
@@ -271,10 +291,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  white-space: nowrap;
   /* background: #292D30; */
-  /* border: red solid; */
+  /* border: yellow solid; */
 }
 
 .WorklistTable-Select {
@@ -316,8 +335,9 @@
 .WorklistTable-Tracer>div {
   text-align: left;
   border-left: white solid;
-  margin-left: 20%;
+  margin-left: 10%;
   width: 100%;
+  white-space: nowrap;
 }
 
 .WorklistTable-Tracer.FMM>div {

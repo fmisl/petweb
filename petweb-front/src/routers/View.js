@@ -28,8 +28,8 @@ import "react-input-range/lib/css/index.css";
 class View extends Component {
   state = {
     value5: {
-      min: 3,
-      max: 30000,
+      min: 16383,
+      max: 16384,
     },
     currentStepIndex: 20,
     username: localStorage.getItem('username'),
@@ -267,8 +267,22 @@ class View extends Component {
   handleInputChange = e => {
     this.setState({ currentStepIndex: e.currentTarget.value });
   };
+  handleWindowChange = (WW,WC) => {
+    // this.setState({ currentStepIndex: e.currentTarget.value });
+    const {value5}=this.state;
+    const newMin=Math.max(0,WC-WW/2);
+    const newMax=Math.min(32767,WC+WW/2);
+    if (value5.min != newMin || value5.max != newMax){
+      this.setState({
+        value5:{
+          min: newMin,
+          max: newMax,
+        }
+      })
+    }
+  };
   render() {
-    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed} = this;
+    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed, handleWindowChange} = this;
     const {value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
     const {counter, stackManager} = this.props;
     return (
@@ -277,29 +291,29 @@ class View extends Component {
         <Headerbar/> */}
         <div className="content-page">
           {/* <div className="view-box"> */}
-            <div style={{background:"black",position: "absolute", top:"150px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-              <ImageViewer value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
+            <div style={{background:"black",position: "absolute", top:"140px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
+              <ImageViewer handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
 
           <div  className="content-title">
             <div className="content-info" style={{border:'0px red solid'}}>
-              <div style={{marginRight:"20px"}}>
+              <div style={{marginRight:"10px", overflow:"hidden", width:"160px", height:"60px"}}>
                 Patient Name
-                <div className="content-var">Daewoon Kim</div>
+                <div className="content-var">{stackManager?.[counter.tabX].PatientName}</div>
               </div>
-              <div style={{margin: "0px 20px"}}>
+              <div style={{margin: "0px 10px"}}>
                 Patient ID
-                <div className="content-var" >2020-0000</div>
+                <div className="content-var" >{stackManager?.[counter.tabX].PatientID}</div>
               </div>
-              <div style={{margin: "0px 20px"}}>
-                Age
-                <div className="content-var" >50</div>
+              <div style={{margin: "0px 10px"}}>
+                Birth Date
+                <div className="content-var" >{stackManager?.[counter.tabX].Age}</div>
               </div>
-              <div style={{margin: "0px 20px"}}>
+              <div style={{margin: "0px 10px"}}>
                 Sex
-                <div className="content-var" >Male</div>
+                <div className="content-var" >{stackManager?.[counter.tabX].Sex}</div>
               </div>
             </div>
             <div style={{display:"flex", color:"white", border:'0px red solid'}}>
@@ -316,7 +330,7 @@ class View extends Component {
               </div>
               <div className="view-btn" onClick={()=>setIsPlayed(!isPlayed)}><img src={IconPlayPNG} width={'42px'}  className="view-icon"/></div>
               <div className="view-btn opacity-bar" >
-                MIP({currentStepIndex}):&nbsp;
+                MIP:&nbsp;
                 <input type="range" style={{height:"100%", width:"100%"}} value={this.state.currentStepIndex} onInput={this.handleInputChange} step="1" min="0" max="50"/>
               </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>

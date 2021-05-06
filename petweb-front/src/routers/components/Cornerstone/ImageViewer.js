@@ -163,10 +163,10 @@ class ImageViewer extends Component {
         >
 
           <canvas className="cornerstone-canvas" onContextMenu={(e)=> {e.preventDefault()}}/>
-          <div style={{position:"absolute", top:"0px"}}>
+          {/* <div style={{position:"absolute", top:"0px"}}>
               WW/WC: {(viewportC !== undefined) && viewportC.voi.windowWidth} /{" "}
               {(viewportC !== undefined) && viewportC.voi.windowCenter}
-          </div>
+          </div> */}
         </div>
         <div
           className="viewportElement sagittal"
@@ -212,9 +212,10 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>} */}
 
-        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
-        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"50%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"0%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
+        {<div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"52%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'60%', width:'0px', boxSizing:"border-box",left:"25%",top:"50%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
         {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
@@ -256,7 +257,14 @@ class ImageViewer extends Component {
     cornerstone.resize(this.elementM);
   }
   onImageRendered() {
+    const {handleWindowChange} = this.props;
     try{
+      let viewportC = cornerstone.getViewport(this.elementC);
+      // console.log('WW/WC:', Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
+      handleWindowChange(Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
+      // viewportC.voi.windowCenter = (value5.max+value5.min)/2;
+      // viewportC.voi.windowWidth = (value5.max-value5.min);
+      // cornerstone.setViewport(this.elementC, viewportC);
       const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
       const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
       const stackDataA = cornerstoneTools.getToolState(this.elementA, "stack");
@@ -536,8 +544,8 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackScroll.activate(elementS, 1);
         cornerstoneTools.stackScrollWheel.activate(elementC);
         cornerstoneTools.stackPrefetch.enable(elementC, 3);
-        cornerstoneTools.wwwc.activate(elementC, 4);
-        cornerstoneTools.wwwcRegion.activate(elementC, 2);
+        cornerstoneTools.wwwc.activate(elementC, 2);
+        cornerstoneTools.wwwcRegion.activate(elementC, 4);
         this.wwwcsynchronizer.add(elementC);
         this.synchronizer.add(elementC);
 
@@ -563,8 +571,8 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackScroll.activate(elementS, 1);
         cornerstoneTools.stackScrollWheel.activate(elementS);
         cornerstoneTools.stackPrefetch.enable(elementS, 3);
-        cornerstoneTools.wwwc.activate(elementS, 4);
-        cornerstoneTools.wwwcRegion.activate(elementS, 2);
+        cornerstoneTools.wwwc.activate(elementS, 2);
+        cornerstoneTools.wwwcRegion.activate(elementS, 4);
         this.wwwcsynchronizer.add(elementS);
         this.synchronizer.add(elementS);
 
@@ -590,8 +598,8 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackScroll.activate(elementA, 1);
         cornerstoneTools.stackScrollWheel.activate(elementA);
         cornerstoneTools.stackPrefetch.enable(elementA, 3);
-        cornerstoneTools.wwwc.activate(elementA, 4);
-        cornerstoneTools.wwwcRegion.activate(elementA, 2);
+        cornerstoneTools.wwwc.activate(elementA, 2);
+        cornerstoneTools.wwwcRegion.activate(elementA, 4);
         this.wwwcsynchronizer.add(elementA);
         this.synchronizer.add(elementA);
 
@@ -630,8 +638,8 @@ class ImageViewer extends Component {
         cornerstoneTools.stackScrollWheel.activate(elementM);
         // cornerstoneTools.stackPrefetch.enable(elementM, 3);
         // cornerstoneTools.zoom.activate(elementM, 3);
-        cornerstoneTools.wwwc.activate(elementM, 4);
-        cornerstoneTools.wwwcRegion.activate(elementM, 2);
+        cornerstoneTools.wwwc.activate(elementM, 2);
+        cornerstoneTools.wwwcRegion.activate(elementM, 4);
 
         try{
           let temp = cornerstoneTools.getElementToolStateManager(elementM)
