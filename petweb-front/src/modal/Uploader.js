@@ -18,6 +18,7 @@ const styleDiv ={
 }
 function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
   const [data, setData] = useState([]);
+  const [hoverState, setHoverState] = useState(false);
   const [alarm, setAlarm] = useState(false);
   const [tracer, setTracer] = useState('');
   const [focusItem, setFelectItem] = useState(0);
@@ -43,6 +44,9 @@ function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, i
       setTimeout(() => alert(`Selected: [\u00B9\u2078F] `+tracer), 100);
     }
   },[alarm])
+  const handleMouseHover=()=> {
+    setHoverState(!hoverState);
+  }
   console.log(selectTracer.slice(-3) == 'FMM')
   return (
     isShowing ? 
@@ -58,6 +62,7 @@ function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, i
               <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{console.log(Math.floor(Math.random() * 20+30));setFelectItem(Math.floor(Math.random() * 20+30))}}>
 
               <div style={{position:'relative', minWidth:'600px', minHeight:'60px'}}>
+                <div className={`modal-header-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>{setSelectTracer('[11C]PIB'); setTracer('Pittsburg Compound B(PIB)'); setAlarm(true);}}>[<sup><sup>11</sup></sup>C]PIB</div>
                 <div className={`modal-header-btn FMM ${selectTracer.slice(-3) == 'FMM' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FMM'); setTracer('Flutemetamol(FMM)'); setAlarm(true);}}>[<sup><sup>18</sup></sup>F]FMM</div>
                 <div className={`modal-header-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP'); setTracer('Florbetapir(FBP)'); setAlarm(true);}}>[<sup><sup>18</sup></sup>F]FBP</div>
                 <div className={`modal-header-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB'); setTracer('Florbetaben(FBB)'); setAlarm(true);}}>[<sup><sup>18</sup></sup>F]FBB</div>
@@ -103,30 +108,47 @@ function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, i
             {tracerModal && 
               <div className="modal-Tracer-Selector">
                 <div style={{position:'relative', minWidth:'1000px', minHeight:'200px', display:"flex", justifyContent:"center"}}>
-                  <div style={{position: 'absolute', top:'-200px'}}>Select tracer from below: </div>
+                  <div style={{position: 'absolute', top:'-200px'}}>Select tracer: </div>
+                  <div className={`modal-tracer-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>{setSelectTracer('[11C]PIB'); 
+                  setTracer('Pittsburg Compound B(PIB)'); setAlarm(true);// alert(`Selected: [\u00B9\u00B9C] `+`Pittsburg compound B`)
+                  }}>
+                    <div>[<sup>11</sup>C]Pittsburg Compound B</div>
+                    {/* <div>(PIB)</div> */}
+                    <div style={{fontSize:'26px'}}>PiB</div>
+                  </div>
                   <div className={`modal-tracer-btn FMM ${selectTracer.slice(-3) == 'FMM' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FMM'); 
                   setTracer('Flutemetamol(FMM)'); setAlarm(true);// alert(`Selected: [\u00B9\u00B9C] `+`Pittsburg compound B`)
                   }}>
-                    <div>[<sup>18</sup>F]Flutemetamol (FMM)</div>
-                    <br/>
-                    <div style={{fontSize:'26px'}}>Trade names: Vizamyl</div>
-                    <div style={{fontSize:'26px'}}>Trader: GE Healthcare</div>
+                    <div>[<sup>18</sup>F]Flutemetamol</div>
+                    {/* <div>(FMM)</div> */}
+                    <div style={{fontSize:'26px'}}>Vizamyl</div>
+                    {/* <div style={{fontSize:'26px'}}>Trader: GE Healthcare</div> */}
                   </div>
                   <div className={`modal-tracer-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP'); 
                   setTracer('Florbetapir(FBP)'); setAlarm(true);// alert(`Selected: [\u00B9\u2078F] `+`Florbetapir`)
                   }}>
-                    <div>[<sup>18</sup>F]Florbetapir (FBP)</div>
-                    <br/>
-                    <div style={{fontSize:'26px'}}>Trade names: Amyvid (AV-45)</div>
-                    <div style={{fontSize:'26px'}}>Company: Lilly</div>
+                    <div>[<sup>18</sup>F]Florbetapir</div>
+                    {/* <div>(FBP)</div> */}
+                    <div style={{fontSize:'26px'}}>Amyvid (AV-45)</div>
+                    {/* <div style={{fontSize:'26px'}}>Company: Lilly</div> */}
                   </div>
                   <div className={`modal-tracer-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB'); 
                   setTracer('Florbetaben(FBB)'); setAlarm(true);// alert(`Selected: [\u00B9\u2078F] `+`Florbetaben`)
                   }}>
-                    <div>[<sup>18</sup>F]Florbetaben (FBB)</div>
-                    <br/>
-                    <div style={{fontSize:'26px'}}>Trade names: Nuraceq (BAY-949172)</div>
-                    <div style={{fontSize:'26px'}}>Company: Bayer</div>
+                    <div>[<sup>18</sup>F]Florbetaben</div>
+                    {/* <div>(FBB)</div> */}
+                    <div style={{fontSize:'26px'}}>Nuraceq (BAY-949172)</div>
+                    {/* <div style={{fontSize:'26px'}}>Company: Bayer</div> */}
+                  </div>
+
+
+
+                  {/* <div style={{position: 'absolute', top: "210px", left: "-220px"}}>Comming soon:</div> */}
+                  <div className={`modal-tracer-comming FPN`} onMouseEnter={handleMouseHover} onMouseLeave={handleMouseHover}>
+                    {hoverState ? <div>[<sup>18</sup>F]Florapronol</div>:<div>New</div>}
+                    {/* <div>(FBB)</div> */}
+                    {hoverState ? <div style={{fontSize:'26px'}}>Alzavue</div>:<div style={{fontSize:'26px'}}>Comming Soon!</div>}
+                    {/* <div style={{fontSize:'26px'}}>Company: Bayer</div> */}
                   </div>
                   <div className={`modal-tracer-confirm`} onClick={()=>{setTracerModal(false)}}>Select</div>
                 </div>
