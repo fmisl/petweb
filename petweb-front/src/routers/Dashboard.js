@@ -9,11 +9,12 @@ import WeeklyPie from './components/Charts/WeeklyPie'
 
 function Dashboard(props) {
   const counter = useSelector(state => state.counter);
-  const listSelected = useSelector(state => state.stackManager);
+  const stackManager = useSelector(state => state.stackManager);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const history =useHistory();
   const location = useLocation();
+  const username = localStorage.getItem('username');
   // useEffect(() => {
   //    console.log(location.pathname); // result: '/secondpage'
   //    console.log(location.search); // result: '?query=abc'
@@ -34,7 +35,7 @@ function Dashboard(props) {
             <div className="dashboard-text" style={{marginBottom:"0"}}>
               Hello, 
               <span style={{color:"#118AF7"}}> 
-                Dr.Daewoon Kim
+                &nbsp;Dr.{username}
               </span>
             </div>
             <div className="dashboard-text" style={{marginTop:"0", marginBottom:"0", lineHeight: "10px"}} >

@@ -416,12 +416,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 400px;
+    width: 500px;
     height: 30px;
     border: 1px white solid;
     border-radius: 20px;
-    top: -40px;
-    left: -23px;
+    top: -35px;
+    left: -43px;
     font-size:16px;
 }
 
