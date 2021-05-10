@@ -9,7 +9,7 @@ import os, shutil
 
 import tensorflow as tf
 from testing.TF_DirectSN import layers_coregpy as lays
-from testing.TF_DirectSN.utils import Dense3DSpatialTransformer
+from testing.TF_DirectSN.utils import Dense3DSpatialTransformer, VTNAffineStem
 from testing.TF_DirectSN.spm2py_coreg import coreg
 from shutil import copyfile
 import glob
