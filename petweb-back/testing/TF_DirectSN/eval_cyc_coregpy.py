@@ -29,10 +29,10 @@ def train(inout_path, caseID):
     in_file = "input_" + caseID
     out_file = "output_" + caseID
     in_file_full_path = os.path.join(inout_path, in_file + ".img")
-    coreged = coreg(V2=in_file_full_path)
-    coreged = np.transpose(coreged, [2, 1, 0])
+    coreged = coreg_mrc1(V2=in_file_full_path)
+#     coreged = np.transpose(coreged, [2, 1, 0])
 
-    maxp = np.quantile(coreged.reshape([-1]), 0.95)
+    maxp = np.quantile(coreged.reshape([-1]), 0.99)
 
     coreged = coreged / maxp
 
@@ -41,26 +41,47 @@ def train(inout_path, caseID):
     with tf.Graph().as_default():
 
         pet_in = tf.placeholder(tf.float32,
-                               [91, 109, 91],
+                               [91, 109, 112],
                                name="PET")
         # pet_in = tf.placeholder(tf.float32,
         #                        [127, 344, 344],
         #                        name="PET")
 
-        pet = tf.pad(pet_in, [[10, 11], [1, 2], [10, 11]], mode='constant')
+        pet = tf.pad(pet_in, [[10, 11], [1, 2], [0, 0]], mode='constant')
 
         pet = tf.expand_dims(tf.expand_dims(pet, axis=-1), axis=0)
 
         # mr = tf.expand_dims(mr, axis=-1)
-
+        
         gimg = pet
 
-        dst = Dense3DSpatialTransformer()
-        dgan = lays.deformedGAN()
+        # TODO: change the path of template MR
+        aa = np.fromfile('C:\\Users\\SKKang\\PycharmProjects\\untitled1\\TF_DirectSN\\fMNI152_T1_2mm.img',
+                 dtype=np.int16)
+        aa = aa.astype(dtype=np.float32) - np.min(aa)
+        aa = aa / np.max(aa)
+        aa = np.reshape(aa, [91, 109, 91])
+        aa = np.transpose(aa, axes=[2, 1, 0])
+        aa_pad = np.pad(aa, [[10, 11], [1, 2], [10, 11]], mode='constant')
 
+        mrTemplate = tf.constant(aa_pad, dtype=tf.float32)
+        mrTemplate = tf.expand_dims(mrTemplate, axis=0)
+        mrTemplate = tf.expand_dims(mrTemplate, axis=-1)
+        mrTemplate = tf.where(tf.is_nan(mrTemplate), tf.ones_like(mrTemplate) * 0, mrTemplate)
+        
+        # Affine layer
         def_list = []
+                with tf.variable_scope('gen_affine'):
+            affine_params = VTNAffineStem(gimg, mrTemplate)
+            affine_flow = affine_params['flow']
+            # def_list.append(affine_flow)
+            gimg = dst._transform(gimg, affine_flow[:, :, :, :, 0], affine_flow[:, :, :, :, 1],
+                                  affine_flow[:, :, :, :, 2])
+
+            def_list.append(affine_flow)
+
         for i in range(0, stages):
-            deform = dgan.autoencoder(gimg, scope='gen_' + str(i), reuse=False)
+            deform = dgan.autoencoder(gimg, mrTemplate, scope='gen_' + str(i), reuse=False)
             gimg = dst._transform(gimg, deform[:, :, :, :, 0], deform[:, :, :, :, 1], deform[:, :, :, :, 2])
             def_list.append(deform)
 
@@ -82,17 +103,6 @@ def train(inout_path, caseID):
                 print('No checkpoint file found')
                 return
 
-            # fname = time.strftime("%m_%d_%H_%M")
-            # fname = fname + 'test'
-            # tfi = os.path.join(r'.\testing\TF_DirectSN\testResults\coregpy', fname)
-            # tfi = os.path.join(inout_path, fname)
-            # if tf.gfile.Exists(tfi):
-            #     tf.gfile.DeleteRecursively(tfi)
-            # tf.gfile.MakeDirs(tfi)
-
-            # hdrBasePath = 'D:\\DNN_directSN\\dataset\\test\\indv_PET\\resampled'
-            # hdrlist = glob.glob(os.path.join(hdrBasePath, '*.hdr'))
-
             for i in range(0, 1):
 
                 [xr, defosr]= sess.run(
@@ -102,7 +112,11 @@ def train(inout_path, caseID):
                 # for ii, in_path in enumerate(outkeys):
 
                 name = 'test'
-                gimg_tmp = xr[0, 10:101, 1:110, 10:101].flatten()
+                test = dst._transform_spline(inp_img, defosr[:, :, :, :, 1], defosr[:, :, :, :, 0],
+                             defosr[:, :, :, :, 2])
+                test = np.transpose(test, axes=[0, 3, 2, 1])
+                
+                gimg_tmp = test[ii, 10:101, 1:110, 10:101].flatten()
                 gimg_tmp = gimg_tmp.astype(dtype=np.int16)
                 gimg_tmp.tofile(os.path.join(inout_path, out_file+".img"))
                 # shutil.copy(os.path.join(hdrBasePath, name + '.hdr'), os.path.join(tfi, 'eval_gimg_' + name + '.hdr'))
@@ -118,12 +132,3 @@ def train(inout_path, caseID):
                     # gxhr_tmp.tofile(os.path.join(tfi, 'eval_labl' + name))
 
                 print(i, name)
-
-
-# train()
-
-# def main(argv=None):  # pylint: disable=unused-argument
-#     train()
-#
-# if __name__ == '__main__':
-#     tf.app.run()
