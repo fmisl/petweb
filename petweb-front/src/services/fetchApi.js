@@ -68,3 +68,10 @@ export function ungroupIndividual(data) {
     },
   });
 }
+export function downloadNifti(data) {
+  return axios.get(IPinUSE+"testing/export/",{
+    headers:{
+    'Authorization':'jwt '+data.token
+    }
+  })
+}

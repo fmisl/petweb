@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import '../App.css';
 import IconDelete from '../images/IconDelete';
 import UploaderTable from './components/Tables/UploaderTable'
+import loadingGIF from '../images/gif/spinner.gif'
 // import * as services from '../services/fetchApi'
 import {IPinUSE} from '../services/IPs'
 const styleDiv ={
@@ -16,7 +17,7 @@ const styleDiv ={
   height:"46%",
   // background: "black",
 }
-function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
+function Uploader({ setListID, listID, setFetchState, fetchState, setaddToWorklist, selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
   const [data, setData] = useState([]);
   const [hoverState, setHoverState] = useState(false);
   const [alarm, setAlarm] = useState(false);
@@ -47,7 +48,7 @@ function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, i
   const handleMouseHover=()=> {
     setHoverState(!hoverState);
   }
-  console.log(selectTracer.slice(-3) == 'FMM')
+  // console.log(selectTracer.slice(-3) == 'FMM')
   return (
     isShowing ? 
     ReactDOM.createPortal(
@@ -59,7 +60,7 @@ function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, i
               UPLOAD <span onClick={hide} ><IconDelete className="worklist-delete" /></span>
             </div>
             <div className="modal-body">
-              <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{console.log(Math.floor(Math.random() * 20+30));setFelectItem(Math.floor(Math.random() * 20+30))}}>
+              <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{setFelectItem(Math.floor(Math.random() * 20+30))}}>
 
               <div style={{position:'relative', minWidth:'600px', minHeight:'60px'}}>
                 <div className={`modal-header-btn PIB ${selectTracer.slice(-3) == 'PIB' && 'act'}`} onClick={()=>{setSelectTracer('[11C]PIB'); setTracer('Pittsburg Compound B(PIB)'); setAlarm(true);}}>[<sup><sup>11</sup></sup>C]PIB</div>
@@ -67,9 +68,9 @@ function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, i
                 <div className={`modal-header-btn FBP ${selectTracer.slice(-3) == 'FBP' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBP'); setTracer('Florbetapir(FBP)'); setAlarm(true);}}>[<sup><sup>18</sup></sup>F]FBP</div>
                 <div className={`modal-header-btn FBB ${selectTracer.slice(-3) == 'FBB' && 'act'}`} onClick={()=>{setSelectTracer('[18F]FBB'); setTracer('Florbetaben(FBB)'); setAlarm(true);}}>[<sup><sup>18</sup></sup>F]FBB</div>
               </div>
-                <UploaderTable selectTracer={selectTracer} fileList={fileList} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>
+                {fetchState ? <div style={{border:"0px red solid", height:"90%", display:"flex", justifyContent:"center", alignItems:"center"}}><img src={loadingGIF}/></div>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={fileList} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
               </div>
-              <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41"}}>
+              <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
                 <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
                   {/* {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}}  */}
                   {currentJPGURL_head !== "" && <img width={'400px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
@@ -91,6 +92,14 @@ function Uploader({ setaddToWorklist, selectTracer, setSelectTracer, fileList, i
                 <div style={{...styleDiv, ...{top:"50%", left:"50%"}}} >
                 {/* <img src={'http://localhost:8000/result/download/case100/input_axial_10.png'}/> */}
                 </div>
+                {/* {fileList.InputAffineX0 < 0 ?  */}
+                {/* {console.log(listID, fileList[listID]?.InputAffineX0, fileList[listID]?.InputAffineY1, fileList[listID]?.InputAffineZ2)} */}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineX0 < 0 ? 'row-reverse':'row'}`}}><div>L</div><div>R</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"52%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineY1 < 0 ? 'row-reverse':'row'}`}}><div>P</div><div>A</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"70%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineX0 < 0 ? 'row-reverse':'row'}`}}><div>L</div><div>R</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"23%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineZ2 < 0 ? 'column-reverse':'column'}`}}><div>S</div><div>I</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"73%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineZ2 < 0 ? 'column-reverse':'column'}`}}><div>S</div><div>I</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"50%", left:"23%", height:"45%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineY1 < 0 ? 'column-reverse':'column'}`}}><div>A</div><div>P</div></div>}
               </div>
             </div>
             <div style={{display:"flex", marginTop:"21px", justifyContent:"space-between", alignItems:"center"}}>

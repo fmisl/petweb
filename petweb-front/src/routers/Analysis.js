@@ -91,8 +91,20 @@ class Analysis extends Component {
   componentWillUnmount() {
     ReactDOM.findDOMNode(this).removeEventListener('wheel', this.handleWheel);
   }
+  niftiDownload = async () =>{
+    const {counter, stackManager} = this.props;
+    console.log('download nifti')
+    const token = localStorage.getItem('token')
+    const username = localStorage.getItem('username')
+    const fileID = stackManager?.[counter.tabX].fileID;
+    const downloadUrl = IPinUSE+'result/download/'+username+'/database/'+fileID+"/"+"output_"+fileID+".nii";
+    // // res = await services.TokenVerify({'token':token})
+    // const res = await services.downloadNifti({'token':token});
+    setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
+  }
   render(){
     const {subRegion} = this.state;
+    const {niftiDownload} = this;
     // console.log('state: ', subRegion)
     const { counter, isLogged, increment, decrement, listSelected, stackManager } = this.props;
     // const counter = useSelector(state => state.counter);
@@ -170,10 +182,10 @@ class Analysis extends Component {
                 <IconBurger className={`view-icon ${this.state.showMenu && 'show'}`}/>
                 {this.state.showMenu && 
                   <div className="view-menu" onClick={(e)=>e.stopPropagation()}>
-                    <div>Save</div>
+                    {/* <div>Save</div>
                     <div>Delete</div>
-                    <div>Export PNG</div>
-                    <div>Export Nifti</div>
+                    <div>Export PNG</div> */}
+                    <div onClick={niftiDownload}>Export Nifti</div>
                   </div>}
               </div>
             </div>

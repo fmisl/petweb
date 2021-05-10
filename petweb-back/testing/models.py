@@ -2,7 +2,9 @@ from django.db import models
 import os
 import datetime
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class TimeStampedModel(models.Model):
     Update = models.DateTimeField(auto_now_add=True)
@@ -16,6 +18,8 @@ class TimeStampedModel(models.Model):
 
 class Case(TimeStampedModel):
     # System Info
+    # Owner = models.ForeignKey(user., blank=True, null=True, on_delete=models.CASCADE, related_name='slices')
+    UserID = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     Opened = models.BooleanField(blank=True, default=False)
     Select = models.BooleanField(blank=True, default=False)
     Focus = models.BooleanField(blank=True, default=False)

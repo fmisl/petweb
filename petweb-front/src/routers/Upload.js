@@ -15,6 +15,8 @@ import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams,
 
 function Upload({toggleWorklist}) {
   const history =useHistory();
+  const [fetchState, setFetchState] = useState(true);
+  const [listID, setListID] = useState(null);
   const [dragState, setDragState] = useState(false);
   const fileList = useSelector(state => state.fileList);
   const counter = useSelector(state => state.counter);
@@ -33,6 +35,7 @@ function Upload({toggleWorklist}) {
   const toggleUploader=(e)=>{
     //   e.preventDefault();
     setDragState(false)
+    setFetchState(true);
     if (isShowingUploader==false){
       deleteFiles()
       let formData = new FormData();
@@ -54,11 +57,14 @@ function Upload({toggleWorklist}) {
     const token = localStorage.getItem('token')
     const res = await services.runFile({'token':token, 'obj':uploaderFileList, 'Tracer':selectTracer, 'addToWorklist':addToWorklist})
     const putList = res.data
-    // console.log(putList)
+    setFetchState(true);
+    setListID(null);
     dispatch(fetchItems(putList))
   }
 
   const deleteFiles = async () =>{
+    setFetchState(true);
+    setListID(null);
     const token = localStorage.getItem('token')
     const res = await services.deleteFile({'token':token})
     const uploadList = res.data
@@ -68,8 +74,12 @@ function Upload({toggleWorklist}) {
 
   const postFiles = async formData =>{
     const token = localStorage.getItem('token')
+    setListID(null);
+    setFetchState(true);
     const res = await services.postFile({'token':token, 'obj':formData})
+    setFetchState(false);
     const uploadList = res.data
+    // console.log(uploadList)
     setUploaderFileList(uploadList)
   }
 
@@ -123,13 +133,13 @@ function Upload({toggleWorklist}) {
     dispatch(fetchItems(uploadList));
     // setFileList(uploadList)
   }
-  console.log("upload: ", selectTracer)
+  // console.log("upload: ", selectTracer)
   return (
     <div className="content">
       {/* <Sidebar />
       <Headerbar/> */}
       {/* <Worklist isShowing={isShowingWorklist} hide={toggleWorklist}/> */}
-      <Uploader selectTracer={selectTracer} setSelectTracer={setSelectTracer} setaddToWorklist={setaddToWorklist} fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
+      <Uploader setListID={setListID} listID={listID} setFetchState={setFetchState} fetchState={fetchState} selectTracer={selectTracer} setSelectTracer={setSelectTracer} setaddToWorklist={setaddToWorklist} fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>

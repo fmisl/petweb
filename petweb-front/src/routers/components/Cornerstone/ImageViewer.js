@@ -77,7 +77,7 @@ class ImageViewer extends Component {
   }
 
   render() {
-    const { isInverted } = this.props;
+    const { isInverted, isCrosshaired } = this.props;
     const divStyleC = {
       // width: "512px",
       // height: "512px",
@@ -212,10 +212,12 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>} */}
 
-        {<div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
-        {<div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"52%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'60%', width:'0px', boxSizing:"border-box",left:"25%",top:"50%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
+        {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"52%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
+        {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'0px', boxSizing:"border-box",left:"25%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'0px', boxSizing:"border-box",left:"75%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {isCrosshaired && <div style={{position:"absolute",height:'60%', width:'0px', boxSizing:"border-box",left:"25%",top:"50%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>} Axial Plane this.AxialRightSide
         {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
@@ -427,13 +429,17 @@ class ImageViewer extends Component {
       if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
         const LRDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineX0:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineX0;
         const APDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineY1:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineY1;
+        const SIDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineZ2:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineZ2;
+        console.log("Direction", LRDirection, APDirection, SIDirection)
         // const SIDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineZ2:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineZ2;
-        this.SagittalLeftSide = APDirection > 0 ? "P":"A";
-        this.SagittalRightSide = APDirection > 0 ? "A":"P";
-        this.CoronalLeftSide = LRDirection > 0 ? "L":"R";
-        this.CoronalRightSide = LRDirection > 0 ? "R":"L";
-        this.AxialLeftSide = LRDirection > 0 ? "L":"R";
-        this.AxialRightSide = LRDirection > 0 ? "R":"L";
+        this.SagittalLeftSide = APDirection < 0 ? "A":"P";
+        this.SagittalRightSide = APDirection < 0 ? "P":"A";
+        this.CoronalLeftSide = LRDirection < 0 ? "R":"L";
+        this.CoronalRightSide = LRDirection < 0 ? "L":"R";
+        this.AxialLeftSide = LRDirection < 0 ? "R":"L";
+        this.AxialRightSide = LRDirection < 0 ? "L":"R";
+        this.CoronalUppderSide = SIDirection < 0 ? "I":"S";
+        this.CoronalUnderSide = SIDirection < 0 ? "S":"I";
         // const AxialLeftSide = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineX0:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineX0;
         // console.log("test:",LRDirection, this.AxialLeftSide, this.AxialRightSide)
         // const IAxialLeftSide = this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].eval(inoutSelect+'AffineX0')>0 ? "L":"R";

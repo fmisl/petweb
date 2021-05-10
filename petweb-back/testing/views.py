@@ -22,6 +22,7 @@ import base64
 import imageio
 import dicom2nifti
 import json
+from zipfile import ZipFile
 
 
 class uploader(APIView):
@@ -31,7 +32,8 @@ class uploader(APIView):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         database_path = os.path.join(user_path, 'database')
-        case = models.Case.objects.filter(fileID=myfile['fileID'])[0]
+        userID = models.User.objects.filter(username=username)[0]
+        case = models.Case.objects.filter(UserID=userID, fileID=myfile['fileID'])[0]
         case.Frontal_L = round(float(Qresult[0][0]), 2)
         case.Frontal_L_C = round(float(Qresult[0][1]), 2)
         case.Frontal_R = round(float(Qresult[1][0]), 2)
@@ -67,14 +69,16 @@ class uploader(APIView):
         case.save()
 
 
-    def async_function(self, request, myfiles):
+    def async_function(self, request):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         database_path = os.path.join(user_path, 'database')
+        userID = models.User.objects.filter(username=username)[0]
+        myfiles = models.Case.objects.filter(UserID=userID)
         # target_mip_size=[45,54,45]
         # target_mip_size=[51,69,51]
         target_mip_size=[91,109,91]
-        for myfile in myfiles:
+        for myfile in myfiles.values():
             # print(os.path.join(user_path, myfile['FileName']))
             target_file = os.path.join(database_path, myfile['FileName'])
             target_folder = os.path.join(database_path, ",".join(myfile['FileName'].split('.')[:-1]))
@@ -138,7 +142,7 @@ class uploader(APIView):
                 # uint8_img3D = uint8_img3D.astype(np.uint8)
 
                 print("Step3: create input image")
-                getCase = models.Case.objects.filter(fileID=myfile['fileID'])[0]
+                getCase = models.Case.objects.filter(UserID=userID, fileID=myfile['fileID'])[0]
                 getCase.InputAffineParamsX0=InputAffineX0
                 getCase.InputAffineParamsY1=InputAffineY1
                 getCase.InputAffineParamsZ2=InputAffineZ2
@@ -322,7 +326,7 @@ class uploader(APIView):
                 OutputAffineX0 = nimg3D.affine[0][0]
                 OutputAffineY1 = nimg3D.affine[1][1]
                 OutputAffineZ2 = nimg3D.affine[2][2]
-                getCase = models.Case.objects.filter(fileID=myfile['fileID'])[0]
+                getCase = models.Case.objects.filter(UserID=userID, fileID=myfile['fileID'])[0]
                 getCase.OutputAffineParamsX0=OutputAffineX0
                 getCase.OutputAffineParamsY1=OutputAffineY1
                 getCase.OutputAffineParamsZ2=OutputAffineZ2
@@ -524,9 +528,11 @@ class uploader(APIView):
         database_files = os.listdir(database_path)
         NofNii = len([v for i, v in enumerate(database_files) if (v.split(".")[-1] == 'nii')])
 
+        userID = models.User.objects.filter(username=username)[0]
         # [np.savetxt(os.path.join(database_path, str(NofNii+i)+"_"+",".join(v['FileName'].split(".")[:-1])+".txt"),[]) for i, v in enumerate(jsonData)]
         for i, v in enumerate(jsonData):
             newCase = models.Case.objects.create(
+                UserID=userID,
                 Opened=False,
                 Select=False,
                 Focus=False,
@@ -603,8 +609,10 @@ class uploader(APIView):
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
 
-        allCases = models.Case.objects.all().values()
-        serializer = serializers.CaseSerializer(allCases, many=True)
+        # userID = models.User.objects.filter(username=username)[0]
+        # # allCases = models.Case.objects.filter(UserID=userID)[0]
+        # allCases = models.Case.objects.filter(UserID=userID).values()
+        # serializer = serializers.CaseSerializer(allCases, many=True)
 
         # centiloidArray = []
         # filenames = os.listdir(database_path) # 파일목록불러오기
@@ -631,9 +639,13 @@ class uploader(APIView):
 
         # thread = threading.Thread(target=self.async_function, args=(request, Format, myfiles, caseID))
         # temp = self.async_function(self, request, fileList)
-        thread = threading.Thread(target=self.async_function, args=(request, list(allCases)))
+        # thread = threading.Thread(target=self.async_function, args=(request, list(allCases.values())))
+        thread = threading.Thread(target=self.async_function, args=[request])
         thread.start()
 
+        userID = models.User.objects.filter(username=username)[0]
+        allCases = models.Case.objects.filter(UserID=userID)
+        serializer = serializers.CaseSerializer(allCases, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
         # return Response("put post test ok", status=200)
 
@@ -672,6 +684,9 @@ class uploader(APIView):
             return Response(data="Error1: File format is not supported. (dcm, hdr/img, nii formats are only supported)",
                             status=status.HTTP_400_BAD_REQUEST)
 
+        InputAffineX0 = []
+        InputAffineY1 = []
+        InputAffineZ2 = []
         # Save files in user_path/uploader
         if Format == "dcm":
             print('dcm')
@@ -717,6 +732,9 @@ class uploader(APIView):
                     print(myfile)
                     NiiPath = os.path.join(uploader_path, myfile)
                     nimg3D = nib.load(NiiPath)
+                    InputAffineX0.append(nimg3D.affine[0][0])
+                    InputAffineY1.append(nimg3D.affine[1][1])
+                    InputAffineZ2.append(nimg3D.affine[2][2])
                     np.array(nimg3D.header['pixdim'][1:4])
                     dsfactor = [float(f) / w for w, f in
                                 zip([2, 2, 2], nimg3D.header['pixdim'][1:4])]  # 픽셀크기 2mm로 변환용 factor
@@ -759,6 +777,9 @@ class uploader(APIView):
                     # Save nii files
                     fs.save(saveNiiPath, f)
                     nimg3D = nib.load(saveNiiPath)
+                    InputAffineX0.append(nimg3D.affine[0][0])
+                    InputAffineY1.append(nimg3D.affine[1][1])
+                    InputAffineZ2.append(nimg3D.affine[2][2])
                     np.array(nimg3D.header['pixdim'][1:4])
                     dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
                     img3D = np.squeeze(np.array(nimg3D.dataobj))
@@ -788,10 +809,10 @@ class uploader(APIView):
                     uint8_img2D = np.rot90(uint8_img2D)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
 
-
-        filenames = os.listdir(uploader_path)
-        fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': 'Sandwich Eater', 'Group': 0, 'fileID': None}
-                    for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+        filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+        fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': 'Sandwich Eater', 'Group': 0, 'fileID': None,
+                     'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
+                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 
 
         return Response(data=fileList, status=status.HTTP_200_OK)
@@ -824,13 +845,13 @@ class fileList(APIView):
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         database_path = os.path.join(user_path, 'database')
         selectedFiles = request.data
+        userID = models.User.objects.filter(username=username)[0]
         for selectedFile in selectedFiles:
             targetFolder = os.path.join(database_path, selectedFile['fileID'])
             print("fileID", selectedFile['fileID'], targetFolder)
-            models.Case.objects.filter(fileID=selectedFile['fileID']).delete()
+            models.Case.objects.filter(UserID=userID, fileID=selectedFile['fileID']).delete()
             # os.remove(targetFolder)
-
-        allCases = models.Case.objects.all()
+        allCases = models.Case.objects.filter(UserID=userID)
         serializer = serializers.CaseSerializer(allCases, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
@@ -843,7 +864,8 @@ class fileList(APIView):
         if not os.path.exists(database_path):
             os.mkdir(database_path)
 
-        allCases = models.Case.objects.all()
+        userID = models.User.objects.filter(username=username)[0]
+        allCases = models.Case.objects.filter(UserID=userID)
         serializer = serializers.CaseSerializer(allCases, many=True)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -853,21 +875,22 @@ class fileList(APIView):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         database_path = os.path.join(user_path, 'database')
+        userID = models.User.objects.filter(username=username)[0]
         if request.data['method'] == 'ungroupIndividual':
             fileID = request.data['fileID']
             print('ungroupIndividual', fileID)
-            selectedCase = models.Case.objects.filter(fileID=fileID)[0]
+            selectedCase = models.Case.objects.filter(UserID=userID, fileID=fileID)[0]
             selectedCase.Group = 0
             selectedCase.save()
         elif request.data['method'] == 'groupSelection':
             selectedFiles = request.data['list']
             for selectedFile in selectedFiles:
-                selectedCase = models.Case.objects.filter(fileID=selectedFile['fileID'])[0]
+                selectedCase = models.Case.objects.filter(UserID=userID, fileID=selectedFile['fileID'])[0]
                 selectedCase.Group = 1
                 selectedCase.save()
                 # os.remove(targetFolder)
 
-        allCases = models.Case.objects.all()
+        allCases = models.Case.objects.filter(UserID=userID)
         serializer = serializers.CaseSerializer(allCases, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
@@ -886,3 +909,27 @@ class viewer(APIView):
         serializer = serializers.SliceSerializer(allSlices, many=True)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class export(APIView):
+    def get(self, request, format=None):
+        username = request.user.username
+        user_path = os.path.join(settings.MEDIA_ROOT, str(username))
+        database_path = os.path.join(user_path, 'database')
+        downloader_path = os.path.join(user_path, 'downloader')
+        if not os.path.exists(downloader_path):
+            os.mkdir(downloader_path)
+        target_path = os.path.join(downloader_path, 'brightonix_imaging.zip')
+        userID = models.User.objects.filter(username=username)[0]
+        selectedCase = models.Case.objects.filter(UserID=userID, Group=1)
+        # selectedCase = models.Case.objects.filter(Group=1)
+        # create a ZipFile object
+        zipObj = ZipFile(target_path, 'w')
+        for idx, filename in enumerate(selectedCase):
+            fullpath = os.path.join(database_path, filename.fileID, "output_"+filename.FileName)
+            targetpath = os.path.join(database_path, filename.fileID, str(idx)+"_"+filename.PatientName+".nii")
+            # Add multiple files to the zip
+            zipObj.write(fullpath, os.path.basename(targetpath))
+        # close the Zip File
+        zipObj.close()
+        return Response(status=status.HTTP_200_OK)

@@ -65,6 +65,7 @@ export default class UploaderTable extends Component {
                   //   ),
                   // });
                   this.props.getJPGURL(props.record.FileName)
+                  this.props.setListID(props.record.id)
                 }
               }
             >
@@ -87,6 +88,7 @@ export default class UploaderTable extends Component {
                 //   ),
                 // });
                 this.props.getJPGURL(props.record.FileName)
+                this.props.setListID(props.record.id)
               }
             }
           >

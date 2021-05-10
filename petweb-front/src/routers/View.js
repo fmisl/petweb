@@ -281,8 +281,19 @@ class View extends Component {
       })
     }
   };
+  niftiDownload = async () =>{
+    const {counter, stackManager} = this.props;
+    console.log('download nifti')
+    const token = localStorage.getItem('token')
+    const username = localStorage.getItem('username')
+    const fileID = stackManager?.[counter.tabX].fileID;
+    const downloadUrl = IPinUSE+'result/download/'+username+'/database/'+fileID+"/"+"output_"+fileID+".nii";
+    // // res = await services.TokenVerify({'token':token})
+    // const res = await services.downloadNifti({'token':token});
+    setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
+  }
   render() {
-    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed, handleWindowChange} = this;
+    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed, handleWindowChange, niftiDownload} = this;
     const {value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
     const {counter, stackManager} = this.props;
     return (
@@ -356,10 +367,10 @@ class View extends Component {
                 <IconBurger className={`view-icon ${showMenu && 'show'}`}/>
                 {showMenu && 
                   <div className="view-menu" onClick={(e)=>e.stopPropagation()}>
-                    <div>Save</div>
-                    <div>Delete</div>
-                    <div>Export PNG</div>
-                    <div>Export Nifti</div>
+                    {/* <div>Save</div> */}
+                    {/* <div>Delete</div> */}
+                    {/* <div>Export PNG</div> */}
+                    <div onClick={niftiDownload}>Export Nifti</div>
                   </div>}
               </div>
             </div>
