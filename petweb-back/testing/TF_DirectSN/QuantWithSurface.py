@@ -206,7 +206,7 @@ def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSi
     # return aal_region_norm, aal_region, aal_count
 
     # Current: only produce regional SUVR values and Centiloid SUVR
-    return aal_region, centil_suvr
+    return aal_region, centil_suvr, sn_crbl_av
 
 # if __name__ == "__main__":
 #     # _quantification(sndir=r'D:\DNN_directSN\testResults\onlySeg_paper_Affine\02_17_07_09test_step1')

@@ -68,7 +68,10 @@ class uploader(APIView):
         case.Centiloid = round(float(Qresult[14][1]), 2)
         case.save()
 
-
+    # in_suvr_max
+    # in_suvr_min
+    # out_suvr_max
+    # out_suvr_min
     def async_function(self, request):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
@@ -115,7 +118,7 @@ class uploader(APIView):
                 train(inout_path, myfile['fileID'])
 
                 print("Step5: Quantification")
-                aal_region, centil_suvr = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize)
+                aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize)
                 # print(aal_region, centil_suvr)
                 full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
                 # full_path2 = os.path.join(inout_path, 'global_centil.txt')
@@ -123,6 +126,13 @@ class uploader(APIView):
                 np.savetxt(full_path1, Qresult, '%.3f')
                 self.update_quantification_DB(request, myfile, Qresult)
                 print("----------complete train & quantification--------------------------------------------------------------")
+
+
+                # Converting SUVR
+                img3D = img3D / sn_crbl_idx
+                in_suvr_max = img3D.max()
+                in_suvr_min = img3D.min()
+
 
                 img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
                 zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
@@ -146,6 +156,8 @@ class uploader(APIView):
                 getCase.InputAffineParamsX0=InputAffineX0
                 getCase.InputAffineParamsY1=InputAffineY1
                 getCase.InputAffineParamsZ2=InputAffineZ2
+                getCase.in_suvr_max = in_suvr_max
+                getCase.in_suvr_min = in_suvr_min
                 getCase.save()
                 reg_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
                 scale_img3D = 32767 * reg_img3D
@@ -330,13 +342,20 @@ class uploader(APIView):
                 getCase.OutputAffineParamsX0=OutputAffineX0
                 getCase.OutputAffineParamsY1=OutputAffineY1
                 getCase.OutputAffineParamsZ2=OutputAffineZ2
-                getCase.save()
                 img3D = np.array(nimg3D.dataobj)
+
+                # Converting to SUVR scale
+                img3D = img3D / sn_crbl_idx
 
                 # nii 파일을 database 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".nii"))
 
                 vx, vy, vz = img3D.shape
+                out_suvr_max = img3D.max()
+                out_suvr_min = img3D.min()
+                getCase.out_suvr_max = out_suvr_max
+                getCase.out_suvr_min = out_suvr_min
+                getCase.save()
                 float_img3D = 32767 * (img3D - img3D.min()) / (img3D.max() - img3D.min())
                 # uint8_img3D = uint8_img3D.astype(np.uint8)
 

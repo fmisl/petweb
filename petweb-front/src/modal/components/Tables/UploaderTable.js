@@ -117,7 +117,7 @@ export default class UploaderTable extends Component {
   render() {
     // const {data} = this.state;
     const {fileList, getJPGURL} = this.props;
-    console.log("uploaderTable",fileList)
+    // console.log("uploaderTable",fileList)
     const fields = [
       { render: this.renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
       { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },

@@ -41,6 +41,10 @@ class Case(TimeStampedModel):
     Sex = models.CharField(max_length=3, blank=True, null=True)
     AcquisitionDateTime = models.CharField(max_length=100, blank=True, null=True, default=None)
     # Quantification Info
+    in_suvr_max = models.FloatField(blank=True, null=True)
+    in_suvr_min = models.FloatField(blank=True, null=True)
+    out_suvr_max = models.FloatField(blank=True, null=True)
+    out_suvr_min = models.FloatField(blank=True, null=True)
     Tracer = models.CharField(max_length=150, blank=True, null=True)
     SUVR = models.FloatField(blank=True, default=None, null=True)
     Centiloid = models.FloatField(blank=True, default=None, null=True)

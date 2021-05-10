@@ -19,7 +19,7 @@ import numpy as np
 from .. import models
 
 # Eager mode 0510
-# import tensorflow.contrib.eager as tfe
+import tensorflow.contrib.eager as tfe
 
 
 FLAGS = tf.flags.FLAGS
@@ -115,14 +115,14 @@ def train(inout_path, caseID):
 
                 [xr, defosr]= sess.run(
                     [gimg, defos], feed_dict={pet_in: coreged})
-                # xr = xr*maxp
+                xr = xr*maxp
 
                 # for ii, in_path in enumerate(outkeys):
 
                 name = 'test'
                 test = dst._transform_spline(coreged, defosr[:, :, :, :, 1], defosr[:, :, :, :, 0],
                              defosr[:, :, :, :, 2])
-                test = np.transpose(test, axes=[0, 3, 2, 1])*maxp
+                test = np.transpose(test, axes=[0, 3, 2, 1])
                 
                 gimg_tmp = test[0, 10:101, 1:110, 10:101].flatten()
                 gimg_tmp = gimg_tmp.astype(dtype=np.int16)
