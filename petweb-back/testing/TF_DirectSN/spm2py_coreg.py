@@ -17,7 +17,7 @@ from dipy.align.transforms import TranslationTransform3D
 
 def coreg_mrc1(V2):
     # Average template
-    V1 = r'D:\DNN_directSN\averageTemplate\output_averageTM2.nii'
+    V1 = r'C:\Users\dwnusa\workspace\petweb\petweb-back\testing\TF_DirectSN\src\output_averageTM2.nii'
 
     I = load(V2)
     if len(I.shape) == 4:
@@ -30,7 +30,7 @@ def coreg_mrc1(V2):
     static = J.get_fdata()
     static_grid2world = J.affine
 
-    moving = I.jget_fdata
+    moving = I.get_fdata()
     moving_grid2world = I.affine
 
     # PET to MR dimension
@@ -39,13 +39,13 @@ def coreg_mrc1(V2):
     c_of_mass = transform_centers_of_mass(static, static_grid2world,
                                           moving, moving_grid2world)
 
-    nbins = 16
+    nbins = 12
     metric = MutualInformationMetric(nbins, sampling_proportion=80)
 
     # Lower time cost: 10 10 5
-    level_iters = [100, 10, 10]
+    level_iters = [1000, 100, 10]
 
-    sigmas = [3.0, 1.0, 0.0]
+    sigmas = [3.0, 1.0, 1.0]
     factors = [4, 2, 1]
 
     affreg = AffineRegistration(metric=metric,

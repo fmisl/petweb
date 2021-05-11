@@ -10,7 +10,7 @@ from shutil import copyfile
 
 # TODO: Change the model paths
 import tensorflow as tf
-import testing.TF_DirectSN.layers_coregpy as lays
+import testing.TF_DirectSN.layers_coregpy_with_eval_affine_v1 as lays
 from testing.TF_DirectSN.PTQuant_utils import Dense3DSpatialTransformer, VTNAffineStem
 
 from testing.TF_DirectSN.PTQuant_preproc_coreg_v1_1 import coreg_mrc1 as coreg
@@ -116,12 +116,11 @@ def train(inout_path, caseID):
                 inp_img = inp_img * maxp
                 test = dst._transform_spline(inp_img, defosr[:, :, :, :, 1], defosr[:, :, :, :, 0],
                                              defosr[:, :, :, :, 2])
-
                 name = 'test'
 
                 gimg_tmp = test.transpose([0, 3, 2, 1])
                 gimg_tmp = gimg_tmp[0, 10:101, 1:110, 10:101].flatten()
-                gimg_tmp = gaussian_filter(gimg_tmp, sigma=4/2.355/2)
+                # gimg_tmp = gaussian_filter(gimg_tmp, sigma=4/2.355/2)
                 gimg_tmp = gimg_tmp.astype(dtype=np.int16)
                 gimg_tmp.tofile(os.path.join(inout_path, out_file + ".img"))
                 # shutil.copy(os.path.join(hdrBasePath, name + '.hdr'), os.path.join(tfi, 'eval_gimg_' + name + '.hdr'))

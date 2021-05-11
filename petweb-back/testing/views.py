@@ -13,7 +13,8 @@ from PIL import Image
 from shutil import move as mv
 import threading, time
 import math
-from testing.TF_DirectSN.PTQuant_eval_affine_v1 import train
+# from testing.TF_DirectSN.eval_cyc_coregpy import train
+from testing.TF_DirectSN.eval_cyc_coregpy import train
 from testing.TF_DirectSN.QuantWithSurface import _quantification
 import datetime
 from . import models, serializers
@@ -85,7 +86,8 @@ class uploader(APIView):
             # print(os.path.join(user_path, myfile['FileName']))
             target_file = os.path.join(database_path, myfile['FileName'])
             target_folder = os.path.join(database_path, ",".join(myfile['FileName'].split('.')[:-1]))
-
+            tracerName = myfile['Tracer']
+            print(tracerName)
             #
             # Step1: File save (hdr, img, nii)
             print("Step1: process list check: ", myfile['FileName'])
@@ -118,7 +120,7 @@ class uploader(APIView):
                 train(inout_path, myfile['fileID'])
 
                 print("Step5: Quantification")
-                aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize)
+                aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize, tracer_name=tracerName)
                 # print(aal_region, centil_suvr)
                 full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
                 # full_path2 = os.path.join(inout_path, 'global_centil.txt')
@@ -153,6 +155,7 @@ class uploader(APIView):
 
                 print("Step3: create input image")
                 getCase = models.Case.objects.filter(UserID=userID, fileID=myfile['fileID'])[0]
+                # tracerName = getCase.Tracer
                 getCase.InputAffineParamsX0=InputAffineX0
                 getCase.InputAffineParamsY1=InputAffineY1
                 getCase.InputAffineParamsZ2=InputAffineZ2
@@ -346,6 +349,7 @@ class uploader(APIView):
 
                 # Converting to SUVR scale
                 img3D = img3D / sn_crbl_idx
+                img3D = nd.gaussian_filter(img3D, 2/2.355/2)
 
                 # nii 파일을 database 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".nii"))
@@ -659,8 +663,9 @@ class uploader(APIView):
         # thread = threading.Thread(target=self.async_function, args=(request, Format, myfiles, caseID))
         # temp = self.async_function(self, request, fileList)
         # thread = threading.Thread(target=self.async_function, args=(request, list(allCases.values())))
-        thread = threading.Thread(target=self.async_function, args=[request])
-        thread.start()
+        # thread = threading.Thread(target=self.async_function, args=[request])
+        # thread.start()
+        self.async_function(request)
 
         userID = models.User.objects.filter(username=username)[0]
         allCases = models.Case.objects.filter(UserID=userID)

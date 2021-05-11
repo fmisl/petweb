@@ -18,10 +18,6 @@ from django.conf import settings
 import numpy as np
 from .. import models
 
-# Eager mode 0510
-# import tensorflow.contrib.eager as tfe
-
-
 FLAGS = tf.flags.FLAGS
 stages = 3
 
@@ -102,7 +98,7 @@ def train(inout_path, caseID):
 
         saver_re = tf.train.Saver()
 
-        with tf.Session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
+        with tf.Session() as sess:
             ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
 
             if ckpt and ckpt.model_checkpoint_path:
@@ -120,13 +116,14 @@ def train(inout_path, caseID):
                 # for ii, in_path in enumerate(outkeys):
 
                 name = 'test'
-                test = dst._transform_spline(coreged, defosr[:, :, :, :, 1], defosr[:, :, :, :, 0],
+                coreged_padded = np.pad(coreged, ((10, 11), (1, 2), (0, 0)), mode='constant')
+                test = dst._transform_spline(coreged_padded, defosr[:, :, :, :, 1], defosr[:, :, :, :, 0],
                              defosr[:, :, :, :, 2])
                 test = np.transpose(test, axes=[0, 3, 2, 1])*maxp
-                
+
                 gimg_tmp = test[0, 10:101, 1:110, 10:101].flatten()
                 gimg_tmp = gimg_tmp.astype(dtype=np.int16)
-                gimg_tmp.tofile(os.path.join(inout_path, out_file+".img"))
+                gimg_tmp.tofile(os.path.join(inout_path, out_file + ".img"))
                 # shutil.copy(os.path.join(hdrBasePath, name + '.hdr'), os.path.join(tfi, 'eval_gimg_' + name + '.hdr'))
 
                 # defosr = defosr[0, 10:101, 1:110, 10:101,:].flatten()
@@ -134,9 +131,10 @@ def train(inout_path, caseID):
                 # defosr.tofile(os.path.join(inout_path, 'eval_defo_' + name))
                 # inout_path = os.path.join(settings.MEDIA_ROOT, "case_66")
                 src_file_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", "output.hdr")
-                dst_file_path = os.path.join(inout_path, "output_"+caseID+".hdr")
+                dst_file_path = os.path.join(inout_path, "output_" + caseID + ".hdr")
                 copyfile(src_file_path, dst_file_path)
                     # gxhr_tmp = xr[ii, :, :, :].flatten()
                     # gxhr_tmp.tofile(os.path.join(tfi, 'eval_labl' + name))
 
                 print(i, name)
+                print(maxp)

@@ -83,7 +83,7 @@ class View extends Component {
         opacity: 1,
         visible: true,
         viewport: {
-          colormap: 'gray',
+          colormap: 'hot',
         },
         name: 'PET'
       }
@@ -97,7 +97,7 @@ class View extends Component {
         opacity: 1,
         visible: true,
         viewport: {
-          colormap: 'gray',
+          colormap: 'hot',
         },
         name: 'PET'
       }

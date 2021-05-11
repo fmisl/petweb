@@ -46,7 +46,7 @@ class Dense3DSpatialTransformer():
 
         output = []
         for i in range(0,batch_size):
-            tmp = elasticdeform.deform_grid(I[i,:,:,:,0], np.stack([dx[i,:,:,:], dy[i,:,:,:], dz[i,:,:,:]], axis=0), order=4)
+            tmp = elasticdeform.deform_grid(I, np.stack([dx[i,:,:,:], dy[i,:,:,:], dz[i,:,:,:]], axis=0), order=4)
             output.append(tmp)
         output = np.stack(output, axis=0)
 

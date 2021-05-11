@@ -572,10 +572,8 @@ class deformedGAN():
     def __init(self):
         pass
 
-    def autoencoder(self, x_in, y_in, width=384, height=384, scope='gen_', reuse=False):
+    def autoencoder(self, x, width=384, height=384, scope='gen_', reuse=False):
         with tf.variable_scope(scope, reuse=reuse):
-            x = tf.concat([x_in, y_in], axis=-1)
-
             skips = [x]
 
             n = x

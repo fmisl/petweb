@@ -476,6 +476,11 @@ class ImageViewer extends Component {
       if (prevProps.isCrosshaired != isCrosshaired){
         this.controlViewport();
         console.log('constrolViewport isCrosshaired: ',isCrosshaired)
+        // let AlayerPET = cornerstone.getLayer(Aelement, AlayerId[1]);
+        // let layerPET = cornerstone.getLayer(elementC, AlayerId[1]);
+        // layerPET.viewport.colormap = "jet";
+        // // cornerstone.setActiveLayer(Aelement, AlayerId[0]);
+        // cornerstone.updateImage(Aelement);
         
         
         // console.log('viewport.colormap', this.props.stackC.options.viewport.colormap)
@@ -703,9 +708,9 @@ class ImageViewer extends Component {
         cornerstoneTools.crosshairs.enable(elementS, 1, this.synchronizer);
         cornerstoneTools.crosshairs.enable(elementA, 1, this.synchronizer);
   
-        cornerstoneTools.crosshairsTouch.enable(elementC, this.synchronizer);
-        cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
-        cornerstoneTools.crosshairsTouch.enable(elementA, this.synchronizer);
+        // cornerstoneTools.crosshairsTouch.enable(elementC, this.synchronizer);
+        // cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
+        // cornerstoneTools.crosshairsTouch.enable(elementA, this.synchronizer);
 
       } catch(e){
         console.error('FastSkip Promise',e)
