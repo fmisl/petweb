@@ -143,7 +143,8 @@ class uploader(APIView):
                 img3D_2mm = np.pad(img3D_2mm, ((50,50),(50,50),(50,50)), mode='constant')
                 zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
                 cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)]  # 중심 좌표 계산
-                offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2), math.floor(min(109, zoomedY) / 2), math.floor(min(91, zoomedZ) / 2)]
+                xPadding = 20
+                offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2 + xPadding), math.floor(min(109, zoomedY) / 2), math.floor(min(91, zoomedZ) / 2)]
                 img3D_crop = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1, cZ - offsetZ:cZ + offsetZ + 1]
 
                 # dsfactor2 = [float(f) / w for w, f in zip([img3D_crop.shape[0], img3D_crop.shape[1], img3D_crop.shape[2]], [91, 109, 91])] # 픽셀크기 2mm로 변환용 factor
@@ -173,7 +174,7 @@ class uploader(APIView):
                 # inverted_uint16_img3D = -uint16_img3D+uint16_img3D.max()
                 ####################################################################################
 
-                dsfactor_sampled = [float(f) / w for w, f in zip(scale_img3D.shape,target_mip_size)]
+                # dsfactor_sampled = [float(f) / w for w, f in zip(scale_img3D.shape,target_mip_size)]
                 # mip_img3D_crop = nd.interpolation.zoom(scale_img3D, zoom=dsfactor_sampled)
                 mip_img3D_crop = scale_img3D
                 maxStep = 45
@@ -225,7 +226,7 @@ class uploader(APIView):
                     # reg_img = 32767 * reg_img
                     reg_img = column_proj1.astype(np.uint16)
                     # width, height = 109, 91
-                    width, height = target_mip_size[1:3]
+                    width, height = target_mip_size[1:3] # 109, 91
                     resized_img = cv2.resize(reg_img, (width, height))
                     inverted_resized_img = -resized_img + 32767
                     # Image.fromarray(resized_img).save(full_path)
@@ -249,7 +250,7 @@ class uploader(APIView):
 
 
 
-
+                # axial plane
                 for iz in range(vz):
                     # uint8_img2D = uint8_img3D[:,:,iz]
                     # uint8_img2D = np.rot90(uint8_img2D)
@@ -261,7 +262,7 @@ class uploader(APIView):
 
                     uint16_img2D = uint16_img3D[:,:,iz]
                     uint16_img2D = np.rot90(uint16_img2D)
-                    width, height = 91, 109
+                    width, height = 91, 109 # (x axis, y axis)
                     resized_img = cv2.resize(uint16_img2D, (width, height))
                     inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
@@ -278,7 +279,7 @@ class uploader(APIView):
                         InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
-
+                # coronal plane
                 for iy in range(vy):
                     # uint8_img2D = uint8_img3D[:,iy,:]
                     # uint8_img2D = np.rot90(uint8_img2D)
@@ -307,7 +308,7 @@ class uploader(APIView):
                         InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
-
+                # sagittal plane
                 for ix in range(vx):
                     # uint8_img2D = uint8_img3D[ix,:,:]
                     # uint8_img2D = np.rot90(uint8_img2D)
@@ -368,9 +369,20 @@ class uploader(APIView):
                 # Converting to SUVR scale
                 img3D = img3D / sn_crbl_idx
                 img3D = nd.gaussian_filter(img3D, 2/2.355/2)
+                img3D_2mm = img3D
 
                 # nii 파일을 database 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".nii"))
+
+
+                # img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor, order=1) # 2mm 픽셀로 스케일 변환
+                img3D_2mm = np.pad(img3D_2mm, ((50,50),(50,50),(50,50)), mode='constant')
+                zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
+                cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)]  # 중심 좌표 계산
+                # xPadding = 20
+                offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2 + xPadding), math.floor(min(109, zoomedY) / 2), math.floor(min(91, zoomedZ) / 2)]
+                img3D = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1, cZ - offsetZ:cZ + offsetZ + 1]
+
 
                 vx, vy, vz = img3D.shape
                 out_suvr_max = img3D.max()

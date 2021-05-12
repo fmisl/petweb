@@ -199,7 +199,7 @@ class View extends Component {
         }
       };
       const petSStack = {
-        imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+invertSelect+"/"+i)),
+        imageIds: [...Array(91+40).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+invertSelect+"/"+i)),
         currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
         options: {
           opacity: 1,
@@ -308,7 +308,7 @@ class View extends Component {
         <Headerbar/> */}
         <div className="content-page">
           {/* <div className="view-box"> */}
-            <div style={{position: "absolute", top:"140px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"937px"}}>
+            <div style={{position: "absolute", top:"140px", left:"300px",width:"1550px", height:"937px"}}>
               <ImageViewer isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
               {/* <Home caseID={caseID}/> */}
             </div>
@@ -454,12 +454,12 @@ class View extends Component {
     console.log('imageLoader with counter and IdxSlice',this.props.counter,IdxSlice)
     var petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial' && v.Type==inoutSelect)[i].B64Data)));
     var petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].B64Data)));
-    var petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
+    var petSagittalOutputData = [...Array(91+40).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
     var petMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
 
     var Inv_petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial' && v.Type==inoutSelect)[i].InvB64Data)));
     var Inv_petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].InvB64Data)));
-    var Inv_petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].InvB64Data)));
+    var Inv_petSagittalOutputData = [...Array(91+40).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].InvB64Data)));
     var Inv_petMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].InvB64Data)));
 
     function getPETImage(imageId) {
@@ -472,9 +472,9 @@ class View extends Component {
       let id=Number(identifier[5])
       var width = 91;
       var height = 91;
-      if(direction === 'coronal') {width=91; height=91}
+      if(direction === 'coronal') {width=91+20; height=91}
       else if(direction === 'sagittal') {width=109; height=91}
-      else if(direction === 'axial') {width=91; height=109}
+      else if(direction === 'axial') {width=91+20; height=109}
       else if (direction === "mip"){width = 109; height = 91}
       // else if(direction === 'mip'){width = 69; height = 51}
       // console.log("ID: ", ID, " Direction: ", Direction, " w/h: ", width,"/",height)
@@ -554,9 +554,9 @@ class View extends Component {
       // let ID = identifier[identifier.length-1]
       let width = 91;
       let height = 91;
-      if (direction === "coronal"){width = 91; height = 91}
+      if (direction === "coronal"){width = 91+20; height = 91}
       else if (direction === "sagittal"){width = 109; height = 91}
-      else if (direction === "axial"){width = 91; height = 109}
+      else if (direction === "axial"){width = 91+20; height = 109}
       else if (direction === "mip"){width = 109; height = 91}
       // else if (direction === "mip"){width = 69; height = 51}
 
@@ -565,7 +565,7 @@ class View extends Component {
           if (direction === 'coronal'){
               return {
                   frameOfReferenceUID: '1.2.3.4.5',
-                  rows: 91,
+                  rows: 91+20,
                   columns: 91,
                   rowCosines:     [ 0,  1,  0], 
                   columnCosines:  [ 0,  0,  1],
@@ -590,7 +590,7 @@ class View extends Component {
               return {
                   frameOfReferenceUID: '1.2.3.4.5',
                   rows: 109,
-                  columns: 91,
+                  columns: 91+20,
                   rowCosines:     [ 0, 1,  0], 
                   columnCosines:  [ -1,  0,  0],
                   imagePositionPatient: [cY+109, cX, -scale*id+cZ+91], //axial plane에서  [coronal line, sagittal line, xxx]
