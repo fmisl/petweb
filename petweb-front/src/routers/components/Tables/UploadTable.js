@@ -111,7 +111,7 @@ class UploadTable extends Component {
             <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                             onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
-                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex}})];
+                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
                                 const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                                 {props.record.Centiloid != null && (this.props.openItem(props.record.id))}
@@ -137,7 +137,7 @@ class UploadTable extends Component {
             <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                             onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
-                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex}})];
+                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
                                 const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                                 {props.record.Centiloid != null && this.props.openItem(props.record.id)}
@@ -166,7 +166,7 @@ class UploadTable extends Component {
             <div  className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
                             onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
-                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex}})];
+                                const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
                                 const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                                 {props.record.Centiloid != null && this.props.openItem(props.record.id)}

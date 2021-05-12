@@ -85,9 +85,10 @@ class ImageViewer extends Component {
     const divStyleC = {
       // width: "512px",
       // height: "512px",
-      top:"0",
-      left:"0",
-      width:"775px",
+      top:"0px",
+      left:"175px",
+      // width:"775px",
+      width:"425px",
       height:"425px",
       position: "absolute",
       color: "white",
@@ -99,9 +100,11 @@ class ImageViewer extends Component {
     const divStyleS = {
       // width: "512px",
       // height: "512px",
-      top:"0",
-      left:"50%",
-      width:"775px",
+      top:"0px",
+      // left:"50%",
+      left:"900px",
+      // width:"775px",
+      width:"510px",
       height:"425px",
       position: "absolute",
       color: "white",
@@ -112,9 +115,12 @@ class ImageViewer extends Component {
     const divStyleA = {
       // width: "512px",
       // height: "512px",
-      top:"50%",
-      left:"0",
-      width:"775px",
+      top:"426px",
+      // left:"0",
+      // width:"775px",
+      left:"175px",
+      // width:"775px",
+      width:"425px",
       // height:"425px",
       height:"510px",
       position: "absolute",
@@ -127,9 +133,11 @@ class ImageViewer extends Component {
     const divStyleM = {
       // width: "512px",
       // height: "512px",
-      top:"50%",
-      left:"50%",
-      width:"775px",
+      top:"426px",
+      // left:"50%",
+      left:"847px",
+      // width:"775px",
+      width:"610px",
       // height:"425px",
       height:"510px",
       position: "absolute",
@@ -142,15 +150,19 @@ class ImageViewer extends Component {
     const divWrapper = {
       position:"relative",
       width:"100%", 
-      height:"100%", 
+      height:"937px", 
+      background: isInverted ? "white":"black",
       // background: isInverted ? "white":"black",
-      background: "white !important",
+      // background: "white !important",
+      // border:"1px red solid",
     };
     const viewportC = this.elementC && cornerstone.getViewport(this.elementC);
     // const viewportS = cornerstone.getViewport(this.elementS);
     // const viewportA = cornerstone.getViewport(this.elementA);
     // const viewportM = cornerstone.getViewport(this.elementM);
     // console.log(selectedColormap, isInverted, selectedColormap === 'hot')
+    // const suvr_max = this.props.isSNed ? this.props.stackManager
+    // const suvrCenter = this.props.stackManager.
     return (
       <div style={divWrapper}>
         <div
@@ -224,7 +236,7 @@ class ImageViewer extends Component {
         {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
         {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'20px', boxSizing:"border-box",left:"25%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
         {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'20px', boxSizing:"border-box",left:"75%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {isCrosshaired && <div style={{position:"absolute",height:'60%', width:'20px', boxSizing:"border-box",left:"25%",top:"50%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>} Axial Plane this.AxialRightSide
+        {isCrosshaired && <div style={{position:"absolute",height:'50%', width:'20px', boxSizing:"border-box",left:"25%",top:"50%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>} Axial Plane this.AxialRightSide
         {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
@@ -620,7 +632,7 @@ class ImageViewer extends Component {
         cornerstoneTools.stackScrollWheel.activate(elementC);
         cornerstoneTools.stackPrefetch.enable(elementC, 3);
         cornerstoneTools.wwwc.activate(elementC, 2);
-        cornerstoneTools.wwwcRegion.activate(elementC, 4);
+        // cornerstoneTools.wwwcRegion.activate(elementC, 4);
         this.wwwcsynchronizer.add(elementC);
         this.synchronizer.add(elementC);
 
@@ -647,7 +659,7 @@ class ImageViewer extends Component {
         cornerstoneTools.stackScrollWheel.activate(elementS);
         cornerstoneTools.stackPrefetch.enable(elementS, 3);
         cornerstoneTools.wwwc.activate(elementS, 2);
-        cornerstoneTools.wwwcRegion.activate(elementS, 4);
+        // cornerstoneTools.wwwcRegion.activate(elementS, 4);
         this.wwwcsynchronizer.add(elementS);
         this.synchronizer.add(elementS);
 
@@ -674,7 +686,7 @@ class ImageViewer extends Component {
         cornerstoneTools.stackScrollWheel.activate(elementA);
         cornerstoneTools.stackPrefetch.enable(elementA, 3);
         cornerstoneTools.wwwc.activate(elementA, 2);
-        cornerstoneTools.wwwcRegion.activate(elementA, 4);
+        // cornerstoneTools.wwwcRegion.activate(elementA, 4);
         this.wwwcsynchronizer.add(elementA);
         this.synchronizer.add(elementA);
 
@@ -714,7 +726,7 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackPrefetch.enable(elementM, 3);
         // cornerstoneTools.zoom.activate(elementM, 3);
         cornerstoneTools.wwwc.activate(elementM, 2);
-        cornerstoneTools.wwwcRegion.activate(elementM, 4);
+        // cornerstoneTools.wwwcRegion.activate(elementM, 4);
 
         try{
           let temp = cornerstoneTools.getElementToolStateManager(elementM)

@@ -1,43 +1,30 @@
-.cornerstone-canvas{
-  /* background: #d33636 !important; */
-  /* border: 1px red solid; */
-}
+
 .cornerstone-canvas:hover {
-  border: 2px #118AF7 solid !important;
-  box-sizing: border-box !important;
+  border: 0px #118AF7 solid !important;
+  /* box-sizing: border-box !important; */
 }
-/* .viewportElement{
-  border: red solid;
-  background: red;
-} */
 .viewportElement.coronal:hover~.coronal-axial,
 .viewportElement.coronal:hover~.coronal-sagittal {
-  /* z-index: 100000; */
-  /* border: 1px #118AF7 solid !important; */
   border: 1px #118AF7 solid !important;
-  border: 1px #118AF7 solid !important;
-  box-sizing: border-box !important;
+  /* box-sizing: border-box !important; */
 }
 
 .viewportElement.sagittal:hover~.sagittal-axial,
 .viewportElement.sagittal:hover~.sagittal-coronal {
-  /* z-index: 100000; */
   border: 1px #118AF7 solid !important;
-  box-sizing: border-box !important;
+  /* box-sizing: border-box !important; */
 }
 
 .viewportElement.axial:hover~.axial-coronal,
 .viewportElement.axial:hover~.axial-sagittal {
-  /* z-index: 100000; */
   border: 1px #118AF7 solid !important;
-  box-sizing: border-box !important;
+  /* box-sizing: border-box !important; */
 }
 
 .viewportElement.mip:hover~.mip-coronal,
 .viewportElement.mip:hover~.mip-sagittal {
-  /* z-index: 100000; */
   border: 1px #118AF7 solid !important;
-  box-sizing: border-box !important;
+  /* box-sizing: border-box !important; */
 }
 .coronal-axial,
 .coronal-sagittal,

@@ -25,7 +25,6 @@ import dicom2nifti
 import json
 from zipfile import ZipFile
 
-
 class uploader(APIView):
     # def async_function(self, request, Format, myfiles, caseID):
     def update_quantification_DB(self, request, myfile, Qresult):
@@ -140,15 +139,17 @@ class uploader(APIView):
                 in_suvr_min = img3D.min()
 
 
-                img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
+                img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor, order=1) # 2mm 픽셀로 스케일 변환
+                img3D_2mm = np.pad(img3D_2mm, ((50,50),(50,50),(50,50)), mode='constant')
                 zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
                 cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)]  # 중심 좌표 계산
                 offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2), math.floor(min(109, zoomedY) / 2), math.floor(min(91, zoomedZ) / 2)]
                 img3D_crop = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1, cZ - offsetZ:cZ + offsetZ + 1]
 
-                dsfactor2 = [float(f) / w for w, f in zip([img3D_crop.shape[0], img3D_crop.shape[1], img3D_crop.shape[2]], [91, 109, 91])] # 픽셀크기 2mm로 변환용 factor
-                img3D_crop = nd.interpolation.zoom(np.squeeze(img3D_crop), zoom=dsfactor2) # 2mm 픽셀로 스케일 변환
+                # dsfactor2 = [float(f) / w for w, f in zip([img3D_crop.shape[0], img3D_crop.shape[1], img3D_crop.shape[2]], [91, 109, 91])] # 픽셀크기 2mm로 변환용 factor
+                # img3D_crop = nd.interpolation.zoom(np.squeeze(img3D_crop), zoom=dsfactor2) # 2mm 픽셀로 스케일 변환
                 # img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
+
                 vx, vy, vz = img3D_crop.shape # 크기는 (91, 109, 91) 이어야함
 
                 # uint8_img3D = img3D_2mm/img3D_2mm.max()*255
@@ -173,7 +174,8 @@ class uploader(APIView):
                 ####################################################################################
 
                 dsfactor_sampled = [float(f) / w for w, f in zip(scale_img3D.shape,target_mip_size)]
-                mip_img3D_crop = nd.interpolation.zoom(scale_img3D, zoom=dsfactor_sampled)
+                # mip_img3D_crop = nd.interpolation.zoom(scale_img3D, zoom=dsfactor_sampled)
+                mip_img3D_crop = scale_img3D
                 maxStep = 45
                 # uniformImg = np.ones(mip_img3D_crop.shape)
                 uniformImg = mip_img3D_crop > 1
@@ -193,14 +195,14 @@ class uploader(APIView):
                     # transform2=np.array([[c2,0,-s2],[0,1,0],[s2,0,c2]])
                     # transform=transform1 # np.dot(transform1, transform2)
                     offset=c_in-c_out.dot(transform)
-                    dst1=nd.interpolation.affine_transform(mip_img3D_crop,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
+                    dst1=nd.interpolation.affine_transform(mip_img3D_crop,transform.T,order=0,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
                     # dst1=dst1-np.min(dst1)
-                    RotatedUniformImg = nd.interpolation.affine_transform(uniformImg,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
+                    # RotatedUniformImg = nd.interpolation.affine_transform(uniformImg,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
 
                     [sx, sy, sz] = dst1.shape
                     [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/6)
                     crop1 = dst1[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
-                    cropedRotatedUniformImg = RotatedUniformImg[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
+                    # cropedRotatedUniformImg = RotatedUniformImg[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
                     # proj = crop1[:, :, :].sum(axis=0)
                     proj = np.max(crop1, axis=0)
                     # temp = cropedRotatedUniformImg[:, :, :].sum(axis=0)
@@ -225,7 +227,7 @@ class uploader(APIView):
                     # width, height = 109, 91
                     width, height = target_mip_size[1:3]
                     resized_img = cv2.resize(reg_img, (width, height))
-                    inverted_resized_img = -resized_img + resized_img.max()
+                    inverted_resized_img = -resized_img + 32767
                     # Image.fromarray(resized_img).save(full_path)
 
                     b64 = base64.b64encode(resized_img).decode('utf-8')
@@ -261,7 +263,7 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91, 109
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + resized_img.max()
+                    inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
                     inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
@@ -290,7 +292,7 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + resized_img.max()
+                    inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
                     inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
@@ -319,7 +321,7 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 109, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + resized_img.max()
+                    inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
                     inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
@@ -396,7 +398,7 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91, 109
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + resized_img.max()
+                    inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
                     inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
@@ -425,7 +427,7 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + resized_img.max()
+                    inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
                     inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
@@ -454,7 +456,7 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 109, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + resized_img.max()
+                    inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
                     inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
@@ -475,8 +477,8 @@ class uploader(APIView):
                 # uniformImg = np.ones(float_img3D.shape)
 
 
-                dsfactor_sampled = [float(f) / w for w, f in zip(float_img3D.shape,target_mip_size)]
-                float_img3D = nd.interpolation.zoom(float_img3D, zoom=dsfactor_sampled)
+                # dsfactor_sampled = [float(f) / w for w, f in zip(float_img3D.shape,target_mip_size)]
+                # float_img3D = nd.interpolation.zoom(float_img3D, zoom=dsfactor_sampled)
 
                 uniformImg = float_img3D > 1
                 for i in range(maxStep):
@@ -495,14 +497,14 @@ class uploader(APIView):
                     # transform2=np.array([[c2,0,-s2],[0,1,0],[s2,0,c2]])
                     # transform=transform1 # np.dot(transform1, transform2)
                     offset=c_in-c_out.dot(transform)
-                    dst1=nd.interpolation.affine_transform(float_img3D,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
+                    dst1=nd.interpolation.affine_transform(float_img3D,transform.T,order=0,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
                     # dst1=dst1-np.min(dst1)
-                    RotatedUniformImg = nd.interpolation.affine_transform(uniformImg,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
+                    # RotatedUniformImg = nd.interpolation.affine_transform(uniformImg,transform.T,order=1,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
 
                     [sx, sy, sz] = dst1.shape
                     [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz])/6)
                     crop1 = dst1[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
-                    cropedRotatedUniformImg = RotatedUniformImg[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
+                    # cropedRotatedUniformImg = RotatedUniformImg[offsetX:sx-offsetX-1, offsetY:sy-offsetY-1, offsetZ:sz-offsetZ-1]
                     # proj = crop1[:, :, :].sum(axis=0)
                     proj = np.max(crop1, axis=0)
                     # temp = cropedRotatedUniformImg[:, :, :].sum(axis=0)
@@ -527,7 +529,7 @@ class uploader(APIView):
                     # width, height = 109, 91
                     width, height = target_mip_size[1:3]
                     resized_img = cv2.resize(reg_img, (width, height))
-                    inverted_resized_img = -resized_img + resized_img.max()
+                    inverted_resized_img = -resized_img + 32767
 
                     # Image.fromarray(resized_img).save(full_path)
 

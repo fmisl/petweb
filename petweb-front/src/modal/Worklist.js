@@ -54,7 +54,7 @@ function Worklist({ isShowing, hide, lock }) {
               <div className="upload-right-btn" onClick={niftiDownload}>Export Nifti</div>
               {/* <div className="upload-right-btn type1">Save</div> */}
               <div className="upload-right-btn type1" onClick={()=>{
-                const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex}})];
+                const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
                 // const nextStackManager = [...stackManager, ...fileList.filter((v,i)=>{if(v.Opened == false && v.Select == true) return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})]
                 const lastIndex = nextStackManager.length-1;
                 dispatch(openSelect());
