@@ -61,15 +61,10 @@ class ImageViewer extends Component {
         min: 3,
         max: 7,
       },
-    //   stackC: props.stackC,
-    //   stackS: props.stackS,
-    //   stackA: props.stackA,
-    //   imageIdC: props.stackC.imageIds,
-    //   imageIdS: props.stackS.imageIds,
-    //   imageIdA: props.stackA.imageIds,
-    //   viewportC: cornerstone.getDefaultViewport(null, undefined),
-    //   viewportS: cornerstone.getDefaultViewport(null, undefined),
-    //   viewportA: cornerstone.getDefaultViewport(null, undefined),
+      in_suvr_max:0, 
+      in_suvr_min:0,
+      out_suvr_max:0,
+      out_suvr_min:0
     };
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onImageRendered = this.onImageRendered.bind(this);
@@ -81,7 +76,8 @@ class ImageViewer extends Component {
   }
 
   render() {
-    const { isInverted, isCrosshaired, selectedColormap } = this.props;
+    const {in_suvr_max, in_suvr_min, out_suvr_max, out_suvr_min} = this.state;
+    const { isInverted, isCrosshaired, selectedColormap, isSNed } = this.props;
     const divStyleC = {
       // width: "512px",
       // height: "512px",
@@ -157,12 +153,11 @@ class ImageViewer extends Component {
       // border:"1px red solid",
     };
     const viewportC = this.elementC && cornerstone.getViewport(this.elementC);
-    // const viewportS = cornerstone.getViewport(this.elementS);
-    // const viewportA = cornerstone.getViewport(this.elementA);
-    // const viewportM = cornerstone.getViewport(this.elementM);
-    // console.log(selectedColormap, isInverted, selectedColormap === 'hot')
-    // const suvr_max = this.props.isSNed ? this.props.stackManager
-    // const suvrCenter = this.props.stackManager.
+
+    const suvr_max = isSNed ? out_suvr_max:in_suvr_max;
+    const suvr_min = isSNed ? out_suvr_min:in_suvr_min;
+    const widthSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowWidth/32767)*(suvr_max-suvr_min)):1;
+    const centerSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowCenter/32767)*(suvr_max-suvr_min)):1;
     return (
       <div style={divWrapper}>
         <div
@@ -237,7 +232,8 @@ class ImageViewer extends Component {
         {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'20px', boxSizing:"border-box",left:"25%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
         {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'20px', boxSizing:"border-box",left:"75%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
         {isCrosshaired && <div style={{position:"absolute",height:'50%', width:'20px', boxSizing:"border-box",left:"25%",top:"50%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>} Axial Plane this.AxialRightSide
-        {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>}
+        {/* {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>} */}
+        {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? out_suvr_max.toFixed(2):in_suvr_max.toFixed(2)}&nbsp;(max)</div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
             
@@ -266,8 +262,8 @@ class ImageViewer extends Component {
           </div>
         }
         {/* {(viewportC !== undefined) && <div  style={{overflow:'hidden', border:"1px red solid", position:"absolute", width:'30px', height:`${viewportC.voi.windowWidth/32768*100*0.45}%`, boxSizing:"border-box",left:"3%",top:`${30+30-(viewportC.voi.windowCenter)/32768*30-(viewportC.voi.windowWidth/32768*50*0.3)}%`, color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}></div>} */}
-        {(viewportC !== undefined) && <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>0(min)</div>}
-
+        {/* {(viewportC !== undefined) && <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>0(min)</div>} */}
+        {(viewportC !== undefined) && <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? out_suvr_min.toFixed(2):in_suvr_min.toFixed(2)}&nbsp;(min)</div>}
 
 
         {/* Coronal Plane  */}
@@ -445,7 +441,8 @@ class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex, value5, selectedColormap } = this.props;
+    
+    const { isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex, value5, selectedColormap, stackManager } = this.props;
     // const elementS = this.elementS;
     // const elementA = this.elementA;
     // let viewportS = cornerstone.getViewport(elementS);
@@ -473,6 +470,17 @@ class ImageViewer extends Component {
       }
 
       if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
+        const in_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].in_suvr_max
+        const in_suvr_min = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].in_suvr_min
+        const out_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].out_suvr_max
+        const out_suvr_min = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].out_suvr_min
+        // console.log(in_suvr_max, in_suvr_min,out_suvr_max,out_suvr_min)
+        this.setState({
+          in_suvr_max,
+          in_suvr_min,
+          out_suvr_max,
+          out_suvr_min,
+        })
         const LRDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineX0:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineX0;
         const APDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineY1:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineY1;
         const SIDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineZ2:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineZ2;
