@@ -309,7 +309,7 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{position: "absolute", top:"140px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"937px"}}>
-              <ImageViewer selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
+              <ImageViewer isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}

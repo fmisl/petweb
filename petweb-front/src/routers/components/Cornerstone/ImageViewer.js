@@ -226,13 +226,12 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>} */}
 
-        {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
-        {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"52%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
-        {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'20px', boxSizing:"border-box",left:"25%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'20px', boxSizing:"border-box",left:"75%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {isCrosshaired && <div style={{position:"absolute",height:'50%', width:'20px', boxSizing:"border-box",left:"25%",top:"50%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>} Axial Plane this.AxialRightSide
-        {/* {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>} */}
+        {<div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
+        {<div style={{position:"absolute",height:'0px', width:'50%', boxSizing:"border-box",left:"50%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"25%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"75%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'50%', width:'0px', boxSizing:"border-box",left:"385px",top:"47%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>}
         {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? out_suvr_max.toFixed(2):in_suvr_max.toFixed(2)}&nbsp;(max)</div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
@@ -249,9 +248,10 @@ class ImageViewer extends Component {
             {(isInverted) ? 
                 selectedColormap === 'jet' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={invertedjetcmap} />:selectedColormap === 'jet' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={jetcmap}/>
             }
-            <div style={{borderTop:"0px white solid", position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100-viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div>
-            <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{Math.floor(viewportC.voi.windowCenter)}</div>
-            <div style={{borderBottom:"0px black solid", position:'absolute', width:'68px', top:`${100-4-(viewportC.voi.windowCenter)/32768*100+viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{Math.floor(viewportC.voi.windowCenter-viewportC.voi.windowWidth/2)}</div>
+            <div style={{borderTop:"0px white solid", position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100-viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR+widthSUVR/2).toFixed(2)}</div>
+            {/* <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{(viewportC.voi.windowCenter/32767).toFixed(2)*)}</div> (out_suvr_max+out_suvr_min)/2*/}
+            <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{centerSUVR.toFixed(2)}</div>
+            <div style={{borderBottom:"0px black solid", position:'absolute', width:'68px', top:`${100-4-(viewportC.voi.windowCenter)/32768*100+viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR-widthSUVR/2).toFixed(2)}</div>
             {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
             {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
             {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'white':'white'} solid`, width: '30px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'red':'blue'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
@@ -262,7 +262,6 @@ class ImageViewer extends Component {
           </div>
         }
         {/* {(viewportC !== undefined) && <div  style={{overflow:'hidden', border:"1px red solid", position:"absolute", width:'30px', height:`${viewportC.voi.windowWidth/32768*100*0.45}%`, boxSizing:"border-box",left:"3%",top:`${30+30-(viewportC.voi.windowCenter)/32768*30-(viewportC.voi.windowWidth/32768*50*0.3)}%`, color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}></div>} */}
-        {/* {(viewportC !== undefined) && <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>0(min)</div>} */}
         {(viewportC !== undefined) && <div style={{position:"absolute",top:"75%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? out_suvr_min.toFixed(2):in_suvr_min.toFixed(2)}&nbsp;(min)</div>}
 
 
@@ -639,7 +638,7 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackScroll.activate(elementS, 1);
         cornerstoneTools.stackScrollWheel.activate(elementC);
         cornerstoneTools.stackPrefetch.enable(elementC, 3);
-        cornerstoneTools.wwwc.activate(elementC, 2);
+        cornerstoneTools.wwwc.activate(elementC, 4);
         // cornerstoneTools.wwwcRegion.activate(elementC, 4);
         this.wwwcsynchronizer.add(elementC);
         this.synchronizer.add(elementC);
@@ -666,7 +665,7 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackScroll.activate(elementS, 1);
         cornerstoneTools.stackScrollWheel.activate(elementS);
         cornerstoneTools.stackPrefetch.enable(elementS, 3);
-        cornerstoneTools.wwwc.activate(elementS, 2);
+        cornerstoneTools.wwwc.activate(elementS, 4);
         // cornerstoneTools.wwwcRegion.activate(elementS, 4);
         this.wwwcsynchronizer.add(elementS);
         this.synchronizer.add(elementS);
@@ -693,7 +692,7 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackScroll.activate(elementA, 1);
         cornerstoneTools.stackScrollWheel.activate(elementA);
         cornerstoneTools.stackPrefetch.enable(elementA, 3);
-        cornerstoneTools.wwwc.activate(elementA, 2);
+        cornerstoneTools.wwwc.activate(elementA, 4);
         // cornerstoneTools.wwwcRegion.activate(elementA, 4);
         this.wwwcsynchronizer.add(elementA);
         this.synchronizer.add(elementA);
@@ -733,7 +732,7 @@ class ImageViewer extends Component {
         cornerstoneTools.stackScrollWheel.activate(elementM);
         // cornerstoneTools.stackPrefetch.enable(elementM, 3);
         // cornerstoneTools.zoom.activate(elementM, 3);
-        cornerstoneTools.wwwc.activate(elementM, 2);
+        cornerstoneTools.wwwc.activate(elementM, 4);
         // cornerstoneTools.wwwcRegion.activate(elementM, 4);
 
         try{
