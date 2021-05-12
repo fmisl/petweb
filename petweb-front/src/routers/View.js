@@ -378,9 +378,9 @@ class View extends Component {
               <div className="view-btn colormap-select">
                 <select id="colormap" name="colormap" onChange={this.changeColormap} value={this.state.selectedColormap}
                 style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
+                  <option value="gray">Gray (colormap)</option>
                   <option value="hot" >Hot (colormap)</option>
                   <option value="jet">Jet (colormap)</option>
-                  <option value="gray">Gray (colormap)</option>
                 </select>
               </div>
               {/* <div className="view-btn template-select">

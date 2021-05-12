@@ -114,7 +114,7 @@ class ImageViewer extends Component {
     const divStyleA = {
       // width: "512px",
       // height: "512px",
-      top:"425px",
+      top:"390px",
       // left:"0",
       // width:"775px",
       // left:"175px",
@@ -163,7 +163,7 @@ class ImageViewer extends Component {
       // background: isInverted ? "red":"black",
       // background: isInverted ? "white":"black",
       // background: "white !important",
-      border:"1px red solid",
+      // border:"1px red solid",
     };
     const viewportC = this.elementC && cornerstone.getViewport(this.elementC);
 
@@ -178,6 +178,17 @@ class ImageViewer extends Component {
           style={divStyleM}
           ref={input => {
             this.elementM = input;
+          }}
+          // onClick={(e)=>{
+          // }}
+        >
+          <canvas className="cornerstone-canvas" onContextMenu={(e)=> {e.preventDefault()}}/>
+        </div>
+        <div
+          className="viewportElement axial"
+          style={divStyleA}
+          ref={input => {
+            this.elementA = input;
           }}
           // onClick={(e)=>{
           // }}
@@ -211,17 +222,6 @@ class ImageViewer extends Component {
           style={divStyleS}
           ref={input => {
             this.elementS = input;
-          }}
-          // onClick={(e)=>{
-          // }}
-        >
-          <canvas className="cornerstone-canvas" onContextMenu={(e)=> {e.preventDefault()}}/>
-        </div>
-        <div
-          className="viewportElement axial"
-          style={divStyleA}
-          ref={input => {
-            this.elementA = input;
           }}
           // onClick={(e)=>{
           // }}
