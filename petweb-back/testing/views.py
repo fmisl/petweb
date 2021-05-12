@@ -169,6 +169,7 @@ class uploader(APIView):
                 reg_img3D = (img3D_crop-img3D_crop.min()) / (img3D_crop.max()-img3D_crop.min())
                 scale_img3D = 32767 * reg_img3D
                 uint16_img3D = scale_img3D.astype(np.uint16)
+                # inverted_uint16_img3D = -uint16_img3D+uint16_img3D.max()
                 ####################################################################################
 
                 dsfactor_sampled = [float(f) / w for w, f in zip(scale_img3D.shape,target_mip_size)]
@@ -224,10 +225,11 @@ class uploader(APIView):
                     # width, height = 109, 91
                     width, height = target_mip_size[1:3]
                     resized_img = cv2.resize(reg_img, (width, height))
-
+                    inverted_resized_img = -resized_img + resized_img.max()
                     # Image.fromarray(resized_img).save(full_path)
 
                     b64 = base64.b64encode(resized_img).decode('utf-8')
+                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="input",
                         ImageID=str(i),
@@ -237,6 +239,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
+                        InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
                 ####################################################################################
@@ -258,7 +261,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91, 109
                     resized_img = cv2.resize(uint16_img2D, (width, height))
+                    inverted_resized_img = -resized_img + resized_img.max()
                     b64 = base64.b64encode(resized_img).decode('utf-8')
+                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="input",
                         ImageID=str(iz),
@@ -268,6 +273,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
+                        InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -284,7 +290,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
+                    inverted_resized_img = -resized_img + resized_img.max()
                     b64 = base64.b64encode(resized_img).decode('utf-8')
+                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="input",
                         ImageID=str(iy),
@@ -294,6 +302,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
+                        InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -310,7 +319,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 109, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
+                    inverted_resized_img = -resized_img + resized_img.max()
                     b64 = base64.b64encode(resized_img).decode('utf-8')
+                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="input",
                         ImageID=str(ix),
@@ -320,6 +331,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
+                        InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -384,7 +396,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91, 109
                     resized_img = cv2.resize(uint16_img2D, (width, height))
+                    inverted_resized_img = -resized_img + resized_img.max()
                     b64 = base64.b64encode(resized_img).decode('utf-8')
+                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="output",
                         ImageID=str(iz),
@@ -394,6 +408,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
+                        InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -410,7 +425,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
+                    inverted_resized_img = -resized_img + resized_img.max()
                     b64 = base64.b64encode(resized_img).decode('utf-8')
+                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="output",
                         ImageID=str(iy),
@@ -420,6 +437,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
+                        InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -436,7 +454,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 109, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
+                    inverted_resized_img = -resized_img + resized_img.max()
                     b64 = base64.b64encode(resized_img).decode('utf-8')
+                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="output",
                         ImageID=str(ix),
@@ -446,6 +466,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
+                        InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -506,10 +527,12 @@ class uploader(APIView):
                     # width, height = 109, 91
                     width, height = target_mip_size[1:3]
                     resized_img = cv2.resize(reg_img, (width, height))
+                    inverted_resized_img = -resized_img + resized_img.max()
 
                     # Image.fromarray(resized_img).save(full_path)
 
                     b64 = base64.b64encode(resized_img).decode('utf-8')
+                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="output",
                         ImageID=str(i),
@@ -519,6 +542,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
+                        InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
                     # imageio.imwrite(full_path,reg_img.astype(np.uint16))
@@ -667,9 +691,9 @@ class uploader(APIView):
         # thread = threading.Thread(target=self.async_function, args=(request, Format, myfiles, caseID))
         # temp = self.async_function(self, request, fileList)
         # thread = threading.Thread(target=self.async_function, args=(request, list(allCases.values())))
-        # thread = threading.Thread(target=self.async_function, args=[request])
-        # thread.start()
-        self.async_function(request)
+        thread = threading.Thread(target=self.async_function, args=[request])
+        thread.start()
+        # self.async_function(request)
 
         userID = models.User.objects.filter(username=username)[0]
         allCases = models.Case.objects.filter(UserID=userID)

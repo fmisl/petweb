@@ -92,7 +92,7 @@ class ImageViewer extends Component {
       position: "absolute",
       color: "white",
       // backgroundColor: 'rgba(255, 255, 128, .5)',
-      filter: isInverted ? "invert(1)":"invert(0)",
+      // filter: isInverted ? "invert(1)":"invert(0)",
       // border:"1px red solid",
       // boxSizing:"border-box",
     };
@@ -105,7 +105,7 @@ class ImageViewer extends Component {
       height:"425px",
       position: "absolute",
       color: "white",
-      filter: isInverted ? "invert(1)":"invert(0)",
+      // filter: isInverted ? "invert(1)":"invert(0)",
       // border:"1px red solid",
       // boxSizing:"border-box",
     };
@@ -119,7 +119,7 @@ class ImageViewer extends Component {
       height:"510px",
       position: "absolute",
       color: "white",
-      filter: isInverted ? "invert(1)":"invert(0)",
+      // filter: isInverted ? "invert(1)":"invert(0)",
       // border:"1px red solid",
       // boxSizing:"border-box",
       // background:"white !important",
@@ -134,7 +134,7 @@ class ImageViewer extends Component {
       height:"510px",
       position: "absolute",
       color: "white",
-      filter: isInverted ? "invert(1)":"invert(0)",
+      // filter: isInverted ? "invert(1)":"invert(0)",
       // border:"1px red solid",
       // boxSizing:"border-box",
       // background:"white !important",
@@ -143,7 +143,8 @@ class ImageViewer extends Component {
       position:"relative",
       width:"100%", 
       height:"100%", 
-      background: isInverted ? "white":"black",
+      // background: isInverted ? "white":"black",
+      background: "white !important",
     };
     const viewportC = this.elementC && cornerstone.getViewport(this.elementC);
     // const viewportS = cornerstone.getViewport(this.elementS);
@@ -221,16 +222,16 @@ class ImageViewer extends Component {
         {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
         {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"52%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
         {isCrosshaired && <div style={{position:"absolute",height:'0px', width:'46%', boxSizing:"border-box",left:"2%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'100px', paddingRight:'100px'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'0px', boxSizing:"border-box",left:"25%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'0px', boxSizing:"border-box",left:"75%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {isCrosshaired && <div style={{position:"absolute",height:'60%', width:'0px', boxSizing:"border-box",left:"25%",top:"50%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>} Axial Plane this.AxialRightSide
+        {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'20px', boxSizing:"border-box",left:"25%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {isCrosshaired && <div style={{position:"absolute",height:'48%', width:'20px', boxSizing:"border-box",left:"75%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {isCrosshaired && <div style={{position:"absolute",height:'60%', width:'20px', boxSizing:"border-box",left:"25%",top:"50%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>} Axial Plane this.AxialRightSide
         {(viewportC !== undefined) && <div style={{position:"absolute",top:"27%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>32768(max)</div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
             
-            {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
-            {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
-            {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'blue':'red'}`}}></div>}
+            {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'white':'white'} solid`, width: '30px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
+            {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'white':'black'} solid`, width: '30px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
+            {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'white':'white'} solid`, width: '30px', height:`${100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'blue':'red'}`}}></div>}
             {(isInverted) ? 
                 selectedColormap === 'gray' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={invertedgraycmap} />:selectedColormap === 'gray' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={graycmap}/>
             }
@@ -245,7 +246,7 @@ class ImageViewer extends Component {
             <div style={{borderBottom:"0px black solid", position:'absolute', width:'68px', top:`${100-4-(viewportC.voi.windowCenter)/32768*100+viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{Math.floor(viewportC.voi.windowCenter-viewportC.voi.windowWidth/2)}</div>
             {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
             {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
-            {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'black':'white'} solid`, width: '30px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'red':'blue'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
+            {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${isInverted ? 'white':'white'} solid`, width: '30px', height:`${(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'red':'blue'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
             {/* <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(-1, 90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}></div> */}
               {/* <div style={{borderTop:"1px red solid", position:'absolute', width:'68px', top:`${90-(viewportC.voi.windowCenter)/32768*100}%`}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div> */}
               {/* <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(10, Math.max(10, viewportC.voi.windowWidth/32768*100)+90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}>{Math.floor(viewportC.voi.windowCenter-viewportC.voi.windowWidth/2)}</div> */}
