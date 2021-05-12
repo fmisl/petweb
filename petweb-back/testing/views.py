@@ -144,7 +144,8 @@ class uploader(APIView):
                 zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
                 cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)]  # 중심 좌표 계산
                 xPadding = 20
-                offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2 + xPadding), math.floor(min(109, zoomedY) / 2), math.floor(min(91, zoomedZ) / 2)]
+                yPadding = 10
+                offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2 + xPadding), math.floor(min(109, zoomedY) / 2 + yPadding), math.floor(min(91, zoomedZ) / 2)]
                 img3D_crop = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1, cZ - offsetZ:cZ + offsetZ + 1]
 
                 # dsfactor2 = [float(f) / w for w, f in zip([img3D_crop.shape[0], img3D_crop.shape[1], img3D_crop.shape[2]], [91, 109, 91])] # 픽셀크기 2mm로 변환용 factor
@@ -227,7 +228,7 @@ class uploader(APIView):
                     reg_img = column_proj1.astype(np.uint16)
                     # width, height = 109, 91
                     width, height = target_mip_size[1:3] # 109, 91
-                    resized_img = cv2.resize(reg_img, (width, height))
+                    resized_img = cv2.resize(reg_img, (width + 2*yPadding, height))
                     inverted_resized_img = -resized_img + 32767
                     # Image.fromarray(resized_img).save(full_path)
 
@@ -262,7 +263,7 @@ class uploader(APIView):
 
                     uint16_img2D = uint16_img3D[:,:,iz]
                     uint16_img2D = np.rot90(uint16_img2D)
-                    width, height = 91, 109 # (x axis, y axis)
+                    width, height = 91 + 2*xPadding, 109 + 2*yPadding # (x axis, y axis)
                     resized_img = cv2.resize(uint16_img2D, (width, height))
                     inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
@@ -291,7 +292,7 @@ class uploader(APIView):
 
                     uint16_img2D = uint16_img3D[:,iy,:]
                     uint16_img2D = np.rot90(uint16_img2D)
-                    width, height = 91, 91
+                    width, height = 91 + 2*xPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
                     inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
@@ -320,7 +321,7 @@ class uploader(APIView):
 
                     uint16_img2D = uint16_img3D[ix,:,:]
                     uint16_img2D = np.rot90(uint16_img2D)
-                    width, height = 109, 91
+                    width, height = 109 + 2*yPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
                     inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
@@ -380,7 +381,7 @@ class uploader(APIView):
                 zoomedX, zoomedY, zoomedZ = img3D_2mm.shape
                 cX, cY, cZ = [math.floor(zoomedX / 2), math.floor(zoomedY / 2), math.floor(zoomedZ / 2)]  # 중심 좌표 계산
                 # xPadding = 20
-                offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2 + xPadding), math.floor(min(109, zoomedY) / 2), math.floor(min(91, zoomedZ) / 2)]
+                offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2 + xPadding), math.floor(min(109, zoomedY) / 2 + yPadding), math.floor(min(91, zoomedZ) / 2)]
                 img3D = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1, cZ - offsetZ:cZ + offsetZ + 1]
 
 
@@ -408,7 +409,7 @@ class uploader(APIView):
 
                     uint16_img2D = uint16_img3D[:,:,iz]
                     uint16_img2D = np.rot90(uint16_img2D)
-                    width, height = 91, 109
+                    width, height = 91 + 2*xPadding, 109 + 2*yPadding
                     resized_img = cv2.resize(uint16_img2D, (width, height))
                     inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
@@ -437,7 +438,7 @@ class uploader(APIView):
 
                     uint16_img2D = uint16_img3D[:,iy,:]
                     uint16_img2D = np.rot90(uint16_img2D)
-                    width, height = 91, 91
+                    width, height = 91 + 2*xPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
                     inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
@@ -466,7 +467,7 @@ class uploader(APIView):
 
                     uint16_img2D = uint16_img3D[ix,:,:]
                     uint16_img2D = np.rot90(uint16_img2D)
-                    width, height = 109, 91
+                    width, height = 109 + 2*yPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
                     inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
@@ -540,7 +541,7 @@ class uploader(APIView):
                     reg_img = column_proj1.astype(np.uint16)
                     # width, height = 109, 91
                     width, height = target_mip_size[1:3]
-                    resized_img = cv2.resize(reg_img, (width, height))
+                    resized_img = cv2.resize(reg_img, (width + 2*yPadding, height))
                     inverted_resized_img = -resized_img + 32767
 
                     # Image.fromarray(resized_img).save(full_path)

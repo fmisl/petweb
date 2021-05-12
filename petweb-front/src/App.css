@@ -2259,3 +2259,12 @@ input:-webkit-autofill:active {
   /* top: 62%; */
   /* left: -10%; */
 }
+.input-range__label--min{
+  visibility: hidden;
+}
+.input-range__label--max{
+  visibility: hidden;
+}
+.input-range__label--value{
+  visibility: hidden;
+}

@@ -86,7 +86,7 @@ class ImageViewer extends Component {
       left:"100px",
       // width:"775px",
       // width:"425px",
-      width:"519px",
+      width:"612px",
       height:"425px",
       position: "absolute",
       color: "white",
@@ -101,9 +101,9 @@ class ImageViewer extends Component {
       top:"0px",
       // left:"50%",
       // left:"900px",
-      left:"619px",
+      left:"712px",
       // width:"775px",
-      width:"510px",
+      width:"602px",
       height:"425px",
       position: "absolute",
       color: "white",
@@ -121,9 +121,9 @@ class ImageViewer extends Component {
       left:"100px",
       // width:"775px",
       // width:"425px",
-      width:"519px",
+      width:"612px",
       // height:"425px",
-      height:"510px",
+      height:"603px",
       position: "absolute",
       color: "white",
       // filter: isInverted ? "invert(1)":"invert(0)",
@@ -138,9 +138,9 @@ class ImageViewer extends Component {
       // left:"50%",
       // left:"847px",
       // left:"726px",
-      left:"587px",
+      left:"655px",
       // width:"775px",
-      width:"610px",
+      width:"723px",
       // height:"425px",
       height:"510px",
       position: "absolute",
@@ -157,13 +157,13 @@ class ImageViewer extends Component {
       // width:"1550px", 
       // width:"1550px",
       left:"74px",
-      width:"1128px",
+      width:"1314px",
       height:"937px", 
       overflow:"hidden",
       // background: isInverted ? "red":"black",
       // background: isInverted ? "white":"black",
       // background: "white !important",
-      // border:"1px red solid",
+      border:"1px red solid",
     };
     const viewportC = this.elementC && cornerstone.getViewport(this.elementC);
 
@@ -239,12 +239,12 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}*/}
 
-        {<div style={{position:"absolute",height:'0px', width:'40%', boxSizing:"border-box",left:"10%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'0px', paddingRight:'0px', border:'0px yellow solid'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
-        {<div style={{position:"absolute",height:'0px', width:'45%', boxSizing:"border-box",left:"53%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'0px', paddingRight:'0px', border:'0px green solid'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'0px', width:'40%', boxSizing:"border-box",left:"10%",top:"75%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'0px', paddingRight:'0px', border:'0px red solid'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"30%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"75%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'50%', width:'0px', boxSizing:"border-box",left:"29.7%",top:"47%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>}
+        {<div style={{position:"absolute",height:'0px', width:'42%', boxSizing:"border-box",left:"10%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'50px', paddingRight:'17px', border:'0px yellow solid'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
+        {<div style={{position:"absolute",height:'0px', width:'45%', boxSizing:"border-box",left:"53%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'60px', paddingRight:'0px', border:'0px green solid'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'0px', width:'42%', boxSizing:"border-box",left:"10%",top:"67%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'50px', paddingRight:'17px', border:'0px red solid'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"33%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"80%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'50%', width:'0px', boxSizing:"border-box",left:"32.5%",top:"47%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>}
         {(viewportC !== undefined) && <div style={{position:"absolute",top:"19%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? out_suvr_max.toFixed(2):in_suvr_max.toFixed(2)}&nbsp;(max)</div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
@@ -274,7 +274,7 @@ class ImageViewer extends Component {
           </div>
         }
         {/* {(viewportC !== undefined) && <div  style={{overflow:'hidden', border:"1px red solid", position:"absolute", width:'30px', height:`${viewportC.voi.windowWidth/32768*100*0.45}%`, boxSizing:"border-box",left:"3%",top:`${30+30-(viewportC.voi.windowCenter)/32768*30-(viewportC.voi.windowWidth/32768*50*0.3)}%`, color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}></div>} */}
-        {(viewportC !== undefined) && <div style={{position:"absolute",top:"67.5%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? out_suvr_min.toFixed(2):in_suvr_min.toFixed(2)}&nbsp;(min)</div>}
+        {(viewportC !== undefined) && <div style={{position:"absolute",top:"67.5%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? Math.max(0,out_suvr_min).toFixed(2):Math.max(0,in_suvr_min).toFixed(2)}&nbsp;(min)</div>}
 
 
         {/* Coronal Plane  */}
@@ -293,14 +293,17 @@ class ImageViewer extends Component {
     cornerstone.resize(this.elementM);
   }
   onImageRendered() {
-    const {handleWindowChange} = this.props;
+    const { in_suvr_max, in_suvr_min, out_suvr_max, out_suvr_min} = this.state;
+    const {handleWindowChange, isSNed} = this.props;
     try{
+      // const elementC = this.elementC;
       let viewportC = cornerstone.getViewport(this.elementC);
-      // console.log('WW/WC:', Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
       handleWindowChange(Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
+      // console.log('WW/WC:', Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
       // viewportC.voi.windowCenter = (value5.max+value5.min)/2;
       // viewportC.voi.windowWidth = (value5.max-value5.min);
       // cornerstone.setViewport(this.elementC, viewportC);
+      // if ()
       const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
       const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
       const stackDataA = cornerstoneTools.getToolState(this.elementA, "stack");
@@ -453,7 +456,7 @@ class ImageViewer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     
-    const { isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex, value5, selectedColormap, stackManager } = this.props;
+    const { isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex, value5, selectedColormap, stackManager, updateSUVR_min_max } = this.props;
     // const elementS = this.elementS;
     // const elementA = this.elementA;
     // let viewportS = cornerstone.getViewport(elementS);
@@ -479,6 +482,20 @@ class ImageViewer extends Component {
         cornerstone.setViewport(elementA, viewportA);
         cornerstone.setViewport(elementM, viewportM);
       }
+      // const elementC = this.elementC;
+      // let viewportC = cornerstone.getViewport(this.elementC);
+      // if (){
+      //   const suvr_max = isSNed ? out_suvr_max:in_suvr_max;
+      //   const suvr_min = Math.max(0, isSNed ? out_suvr_min:in_suvr_min);
+      //   const widthSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowWidth/32767)*(suvr_max-suvr_min)):1;
+      //   const centerSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowCenter/32767)*(suvr_max-suvr_min)):1;
+      //   this.props.updateSUVR_min_max({
+      //     suvr_max,
+      //     suvr_min,
+      //     widthSUVR,
+      //     centerSUVR,
+      //   })
+      // }
 
       if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
         const in_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].in_suvr_max
