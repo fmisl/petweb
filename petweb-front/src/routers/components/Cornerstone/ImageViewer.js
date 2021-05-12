@@ -158,7 +158,7 @@ class ImageViewer extends Component {
       // width:"1550px",
       left:"74px",
       width:"1314px",
-      height:"937px", 
+      height:"933px", 
       overflow:"hidden",
       // background: isInverted ? "red":"black",
       // background: isInverted ? "white":"black",
@@ -239,12 +239,12 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"0%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}
         {<div style={{position:"absolute",height:'0px', width:'50%',border:"0px red solid", boxSizing:"border-box",left:"50%",top:"50%", color:'red', fontSize:'25px', userSelect:'none'}}>Superior</div>}*/}
 
-        {<div style={{position:"absolute",height:'0px', width:'42%', boxSizing:"border-box",left:"10%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'50px', paddingRight:'17px', border:'0px yellow solid'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
+        {<div style={{position:"absolute",height:'0px', width:'42%', boxSizing:"border-box",left:"10%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'25px', paddingRight:'17px', border:'0px yellow solid'}}><div>{this.CoronalLeftSide}</div><div>{this.CoronalRightSide}</div></div>} {/* Coronal Plane  */}
         {<div style={{position:"absolute",height:'0px', width:'45%', boxSizing:"border-box",left:"53%",top:"20%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'60px', paddingRight:'0px', border:'0px green solid'}}><div>{this.SagittalLeftSide}</div><div>{this.SagittalRightSide}</div></div>} {/* Sagittal Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'0px', width:'42%', boxSizing:"border-box",left:"10%",top:"67%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'50px', paddingRight:'17px', border:'0px red solid'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"33%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"80%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
-        {<div style={{position:"absolute",height:'50%', width:'0px', boxSizing:"border-box",left:"32.5%",top:"47%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>}
+        {<div style={{position:"absolute",height:'0px', width:'42%', boxSizing:"border-box",left:"10%",top:"67%", color:'red', fontSize:'25px', display:'flex', justifyContent:'space-between', userSelect:'none', paddingLeft:'25px', paddingRight:'17px', border:'0px red solid'}}><div>{this.AxialLeftSide}</div><div>{this.AxialRightSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"30.35%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px yellow solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"77%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
+        {<div style={{position:"absolute",height:'50%', width:'0px', boxSizing:"border-box",left:"30%",top:"47%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>}
         {(viewportC !== undefined) && <div style={{position:"absolute",top:"19%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? out_suvr_max.toFixed(2):in_suvr_max.toFixed(2)}&nbsp;(max)</div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
