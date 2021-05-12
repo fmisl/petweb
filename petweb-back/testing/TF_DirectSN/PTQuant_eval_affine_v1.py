@@ -10,7 +10,7 @@ from shutil import copyfile
 
 # TODO: Change the model paths
 import tensorflow as tf
-import testing.TF_DirectSN.layers_coregpy_with_eval_affine_v1 as lays
+import testing.TF_DirectSN.layers_coregpy as lays
 from testing.TF_DirectSN.PTQuant_utils import Dense3DSpatialTransformer, VTNAffineStem
 
 from testing.TF_DirectSN.PTQuant_preproc_coreg_v1_1 import coreg_mrc1 as coreg
@@ -20,11 +20,11 @@ from django.conf import settings
 
 import numpy as np
 from scipy.ndimage import gaussian_filter
-FLAGS = tf.flags.FLAGS
+# FLAGS = tf.flags.FLAGS
 stages = 3
 
 
-def train(inout_path, caseID):
+def train_pib(inout_path, caseID):
 
     # checkpoint_dir = r".\testing\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
     checkpoint_dir = os.path.join(os.getcwd(), 'testing', 'TF_DirectSN', '02_14_20_10_CascadedGAN_Unet_augment_v1',)
@@ -72,7 +72,7 @@ def train(inout_path, caseID):
             def_list.append(affine_flow)
 
         for i in range(0, stages):
-            deform = dgan.autoencoder(gimg, scope='gen_' + str(i), reuse=False)
+            deform = dgan.autoencoder_pib(gimg, scope='gen_' + str(i), reuse=False)
             gimg = dst._transform(gimg, deform[:, :, :, :, 0], deform[:, :, :, :, 1], deform[:, :, :, :, 2])
             def_list.append(deform)
 

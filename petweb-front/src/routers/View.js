@@ -27,9 +27,10 @@ import "react-input-range/lib/css/index.css";
 // function View({}) {
 class View extends Component {
   state = {
+    selectedColormap: 'gray',
     value5: {
-      min: 16383,
-      max: 16384,
+      min: 0,
+      max: 32767,
     },
     currentStepIndex: 20,
     username: localStorage.getItem('username'),
@@ -292,10 +293,14 @@ class View extends Component {
     // const res = await services.downloadNifti({'token':token});
     setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
   }
+  changeColormap = (event)=>{
+    this.setState({selectedColormap: event.target.value});
+  }
   render() {
-    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed, handleWindowChange, niftiDownload} = this;
-    const {value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
+    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed, handleWindowChange, niftiDownload, changeColormap} = this;
+    const {selectedColormap, value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
     const {counter, stackManager} = this.props;
+    // console.log(this.state.selectedColormap)
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
         {/* <Sidebar />
@@ -303,7 +308,7 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{background:"black",position: "absolute", top:"140px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-              <ImageViewer handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
+              <ImageViewer selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
@@ -328,6 +333,11 @@ class View extends Component {
               </div>
             </div>
             <div style={{display:"flex", color:"white", border:'0px red solid'}}>
+              <div className="view-btn" onClick={()=>setIsPlayed(!isPlayed)}><img src={IconPlayPNG} width={'42px'}  className="view-icon"/></div>
+              <div className="view-btn opacity-bar" >
+                MIP:&nbsp;
+                <input type="range" style={{height:"100%", width:"100%"}} value={this.state.currentStepIndex} onInput={this.handleInputChange} step="1" min="0" max="50"/>
+              </div>
               <div className="view-btn opacity-bar" >
                 <InputRange
                   draggableTrack
@@ -339,30 +349,26 @@ class View extends Component {
                   // orientation="vertical"
                 />
               </div>
-              <div className="view-btn" onClick={()=>setIsPlayed(!isPlayed)}><img src={IconPlayPNG} width={'42px'}  className="view-icon"/></div>
-              <div className="view-btn opacity-bar" >
-                MIP:&nbsp;
-                <input type="range" style={{height:"100%", width:"100%"}} value={this.state.currentStepIndex} onInput={this.handleInputChange} step="1" min="0" max="50"/>
-              </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsInverted(!isInverted)}>{isInverted ? <IconInvert className="view-icon"/>:<IconInvertOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsSNed(!isSNed)}>{isSNed ? <IconSN className="view-icon"/>:<IconSNOff className="view-icon"/>}</div>
-              <div className="view-btn opacity-bar" >
+              {/* <div className="view-btn opacity-bar" >
                 Opacity:&nbsp;
                 <input type="range" style={{height:"100%", width:"100%"}} value="50" step="1" min="0" max="100"/>
-              </div>
+              </div> */}
               <div className="view-btn colormap-select">
-                <select id="colormap" name="colormap" style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
-                  <option value="hot" selected>Hot (colormap)</option>
+                <select id="colormap" name="colormap" onChange={this.changeColormap} value={this.state.selectedColormap}
+                style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
+                  <option value="hot" >Hot (colormap)</option>
                   <option value="jet">Jet (colormap)</option>
-                  <option value="gray" >Gray (colormap)</option>
+                  <option value="gray">Gray (colormap)</option>
                 </select>
               </div>
-              <div className="view-btn template-select">
+              {/* <div className="view-btn template-select">
                 <select id="template" name="template" style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
                   <option value="MNI" selected>MNI305</option>
                 </select>
-              </div>
+              </div> */}
               <div className="view-btn" onClick={(e)=>{e.stopPropagation();setShowMenu(!showMenu)}}>
                 <IconBurger className={`view-icon ${showMenu && 'show'}`}/>
                 {showMenu && 

@@ -18,7 +18,7 @@ from django.conf import settings
 import numpy as np
 from .. import models
 
-FLAGS = tf.flags.FLAGS
+# FLAGS = tf.flags.FLAGS
 stages = 3
 
 

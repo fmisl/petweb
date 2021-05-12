@@ -13,7 +13,7 @@ from PIL import Image
 from shutil import move as mv
 import threading, time
 import math
-# from testing.TF_DirectSN.eval_cyc_coregpy import train
+from testing.TF_DirectSN.PTQuant_eval_affine_v1 import train_pib
 from testing.TF_DirectSN.eval_cyc_coregpy import train
 from testing.TF_DirectSN.QuantWithSurface import _quantification
 import datetime
@@ -117,7 +117,11 @@ class uploader(APIView):
                 print("Step4: algorithm(DL)----------------------------------------------------------------------")
                 # start = time.perf_counter()
                 inout_path = os.path.join(database_path, myfile['fileID'])
-                train(inout_path, myfile['fileID'])
+
+                if tracerName.find('PIB') is not -1:
+                    train_pib(inout_path, myfile['fileID'])
+                else:
+                    train(inout_path, myfile['fileID'])
 
                 print("Step5: Quantification")
                 aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize, tracer_name=tracerName)
