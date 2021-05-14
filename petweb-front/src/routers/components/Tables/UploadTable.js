@@ -56,7 +56,7 @@ class UploadTable extends Component {
                 // console.log('data changed: ', this.state.data)
                 this.props.updateCentiloid(data)
             }
-        }, 20000)
+        }, 5000)
     }
     componentWillUnmount(){
         clearInterval(this.myInterval);

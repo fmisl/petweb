@@ -54,7 +54,7 @@ class Analysisitem3 extends Component {
                 </div>
                 <div className="AnalysisItem3-Threshold">
                     <span>SUVR &nbsp;</span>
-                    <input type="range" min="0.6" max="2.8" value={this.state.currentStepIndex} step="0.2" onInput={this.handleInputChange} style={{width:"35%"}}/>
+                    <input type="range" min="0.6" max="2.6" value={this.state.currentStepIndex} step="0.5" onInput={this.handleInputChange} style={{width:"35%"}}/>
                     <span> &nbsp;{parseFloat(currentStepIndex).toFixed(1)}</span>
                 </div>
             </div>

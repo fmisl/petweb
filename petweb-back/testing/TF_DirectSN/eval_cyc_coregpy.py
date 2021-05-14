@@ -122,7 +122,7 @@ def train(inout_path, caseID):
                 test = np.transpose(test, axes=[0, 3, 2, 1])*maxp
 
                 gimg_tmp = test[0, 10:101, 1:110, 10:101].flatten()
-                gimg_tmp = gimg_tmp.astype(dtype=np.int16)
+                gimg_tmp = gimg_tmp.astype(dtype=np.float32)
                 gimg_tmp.tofile(os.path.join(inout_path, out_file + ".img"))
                 # shutil.copy(os.path.join(hdrBasePath, name + '.hdr'), os.path.join(tfi, 'eval_gimg_' + name + '.hdr'))
 
@@ -130,7 +130,7 @@ def train(inout_path, caseID):
                 # defosr = defosr.astype(dtype=np.float32)
                 # defosr.tofile(os.path.join(inout_path, 'eval_defo_' + name))
                 # inout_path = os.path.join(settings.MEDIA_ROOT, "case_66")
-                src_file_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", "output.hdr")
+                src_file_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", "output_f32.hdr")
                 dst_file_path = os.path.join(inout_path, "output_" + caseID + ".hdr")
                 copyfile(src_file_path, dst_file_path)
                     # gxhr_tmp = xr[ii, :, :, :].flatten()

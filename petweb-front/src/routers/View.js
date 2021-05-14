@@ -275,16 +275,31 @@ class View extends Component {
   };
   handleWindowChange = (WW,WC) => {
     // this.setState({ currentStepIndex: e.currentTarget.value });
+    console.log('handleWindowChange')
     const {value5}=this.state;
-    const newMin=Math.max(0,WC-WW/2);
-    const newMax=Math.min(32767,WC+WW/2);
-    if (value5.min != newMin || value5.max != newMax){
-      this.setState({
-        value5:{
-          min: newMin,
-          max: newMax,
-        }
-      })
+    if (this.props.isInverted){
+      const newMax=Math.min(32767,32767 - (WC-WW/2));
+      const newMin=Math.max(0,32767 - (WC+WW/2));
+      if (value5.min != newMin || value5.max != newMax){
+        this.setState({
+          value5:{
+            max: newMax,
+            min: newMin,
+          }
+        })
+      }
+
+    } else {
+      const newMin=Math.max(0,WC-WW/2);
+      const newMax=Math.min(32767,WC+WW/2);
+      if (value5.min != newMin || value5.max != newMax){
+        this.setState({
+          value5:{
+            min: newMin,
+            max: newMax,
+          }
+        })
+      }
     }
   };
   niftiDownload = async () =>{
@@ -358,15 +373,15 @@ class View extends Component {
                 <input type="range" style={{height:"100%", width:"100%"}} value={this.state.currentStepIndex} onInput={this.handleInputChange} step="1" min="0" max="50"/>
               </div>
               <div className="view-btn opacity-bar" >
-                <InputRange
-                  draggableTrack
-                  step={1000}
-                  maxValue={32767}
-                  minValue={0}
-                  value={this.state.value5}
-                  onChange={value => this.setState({ value5: value })}
-                  // orientation="vertical"
-                />
+                {<InputRange
+                    draggableTrack
+                    step={1000}
+                    maxValue={32767}
+                    minValue={0}
+                    value={this.state.value5}
+                    onChange={value => this.setState({ value5: value })}
+                    // orientation="vertical"
+                  />}
               </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsInverted(!isInverted)}>{isInverted ? <IconInvert className="view-icon"/>:<IconInvertOff className="view-icon"/>}</div>
