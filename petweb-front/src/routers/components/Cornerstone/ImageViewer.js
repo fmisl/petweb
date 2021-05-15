@@ -57,6 +57,8 @@ class ImageViewer extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      ww: 10000,
+      wc: 16384,
       value5: {
         min: 3,
         max: 7,
@@ -76,7 +78,7 @@ class ImageViewer extends Component {
   }
 
   render() {
-    const {in_suvr_max, in_suvr_min, out_suvr_max, out_suvr_min} = this.state;
+    const {ww, wc, in_suvr_max, in_suvr_min, out_suvr_max, out_suvr_min} = this.state;
     const { isInverted, isCrosshaired, selectedColormap, isSNed } = this.props;
     const divStyleC = {
       // width: "512px",
@@ -171,6 +173,8 @@ class ImageViewer extends Component {
     const suvr_min = Math.max(0, isSNed ? out_suvr_min:in_suvr_min);
     const widthSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowWidth/32767)*(suvr_max-suvr_min)):1;
     const centerSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowCenter/32767)*(suvr_max-suvr_min)):1;
+    const suvrMax = wc + ww/2;
+    const suvrMin = wc - ww/2;
     return (
       <div style={divWrapper}>
         <div
@@ -250,24 +254,23 @@ class ImageViewer extends Component {
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
             {/* 상단 배경*/}
-            {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'white'} solid`, width: '30px', height:`${false ? (viewportC.voi.windowCenter)/32768*100:100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
-            {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'black'} solid`, width: '30px', height:`${false ? (viewportC.voi.windowCenter)/32768*100:100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
-            {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'white'} solid`, width: '30px', height:`${false ? (viewportC.voi.windowCenter)/32768*100:100-(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'blue':'red'}`}}></div>}
+            {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'white'} solid`, width: '30px', height:`${false ? (wc)/32768*100:100-(wc)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
+            {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'black'} solid`, width: '30px', height:`${false ? (wc)/32768*100:100-(wc)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
+            {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'white'} solid`, width: '30px', height:`${false ? (wc)/32768*100:100-(wc)/32768*100}%`, background:`${isInverted ? 'blue':'red'}`}}></div>}
             {/* 이미지 컬러맵 */}
-            {selectedColormap === 'gray' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedgraycmap:graycmap}/>}
-            {selectedColormap === 'hot' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedhotcmap:hotcmap}/>}
-            {selectedColormap === 'jet' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(viewportC.voi.windowCenter)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedjetcmap:jetcmap}/>}
+            {selectedColormap === 'gray' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(wc)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedgraycmap:graycmap}/>}
+            {selectedColormap === 'hot' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(wc)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedhotcmap:hotcmap}/>}
+            {selectedColormap === 'jet' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(wc)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedjetcmap:jetcmap}/>}
             {/* 상단 글자 */}
-            <div style={{borderTop:"0px white solid", position:'absolute', width:'68px', top:`${false ? (viewportC.voi.windowCenter)/32768*100-viewportC.voi.windowWidth/32768*50:100-(viewportC.voi.windowCenter)/32768*100-viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR+widthSUVR/2).toFixed(2)}</div>
-            {/* <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{(viewportC.voi.windowCenter/32767).toFixed(2)*)}</div> (out_suvr_max+out_suvr_min)/2*/}
+            <div style={{borderTop:"0px white solid", position:'absolute', width:'68px', top:`${false ? (wc)/32768*100-viewportC.voi.windowWidth/32768*50:100-(wc)/32768*100-viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR+widthSUVR/2).toFixed(2)}</div>{/* <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{(viewportC.voi.windowCenter/32767).toFixed(2)*)}</div> (out_suvr_max+out_suvr_min)/2*/}
             {/* 중심선과 중심글자 */}
-            {(false) ? <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{centerSUVR.toFixed(2)}</div>:<div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{centerSUVR.toFixed(2)}</div>}
+            {(false) ? <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${(wc)/32768*100}%`, fontSize:'12px'}}>{centerSUVR.toFixed(2)}</div>:<div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(wc)/32768*100}%`, fontSize:'12px'}}>{centerSUVR.toFixed(2)}</div>}
             {/* 하단 글자 */}
-            <div style={{borderBottom:"0px black solid", position:'absolute', width:'68px', top:`${false ? -4+(viewportC.voi.windowCenter)/32768*100+viewportC.voi.windowWidth/32768*50:100-4-(viewportC.voi.windowCenter)/32768*100+viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR-widthSUVR/2).toFixed(2)}</div>
+            <div style={{borderBottom:"0px black solid", position:'absolute', width:'68px', top:`${false ? -4+(wc)/32768*100+viewportC.voi.windowWidth/32768*50:100-4-(wc)/32768*100+viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR-widthSUVR/2).toFixed(2)}</div>
             {/* 하단배경 */}
-            {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'black':'white'} solid`, width: '30px', height:`${false ? 100-(viewportC.voi.windowCenter)/32768*100:(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
-            {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'black':'white'} solid`, width: '30px', height:`${false ? 100-(viewportC.voi.windowCenter)/32768*100:(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
-            {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'white'} solid`, width: '30px', height:`${false ? 100-(viewportC.voi.windowCenter)/32768*100:(viewportC.voi.windowCenter)/32768*100}%`, background:`${isInverted ? 'red':'blue'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
+            {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'black':'white'} solid`, width: '30px', height:`${false ? 100-(wc)/32768*100:(wc)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
+            {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'black':'white'} solid`, width: '30px', height:`${false ? 100-(wc)/32768*100:(wc)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
+            {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'white'} solid`, width: '30px', height:`${false ? 100-(wc)/32768*100:(wc)/32768*100}%`, background:`${isInverted ? 'red':'blue'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
             {/* <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(-1, 90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}></div> */}
               {/* <div style={{borderTop:"1px red solid", position:'absolute', width:'68px', top:`${90-(viewportC.voi.windowCenter)/32768*100}%`}}>{Math.floor(viewportC.voi.windowCenter+viewportC.voi.windowWidth/2)}</div> */}
               {/* <div style={{borderBottom:"1px red solid", position:'absolute', width:'68px', top:`${Math.min(93, Math.max(10, Math.max(10, viewportC.voi.windowWidth/32768*100)+90-(viewportC.voi.windowCenter/32768*100)-(viewportC.voi.windowWidth/32768*50)))}%`}}>{Math.floor(viewportC.voi.windowCenter-viewportC.voi.windowWidth/2)}</div> */}
@@ -295,18 +298,26 @@ class ImageViewer extends Component {
     cornerstone.resize(this.elementM);
   }
   onImageRendered() {
-    const { in_suvr_max, in_suvr_min, out_suvr_max, out_suvr_min} = this.state;
-    const {handleWindowChange, isSNed} = this.props;
+    const {ww, wc, in_suvr_max, in_suvr_min, out_suvr_max, out_suvr_min} = this.state;
+    const {handleWindowChange, isSNed, isInverted} = this.props;
     try{
-      // const elementC = this.elementC;
       let viewportC = cornerstone.getViewport(this.elementC);
-      // if (viewportC)
-      handleWindowChange(Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
-      // console.log('WW/WC:', Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
-      // viewportC.voi.windowCenter = (value5.max+value5.min)/2;
-      // viewportC.voi.windowWidth = (value5.max-value5.min);
-      // cornerstone.setViewport(this.elementC, viewportC);
-      // if ()
+      const newWW = viewportC.voi.windowWidth;
+      const newWC = isInverted ? 32767-viewportC.voi.windowCenter:viewportC.voi.windowCenter;
+      if (ww != newWW || wc != newWC){
+        // console.log('windowCenter:',newWC)
+        this.setState({
+          ww: newWW,
+          wc: newWC,
+        })
+        const newMax = newWC + newWW/2;
+        const newMin = newWC - newWW/2;
+        handleWindowChange(Math.floor(newMax), Math.floor(newMin));
+      }
+      // let viewportC = cornerstone.getViewport(this.elementC);
+      // handleWindowChange(Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
+      
+
       const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
       const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
       const stackDataA = cornerstoneTools.getToolState(this.elementA, "stack");
@@ -458,13 +469,44 @@ class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    
-    const { isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex, value5, selectedColormap, stackManager, updateSUVR_min_max } = this.props;
+    const { value5, handleWindowChange, isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex, selectedColormap, stackManager, updateSUVR_min_max } = this.props;
     // const elementS = this.elementS;
     // const elementA = this.elementA;
     // let viewportS = cornerstone.getViewport(elementS);
     // let viewportA = cornerstone.getViewport(elementA);
     try{
+
+      if (prevProps.value5 != value5){
+        // console.log('value5 update')
+        const newWW = (value5.max-value5.min);
+        const newWC = isInverted ? 32767-(value5.max+value5.min)/2:(value5.max+value5.min)/2;
+        let viewportC = cornerstone.getViewport(this.elementC);
+        viewportC.voi.windowCenter = newWC;
+        viewportC.voi.windowWidth = newWW;
+        cornerstone.setViewport(this.elementC, viewportC);
+        
+        // if (isInverted){
+        //   const WW = viewportC.voi.windowWidth;
+        //   const WC = viewportC.voi.windowCenter;
+        //   const newWC = WC;
+        //   const newMax=Math.min(32767,newWC+WW/2);
+        //   const newMin=Math.max(0,newWC-WW/2);
+        //   // handleWindowChange(Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
+        //   handleWindowChange(newMax, newMin);
+        // } else{
+        //   const WW = viewportC.voi.windowWidth;
+        //   const WC = viewportC.voi.windowCenter;
+        //   const newWC = WC;
+        //   const newMax=Math.min(32767,newWC+WW/2);
+        //   const newMin=Math.max(0,newWC-WW/2);
+        //   // handleWindowChange(Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
+        //   handleWindowChange(newMax, newMin);
+        // }
+
+        // handleWindowChange(Math.floor(viewportC.voi.windowWidth), Math.floor(viewportC.voi.windowCenter))
+      
+        // let viewportC = cornerstone.getViewport(this.elementC);
+      }
       // if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
       if (prevProps.selectedColormap !== selectedColormap){
         const elementC = this.elementC;
@@ -570,12 +612,6 @@ class ImageViewer extends Component {
         // let layerPET = cornerstone.getLayer(elementC);
         // layerPET.viewport.colormap = "jet";
         // cornerstone.updateImage(elementC);
-      }
-      if (prevProps.value5 != value5){
-        let viewportC = cornerstone.getViewport(this.elementC);
-        viewportC.voi.windowCenter = (value5.max+value5.min)/2;
-        viewportC.voi.windowWidth = (value5.max-value5.min);
-        cornerstone.setViewport(this.elementC, viewportC);
       }
     } catch(e){
       console.error(e)

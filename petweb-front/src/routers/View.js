@@ -273,34 +273,47 @@ class View extends Component {
   handleInputChange = e => {
     this.setState({ currentStepIndex: e.currentTarget.value });
   };
-  handleWindowChange = (WW,WC) => {
+  handleWindowChange = (newMax,newMin) => {
     // this.setState({ currentStepIndex: e.currentTarget.value });
-    console.log('handleWindowChange')
     const {value5}=this.state;
-    if (this.props.isInverted){
-      const newMax=Math.min(32767,32767 - (WC-WW/2));
-      const newMin=Math.max(0,32767 - (WC+WW/2));
-      if (value5.min != newMin || value5.max != newMax){
-        this.setState({
-          value5:{
-            max: newMax,
-            min: newMin,
-          }
-        })
-      }
-
-    } else {
-      const newMin=Math.max(0,WC-WW/2);
-      const newMax=Math.min(32767,WC+WW/2);
-      if (value5.min != newMin || value5.max != newMax){
-        this.setState({
-          value5:{
-            min: newMin,
-            max: newMax,
-          }
-        })
-      }
+    // console.log('handleWindowChange:', newMax, newMin)
+    if (value5.min != newMin || value5.max != newMax){
+      this.setState({
+        value5:{
+          max: newMax,
+          min: newMin,
+        }
+      })
     }
+    // if (this.state.isInverted){
+    //   console.log('handleWindowChange update')
+    //   const newWC = WC;
+    //   // console.log('handleWindowChange1(WC, newWC):', WC, newWC)
+    //   // const newMax=Math.min(32767,32767 - (WC-WW/2));
+    //   // const newMin=Math.max(0,32767 - (WC+WW/2));
+    //   const newMax=Math.min(32767,newWC+WW/2);
+    //   const newMin=Math.max(0,newWC-WW/2);
+    //   if (value5.min != newMin || value5.max != newMax){
+    //     this.setState({
+    //       value5:{
+    //         max: newMax,
+    //         min: newMin,
+    //       }
+    //     })
+    //   }
+
+    // } else {
+    //   const newMax=Math.min(32767,WC+WW/2);
+    //   const newMin=Math.max(0,WC-WW/2);
+    //   if (value5.min != newMin || value5.max != newMax){
+    //     this.setState({
+    //       value5:{
+    //         max: newMax,
+    //         min: newMin,
+    //       }
+    //     })
+    //   }
+    // }
   };
   niftiDownload = async () =>{
     const {counter, stackManager} = this.props;
@@ -379,8 +392,16 @@ class View extends Component {
                     maxValue={32767}
                     minValue={0}
                     value={this.state.value5}
-                    onChange={value => this.setState({ value5: value })}
-                    // orientation="vertical"
+                    onChange={value => 
+                        {
+                          this.setState({ 
+                            value5:{
+                              max:value.max,
+                              min:value.min,
+                            }})
+                          console.log('InputRange:', value)
+                        }
+                      }
                   />}
               </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>
