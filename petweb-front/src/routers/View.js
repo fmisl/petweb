@@ -493,6 +493,19 @@ class View extends Component {
       }
       return bufView;
     }
+    function str2InvertedpixelData(str) {
+      var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+      var bufView = new Int16Array(buf);
+      var index = 0;
+      for (var i=0, strLen=str.length; i<strLen; i+=2) {
+        var lower = str.charCodeAt(i);
+        var upper = str.charCodeAt(i+1);
+        // debugger;
+        bufView[index] = 32767-Number(lower + (upper <<8));
+        index++;
+      }
+      return bufView;
+    }
 
     var min1 = 0;
     var max1 = 0;
@@ -501,7 +514,15 @@ class View extends Component {
       // if(!base64PixelData) debugger;
       var pixelDataAsString = window.atob(base64PixelData);
       var pixelData = str2pixelData(pixelDataAsString);
-      // console.log("min:", pixelData.length);
+      // console.log("pixelData:", pixelData);
+      return pixelData;
+    }
+    function getInvertedPixelData(base64PixelData)
+    {
+      // if(!base64PixelData) debugger;
+      var pixelDataAsString = window.atob(base64PixelData);
+      var pixelData = str2InvertedpixelData(pixelDataAsString);
+      // console.log("pixelData type:", typeof(pixelData), pixelData);
       return pixelData;
     }
     const IdxSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
@@ -511,10 +532,10 @@ class View extends Component {
     var petSagittalOutputData = [...Array(91+40).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
     var petMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
 
-    var Inv_petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial' && v.Type==inoutSelect)[i].InvB64Data)));
-    var Inv_petCoronalOutputData = [...Array(109+20).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].InvB64Data)));
-    var Inv_petSagittalOutputData = [...Array(91+40).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].InvB64Data)));
-    var Inv_petMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].InvB64Data)));
+    var Inv_petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial' && v.Type==inoutSelect)[i].B64Data)));
+    var Inv_petCoronalOutputData = [...Array(109+20).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].B64Data)));
+    var Inv_petSagittalOutputData = [...Array(91+40).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
+    var Inv_petMipOutputData = [...Array(45).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
 
     function getPETImage(imageId) {
       let identifier=imageId.split(/[:,/]+/)

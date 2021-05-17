@@ -171,10 +171,10 @@ class ImageViewer extends Component {
 
     const suvr_max = isSNed ? out_suvr_max:in_suvr_max;
     const suvr_min = Math.max(0, isSNed ? out_suvr_min:in_suvr_min);
-    const widthSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowWidth/32767)*(suvr_max-suvr_min)):1;
-    const centerSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowCenter/32767)*(suvr_max-suvr_min)):1;
-    const suvrMax = wc + ww/2;
-    const suvrMin = wc - ww/2;
+    const widthSUVR = (viewportC !== undefined) ? ((ww/32767)*(suvr_max-suvr_min)):1;
+    const centerSUVR = (viewportC !== undefined) ? ((wc/32767)*(suvr_max-suvr_min)):1;
+    // const suvrMax = wc + ww/2;
+    // const suvrMin = wc - ww/2;
     return (
       <div style={divWrapper}>
         <div
