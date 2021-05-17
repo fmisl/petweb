@@ -148,7 +148,7 @@ class Slice(TimeStampedModel):
     # SizeZ = models.CharField(max_length=5, blank=True, null=True)
     CaseID = models.ForeignKey(Case, blank=True, null=True, on_delete=models.CASCADE, related_name='slices')
     B64Data = models.TextField(max_length=5000, blank=True, null=True)
-    InvB64Data = models.TextField(max_length=5000, blank=True, null=True)
+    # InvB64Data = models.TextField(max_length=5000, blank=True, null=True)
 
     class Meta:
         ordering = ['pk']

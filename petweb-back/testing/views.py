@@ -229,11 +229,11 @@ class uploader(APIView):
                     # width, height = 109, 91
                     width, height = target_mip_size[1:3] # 109, 91
                     resized_img = cv2.resize(reg_img, (width + 2*yPadding, height))
-                    inverted_resized_img = -resized_img + 32767
+                    # inverted_resized_img = -resized_img + 32767
                     # Image.fromarray(resized_img).save(full_path)
 
                     b64 = base64.b64encode(resized_img).decode('utf-8')
-                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
+                    # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="input",
                         ImageID=str(i),
@@ -243,7 +243,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
-                        InvB64Data=inverted_b64,
+                        # InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
                 ####################################################################################
@@ -265,9 +265,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91 + 2*xPadding, 109 + 2*yPadding # (x axis, y axis)
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + 32767
+                    # inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
-                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
+                    # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="input",
                         ImageID=str(iz),
@@ -277,7 +277,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
-                        InvB64Data=inverted_b64,
+                        # InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
                 # coronal plane
@@ -294,9 +294,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91 + 2*xPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + 32767
+                    # inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
-                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
+                    # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="input",
                         ImageID=str(iy),
@@ -306,7 +306,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
-                        InvB64Data=inverted_b64,
+                        # InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
                 # sagittal plane
@@ -323,9 +323,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 109 + 2*yPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + 32767
+                    # inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
-                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
+                    # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="input",
                         ImageID=str(ix),
@@ -335,7 +335,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
-                        InvB64Data=inverted_b64,
+                        # InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -411,9 +411,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91 + 2*xPadding, 109 + 2*yPadding
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + 32767
+                    # inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
-                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
+                    # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="output",
                         ImageID=str(iz),
@@ -423,7 +423,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
-                        InvB64Data=inverted_b64,
+                        # InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -440,9 +440,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91 + 2*xPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + 32767
+                    # inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
-                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
+                    # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="output",
                         ImageID=str(iy),
@@ -452,7 +452,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
-                        InvB64Data=inverted_b64,
+                        # InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -469,9 +469,9 @@ class uploader(APIView):
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 109 + 2*yPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
-                    inverted_resized_img = -resized_img + 32767
+                    # inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
-                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
+                    # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="output",
                         ImageID=str(ix),
@@ -481,7 +481,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
-                        InvB64Data=inverted_b64,
+                        # InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
 
@@ -542,12 +542,12 @@ class uploader(APIView):
                     # width, height = 109, 91
                     width, height = target_mip_size[1:3]
                     resized_img = cv2.resize(reg_img, (width + 2*yPadding, height))
-                    inverted_resized_img = -resized_img + 32767
+                    # inverted_resized_img = -resized_img + 32767
 
                     # Image.fromarray(resized_img).save(full_path)
 
                     b64 = base64.b64encode(resized_img).decode('utf-8')
-                    inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
+                    # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
                     b64Slice = models.Slice.objects.create(
                         Type="output",
                         ImageID=str(i),
@@ -557,7 +557,7 @@ class uploader(APIView):
                         Depth=32767,
                         CaseID=getCase,
                         B64Data=b64,
-                        InvB64Data=inverted_b64,
+                        # InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
                     # imageio.imwrite(full_path,reg_img.astype(np.uint16))
