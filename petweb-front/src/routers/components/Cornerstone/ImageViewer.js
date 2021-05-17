@@ -250,7 +250,7 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"77%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
         {<div style={{position:"absolute",height:'50%', width:'0px', boxSizing:"border-box",left:"30%",top:"47%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>}
         {/* 32767의 SUVR값 */}
-        {(viewportC !== undefined) && <div style={{position:"absolute",top:"19%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? out_suvr_max.toFixed(2):in_suvr_max.toFixed(2)}&nbsp;(max)</div>}
+        {(viewportC !== undefined) && <div style={{position:"absolute",top:"17%", left:"0%", color:'white', fontSize:"16px", userSelect:'none', border:"0px red solid"}}><div>SUVR</div><div>{isSNed ? out_suvr_max.toFixed(2):in_suvr_max.toFixed(2)}&nbsp;(max)</div></div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
             {/* 상단 배경*/}
@@ -279,7 +279,7 @@ class ImageViewer extends Component {
         }
         {/* {(viewportC !== undefined) && <div  style={{overflow:'hidden', border:"1px red solid", position:"absolute", width:'30px', height:`${viewportC.voi.windowWidth/32768*100*0.45}%`, boxSizing:"border-box",left:"3%",top:`${30+30-(viewportC.voi.windowCenter)/32768*30-(viewportC.voi.windowWidth/32768*50*0.3)}%`, color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}></div>} */}
         {/* 0의 SUVR 값 */}
-        {(viewportC !== undefined) && <div style={{position:"absolute",top:"67.5%", left:"1%", color:'red', fontSize:"16px", userSelect:'none'}}>{isSNed ? Math.max(0,out_suvr_min).toFixed(2):Math.max(0,in_suvr_min).toFixed(2)}&nbsp;(min)</div>}
+        {(viewportC !== undefined) && <div style={{position:"absolute",top:"67.5%", left:"0%", color:'white', fontSize:"16px", userSelect:'none'}}>{isSNed ? Math.max(0,out_suvr_min).toFixed(2):Math.max(0,in_suvr_min).toFixed(2)}&nbsp;(min)</div>}
 
 
         {/* Coronal Plane  */}
@@ -704,10 +704,13 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackScroll.activate(elementC, 1);
         
         // cornerstoneTools.stackScroll.activate(elementS, 1);
+        // cornerstoneTools.probe.activate(elementC, 2);
+        cornerstoneTools.dragProbe.activate(elementC, 2);
+        cornerstoneTools.dragProbeTouch.activate(elementC);
         cornerstoneTools.stackScrollWheel.activate(elementC);
         cornerstoneTools.stackPrefetch.enable(elementC, 3);
         cornerstoneTools.wwwc.activate(elementC, 4);
-        cornerstoneTools.wwwcRegion.activate(elementC, 2);
+        // cornerstoneTools.wwwcRegion.activate(elementC, 2);
         this.wwwcsynchronizer.add(elementC);
         this.synchronizer.add(elementC);
 
@@ -731,10 +734,12 @@ class ImageViewer extends Component {
         cornerstoneTools.addStackStateManager(elementS, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementS, "stack", stack);
         // cornerstoneTools.stackScroll.activate(elementS, 1);
+        cornerstoneTools.dragProbe.activate(elementS, 2);
+        cornerstoneTools.dragProbeTouch.activate(elementS);
         cornerstoneTools.stackScrollWheel.activate(elementS);
         cornerstoneTools.stackPrefetch.enable(elementS, 3);
         cornerstoneTools.wwwc.activate(elementS, 4);
-        cornerstoneTools.wwwcRegion.activate(elementS, 2);
+        // cornerstoneTools.wwwcRegion.activate(elementS, 2);
         this.wwwcsynchronizer.add(elementS);
         this.synchronizer.add(elementS);
 
@@ -758,10 +763,12 @@ class ImageViewer extends Component {
         cornerstoneTools.addStackStateManager(elementA, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementA, "stack", stack);
         // cornerstoneTools.stackScroll.activate(elementA, 1);
+        cornerstoneTools.dragProbe.activate(elementA, 2);
+        cornerstoneTools.dragProbeTouch.activate(elementA);
         cornerstoneTools.stackScrollWheel.activate(elementA);
         cornerstoneTools.stackPrefetch.enable(elementA, 3);
         cornerstoneTools.wwwc.activate(elementA, 4);
-        cornerstoneTools.wwwcRegion.activate(elementA, 2);
+        // cornerstoneTools.wwwcRegion.activate(elementA, 2);
         this.wwwcsynchronizer.add(elementA);
         this.synchronizer.add(elementA);
 
@@ -801,7 +808,9 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackPrefetch.enable(elementM, 3);
         // cornerstoneTools.zoom.activate(elementM, 3);
         cornerstoneTools.wwwc.activate(elementM, 4);
-        cornerstoneTools.wwwcRegion.activate(elementM, 2);
+        cornerstoneTools.dragProbe.activate(elementM, 2);
+        cornerstoneTools.dragProbeTouch.activate(elementM);
+        // cornerstoneTools.wwwcRegion.activate(elementM, 2);
 
         try{
           let temp = cornerstoneTools.getElementToolStateManager(elementM)

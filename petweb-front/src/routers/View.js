@@ -5,8 +5,10 @@ import * as actions from '../reduxs/actions';
 import * as cornerstone from "cornerstone-core";
 import '../App.css';
 import {useSelector, useDispatch} from 'react-redux';
-import IconPlay from '../images/IconPlay';
 import IconPlayPNG from '../images/play.png';
+import IconReset from '../images/IconReset';
+import IconPause from '../images/IconPause';
+import IconPlay from '../images/IconPlay';
 import IconCrosshair from '../images/IconCrosshair';
 import IconCrosshairOff from '../images/IconCrosshairOff';
 import IconInvert from '../images/IconInvert';
@@ -39,7 +41,7 @@ class View extends Component {
     currentStepIndex: 20,
     username: localStorage.getItem('username'),
     showMenu: false,
-    isPlayed: true,
+    isPlayed: false,
     isCrosshaired: true,
     isInverted: true,
     isSNed: true,
@@ -380,12 +382,19 @@ class View extends Component {
               </div>
             </div>
             <div style={{display:"flex", color:"white", border:'0px red solid'}}>
-              <div className="view-btn" onClick={()=>setIsPlayed(!isPlayed)}><img src={IconPlayPNG} width={'42px'}  className="view-icon"/></div>
-              <div className="view-btn opacity-bar" >
-                MIP:&nbsp;
+              <div className="view-btn" onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
+                &nbsp; MIP: &nbsp;
+              </div>
+              <div className="view-btn" onClick={()=>setIsPlayed(!isPlayed)} style={{marginLeft:"0px"}} >
+                {isPlayed ? <IconPause className="view-icon"/>:<IconPlay className="view-icon"/>}
+              </div>
+              <div className="view-btn opacity-bar" style={{marginLeft:"0px"}}>
                 <input type="range" style={{height:"100%", width:"100%"}} value={this.state.currentStepIndex} onInput={this.handleInputChange} step="1" min="0" max="50"/>
               </div>
-              <div className="view-btn opacity-bar" >
+              <div className="view-btn" onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
+                &nbsp; SUVR:
+              </div>
+              <div className="view-btn opacity-bar" style={{marginLeft:"0px"}} >
                 {<InputRange
                     draggableTrack
                     step={1000}
@@ -403,6 +412,9 @@ class View extends Component {
                         }
                       }
                   />}
+              </div>
+              <div className="view-btn" style={{marginLeft:"0px"}} onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
+                <IconReset className="view-icon" />
               </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsInverted(!isInverted)}>{isInverted ? <IconInvert className="view-icon"/>:<IconInvertOff className="view-icon"/>}</div>

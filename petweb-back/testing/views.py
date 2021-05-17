@@ -733,7 +733,7 @@ class uploader(APIView):
         file_format = file_name.split('.')
 
         # Input Dicom
-        if file_format[-1].lower() == "dcm" or file_format[-1].lower() == "ima":
+        if file_format[-1].lower() == "dcm" or file_format[-1].lower() == "ima" or file_format[-1].lower() == "dicom":
             Format = "dcm"
             if len(myfiles) <= 50:
                 return Response(data="Error1: the number of dcm files is not enough (>=50)", status=status.HTTP_400_BAD_REQUEST)
@@ -747,6 +747,8 @@ class uploader(APIView):
             Format = "nifti"
             if len(myfiles) < 1:
                 return Response(data="Error1: Must be uploaded more than one", status=status.HTTP_400_BAD_REQUEST)
+        elif len(myfiles) > 50:
+            Format = "dcm"
         else:
             return Response(data="Error1: File format is not supported. (dcm, hdr/img, nii formats are only supported)",
                             status=status.HTTP_400_BAD_REQUEST)
@@ -791,7 +793,10 @@ class uploader(APIView):
             # dicom2nifti.convert_directory(dcm_folder_path, uploader_path, reorient=True, compression=False)
             dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')
             # subprocess.run([dcm2niix_path, "-o", r'uploads\dwnusa\uploader', "-f", "%t_%p_%s", dcm_folder_path])
-            subprocess.run([dcm2niix_path, "-o", uploader_path, "-b", "y", "-ba", "n", "-f", "%t_%p_%s", dcm_folder_path])
+            try:
+                subprocess.run([dcm2niix_path, "-o", uploader_path, "-b", "y", "-ba", "n", "-f", "%t_%p_%s", dcm_folder_path], check=True)
+            except subprocess.CalledProcessError as e:
+                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
             database_files = os.listdir(uploader_path)
             for idx, myfile in enumerate(database_files):
@@ -924,6 +929,7 @@ class fileList(APIView):
 
     def get(self, request, format=None):
         username = request.user.username
+        print(str(username) + ' is currently connected')
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         if not os.path.exists(user_path):
             os.mkdir(user_path)
@@ -979,8 +985,9 @@ class viewer(APIView):
 
 
 class export(APIView):
-    def get(self, request, format=None):
+    def put(self, request, format=None):
         username = request.user.username
+        id_tuple = tuple([v['id'] for v in request.data['selectedList']])
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         database_path = os.path.join(user_path, 'database')
         downloader_path = os.path.join(user_path, 'downloader')
@@ -988,7 +995,7 @@ class export(APIView):
             os.mkdir(downloader_path)
         target_path = os.path.join(downloader_path, 'brightonix_imaging.zip')
         userID = models.User.objects.filter(username=username)[0]
-        selectedCase = models.Case.objects.filter(UserID=userID, Group=1)
+        selectedCase = models.Case.objects.filter(UserID=userID, Group=1, id__in=id_tuple)
         # selectedCase = models.Case.objects.filter(Group=1)
         # create a ZipFile object
         zipObj = ZipFile(target_path, 'w')
