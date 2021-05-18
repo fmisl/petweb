@@ -705,12 +705,14 @@ class ImageViewer extends Component {
         
         // cornerstoneTools.stackScroll.activate(elementS, 1);
         // cornerstoneTools.probe.activate(elementC, 2);
-        cornerstoneTools.dragProbe.activate(elementC, 2);
-        cornerstoneTools.dragProbeTouch.activate(elementC);
+        // cornerstoneTools.dragProbe.activate(elementC, 2);
+        // cornerstoneTools.dragProbeTouch.activate(elementC);
+        cornerstoneTools.zoomTouchPinch.activate(elementC);
+
         cornerstoneTools.stackScrollWheel.activate(elementC);
         cornerstoneTools.stackPrefetch.enable(elementC, 3);
         cornerstoneTools.wwwc.activate(elementC, 4);
-        // cornerstoneTools.wwwcRegion.activate(elementC, 2);
+        cornerstoneTools.wwwcRegion.activate(elementC, 2);
         this.wwwcsynchronizer.add(elementC);
         this.synchronizer.add(elementC);
 
@@ -734,12 +736,12 @@ class ImageViewer extends Component {
         cornerstoneTools.addStackStateManager(elementS, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementS, "stack", stack);
         // cornerstoneTools.stackScroll.activate(elementS, 1);
-        cornerstoneTools.dragProbe.activate(elementS, 2);
-        cornerstoneTools.dragProbeTouch.activate(elementS);
+        // cornerstoneTools.dragProbe.activate(elementS, 2);
+        // cornerstoneTools.dragProbeTouch.activate(elementS);
         cornerstoneTools.stackScrollWheel.activate(elementS);
         cornerstoneTools.stackPrefetch.enable(elementS, 3);
         cornerstoneTools.wwwc.activate(elementS, 4);
-        // cornerstoneTools.wwwcRegion.activate(elementS, 2);
+        cornerstoneTools.wwwcRegion.activate(elementS, 2);
         this.wwwcsynchronizer.add(elementS);
         this.synchronizer.add(elementS);
 
@@ -763,12 +765,12 @@ class ImageViewer extends Component {
         cornerstoneTools.addStackStateManager(elementA, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementA, "stack", stack);
         // cornerstoneTools.stackScroll.activate(elementA, 1);
-        cornerstoneTools.dragProbe.activate(elementA, 2);
-        cornerstoneTools.dragProbeTouch.activate(elementA);
+        // cornerstoneTools.dragProbe.activate(elementA, 2);
+        // cornerstoneTools.dragProbeTouch.activate(elementA);
         cornerstoneTools.stackScrollWheel.activate(elementA);
         cornerstoneTools.stackPrefetch.enable(elementA, 3);
         cornerstoneTools.wwwc.activate(elementA, 4);
-        // cornerstoneTools.wwwcRegion.activate(elementA, 2);
+        cornerstoneTools.wwwcRegion.activate(elementA, 2);
         this.wwwcsynchronizer.add(elementA);
         this.synchronizer.add(elementA);
 
@@ -808,9 +810,9 @@ class ImageViewer extends Component {
         // cornerstoneTools.stackPrefetch.enable(elementM, 3);
         // cornerstoneTools.zoom.activate(elementM, 3);
         cornerstoneTools.wwwc.activate(elementM, 4);
-        cornerstoneTools.dragProbe.activate(elementM, 2);
-        cornerstoneTools.dragProbeTouch.activate(elementM);
-        // cornerstoneTools.wwwcRegion.activate(elementM, 2);
+        // cornerstoneTools.dragProbe.activate(elementM, 2);
+        // cornerstoneTools.dragProbeTouch.activate(elementM);
+        cornerstoneTools.wwwcRegion.activate(elementM, 2);
 
         try{
           let temp = cornerstoneTools.getElementToolStateManager(elementM)

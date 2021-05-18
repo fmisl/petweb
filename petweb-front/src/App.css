@@ -714,10 +714,12 @@ input:-webkit-autofill:active {
   box-shadow: 0px 15px 30px rgba(25, 25, 25, 0.15);
   border-radius: 5px;
   /* max-height: 700vh; */
-  /* border: 0px red solid;
+  /* border: 1px red solid;
   box-sizing: border-box; */
 }
-
+.dashboard-box1 > .recharts-wrapper{
+  height: 537px !important;
+}
 .dashboard-box1 > span {
   margin: 3px 35px;
   align-self: flex-start;
@@ -830,6 +832,10 @@ input:-webkit-autofill:active {
   /* border: green solid;
   box-sizing: border-box; */
 }
+.analysis-box > .slick-slider > .slick-list{
+  padding-top:10px !important;
+  /* border: red solid; */
+}
 /* .analysis-box:hover{
   border:1px red solid;
   box-sizing: border-box;
@@ -846,7 +852,7 @@ input:-webkit-autofill:active {
   /* align-items; */
   margin: 0px 10px;
   width: 770px;
-  height: 800px;
+  height: 830px;
   background: #383c41;
   box-shadow: 0px 15px 30px rgba(25, 25, 25, 0.15);
   border-radius: 5px;
@@ -939,7 +945,7 @@ input:-webkit-autofill:active {
   left: 300px; */
   margin: 0px 10px;
   width: 770px;
-  height: 800px;
+  height: 830px;
   background: #383c41;
   box-shadow: 0px 15px 30px rgba(25, 25, 25, 0.15);
   border-radius: 5px;
@@ -968,8 +974,8 @@ input:-webkit-autofill:active {
 
 .analysis-box2-content {
   margin: 0px 40px 0px 40px;
-  border: red solid;
-  box-sizing: border-box;
+  /* border: red solid;
+  box-sizing: border-box; */
 }
 
 .analysis-box3 {

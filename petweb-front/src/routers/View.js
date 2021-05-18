@@ -428,7 +428,9 @@ class View extends Component {
                 style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
                   <option value="gray">Gray (colormap)</option>
                   <option value="hot" >Hot (colormap)</option>
+                  {/* <option value="hot_inverted" >Hot_inverted (colormap)</option> */}
                   <option value="jet">Jet (colormap)</option>
+                  {/* <option value="jet_inverted">Jet_inverted (colormap)</option> */}
                 </select>
               </div>
               {/* <div className="view-btn template-select">
@@ -680,7 +682,7 @@ class View extends Component {
                   columns: 91+40,
                   rowCosines:     [ 0, 1,  0], 
                   columnCosines:  [ -1,  0,  0],
-                  imagePositionPatient: [cY+109, cX, -scale*id+cZ+91], //axial plane에서  [coronal line, sagittal line, xxx]
+                  imagePositionPatient: [cY+109+20, cX, -scale*id+cZ+91], //axial plane에서  [coronal line, sagittal line, xxx]
                   columnPixelSpacing: 1,
                   rowPixelSpacing: 1,
               }
