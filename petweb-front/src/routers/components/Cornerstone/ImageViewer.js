@@ -301,6 +301,7 @@ class ImageViewer extends Component {
     const {ww, wc, in_suvr_max, in_suvr_min, out_suvr_max, out_suvr_min} = this.state;
     const {handleWindowChange, isSNed, isInverted} = this.props;
     try{
+      // 이곳의 viewport를 열어서 min, max를 상위 component로 전달하고, 이곳의 state (ww, wc)를 바꿈
       let viewportC = cornerstone.getViewport(this.elementC);
       const newWW = viewportC.voi.windowWidth;
       const newWC = isInverted ? 32767-viewportC.voi.windowCenter:viewportC.voi.windowCenter;
@@ -475,7 +476,7 @@ class ImageViewer extends Component {
     // let viewportS = cornerstone.getViewport(elementS);
     // let viewportA = cornerstone.getViewport(elementA);
     try{
-
+      // 상위의 state (ww, wc) 를 받아서 viewport를 업데이트 시킴
       if (prevProps.value5 != value5){
         // console.log('value5 update')
         const newWW = (value5.max-value5.min);
