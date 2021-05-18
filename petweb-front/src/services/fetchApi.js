@@ -68,8 +68,9 @@ export function ungroupIndividual(data) {
     },
   });
 }
+// return axios.put(IPinUSE+"testing/uploader/",{obj:data.obj, Tracer:data.Tracer, addToWorklist:data.addToWorklist},{
 export function downloadNifti(data) {
-  return axios.get(IPinUSE+"testing/export/",{
+  return axios.put(IPinUSE+"testing/export/",{selectedList:data.selectedList},{
     headers:{
     'Authorization':'jwt '+data.token
     }

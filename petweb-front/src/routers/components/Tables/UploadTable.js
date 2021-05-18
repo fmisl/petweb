@@ -39,11 +39,31 @@ class UploadTable extends Component {
         }
         // console.log('Enter: ' + this.props.menuItem.caption.toUpperCase());
     }
-    componentDidMount(){
+    componentDidMount = async() =>{
         const {fileList} = this.props;
-        this.setState({
-            data:fileList,
-        })
+        const token = localStorage.getItem('token')
+        const res = await services.testing({'token':token})
+        let newdata = res.data
+        // console.log("interval: ",data!=this.state.data, data,this.state.data)
+        console.log('UploadTable-componentDidMount-updateCentiloid')
+        if (newdata!=this.state.data){
+            // console.log('data changed: ', newdata, fileList, fileList.map((v,i)=>{return {...v, Centiloid:newdata.filter(vv=>vv.id==v.id).Centiloid}}))
+            this.props.updateCentiloid(newdata)
+            try{
+                const newfileList = fileList.map((v,i)=>{return {...v, Centiloid:newdata.filter(vv=>vv.id==v.id)[0].Centiloid}});
+                this.setState({
+                    data:newfileList,
+                })
+            } catch (e) {
+                this.setState({
+                    data:newdata,
+                })
+            }
+        } else {
+            this.setState({
+                data:fileList,
+            })
+        }
         this.myTimer();
     }
     myTimer = async()=>{
@@ -52,11 +72,12 @@ class UploadTable extends Component {
             const res = await services.testing({'token':token})
             let data = res.data
             // console.log("interval: ",data!=this.state.data, data,this.state.data)
+            console.log('UploadTable-componentDidMount-myTimer')
             if (data!=this.state.data){
                 // console.log('data changed: ', this.state.data)
                 this.props.updateCentiloid(data)
             }
-        }, 5000)
+        }, 10000)
     }
     componentWillUnmount(){
         clearInterval(this.myInterval);

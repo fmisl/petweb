@@ -30,12 +30,18 @@ function Worklist({ isShowing, hide, lock }) {
     const token = localStorage.getItem('token')
     const username = localStorage.getItem('username')
     // // res = await services.TokenVerify({'token':token})
-    const res = await services.downloadNifti({'token':token});
-    if (res.status == 200){
-      const downloadUrl = IPinUSE+'result/download/'+username+'/downloader/brightonix_imaging.zip';
-      setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
-    } else{
-      alert('Download failed');
+    const selectedList = fileList.filter((v, i)=>v.Select == true && v.Group == 1);
+    console.log(selectedList.length)
+    if (selectedList.length != 0){
+      const res = await services.downloadNifti({'token':token, 'selectedList':selectedList});
+      if (res.status == 200){
+        const downloadUrl = IPinUSE+'result/download/'+username+'/downloader/brightonix_imaging.zip';
+        setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
+      } else{
+        alert('Download failed');
+      }
+    } else {
+      alert('No files selected')
     }
   }
   return (

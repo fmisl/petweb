@@ -24,6 +24,7 @@ class Case(TimeStampedModel):
     Select = models.BooleanField(blank=True, default=False)
     Focus = models.BooleanField(blank=True, default=False)
     Group = models.IntegerField(blank=True, default=0)
+    Complete = models.BooleanField(blank=True, default=False)
     # File & Image Info
     fileID = models.CharField(max_length=150, blank=True, null=True)
     OriginalFileName = models.CharField(max_length=500, blank=True, null=True)
@@ -148,7 +149,7 @@ class Slice(TimeStampedModel):
     # SizeZ = models.CharField(max_length=5, blank=True, null=True)
     CaseID = models.ForeignKey(Case, blank=True, null=True, on_delete=models.CASCADE, related_name='slices')
     B64Data = models.TextField(max_length=5000, blank=True, null=True)
-    InvB64Data = models.TextField(max_length=5000, blank=True, null=True)
+    # InvB64Data = models.TextField(max_length=5000, blank=True, null=True)
 
     class Meta:
         ordering = ['pk']
