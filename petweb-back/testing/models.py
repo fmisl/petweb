@@ -24,6 +24,7 @@ class Case(TimeStampedModel):
     Select = models.BooleanField(blank=True, default=False)
     Focus = models.BooleanField(blank=True, default=False)
     Group = models.IntegerField(blank=True, default=0)
+    Complete = models.BooleanField(blank=True, default=False)
     # File & Image Info
     fileID = models.CharField(max_length=150, blank=True, null=True)
     OriginalFileName = models.CharField(max_length=500, blank=True, null=True)

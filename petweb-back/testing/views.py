@@ -569,6 +569,10 @@ class uploader(APIView):
                     # Image.fromarray(reg_img.astype(np.uint16)).save(full_path)
                     # # imageio.imwrite(full_path,reg_img.astype(np.uint16))
                 print("---------complete generating output png files--------")
+            userID = models.User.objects.filter(username=username)[0]
+            case = models.Case.objects.filter(UserID=userID, fileID=myfile['fileID'])[0]
+            case.Complete = True
+            case.save()
 
     def put(self, request, format=None):
         username = request.user.username

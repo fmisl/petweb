@@ -13,11 +13,11 @@ function Dashboard(props) {
   const [NofFMM, setNofFMM] = useState(0);
   const [NofFBB, setNofFBB] = useState(0);
   const [NofFBP, setNofFBP] = useState(0);
-  const [recent7dates, setRecent7dates] = useState([]);
-  const [NofPIBbyDay, setNofPIBbyDay] = useState([]);
-  const [NofFMMbyDay, setNofFMMbyDay] = useState([]);
-  const [NofFBBbyDay, setNofFBBbyDay] = useState([]);
-  const [NofFBPbyDay, setNofFBPbyDay] = useState([]);
+  const [recent7dates, setRecent7dates] = useState([0,0,0,0,0,0,0]);
+  const [NofPIBbyDay, setNofPIBbyDay] = useState([0,0,0,0,0,0,0]);
+  const [NofFMMbyDay, setNofFMMbyDay] = useState([0,0,0,0,0,0,0]);
+  const [NofFBBbyDay, setNofFBBbyDay] = useState([0,0,0,0,0,0,0]);
+  const [NofFBPbyDay, setNofFBPbyDay] = useState([0,0,0,0,0,0,0]);
   const counter = useSelector(state => state.counter);
   const stackManager = useSelector(state => state.stackManager);
   const isLogged = useSelector(state => state.isLogged);
