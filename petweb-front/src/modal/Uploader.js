@@ -73,19 +73,19 @@ function Uploader({ setListID, listID, setFetchState, fetchState, setaddToWorkli
               <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
                 <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
                   {/* {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}}  */}
-                  {currentJPGURL_head !== "" && <img width={'400px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
-                  // src={IPinUSE+'result/download/'+username+'uploader/input_coronal_'+focusItem+'.png'}/>
+                  {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${fileList[listID]?.InputAffineX0 < 0 ? "-1":"1"}, ${fileList[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} 
+                  // src={IPinUSE+'result/download/'+username+'uploader/input_coronal_'+focusItem+'.png'}/> transform:`${fileList[listID]?.InputAffineX0 < 0 ? "scaleX(-1)":"scaleX(1)"}`, 
                   src={currentJPGURL_head+'_hy.jpg'} alt=" "/>}
                 </div>
                 <div style={{...styleDiv, ...{top:"", left:"50%"}}} >
                   {/* {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}}  */}
-                  {currentJPGURL_head !== "" && <img width={'400px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
+                  {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${fileList[listID]?.InputAffineY1 < 0 ? "-1":"1"}, ${fileList[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} 
                   // src={IPinUSE+'result/download/'+username+'uploader/input_sagittal_'+focusItem+'.png'}/>
                   src={currentJPGURL_head+'_hx.jpg'} alt=" "/>}
                 </div>
                   <div style={{...styleDiv, ...{top:"50%", left:"0"}}} >
                   {/* {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}}  */}
-                  {currentJPGURL_head !== "" && <img width={'400px'} style={{border:"1px white solid", boxSizing:"border-box"}} 
+                  {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${fileList[listID]?.InputAffineX0 < 0 ? "1":"-1"}, ${fileList[listID]?.InputAffineY1 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} 
                   // src={IPinUSE+'result/download/'+username+'uploader/input_axial_'+focusItem+'.png'}/>
                   src={currentJPGURL_head+'_hz.jpg'} alt=" "/>}
                 </div>
@@ -94,12 +94,12 @@ function Uploader({ setListID, listID, setFetchState, fetchState, setaddToWorkli
                 </div>
                 {/* {fileList.InputAffineX0 < 0 ?  */}
                 {/* {console.log(listID, fileList[listID]?.InputAffineX0, fileList[listID]?.InputAffineY1, fileList[listID]?.InputAffineZ2)} */}
-                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineX0 < 0 ? 'row-reverse':'row'}`}}><div>L</div><div>R</div></div>}
-                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"52%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineY1 < 0 ? 'row-reverse':'row'}`}}><div>P</div><div>A</div></div>}
-                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"70%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineX0 < 0 ? 'row-reverse':'row'}`}}><div>L</div><div>R</div></div>}
-                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"23%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineZ2 < 0 ? 'column-reverse':'column'}`}}><div>S</div><div>I</div></div>}
-                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"73%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineZ2 < 0 ? 'column-reverse':'column'}`}}><div>S</div><div>I</div></div>}
-                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"50%", left:"23%", height:"45%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:`${fileList[listID]?.InputAffineY1 < 0 ? 'column-reverse':'column'}`}}><div>A</div><div>P</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>R</div><div>L</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"52%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>P</div><div>A</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"70%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>R</div><div>L</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"23%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>S</div><div>I</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"73%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>S</div><div>I</div></div>}
+                {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"50%", left:"23%", height:"45%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>A</div><div>P</div></div>}
               </div>
             </div>
             <div style={{display:"flex", marginTop:"21px", justifyContent:"space-between", alignItems:"center"}}>

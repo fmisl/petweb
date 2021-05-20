@@ -30,7 +30,7 @@ def train(inout_path, caseID):
     out_file = "output_" + caseID
     in_file_full_path = os.path.join(inout_path, in_file + ".img")
     coreged = coreg_mrc1(V2=in_file_full_path)
-#     coreged = np.transpose(coreged, [2, 1, 0])
+    #     coreged = np.transpose(coreged, [2, 1, 0])
 
     maxp = np.quantile(coreged.reshape([-1]), 0.99)
 
@@ -41,8 +41,8 @@ def train(inout_path, caseID):
     with tf.Graph().as_default():
 
         pet_in = tf.placeholder(tf.float32,
-                               [91, 109, 112],
-                               name="PET")
+                                [91, 109, 112],
+                                name="PET")
         # pet_in = tf.placeholder(tf.float32,
         #                        [127, 344, 344],
         #                        name="PET")
@@ -52,12 +52,12 @@ def train(inout_path, caseID):
         pet = tf.expand_dims(tf.expand_dims(pet, axis=-1), axis=0)
 
         # mr = tf.expand_dims(mr, axis=-1)
-        
+
         gimg = pet
 
         # TODO: change the path of template MR
         aa = np.fromfile(r'C:\Users\dwnusa\workspace\petweb\petweb-back\testing\TF_DirectSN\src\fMNI152_T1_2mm.img',
-                 dtype=np.int16)
+                         dtype=np.int16)
         aa = aa.astype(dtype=np.float32) - np.min(aa)
         aa = aa / np.max(aa)
         aa = np.reshape(aa, [91, 109, 91])
@@ -68,7 +68,7 @@ def train(inout_path, caseID):
         mrTemplate = tf.expand_dims(mrTemplate, axis=0)
         mrTemplate = tf.expand_dims(mrTemplate, axis=-1)
         mrTemplate = tf.where(tf.is_nan(mrTemplate), tf.ones_like(mrTemplate) * 0, mrTemplate)
-        
+
         # Affine layer
         def_list = []
 
@@ -108,8 +108,7 @@ def train(inout_path, caseID):
                 return
 
             for i in range(0, 1):
-
-                [xr, defosr]= sess.run(
+                [xr, defosr] = sess.run(
                     [gimg, defos], feed_dict={pet_in: coreged})
                 # xr = xr*maxp
 
@@ -118,8 +117,8 @@ def train(inout_path, caseID):
                 name = 'test'
                 coreged_padded = np.pad(coreged, ((10, 11), (1, 2), (0, 0)), mode='constant')
                 test = dst._transform_spline(coreged_padded, defosr[:, :, :, :, 1], defosr[:, :, :, :, 0],
-                             defosr[:, :, :, :, 2])
-                test = np.transpose(test, axes=[0, 3, 2, 1])*maxp
+                                             defosr[:, :, :, :, 2])
+                test = np.transpose(test, axes=[0, 3, 2, 1]) * maxp
 
                 gimg_tmp = test[0, 10:101, 1:110, 10:101].flatten()
                 gimg_tmp = gimg_tmp.astype(dtype=np.float32)
@@ -133,8 +132,8 @@ def train(inout_path, caseID):
                 src_file_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", "output_f32.hdr")
                 dst_file_path = os.path.join(inout_path, "output_" + caseID + ".hdr")
                 copyfile(src_file_path, dst_file_path)
-                    # gxhr_tmp = xr[ii, :, :, :].flatten()
-                    # gxhr_tmp.tofile(os.path.join(tfi, 'eval_labl' + name))
+                # gxhr_tmp = xr[ii, :, :, :].flatten()
+                # gxhr_tmp.tofile(os.path.join(tfi, 'eval_labl' + name))
 
                 print(i, name)
                 print(maxp)

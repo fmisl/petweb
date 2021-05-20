@@ -33,8 +33,8 @@ function Dashboard(props) {
     const FBBList = fileList.filter((v,i)=>v.Tracer=='[18F]FBP');
     setNofPIB(PIBList.length);
     setNofFMM(FMMList.length);
-    setNofFBB(FBPList.length);
-    setNofFBP(FBBList.length);
+    setNofFBP(FBPList.length);
+    setNofFBB(FBBList.length);
     
     const date0 = new Date();
     const date1 = new Date(date0);

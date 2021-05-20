@@ -139,6 +139,7 @@
   top: 76px;
   /* left:10px; */
   height: 90%;
+  /* width: 100% !important; */
   /* border: 1px red solid; */
   overflow-y: scroll;
 
@@ -151,6 +152,7 @@
   /* height: 67px; */
   /* border: 1px white solid; */
   /* background:#292D30; */
+  width:100%;
 }
 
 .filterable-table>tbody>tr:hover {
@@ -241,6 +243,10 @@
 }
 
 .WorklistTable.filterable-table>tbody>tr>td:nth-child(4) {
+  width:100px;
+  /* border: 1px red solid; */
+}
+.WorklistTable.filterable-table>tbody>tr>td:nth-child(5) {
   width:100px;
   /* border: 1px red solid; */
 }

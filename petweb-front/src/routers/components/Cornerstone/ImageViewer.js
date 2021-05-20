@@ -250,7 +250,7 @@ class ImageViewer extends Component {
         {<div style={{position:"absolute",height:'44%', width:'0px', boxSizing:"border-box",left:"77%",top:"1%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px green solid'}}><div>{this.CoronalUppderSide}</div><div>{this.CoronalUnderSide}</div></div>} {/* Axial Plane this.AxialRightSide */}
         {<div style={{position:"absolute",height:'50%', width:'0px', boxSizing:"border-box",left:"30%",top:"47%", color:'red', fontSize:'25px', display:'flex', flexDirection:'column', justifyContent:'space-between', userSelect:'none', border:'0px red solid'}}><div>{this.SagittalRightSide}</div><div>{this.SagittalLeftSide}</div></div>}
         {/* 32767의 SUVR값 */}
-        {(viewportC !== undefined) && <div style={{position:"absolute",top:"17%", left:"0%", color:'white', fontSize:"16px", userSelect:'none', border:"0px red solid"}}><div>SUVR</div><div>{isSNed ? out_suvr_max.toFixed(2):in_suvr_max.toFixed(2)}&nbsp;(max)</div></div>}
+        {(viewportC !== undefined) && <div style={{position:"absolute",top:"17%", left:"0%", color:'white', fontSize:"16px", userSelect:'none', border:"0px red solid"}}><div>SUVR</div><div>{isSNed ? out_suvr_max?.toFixed(2):in_suvr_max?.toFixed(2)}&nbsp;(max)</div></div>}
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
             {/* 상단 배경*/}
@@ -262,11 +262,11 @@ class ImageViewer extends Component {
             {selectedColormap === 'hot' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(wc)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedhotcmap:hotcmap}/>}
             {selectedColormap === 'jet' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(wc)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedjetcmap:jetcmap}/>}
             {/* 상단 글자 */}
-            <div style={{borderTop:"0px white solid", position:'absolute', width:'68px', top:`${false ? (wc)/32768*100-viewportC.voi.windowWidth/32768*50:100-(wc)/32768*100-viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR+widthSUVR/2).toFixed(2)}</div>{/* <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{(viewportC.voi.windowCenter/32767).toFixed(2)*)}</div> (out_suvr_max+out_suvr_min)/2*/}
+            <div style={{borderTop:"0px white solid", position:'absolute', width:'68px', top:`${false ? (wc)/32768*100-viewportC.voi.windowWidth/32768*50:100-(wc)/32768*100-viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR+widthSUVR/2)?.toFixed(2)}</div>{/* <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(viewportC.voi.windowCenter)/32768*100}%`, fontSize:'12px'}}>{(viewportC.voi.windowCenter/32767).toFixed(2)*)}</div> (out_suvr_max+out_suvr_min)/2*/}
             {/* 중심선과 중심글자 */}
-            {(false) ? <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${(wc)/32768*100}%`, fontSize:'12px'}}>{centerSUVR.toFixed(2)}</div>:<div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(wc)/32768*100}%`, fontSize:'12px'}}>{centerSUVR.toFixed(2)}</div>}
+            {(false) ? <div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${(wc)/32768*100}%`, fontSize:'12px'}}>{centerSUVR?.toFixed(2)}</div>:<div style={{minHeight:'15px', borderTop:`${viewportC.voi.windowWidth/32768*10}px yellow solid`, position:'absolute', width:'68px', top:`${100-(wc)/32768*100}%`, fontSize:'12px'}}>{centerSUVR?.toFixed(2)}</div>}
             {/* 하단 글자 */}
-            <div style={{borderBottom:"0px black solid", position:'absolute', width:'68px', top:`${false ? -4+(wc)/32768*100+viewportC.voi.windowWidth/32768*50:100-4-(wc)/32768*100+viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR-widthSUVR/2).toFixed(2)}</div>
+            <div style={{borderBottom:"0px black solid", position:'absolute', width:'68px', top:`${false ? -4+(wc)/32768*100+viewportC.voi.windowWidth/32768*50:100-4-(wc)/32768*100+viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR-widthSUVR/2)?.toFixed(2)}</div>
             {/* 하단배경 */}
             {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'black':'white'} solid`, width: '30px', height:`${false ? 100-(wc)/32768*100:(wc)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
             {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'black':'white'} solid`, width: '30px', height:`${false ? 100-(wc)/32768*100:(wc)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
@@ -279,7 +279,7 @@ class ImageViewer extends Component {
         }
         {/* {(viewportC !== undefined) && <div  style={{overflow:'hidden', border:"1px red solid", position:"absolute", width:'30px', height:`${viewportC.voi.windowWidth/32768*100*0.45}%`, boxSizing:"border-box",left:"3%",top:`${30+30-(viewportC.voi.windowCenter)/32768*30-(viewportC.voi.windowWidth/32768*50*0.3)}%`, color:'red', fontSize:'25px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', userSelect:'none', paddingLeft:'10px', paddingRight:'10px'}}></div>} */}
         {/* 0의 SUVR 값 */}
-        {(viewportC !== undefined) && <div style={{position:"absolute",top:"67.5%", left:"0%", color:'white', fontSize:"16px", userSelect:'none'}}>{isSNed ? Math.max(0,out_suvr_min).toFixed(2):Math.max(0,in_suvr_min).toFixed(2)}&nbsp;(min)</div>}
+        {(viewportC !== undefined) && <div style={{position:"absolute",top:"67.5%", left:"0%", color:'white', fontSize:"16px", userSelect:'none'}}>{isSNed ? Math.max(0,out_suvr_min)?.toFixed(2):Math.max(0,in_suvr_min)?.toFixed(2)}&nbsp;(min)</div>}
 
 
         {/* Coronal Plane  */}
@@ -544,10 +544,10 @@ class ImageViewer extends Component {
       // }
 
       if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
-        const in_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].in_suvr_max
-        const in_suvr_min = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].in_suvr_min
-        const out_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].out_suvr_max
-        const out_suvr_min = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].out_suvr_min
+        const in_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.in_suvr_max
+        const in_suvr_min = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.in_suvr_min
+        const out_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.out_suvr_max
+        const out_suvr_min = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.out_suvr_min
         // console.log(in_suvr_max, in_suvr_min,out_suvr_max,out_suvr_min)
         this.setState({
           in_suvr_max,

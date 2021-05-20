@@ -98,11 +98,34 @@ class uploader(APIView):
                 print("Step2: create target folder ")
                 os.mkdir(target_folder)
                 nimg3D = nib.load(target_file) # 이미지 불러오기
+                copy_nimg3D = nimg3D.get_data().copy()
+                sign_of_x_axis = np.sign(nimg3D.affine[0][0])
+                # if sign_of_x_axis < 0:
+                #     copy_nimg3D = np.flip(copy_nimg3D, axis=0)
+                #     nimg3D.affine[0][0] = nimg3D.affine[0][0]*sign_of_x_axis
+
+                sign_of_y_axis = np.sign(nimg3D.affine[1][1])
+                if sign_of_y_axis < 0:
+                    copy_nimg3D = np.flip(copy_nimg3D, axis=1).copy()
+                    nimg3D.affine[1][1] = nimg3D.affine[1][1]*sign_of_y_axis
+
+                nimg3D = nib.Nifti1Image(copy_nimg3D, affine=nimg3D.affine, header=nimg3D.header)
+
                 InputAffineX0 = nimg3D.affine[0][0]
                 InputAffineY1 = nimg3D.affine[1][1]
                 InputAffineZ2 = nimg3D.affine[2][2]
-
-                # img hdr 파일을 생성해서 각 폴더에 생성하기....
+                #
+                # c_in=0.5*np.array(origin_img3D.shape)
+                # c_out=np.array(origin_img3D.shape)
+                # transform=np.array([[1,0,0],[0,np.sign(InputAffineY1),0],[0,0,1]])
+                # offset=c_in-c_out.dot(transform)
+                # nimg3D=nd.interpolation.affine_transform(origin_img3D,transform.T,order=0,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
+                # # nimg3D = origin_nimg3D
+                #
+                # [sx, sy, sz] = nimg3D.shape
+                # [offsetX, offsetY, offsetZ] = np.uint16(np.array([sx, sy, sz]) / 4)
+                # nimg3D = nimg3D[offsetX:sx - offsetX - 1, offsetY:sy - offsetY - 1, offsetZ:sz - offsetZ - 1]
+                # # img hdr 파일을 생성해서 각 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "input_"+myfile['fileID']+".img"))
 
 
@@ -196,6 +219,9 @@ class uploader(APIView):
                     transform=np.array([[c1,-s1,0],[s1,c1,0],[0,0,1]])
                     # transform2=np.array([[c2,0,-s2],[0,1,0],[s2,0,c2]])
                     # transform=transform1 # np.dot(transform1, transform2)
+                    # InputAffineX0
+                    # InputAffineY1
+                    # InputAffineZ2
                     offset=c_in-c_out.dot(transform)
                     dst1=nd.interpolation.affine_transform(mip_img3D_crop,transform.T,order=0,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
                     # dst1=dst1-np.min(dst1)
@@ -261,7 +287,11 @@ class uploader(APIView):
                     # full_path = os.path.join(target_folder, file_name)
                     # Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
-                    uint16_img2D = uint16_img3D[:,:,iz]
+                    uint16_img2D = uint16_img3D[:, :, iz]
+                    # if InputAffineZ2 >= 0:
+                    #     uint16_img2D = uint16_img3D[:,:,iz]
+                    # else:
+                    #     uint16_img2D = uint16_img3D[:,:,uint16_img3D.shape[2]-1-iz]
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91 + 2*xPadding, 109 + 2*yPadding # (x axis, y axis)
                     resized_img = cv2.resize(uint16_img2D, (width, height))
@@ -290,10 +320,29 @@ class uploader(APIView):
                     # full_path = os.path.join(target_folder, file_name)
                     # Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
-                    uint16_img2D = uint16_img3D[:,iy,:]
+                    uint16_img2D = uint16_img3D[:, iy, :]
+                    # if InputAffineY1 >= 0:
+                    #     uint16_img2D = uint16_img3D[:,iy,:]
+                    # else:
+                    #     uint16_img2D = uint16_img3D[:,uint16_img3D.shape[1]-1-iy,:]
+
+                    # if InputAffineY1 >= 0:
+                    #     uint16_img2D=uint16_img2D_plus
+                    # else:
+                    #     uint16_img2D=uint16_img2D_minus
+
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 91 + 2*xPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
+
+                    # file_name = "input_" + "coronal_" + str(iy) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # Image.fromarray(resized_img.astype(np.uint16)).save(full_path)
+                    #
+                    # file_name = "input_" + "coronal_" + str(iy) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # Image.fromarray(resized_img.astype(np.uint16)).save(full_path)
+
                     # inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
                     # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
@@ -315,14 +364,21 @@ class uploader(APIView):
                     # uint8_img2D = np.rot90(uint8_img2D)
                     # # colored_image = cm1(uint8_img2D)
                     # # colored_image2 = cm2(uint8_img2D)
-                    # file_name = "input_" + "sagittal_" + str(ix) + ".png"
-                    # full_path = os.path.join(target_folder, file_name)
                     # Image.fromarray(uint8_img2D.astype(np.uint8)).save(full_path)
 
-                    uint16_img2D = uint16_img3D[ix,:,:]
+                    uint16_img2D = uint16_img3D[ix, :, :]
+                    # if InputAffineX0 >= 0:
+                    #     uint16_img2D = uint16_img3D[ix,:,:]
+                    # else:
+                    #     uint16_img2D = uint16_img3D[uint16_img3D.shape[0]-1-ix,:,:]
                     uint16_img2D = np.rot90(uint16_img2D)
                     width, height = 109 + 2*yPadding, 91
                     resized_img = cv2.resize(uint16_img2D, (width, height))
+
+                    # file_name = "input_" + "sagittal_" + str(ix) + ".png"
+                    # full_path = os.path.join(target_folder, file_name)
+                    # Image.fromarray(resized_img.astype(np.uint16)).save(full_path)
+
                     # inverted_resized_img = -resized_img + 32767
                     b64 = base64.b64encode(resized_img).decode('utf-8')
                     # inverted_b64 = base64.b64encode(inverted_resized_img).decode('utf-8')
@@ -725,8 +781,13 @@ class uploader(APIView):
         userId = request.user.id
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
+        if not os.path.exists(user_path):
+            os.mkdir(user_path)
         uploader_path = os.path.join(user_path, 'uploader')
         myfiles = request.FILES.getlist('myfiles')
+
+        if not os.path.exists(uploader_path):
+            os.mkdir(uploader_path)
 
         # Check if file attached
         if not myfiles:
@@ -897,6 +958,9 @@ class uploader(APIView):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         uploader_path = os.path.join(user_path, 'uploader')
+
+        if not os.path.exists(uploader_path):
+            os.mkdir(uploader_path)
 
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
