@@ -10,7 +10,11 @@ import os, shutil
 import tensorflow as tf
 from testing.TF_DirectSN import layers_coregpy as lays
 <<<<<<< HEAD
+<<<<<<< HEAD
 from testing.TF_DirectSN.utils import Dense3DSpatialTransformer
+=======
+from testing.TF_DirectSN.utils import Dense3DSpatialTransformer, VTNAffineStem
+>>>>>>> 7aca0f6d7b5aa45247af8312ea0ccc7efccc3478
 =======
 from testing.TF_DirectSN.utils import Dense3DSpatialTransformer, VTNAffineStem
 >>>>>>> 7aca0f6d7b5aa45247af8312ea0ccc7efccc3478
@@ -142,6 +146,7 @@ def train(inout_path, caseID):
 
                 print(i, name)
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 # train()
@@ -151,6 +156,9 @@ def train(inout_path, caseID):
 #
 # if __name__ == '__main__':
 #     tf.app.run()
+=======
+                print(maxp)
+>>>>>>> 7aca0f6d7b5aa45247af8312ea0ccc7efccc3478
 =======
                 print(maxp)
 >>>>>>> 7aca0f6d7b5aa45247af8312ea0ccc7efccc3478
