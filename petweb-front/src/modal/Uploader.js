@@ -79,7 +79,7 @@ function Uploader({ setListID, listID, setFetchState, fetchState, setaddToWorkli
                 </div>
                 <div style={{...styleDiv, ...{top:"", left:"50%"}}} >
                   {/* {currentJPGURL_head !== "" && <img height={'100%'} width={'300px'} style={{border:"1px white solid", boxSizing:"border-box"}}  */}
-                  {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${fileList[listID]?.InputAffineX0 < 0 ? "-1":"1"}, ${fileList[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} 
+                  {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${fileList[listID]?.InputAffineY1 < 0 ? "-1":"1"}, ${fileList[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} 
                   // src={IPinUSE+'result/download/'+username+'uploader/input_sagittal_'+focusItem+'.png'}/>
                   src={currentJPGURL_head+'_hx.jpg'} alt=" "/>}
                 </div>
