@@ -98,11 +98,18 @@ class uploader(APIView):
                 print("Step2: create target folder ")
                 os.mkdir(target_folder)
                 nimg3D = nib.load(target_file) # 이미지 불러오기
+                copy_nimg3D = nimg3D.get_data().copy()
+                sign_of_x_axis = np.sign(nimg3D.affine[0][0])
+                # if sign_of_x_axis < 0:
+                #     copy_nimg3D = np.flip(copy_nimg3D, axis=0)
+                #     nimg3D.affine[0][0] = nimg3D.affine[0][0]*sign_of_x_axis
+
                 sign_of_y_axis = np.sign(nimg3D.affine[1][1])
                 if sign_of_y_axis < 0:
-                    yflip = np.flip(nimg3D.get_data(), axis=1).copy()
+                    copy_nimg3D = np.flip(copy_nimg3D, axis=1).copy()
                     nimg3D.affine[1][1] = nimg3D.affine[1][1]*sign_of_y_axis
-                    nimg3D = nib.Nifti1Image(yflip, affine=nimg3D.affine, header=nimg3D.header)
+
+                nimg3D = nib.Nifti1Image(copy_nimg3D, affine=nimg3D.affine, header=nimg3D.header)
 
                 InputAffineX0 = nimg3D.affine[0][0]
                 InputAffineY1 = nimg3D.affine[1][1]
