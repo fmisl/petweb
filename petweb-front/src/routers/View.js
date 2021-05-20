@@ -172,7 +172,7 @@ class View extends Component {
     const IdxSlice = sliceList.findIndex(v=>v.fileID==counter.fileID)
     const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
     // console.log('prevProps.stackManager.length != stackManager.length', prevProps.stackManager.length != stackManager.length)
-    if (Completed){
+    if (true){
       if (prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
         console.log('componentDidUpdate with counter', counter, Completed)
         // const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
@@ -365,7 +365,7 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{position: "absolute", top:"140px", left:"300px",width:"1550px", height:"937px"}}>
-              {Completed ? <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>:<div style={{height:"90%", display:"flex", alignItems:"center", justifyContent:"center"}}><img src={viewer_spinner}/></div>}
+              {true ? <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>:<div style={{height:"90%", display:"flex", alignItems:"center", justifyContent:"center"}}><img src={viewer_spinner}/></div>}
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
