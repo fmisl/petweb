@@ -36,7 +36,7 @@ Parietal_R = np.arange(58,70,2)
 Temporal_L = np.arange(79,90,2)
 Temporal_R = np.arange(80,90,2)
 
-ROIS = [Frontal_L, Frontal_R, Cingulate_L, Cingulate_R, Striatum_L, Striatum_R, Thalamus_L, Thalamus_R, Occipital_L, Occipital_L, Parietal_L, Parietal_R, Temporal_L, Temporal_R]
+ROIS = [Frontal_L, Frontal_R, Cingulate_L, Cingulate_R, Striatum_L, Striatum_R, Thalamus_L, Thalamus_R, Occipital_L, Occipital_R, Parietal_L, Parietal_R, Temporal_L, Temporal_R]
 
 # C:\Users\dwnusa\workspace\3_project\PET-Web\SN_DL_v2\testResults\coregpy\06_22_10_10test\eval_gimg_test.img
 def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSize=None, tracer_name=None):
@@ -187,7 +187,7 @@ def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSi
             # Centil Scale for PIB: 100*(pib_ctx_val- 1.009)/1.067;
 
             centil_suvr[0, fnum] = np.sum(sn_img_idx * centil_crtx) / np.sum(centil_crtx)
-            centil_suvr[1, fnum] = 100*(np.sum(sn_img_idx_centil * centil_crtx) / np.sum(centil_crtx) - 1.009) / 1.067
+
 
             for cnt, roi in enumerate(ROIS):
                 roiimg = np.zeros_like(sn_img)
@@ -198,14 +198,25 @@ def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSi
                 aal_region[cnt, fnum, 0] = idx_sum
                 if tracer_name.find('FBB') is not -1:
                     aal_region[cnt, fnum, 1] = 153.4*(idx_sum_centil) - 154.9
+                    centil_suvr[1, fnum] = 153.4 * (
+                                np.sum(sn_img_idx_centil * centil_crtx) / np.sum(centil_crtx)) - 154.9
                 elif tracer_name.find('FBP') is not -1:
                     aal_region[cnt, fnum, 1] = 196.9*(idx_sum_centil) - 196.03
+                    centil_suvr[1, fnum] = 196.9 * (
+                            np.sum(sn_img_idx_centil * centil_crtx) / np.sum(centil_crtx)) - 196.03
                 elif tracer_name.find('FMM') is not -1:
                     aal_region[cnt, fnum, 1] = 121.42*(idx_sum_centil) - 121.16
+                    centil_suvr[1, fnum] = 121.42 * (
+                            np.sum(sn_img_idx_centil * centil_crtx) / np.sum(centil_crtx)) - 121.16
                 elif tracer_name.find('PIB') is not -1:
                     aal_region[cnt, fnum, 1] = 100 * (idx_sum_centil - 1.009) / 1.067
+                    centil_suvr[1, fnum] = 100 * (
+                            np.sum(sn_img_idx_centil * centil_crtx) / np.sum(centil_crtx) - 1.009) / 1.067
                 else:
-                    aal_region[cnt, fnum, 1] = 196.9*(idx_sum_centil) - 196.03
+                    # TODO give 0 and indicate not provide?
+                    aal_region[cnt, fnum, 1] = 196.9*(idx_sum_centil) - 196.9
+                    centil_suvr[1, fnum] = 196.9 * (
+                            np.sum(sn_img_idx_centil * centil_crtx) / np.sum(centil_crtx)) - 196.9
         except:
             print('PROVIDE normalized image!\n', file=sys.stderr)
             return 0
