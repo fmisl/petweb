@@ -97,10 +97,26 @@ class uploader(APIView):
 
                 print("Step2: create target folder ")
                 os.mkdir(target_folder)
-                nimg3D = nib.load(target_file) # 이미지 불러오기
-                InputAffineX0 = nimg3D.affine[0][0]
-                InputAffineY1 = nimg3D.affine[1][1]
-                InputAffineZ2 = nimg3D.affine[2][2]
+                origin_nimg3D = nib.load(target_file) # 이미지 불러오기
+                InputAffineX0 = origin_nimg3D.affine[0][0]
+                InputAffineY1 = origin_nimg3D.affine[1][1]
+                InputAffineZ2 = origin_nimg3D.affine[2][2]
+                # nimg3D
+
+
+                # angle1=i*8/180*np.pi
+                #
+                # # angle2=8/180*np.pi
+                # # c2=np.cos(angle2)
+                # # s2=np.sin(angle2)
+                #
+                c_in=0.5*np.array(origin_nimg3D.shape)
+                c_out=np.array(origin_nimg3D.shape)
+                transform=np.array([[1,0,0],[0,np.sign(InputAffineY1),0],[0,0,1]])
+                # # transform2=np.array([[c2,0,-s2],[0,1,0],[s2,0,c2]])
+                # # transform=transform1 # np.dot(transform1, transform2)
+                offset=c_in-c_out.dot(transform)
+                nimg3D=nd.interpolation.affine_transform(origin_nimg3D,transform.T,order=0,offset=offset,output_shape=2*c_out,cval=0.0,output=np.float32)
 
                 # img hdr 파일을 생성해서 각 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "input_"+myfile['fileID']+".img"))
