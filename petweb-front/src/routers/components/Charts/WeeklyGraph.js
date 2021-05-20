@@ -4,56 +4,56 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, Legend } from 'r
   const divStyle = {
     background: 'rgba(25, 25, 25, 0.15)',
   };
-const WeeklyGraph = ({recent7dates, NofPIBbyDay, NofFMMbyDay, NofFBBbyDay, NofFBPbyDay}) =>{
+const WeeklyGraph = ({recent7dates, NofPIBbyDay, NofFMMbyDay, NofFBPbyDay, NofFBBbyDay}) =>{
     const data = [
       {
         name: recent7dates[6],
         PIB: NofPIBbyDay[6],
         FMM: NofFMMbyDay[6],
-        FBP: NofFBBbyDay[6],
         FBB: NofFBPbyDay[6],
+        FBP: NofFBBbyDay[6],
       },
       {
         name: recent7dates[5],
         PIB: NofPIBbyDay[5],
         FMM: NofFMMbyDay[5],
-        FBP: NofFBBbyDay[5],
         FBB: NofFBPbyDay[5],
+        FBP: NofFBBbyDay[5],
       },
       {
         name: recent7dates[4],
         PIB: NofPIBbyDay[4],
         FMM: NofFMMbyDay[4],
-        FBP: NofFBBbyDay[4],
         FBB: NofFBPbyDay[4],
+        FBP: NofFBBbyDay[4],
       },
       {
         name: recent7dates[3],
         PIB: NofPIBbyDay[3],
         FMM: NofFMMbyDay[3],
-        FBP: NofFBBbyDay[3],
         FBB: NofFBPbyDay[3],
+        FBP: NofFBBbyDay[3],
       },
       {
         name: recent7dates[2],
         PIB: NofPIBbyDay[2],
         FMM: NofFMMbyDay[2],
-        FBP: NofFBBbyDay[2],
         FBB: NofFBPbyDay[2],
+        FBP: NofFBBbyDay[2],
       },
       {
         name: recent7dates[1],
         PIB: NofPIBbyDay[1],
         FMM: NofFMMbyDay[1],
-        FBP: NofFBBbyDay[1],
         FBB: NofFBPbyDay[1],
+        FBP: NofFBBbyDay[1],
       },
       {
         name: recent7dates[0],
         PIB: NofPIBbyDay[0],
         FMM: NofFMMbyDay[0],
-        FBP: NofFBBbyDay[0],
         FBB: NofFBPbyDay[0],
+        FBP: NofFBBbyDay[0],
       }
     ];
     return(
