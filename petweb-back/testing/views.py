@@ -728,6 +728,9 @@ class uploader(APIView):
         uploader_path = os.path.join(user_path, 'uploader')
         myfiles = request.FILES.getlist('myfiles')
 
+        if not os.path.exists(uploader_path):
+            os.mkdir(uploader_path)
+
         # Check if file attached
         if not myfiles:
             return Response(data="Files are not attached correctly", status=status.HTTP_400_BAD_REQUEST)
@@ -897,6 +900,9 @@ class uploader(APIView):
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         uploader_path = os.path.join(user_path, 'uploader')
+
+        if not os.path.exists(uploader_path):
+            os.mkdir(uploader_path)
 
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
