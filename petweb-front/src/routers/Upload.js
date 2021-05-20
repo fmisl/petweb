@@ -15,6 +15,8 @@ import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams,
 
 function Upload({toggleWorklist}) {
   const history =useHistory();
+  const [fetchState, setFetchState] = useState(true);
+  const [listID, setListID] = useState(null);
   const [dragState, setDragState] = useState(false);
   const fileList = useSelector(state => state.fileList);
   const counter = useSelector(state => state.counter);
@@ -24,7 +26,8 @@ function Upload({toggleWorklist}) {
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const [uploaderFileList, setUploaderFileList] = useState([]);
-  const [selectTracer, setSelectTracer] = useState('[11C]PIB');
+  const [selectTracer, setSelectTracer] = useState('[18F]FBP');
+  const [addToWorklist, setaddToWorklist] = useState(true);
   // useEffect(() => {
   //   console.log('useEffect called in Upload (uploaderFileList)',fileList)
   // },[fileList.length])
@@ -32,6 +35,7 @@ function Upload({toggleWorklist}) {
   const toggleUploader=(e)=>{
     //   e.preventDefault();
     setDragState(false)
+    setFetchState(true);
     if (isShowingUploader==false){
       deleteFiles()
       let formData = new FormData();
@@ -40,7 +44,7 @@ function Upload({toggleWorklist}) {
       postFiles(formData)
     } else {
       if (e.target.innerText == "Run"){
-        runFiles(selectTracer)
+        runFiles(selectTracer, addToWorklist)
       }
       else {
         deleteFiles()
@@ -49,15 +53,18 @@ function Upload({toggleWorklist}) {
     setIsShowingUploader(!isShowingUploader);
   };
 
-  const runFiles = async (selectTracer) =>{
+  const runFiles = async (selectTracer, addToWorklist) =>{
     const token = localStorage.getItem('token')
-    const res = await services.runFile({'token':token, 'obj':uploaderFileList, 'Tracer':selectTracer})
+    const res = await services.runFile({'token':token, 'obj':uploaderFileList, 'Tracer':selectTracer, 'addToWorklist':addToWorklist})
     const putList = res.data
-    // console.log(putList)
+    setFetchState(true);
+    setListID(null);
     dispatch(fetchItems(putList))
   }
 
   const deleteFiles = async () =>{
+    setFetchState(true);
+    setListID(null);
     const token = localStorage.getItem('token')
     const res = await services.deleteFile({'token':token})
     const uploadList = res.data
@@ -67,8 +74,12 @@ function Upload({toggleWorklist}) {
 
   const postFiles = async formData =>{
     const token = localStorage.getItem('token')
+    setListID(null);
+    setFetchState(true);
     const res = await services.postFile({'token':token, 'obj':formData})
+    setFetchState(false);
     const uploadList = res.data
+    // console.log(uploadList)
     setUploaderFileList(uploadList)
   }
 
@@ -88,7 +99,9 @@ function Upload({toggleWorklist}) {
     )
   }
   const viewClickHandler = async ()=>{
-    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex,
+      inputAffineX0:v.InputAffineParamsX0, inputAffineY1:v.InputAffineParamsY1, inputAffineZ2:v.InputAffineParamsZ2, 
+      outputAffineX0:v.OutputAffineParamsX0, outputAffineY1:v.OutputAffineParamsY1, outputAffineZ2:v.OutputAffineParamsZ2,currentC:50, currentS:50, currentA:50, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
     const lastIndex = nextStackManager.length-1;
     dispatch(openSelect());
     dispatch(addStack(nextStackManager));
@@ -99,7 +112,9 @@ function Upload({toggleWorklist}) {
     setTimeout(() => history.push('/view/'+lastIndex), 100);
   }
   const analysisClickHandler = async ()=>{
-    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+    const nextStackManager = [...stackManager, ...fileList.filter((v, i)=>v.Opened == false && v.Select == true).map(v=>{return {fileID:v.fileID, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex,
+      inputAffineX0:v.InputAffineParamsX0, inputAffineY1:v.InputAffineParamsY1, inputAffineZ2:v.InputAffineParamsZ2, 
+      outputAffineX0:v.OutputAffineParamsX0, outputAffineY1:v.OutputAffineParamsY1, outputAffineZ2:v.OutputAffineParamsZ2, currentC:50, currentS:50, currentA:50, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
     // const nextStackManager = [...stackManager, ...fileList.filter((v,i)=>{if(v.Opened == false && v.Select == true) return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})]
     const lastIndex = nextStackManager.length-1;
     dispatch(openSelect());
@@ -118,13 +133,13 @@ function Upload({toggleWorklist}) {
     dispatch(fetchItems(uploadList));
     // setFileList(uploadList)
   }
-
+  // console.log("upload: ", selectTracer)
   return (
     <div className="content">
       {/* <Sidebar />
       <Headerbar/> */}
       {/* <Worklist isShowing={isShowingWorklist} hide={toggleWorklist}/> */}
-      <Uploader selectTracer={selectTracer} setSelectTracer={setSelectTracer} fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
+      <Uploader setListID={setListID} listID={listID} setFetchState={setFetchState} fetchState={fetchState} selectTracer={selectTracer} setSelectTracer={setSelectTracer} setaddToWorklist={setaddToWorklist} fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>

@@ -33,7 +33,7 @@ export function postFile(data) {
   });
 }
 export function runFile(data) {
-  return axios.put(IPinUSE+"testing/uploader/",{obj:data.obj, Tracer:data.Tracer},{
+  return axios.put(IPinUSE+"testing/uploader/",{obj:data.obj, Tracer:data.Tracer, addToWorklist:data.addToWorklist},{
     headers:{
       'Authorization':'jwt '+data.token,
     }
@@ -67,4 +67,12 @@ export function ungroupIndividual(data) {
       'Authorization':'jwt '+data.token,
     },
   });
+}
+// return axios.put(IPinUSE+"testing/uploader/",{obj:data.obj, Tracer:data.Tracer, addToWorklist:data.addToWorklist},{
+export function downloadNifti(data) {
+  return axios.put(IPinUSE+"testing/export/",{selectedList:data.selectedList},{
+    headers:{
+    'Authorization':'jwt '+data.token
+    }
+  })
 }

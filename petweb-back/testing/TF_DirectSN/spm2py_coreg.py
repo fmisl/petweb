@@ -1,43 +1,68 @@
-import numpy as np
-
-from nipy import load_image
-from nipy.algorithms.registration import HistogramRegistration, resample
+from nibabel import load
 
 import time
+import numpy as np
+
+from dipy.align.imaffine import (MutualInformationMetric,
+                                 AffineRegistration,
+                                 transform_centers_of_mass)
+
+from dipy.align.transforms import TranslationTransform3D
+
+
 
 #################################
 # Caution: numpy must be <=1.17 #
 #################################
 
-def coreg(V2, V1 = r'.\testing\TF_DirectSN\src\fMNI152_T1_2mm.img'):
-    # execute only if run as a script
-    V1 = r'.\testing\TF_DirectSN\src\fMNI152_T1_2mm.img'
-    # V1 = r'C:\Users\dwnusa\workspace\3_project\PET-Web\SN_DL_v2\Downloads\pib_testfile.img'
-    # V2 = 'C:\\Users\\SKKang\\Downloads\\12903102_KANGKIJEONG_C11PiB_20161123.img'
+def coreg_mrc1(V2):
+    # Average template
+    V1 = r'C:\Users\dwnusa\workspace\petweb\petweb-back\testing\TF_DirectSN\src\output_averageTM2.nii'
 
-    similarity = 'crl1'
-    renormalize = False
-    interp = 'pv'
-    optimizer = 'powell'
-    tol = 1e-8
+    I = load(V2)
+    if len(I.shape) == 4:
+        I = I.slicer[:, :, :, 0]
 
-    I = load_image(V2)
-    J = load_image(V1)
+    J = load(V1)
+    if len(J.shape) == 4:
+        J = J.slicer[:, :, :, 0]
 
-    print('Setting up registration...')
+    static = J.get_fdata()
+    static_grid2world = J.affine
+
+    moving = I.get_fdata()
+    moving_grid2world = I.affine
+
+    # PET to MR dimension
     tic = time.time()
-    R = HistogramRegistration(I, J, similarity='nmi', interp='pv',
-                              renormalize=False, smooth=1)
-    T = R.optimize('rigid', optimizer=optimizer, ftol=1e-5)
-    toc = time.time()
-    print('  Registration time: %f sec' % (toc - tic))
 
-    # Resample source image
-    print('Resampling source image...')
-    tic = time.time()
-    # It = resample2(I, J.coordmap, T.inv(), J.shape)
-    It = resample(I, T.inv(), reference=J)
-    toc = time.time()
-    print('  Resampling time: %f sec' % (toc - tic))
+    c_of_mass = transform_centers_of_mass(static, static_grid2world,
+                                          moving, moving_grid2world)
 
-    return It.get_data()
+    nbins = 12
+    metric = MutualInformationMetric(nbins, sampling_proportion=80)
+
+    # Lower time cost: 10 10 5
+    level_iters = [1000, 100, 10]
+
+    sigmas = [3.0, 1.0, 1.0]
+    factors = [4, 2, 1]
+
+    affreg = AffineRegistration(metric=metric,
+                                level_iters=level_iters,
+                                sigmas=sigmas,
+                                factors=factors)
+
+    transform = TranslationTransform3D()
+    params0 = None
+    translation = affreg.optimize(static, moving, transform, params0, static_grid2world, moving_grid2world, starting_affine = c_of_mass.affine)
+
+
+    translation.domain_shape = (91, 109, 112)
+    translation.domain_grid2world = np.asarray([[-2, 0, 0, 90], [0, 2, 0, -126], [0, 0, 2, -92], [0, 0, 0, 1]])
+    t_pet = translation.transform(moving)
+
+    toc = time.time()
+    print('Elapsed time for registration: %f sec' % (toc - tic))
+
+    return t_pet

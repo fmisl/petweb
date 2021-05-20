@@ -2,7 +2,7 @@ import React, {useState, useEffect } from 'react';
 import '../App.css'
 import {useHistory, Redirect, Link, useLocation, useParams} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
-import {logout, increment, decrement, tab_location} from '../reduxs/actions';
+import {logout, increment, decrement, tab_location, fetchItems} from '../reduxs/actions';
 // import logoWhite from '../../images/logo-white.png'
 import LogoWhite from '../images/LogoWhite';
 import IconDashboard from '../images/IconDashboard';
@@ -92,7 +92,7 @@ function Sidebar() {
         {stackManagerLength !==0 ? <div className={`sidebar-grp1-menu ${pathname[1] == 'analysis' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr/'+counter.fileID);}}> {/*  dispatch(tab_location(3)); */}
           <div className={`sidebar-grp1-menu-title`}><IconAnalysis size={'40'} stroke={pathname[1] === 'analysis' ? "#118AF7" : "#ccccda"}/><li>Analysis</li></div>
           <div className={`sidebar-grp1-menu-item ${pathname[2] == 'suvr' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/suvr/'+counter.fileID);}}><li>SUVR</li></div> {/* dispatch(tab_location(3)); */}
-          <div className={`sidebar-grp1-menu-item ${pathname[2] == 'report' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/report/'+counter.fileID);}}><li>Report</li></div> {/* dispatch(tab_location(4)); */}
+          {/* <div className={`sidebar-grp1-menu-item ${pathname[2] == 'report' ? 'act' : ''}`} onClick={(e)=>{e.stopPropagation(); history.push('/analysis/report/'+counter.fileID);}}><li>Report</li></div> dispatch(tab_location(4)); */}
         </div>
         :<div className={`sidebar-grp1-menu-disable`}> {/*  dispatch(tab_location(3)); */}
           <div className={`sidebar-grp1-menu-title`}><IconAnalysis size={'40'} stroke={"gray"}/><li>Analysis</li></div>
@@ -104,7 +104,7 @@ function Sidebar() {
         </div>
       </ul>
       <ul className='sidebar-grp2'>
-        <div className={`sidebar-grp2-menu`} onClick={()=> {dispatch(logout());localStorage.removeItem("token");}} >
+        <div className={`sidebar-grp2-menu`} onClick={()=> {dispatch(fetchItems([]));dispatch(logout());localStorage.removeItem("token");}} >
           <div className={`sidebar-grp2-menu-title`}><IconLogout size={'40'} stroke={"#ccccda"}/><li>Logout</li></div>
         </div>
       </ul>

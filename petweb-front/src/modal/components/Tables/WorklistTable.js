@@ -135,19 +135,8 @@ class WorklistTable extends Component {
         const {data} = this.state;
         return(
             <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
-                    onClick={()=>{
-                        {props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}
-                        // this.setState({
-                        // // data:[...data, props.record]
-                        //     data: data.map(
-                        //     item => props.record.id === item.id ?
-                        //     { ...item, ...{Select:!props.record.Select} } // 새 객체를 만들어서 기존의 값과 전달받은 data 을 덮어씀
-                        //     : {...item} // 기존의 값을 그대로 유지
-                        //     ),
-                        // });
-                        // console.dir(props)
-                    }
-                }
+                    onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
+                    // onClick={()=>{{props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}}}
                     >
                 <div className={`WorklistTable-Select ${props.value && 'act'}`}>
                     <div></div>
@@ -161,7 +150,7 @@ class WorklistTable extends Component {
             <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
                 onClick={()=>{{props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}}}
                 onDoubleClick={()=>{
-                    const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                    const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
                     const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                     // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                     // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
@@ -183,7 +172,7 @@ class WorklistTable extends Component {
                 }}
                     >
                 <div className={`WorklistTable-Tracer ${props.value.slice(-3)}`}  >
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{props.value}</div>
+                    <div>&emsp;[<sup>{props.value.split(/[\[,\]]/)[1].slice(0,-1)}</sup>{props.value.split(/[\[,\]]/)[1].slice(-1)}]{props.value.split(/[\[,\]]/)[2]}</div>
                 </div>
             </div>
         );
@@ -194,7 +183,7 @@ class WorklistTable extends Component {
             <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
                         onClick={()=>{{props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}}}
                         onDoubleClick={()=>{
-                            const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})];
+                            const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
                             const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                             // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                             // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
@@ -226,7 +215,7 @@ class WorklistTable extends Component {
             // { render: this.renderSUVR, name: 'SUVR', displayName: "SUVR", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Age', displayName: "Age", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Age', displayName: "Birth Date", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'Sex', displayName: "Sex", inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
             // { render: this.renderClick, name: 'Update', displayName: "Update", inputFilterable: true, exactFilterable: false, sortable: true },
@@ -242,7 +231,7 @@ class WorklistTable extends Component {
                 fields={fields}
                 noRecordsMessage="There are no people to display"
                 noFilteredRecordsMessage="No people match your filters!"
-                pageSize={20}
+                pageSize={100}
             />
         );
     }

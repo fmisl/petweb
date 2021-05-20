@@ -6,6 +6,7 @@ import matplotlib
 matplotlib.use ('Agg') #<= this is required
 import matplotlib.pyplot as plt
 import nibabel as nib
+from scipy import ndimage as nd
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from PIL import Image
 from django.conf import settings
@@ -38,7 +39,7 @@ Temporal_R = np.arange(80,90,2)
 ROIS = [Frontal_L, Frontal_R, Cingulate_L, Cingulate_R, Striatum_L, Striatum_R, Thalamus_L, Thalamus_R, Occipital_L, Occipital_L, Parietal_L, Parietal_R, Temporal_L, Temporal_R]
 
 # C:\Users\dwnusa\workspace\3_project\PET-Web\SN_DL_v2\testResults\coregpy\06_22_10_10test\eval_gimg_test.img
-def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSize=None):
+def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSize=None, tracer_name=None):
 
     crbl_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", 'fcrbll_fnirt_thr50_wo_vermis.img')
     aalt_path = os.path.join(settings.BASE_DIR, "testing", "TF_DirectSN", "src", 'faalnumconvergion_paper.img')
@@ -133,42 +134,55 @@ def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSi
             sn_img_idx_centil = sn_img / sn_centil_crbl
 
             # Only produces cerebellum grey
-            new_image = nib.Nifti1Image(sn_img_idx, affine=save_header.affine)
+            sn_img_idx_blurred = nd.gaussian_filter(sn_img_idx, 8/2.355/2)
+            new_image = nib.Nifti1Image(sn_img_idx_blurred, affine=save_header.affine)
 
             fsaverage = datasets.fetch_surf_fsaverage()
             texture = surface.vol_to_surf(new_image, fsaverage.pial_right)
 
             plt.rcParams["figure.figsize"] = (4, 3)
-            fig = plotting.plot_surf(fsaverage.infl_right, texture, hemi='right',
-                                     threshold=threshold, bg_map=fsaverage.sulc_right, vmax=vmax, vmin=0, title=None,
-                                     cmap='black_red', view='lateral')
-            full_path = os.path.join(case_fullpath, '_rlat.png')
-            fig.savefig(full_path, format='png', transparent=True)
-            plt.close(fig)
+            for th in np.arange(0.6, 3.0, 0.5):
+                # [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]:
+                float_th=round(th,1)
+                fig = plotting.plot_surf(fsaverage.infl_right, texture, hemi='right',
+                                         threshold=float_th, bg_map=fsaverage.sulc_right, vmax=vmax, vmin=0, title=None,
+                                         cmap='black_red', view='lateral')
+                full_path = os.path.join(case_fullpath, '_rlat_'+str(float_th)+'.png')
+                fig.savefig(full_path, format='png', transparent=True)
+            plt.close('all')
 
             plt.rcParams["figure.figsize"] = (4, 3)
-            fig = plotting.plot_surf(fsaverage.infl_left, texture, hemi='left',
-                                     threshold=threshold, bg_map=fsaverage.sulc_left, vmax=vmax, vmin=0, title=None,
-                                     cmap='black_red', view='lateral')
-            full_path = os.path.join(case_fullpath, '_llat.png')
-            fig.savefig(full_path, format='png', transparent=True)
-            plt.close(fig)
+            for th in np.arange(0.6, 3.0, 0.5):
+                # [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]:
+                float_th=round(th,1)
+                fig = plotting.plot_surf(fsaverage.infl_left, texture, hemi='left',
+                                         threshold=float_th, bg_map=fsaverage.sulc_left, vmax=vmax, vmin=0, title=None,
+                                         cmap='black_red', view='lateral')
+                full_path = os.path.join(case_fullpath, '_llat_'+str(float_th)+'.png')
+                fig.savefig(full_path, format='png', transparent=True)
+            plt.close('all')
 
             plt.rcParams["figure.figsize"] = (4, 3)
-            fig = plotting.plot_surf(fsaverage.infl_right, texture, hemi='right',
-                                     threshold=threshold, bg_map=fsaverage.sulc_right, vmax=vmax, vmin=0, title=None,
-                                     cmap='black_red', view = 'medial')
-            full_path = os.path.join(case_fullpath, '_rmed.png')
-            fig.savefig(full_path, format='png', transparent=True)
-            plt.close(fig)
+            for th in np.arange(0.6, 3.0, 0.5):
+                # [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]:
+                float_th=round(th,1)
+                fig = plotting.plot_surf(fsaverage.infl_right, texture, hemi='right',
+                                         threshold=float_th, bg_map=fsaverage.sulc_right, vmax=vmax, vmin=0, title=None,
+                                         cmap='black_red', view = 'medial')
+                full_path = os.path.join(case_fullpath, '_rmed_'+str(float_th)+'.png')
+                fig.savefig(full_path, format='png', transparent=True)
+            plt.close('all')
 
             plt.rcParams["figure.figsize"] = (4, 3)
-            fig = plotting.plot_surf(fsaverage.infl_left, texture, hemi='left',
-                                     threshold=threshold, bg_map=fsaverage.sulc_left, vmax=vmax, vmin=0, title=None,
-                                     cmap='black_red', view = 'medial')
-            full_path = os.path.join(case_fullpath, '_lmed.png')
-            fig.savefig(full_path, format='png', transparent=True)
-            plt.close(fig)
+            for th in np.arange(0.6, 3.0, 0.5):
+                # [0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]:
+                float_th=round(th,1)
+                fig = plotting.plot_surf(fsaverage.infl_left, texture, hemi='left',
+                                         threshold=float_th, bg_map=fsaverage.sulc_left, vmax=vmax, vmin=0, title=None,
+                                         cmap='black_red', view = 'medial')
+                full_path = os.path.join(case_fullpath, '_lmed_'+str(float_th)+'.png')
+                fig.savefig(full_path, format='png', transparent=True)
+            plt.close('all')
 
             # Centil Scale for PIB: 100*(pib_ctx_val- 1.009)/1.067;
 
@@ -182,8 +196,14 @@ def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSi
                 idx_sum = np.sum(sn_img_idx * roiimg) / np.sum(roiimg)
                 idx_sum_centil = np.sum(sn_img_idx_centil * roiimg) / np.sum(roiimg)
                 aal_region[cnt, fnum, 0] = idx_sum
-                if oriSize == 344*344*127:
-                    aal_region[cnt, fnum, 1] = 100*(idx_sum_centil - 1.009) / 1.067
+                if tracer_name.find('FBB') is not -1:
+                    aal_region[cnt, fnum, 1] = 153.4*(idx_sum_centil) - 154.9
+                elif tracer_name.find('FBP') is not -1:
+                    aal_region[cnt, fnum, 1] = 196.9*(idx_sum_centil) - 196.03
+                elif tracer_name.find('FMM') is not -1:
+                    aal_region[cnt, fnum, 1] = 121.42*(idx_sum_centil) - 121.16
+                elif tracer_name.find('PIB') is not -1:
+                    aal_region[cnt, fnum, 1] = 100 * (idx_sum_centil - 1.009) / 1.067
                 else:
                     aal_region[cnt, fnum, 1] = 196.9*(idx_sum_centil) - 196.03
         except:
@@ -194,7 +214,7 @@ def _quantification(sndir, case_fullpath, maxval=100, threshold=1, vmax=3, oriSi
     # return aal_region_norm, aal_region, aal_count
 
     # Current: only produce regional SUVR values and Centiloid SUVR
-    return aal_region, centil_suvr
+    return aal_region, centil_suvr, sn_crbl_av
 
 # if __name__ == "__main__":
 #     # _quantification(sndir=r'D:\DNN_directSN\testResults\onlySeg_paper_Affine\02_17_07_09test_step1')

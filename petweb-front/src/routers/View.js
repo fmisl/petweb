@@ -5,6 +5,11 @@ import * as actions from '../reduxs/actions';
 import * as cornerstone from "cornerstone-core";
 import '../App.css';
 import {useSelector, useDispatch} from 'react-redux';
+import viewer_spinner from '../images/gif/viewer_spinner3.gif'
+import IconPlayPNG from '../images/play.png';
+import IconReset from '../images/IconReset';
+import IconPause from '../images/IconPause';
+import IconPlay from '../images/IconPlay';
 import IconCrosshair from '../images/IconCrosshair';
 import IconCrosshairOff from '../images/IconCrosshairOff';
 import IconInvert from '../images/IconInvert';
@@ -19,12 +24,25 @@ import * as services from '../services/fetchApi'
 import Home from './components/Cornerstone/Home'
 import {login, logout, increment, decrement, loadItems, loadSlices, profile, tab_location, groupItem, addStack, updateStack, removeStack, fetchItems} from '../reduxs/actions';
 
+import InputRange from 'react-input-range';
+import "react-input-range/lib/css/index.css";
 
 // function View({}) {
 class View extends Component {
   state = {
+    selectedColormap: 'gray',
+    value5: {
+      min: 0,
+      max: 32767,
+    },
+    suvr_max:0, 
+    suvr_min:0,
+    widthSUVR:0,
+    centerSUVR:0,
+    currentStepIndex: 20,
     username: localStorage.getItem('username'),
     showMenu: false,
+    isPlayed: false,
     isCrosshaired: true,
     isInverted: true,
     isSNed: true,
@@ -32,10 +50,10 @@ class View extends Component {
     imageIdC: [],
     imageIdS: [],
     imageIdA: [],
-    stackCoronal:{},
-    stackSaggital:{},
-    stackAxial:{},
-    stackMip:{},
+    // stackCoronal:{},
+    // stackSaggital:{},
+    // stackAxial:{},
+    // stackMip:{},
     petCStack: {},
     petSStack: {},
     petAStack: {},
@@ -43,26 +61,26 @@ class View extends Component {
   componentDidMount(){
     const {username, inoutSelect} = this.state;
     const {counter, stackManager} = this.props;
-    const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
-    const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
-    const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
-    const imageIdM = [...Array(45).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'));
-    const stackCoronal = {
-      imageIds: imageIdC,
-      currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC
-    };
-    const stackSaggital = {
-      imageIds: imageIdS,
-      currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS
-    };
-    const stackAxial = {
-      imageIds: imageIdA,
-      currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
-    };
-    const stackMip = {
-      imageIds: imageIdM,
-      currentImageIdIndex: 0
-    };
+    // const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
+    // const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
+    // const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
+    // const imageIdM = [...Array(45).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'));
+    // const stackCoronal = {
+    //   imageIds: imageIdC,
+    //   currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC
+    // };
+    // const stackSaggital = {
+    //   imageIds: imageIdS,
+    //   currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS
+    // };
+    // const stackAxial = {
+    //   imageIds: imageIdA,
+    //   currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
+    // };
+    // const stackMip = {
+    //   imageIds: imageIdM,
+    //   currentImageIdIndex: 0
+    // };
 
     const petCStack = {
       // patient: "anonymous",
@@ -121,13 +139,13 @@ class View extends Component {
       }
     };
     this.setState({
-      imageIdC,
-      imageIdS,
-      imageIdA,
-      stackCoronal,
-      stackSaggital,
-      stackAxial,
-      stackMip,
+      // imageIdC,
+      // imageIdS,
+      // imageIdA,
+      // stackCoronal,
+      // stackSaggital,
+      // stackAxial,
+      // stackMip,
       petCStack,
       petSStack,
       petAStack,
@@ -135,6 +153,7 @@ class View extends Component {
     })
   }
   setShowMenu = (value) =>{ this.setState({showMenu:value}) }
+  setIsPlayed = (value) =>{ this.setState({isPlayed:value}) }
   setIsCrosshaired = (value) =>{ this.setState({isCrosshaired:value}) }
   setIsInverted = (value) =>{ this.setState({isInverted:value}) }
   setIsSNed = (value) =>{ this.setState({isSNed:value}) }
@@ -145,177 +164,296 @@ class View extends Component {
   // const [isSNed, setIsSNed] = useState(true)
   // const [inoutSelect, setInoutSelect] = useState("output")
   componentDidUpdate(prevProps, prevState){
-    const {isSNed, username} = this.state;
-    const {counter, stackManager, sliceList} = this.props;
+    const {isSNed, username, isInverted} = this.state;
+    const {counter, stackManager, sliceList, fileList} = this.props;
     const {imageLoader, metaDataLoader} = this;
     const inoutSelect = isSNed ? "output":"input"
+    const invertSelect = isInverted ? "invert":"right"
     const IdxSlice = sliceList.findIndex(v=>v.fileID==counter.fileID)
+    const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
     // console.log('prevProps.stackManager.length != stackManager.length', prevProps.stackManager.length != stackManager.length)
-    if (prevProps.counter != counter || prevState.isSNed != isSNed || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
-      console.log('componentDidUpdate with counter', counter)
-      const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
-      const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
-      const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
-      const imageIdM = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'));
-      const stackCoronal = {
-        imageIds: imageIdC,
-        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC
-      };
-      const stackSaggital = {
-        imageIds: imageIdS,
-        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS
-      };
-      const stackAxial = {
-        imageIds: imageIdA,
-        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
-      };
-      const stackMip = {
-        imageIds: imageIdM,
-        currentImageIdIndex: 0
-      };
-      const petCStack = {
-        imageIds: [...Array(109).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+i)),
-        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
-        options: {
-          opacity: 1,
-          visible: true,
-          viewport: {
-            colormap: this.state.isCrosshaired ? 'hot':'jet',
-          },
-          name: 'PET'
-        }
-      };
-      const petSStack = {
-        imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+i)),
-        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
-        options: {
-          opacity: 1,
-          visible: true,
-          viewport: {
-            colormap: 'hot',
-          },
-          name: 'PET'
-        }
-      };
-      const petAStack = {
-        imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/axial/"+i)),
-        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
-        options: {
-          opacity: 1,
-          visible: true,
-          viewport: {
-            colormap: 'gray',
-          },
-          name: 'PET'
-        }
-      };
-      const petMStack = {
-        // IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'
-        imageIds: [...Array(45).keys()].map((v,i)=>("pet:output/"+IdxSlice+"/mip/"+i)),
-        currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
-        options: {
-          opacity: 1,
-          visible: true,
-          viewport: {
-            colormap: 'gray',
-          },
-          name: 'PET'
-        }
-      };
+    if (Completed){
+      if (prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
+        console.log('componentDidUpdate with counter', counter, Completed)
+        // const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
+        // const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
+        // const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
+        // const imageIdM = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'));
+        // const stackCoronal = {
+        //   imageIds: imageIdC,
+        //   currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC
+        // };
+        // const stackSaggital = {
+        //   imageIds: imageIdS,
+        //   currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS
+        // };
+        // const stackAxial = {
+        //   imageIds: imageIdA,
+        //   currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
+        // };
+        // const stackMip = {
+        //   imageIds: imageIdM,
+        //   currentImageIdIndex: 0
+        // };
+        const petCStack = {
+          imageIds: [...Array(109+20).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+invertSelect+"/"+i)),
+          currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
+          options: {
+            opacity: 1,
+            visible: true,
+            viewport: {
+              colormap: 'gray',
+            },
+            name: 'PET'
+          }
+        };
+        const petSStack = {
+          imageIds: [...Array(91+40).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+invertSelect+"/"+i)),
+          currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
+          options: {
+            opacity: 1,
+            visible: true,
+            viewport: {
+              colormap: 'gray',
+            },
+            name: 'PET'
+          }
+        };
+        const petAStack = {
+          imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/axial/"+invertSelect+"/"+i)),
+          currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
+          options: {
+            opacity: 1,
+            visible: true,
+            viewport: {
+              colormap: 'gray',
+            },
+            name: 'PET'
+          }
+        };
+        const petMStack = {
+          // IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'
+          imageIds: [...Array(45).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/mip/"+invertSelect+"/"+i)),
+          currentImageIdIndex: 0,
+          options: {
+            opacity: 1,
+            visible: true,
+            viewport: {
+              colormap: 'gray',
+            },
+            name: 'PET'
+          }
+        };
 
-      try{
-        console.log('imageLoader update from sliceList B64Data')
-        const isExistSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
-        if (sliceList.length != 0 && stackManager.length != 0 && isExistSlice >= 0){
-          console.log('isExistSlice ',isExistSlice)
-          imageLoader(inoutSelect);
-          metaDataLoader(inoutSelect);
-          this.setState({
-            inoutSelect,
-            imageIdC,
-            imageIdS,
-            imageIdA,
-            stackCoronal,
-            stackSaggital,
-            stackAxial,
-            stackMip,
-            petCStack,
-            petSStack,
-            petAStack,
-            petMStack,
-          })
+        try{
+          console.log('imageLoader update from sliceList B64Data')
+          const isExistSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
+          if (sliceList.length != 0 && stackManager.length != 0 && isExistSlice >= 0){
+
+            console.log('isExistSlice ',isExistSlice)
+            imageLoader(inoutSelect, isInverted);
+            metaDataLoader(inoutSelect, isInverted);
+            this.setState({
+              inoutSelect,
+              // imageIdC,
+              // imageIdS,
+              // imageIdA,
+              // stackCoronal,
+              // stackSaggital,
+              // stackAxial,
+              // stackMip,
+              petCStack,
+              petSStack,
+              petAStack,
+              petMStack,
+            })
+          }
+        } catch (e){
+          console.log('imageLoader metaDataLoader fail')
         }
-      } catch (e){
-        console.log('imageLoader metaDataLoader fail')
+        // console.log("2");
+        // this.metaDataLoader();
       }
-      // console.log("2");
-      // this.metaDataLoader();
     }
   }
 
-  render() {
-    const {setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady} = this;
-    const {dataReady, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack} = this.state;
+  handleInputChange = e => {
+    this.setState({ currentStepIndex: e.currentTarget.value });
+  };
+  handleWindowChange = (newMax,newMin) => {
+    // this.setState({ currentStepIndex: e.currentTarget.value });
+    const {value5}=this.state;
+    // console.log('handleWindowChange:', newMax, newMin)
+    if (value5.min != newMin || value5.max != newMax){
+      this.setState({
+        value5:{
+          max: newMax,
+          min: newMin,
+        }
+      })
+    }
+    // if (this.state.isInverted){
+    //   console.log('handleWindowChange update')
+    //   const newWC = WC;
+    //   // console.log('handleWindowChange1(WC, newWC):', WC, newWC)
+    //   // const newMax=Math.min(32767,32767 - (WC-WW/2));
+    //   // const newMin=Math.max(0,32767 - (WC+WW/2));
+    //   const newMax=Math.min(32767,newWC+WW/2);
+    //   const newMin=Math.max(0,newWC-WW/2);
+    //   if (value5.min != newMin || value5.max != newMax){
+    //     this.setState({
+    //       value5:{
+    //         max: newMax,
+    //         min: newMin,
+    //       }
+    //     })
+    //   }
+
+    // } else {
+    //   const newMax=Math.min(32767,WC+WW/2);
+    //   const newMin=Math.max(0,WC-WW/2);
+    //   if (value5.min != newMin || value5.max != newMax){
+    //     this.setState({
+    //       value5:{
+    //         max: newMax,
+    //         min: newMin,
+    //       }
+    //     })
+    //   }
+    // }
+  };
+  niftiDownload = async () =>{
     const {counter, stackManager} = this.props;
+    console.log('download nifti')
+    const token = localStorage.getItem('token')
+    const username = localStorage.getItem('username')
+    const fileID = stackManager?.[counter.tabX].fileID;
+    const downloadUrl = IPinUSE+'result/download/'+username+'/database/'+fileID+"/"+"output_"+fileID+".nii";
+    // // res = await services.TokenVerify({'token':token})
+    // const res = await services.downloadNifti({'token':token});
+    setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
+  }
+  changeColormap = (event)=>{
+    this.setState({selectedColormap: event.target.value});
+  }
+  updateSUVR_min_max = (suvr_max, suvr_min, widthSUVR, centerSUVR)=>{
+    // console.log('ww/wc:', suvr_max,suvr_min,widthSUVR,centerSUVR)
+    // this.setState({
+    //   suvr_max,
+    //   suvr_min,
+    //   widthSUVR,
+    //   centerSUVR,
+    // });
+  }
+  render() {
+    const {updateSUVR_min_max, setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed, handleWindowChange, niftiDownload, changeColormap} = this;
+    const {suvr_max, suvr_min, widthSUVR, centerSUVR, selectedColormap, value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
+    // const {} = this.state;
+    const {counter, stackManager, fileList} = this.props;
+    // console.log(this.state.selectedColormap)
+    // const suvr_max = isSNed ? out_suvr_max:in_suvr_max;
+    // const suvr_min = Math.max(0, isSNed ? out_suvr_min:in_suvr_min);
+    // const widthSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowWidth/32767)*(suvr_max-suvr_min)):1;
+    // const centerSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowCenter/32767)*(suvr_max-suvr_min)):1;
+    // const Completed = counter?.fileID && fileList.filter((v,i)=>{v.fileID == counter.fileID})[0];
+    // console.log(counter.fileID, fileList.filter((v,i)=>{v.fileID == counter.id}));
+    const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
         {/* <Sidebar />
         <Headerbar/> */}
         <div className="content-page">
           {/* <div className="view-box"> */}
-            <div style={{background:"black",position: "absolute", top:"170px", left:"300px",width:"100%",height:"100%", width:"1550px", height:"850px"}}>
-              <ImageViewer isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
+            <div style={{position: "absolute", top:"140px", left:"300px",width:"1550px", height:"937px"}}>
+              {Completed ? <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>:<div style={{height:"90%", display:"flex", alignItems:"center", justifyContent:"center"}}><img src={viewer_spinner}/></div>}
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
 
           <div  className="content-title">
-            <div className="content-info" >
-              <div style={{marginRight:"25px"}}>
+            <div className="content-info" style={{border:'0px red solid'}}>
+              <div style={{marginRight:"10px", overflow:"hidden", width:"160px", height:"60px"}}>
                 Patient Name
-                <div className="content-var">Daewoon Kim</div>
+                <div className="content-var">{stackManager?.[counter.tabX].PatientName}</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
+              <div style={{margin: "0px 10px"}}>
                 Patient ID
-                <div className="content-var" >2020-0000</div>
+                <div className="content-var" >{stackManager?.[counter.tabX].PatientID}</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
-                Age
-                <div className="content-var" >50</div>
+              <div style={{margin: "0px 10px"}}>
+                Birth Date
+                <div className="content-var" >{stackManager?.[counter.tabX].Age}</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
+              <div style={{margin: "0px 10px"}}>
                 Sex
-                <div className="content-var" >Male</div>
+                <div className="content-var" >{stackManager?.[counter.tabX].Sex}</div>
               </div>
             </div>
-            <div style={{display:"flex", color:"white"}}>
+            <div style={{display:"flex", color:"white", border:'0px red solid'}}>
+              <div className="view-btn" onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
+                &nbsp; MIP: &nbsp;
+              </div>
+              <div className="view-btn" onClick={()=>setIsPlayed(!isPlayed)} style={{marginLeft:"0px"}} >
+                {isPlayed ? <IconPause className="view-icon"/>:<IconPlay className="view-icon"/>}
+              </div>
+              <div className="view-btn opacity-bar" style={{marginLeft:"0px"}}>
+                <input type="range" style={{height:"100%", width:"100%"}} value={this.state.currentStepIndex} onInput={this.handleInputChange} step="1" min="0" max="50"/>
+              </div>
+              <div className="view-btn" onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
+                &nbsp; SUVR:
+              </div>
+              <div className="view-btn opacity-bar" style={{marginLeft:"0px"}} >
+                {<InputRange
+                    draggableTrack
+                    step={1000}
+                    maxValue={32767}
+                    minValue={0}
+                    value={this.state.value5}
+                    onChange={value => 
+                        {
+                          this.setState({ 
+                            value5:{
+                              max:value.max,
+                              min:value.min,
+                            }})
+                          console.log('InputRange:', value)
+                        }
+                      }
+                  />}
+              </div>
+              <div className="view-btn" style={{marginLeft:"0px"}} onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
+                <IconReset className="view-icon" />
+              </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsInverted(!isInverted)}>{isInverted ? <IconInvert className="view-icon"/>:<IconInvertOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsSNed(!isSNed)}>{isSNed ? <IconSN className="view-icon"/>:<IconSNOff className="view-icon"/>}</div>
-              <div className="view-btn opacity-bar" >
+              {/* <div className="view-btn opacity-bar" >
                 Opacity:&nbsp;
                 <input type="range" style={{height:"100%", width:"100%"}} value="50" step="1" min="0" max="100"/>
-              </div>
+              </div> */}
               <div className="view-btn colormap-select">
-                <select id="colormap" name="colormap" style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
-                  <option value="hot" selected>Hot (colormap)</option>
+                <select id="colormap" name="colormap" onChange={this.changeColormap} value={this.state.selectedColormap}
+                style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
+                  <option value="gray">Gray (colormap)</option>
+                  <option value="hot" >Hot (colormap)</option>
+                  {/* <option value="hot_inverted" >Hot_inverted (colormap)</option> */}
                   <option value="jet">Jet (colormap)</option>
-                  <option value="gray" >Gray (colormap)</option>
+                  {/* <option value="jet_inverted">Jet_inverted (colormap)</option> */}
                 </select>
               </div>
-              <div className="view-btn template-select">
+              {/* <div className="view-btn template-select">
                 <select id="template" name="template" style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
                   <option value="MNI" selected>MNI305</option>
                 </select>
-              </div>
+              </div> */}
               <div className="view-btn" onClick={(e)=>{e.stopPropagation();setShowMenu(!showMenu)}}>
                 <IconBurger className={`view-icon ${showMenu && 'show'}`}/>
                 {showMenu && 
                   <div className="view-menu" onClick={(e)=>e.stopPropagation()}>
-                    <div>Save</div>
-                    <div>Delete</div>
-                    <div>Export PNG</div>
-                    <div>Export Nifti</div>
+                    {/* <div>Save</div> */}
+                    {/* <div>Delete</div> */}
+                    {/* <div>Export PNG</div> */}
+                    <div onClick={niftiDownload}>Export Nifti</div>
                   </div>}
               </div>
             </div>
@@ -334,7 +472,7 @@ class View extends Component {
       </div>
     );
   }
-  imageLoader = async (inoutSelect) => {
+  imageLoader = async (inoutSelect, isInverted) => {
 
     "use strict";
 
@@ -377,23 +515,49 @@ class View extends Component {
       }
       return bufView;
     }
+    function str2InvertedpixelData(str) {
+      var buf = new ArrayBuffer(str.length*2); // 2 bytes for each char
+      var bufView = new Int16Array(buf);
+      var index = 0;
+      for (var i=0, strLen=str.length; i<strLen; i+=2) {
+        var lower = str.charCodeAt(i);
+        var upper = str.charCodeAt(i+1);
+        // debugger;
+        bufView[index] = 32767-Number(lower + (upper <<8));
+        index++;
+      }
+      return bufView;
+    }
 
     var min1 = 0;
     var max1 = 0;
     function getPixelData(base64PixelData)
     {
-      if(!base64PixelData) debugger;
+      // if(!base64PixelData) debugger;
       var pixelDataAsString = window.atob(base64PixelData);
       var pixelData = str2pixelData(pixelDataAsString);
-      // console.log("min:", pixelData.length);
+      // console.log("pixelData:", pixelData);
+      return pixelData;
+    }
+    function getInvertedPixelData(base64PixelData)
+    {
+      // if(!base64PixelData) debugger;
+      var pixelDataAsString = window.atob(base64PixelData);
+      var pixelData = str2InvertedpixelData(pixelDataAsString);
+      // console.log("pixelData type:", typeof(pixelData), pixelData);
       return pixelData;
     }
     const IdxSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
     console.log('imageLoader with counter and IdxSlice',this.props.counter,IdxSlice)
     var petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial' && v.Type==inoutSelect)[i].B64Data)));
-    var petCoronalOutputData = [...Array(109).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].B64Data)));
-    var petSagittalOutputData = [...Array(91).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
-    var petMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type=="output")[i].B64Data)));
+    var petCoronalOutputData = [...Array(109+20).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].B64Data)));
+    var petSagittalOutputData = [...Array(91+40).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
+    var petMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
+
+    var Inv_petAxialOutputData = [...Array(91).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='axial' && v.Type==inoutSelect)[i].B64Data)));
+    var Inv_petCoronalOutputData = [...Array(109+20).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='coronal' && v.Type==inoutSelect)[i].B64Data)));
+    var Inv_petSagittalOutputData = [...Array(91+40).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
+    var Inv_petMipOutputData = [...Array(45).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
 
     function getPETImage(imageId) {
       let identifier=imageId.split(/[:,/]+/)
@@ -401,14 +565,15 @@ class View extends Component {
       let inout = identifier[1]//output
       let slice = identifier[2] //0
       let direction=identifier[3]
-      let id=Number(identifier[4])
+      let Inverter=identifier[4]
+      let id=Number(identifier[5])
       var width = 91;
       var height = 91;
-      if(direction === 'coronal') {width=91; height=91}
-      else if(direction === 'sagittal') {width=109; height=91}
-      else if(direction === 'axial') {width=91; height=109}
-      // else if (direction === "mip"){width = 91; height = 109}
-      else if(direction === 'mip') {width=109; height=91}
+      if(direction === 'coronal') {width=91+40; height=91}
+      else if(direction === 'sagittal') {width=109+20; height=91}
+      else if(direction === 'axial') {width=91+40; height=109+20}
+      else if (direction === "mip"){width = 109+20; height = 91}
+      // else if(direction === 'mip'){width = 69; height = 51}
       // console.log("ID: ", ID, " Direction: ", Direction, " w/h: ", width,"/",height)
 
       var image = {
@@ -433,10 +598,18 @@ class View extends Component {
 
       function getPixelData()
       {
-        if (direction === "coronal"){return petCoronalOutputData[id]}
-        else if (direction === "sagittal"){return petSagittalOutputData[id]}
-        else if (direction === "axial"){return petAxialOutputData[id]}
-        else if (direction === "mip"){return petMipOutputData[id]}
+        if (Inverter === "right"){
+          if (direction === "coronal"){return petCoronalOutputData[id]}
+          else if (direction === "sagittal"){return petSagittalOutputData[id]}
+          else if (direction === "axial"){return petAxialOutputData[id]}
+          else if (direction === "mip"){return petMipOutputData[id]}
+        } else {
+          if (direction === "coronal"){return Inv_petCoronalOutputData[id]}
+          else if (direction === "sagittal"){return Inv_petSagittalOutputData[id]}
+          else if (direction === "axial"){return Inv_petAxialOutputData[id]}
+          else if (direction === "mip"){return Inv_petMipOutputData[id]}
+        }
+        // else if (direction === "mip" && inout === "output"){return petMipOutputData[id]}
 
         throw "unknown imageId";
       }
@@ -463,7 +636,8 @@ class View extends Component {
       let inout = identifier[1]//output
       let slice = identifier[2] //0
       let direction=identifier[3]
-      let id=Number(identifier[4])
+      let Inverter=identifier[4]
+      let id=Number(identifier[5])
       let scale = 1;
       let cX = 1;
       let cY = 1;
@@ -477,11 +651,11 @@ class View extends Component {
       // let ID = identifier[identifier.length-1]
       let width = 91;
       let height = 91;
-      if (direction === "coronal"){width = 91; height = 91}
-      else if (direction === "sagittal"){width = 109; height = 91}
-      else if (direction === "axial"){width = 91; height = 109}
-      // else if (direction === "mip"){width = 91; height = 109}
-      else if (direction === "mip"){width = 109; height = 91}
+      if (direction === "coronal"){width = 91+40; height = 91}
+      else if (direction === "sagittal"){width = 109+20; height = 91}
+      else if (direction === "axial"){width = 91+40; height = 109+20}
+      else if (direction === "mip"){width = 109+20; height = 91}
+      // else if (direction === "mip"){width = 69; height = 51}
 
       // console.log(identifier, type)
       if(type === 'imagePlaneModule') {
@@ -489,7 +663,7 @@ class View extends Component {
               return {
                   frameOfReferenceUID: '1.2.3.4.5',
                   rows: 91,
-                  columns: 91,
+                  columns: 91+40,
                   rowCosines:     [ 0,  1,  0], 
                   columnCosines:  [ 0,  0,  1],
                   imagePositionPatient: [scale*id+cY, cX, cZ], //coronal plane에서 [xxx, sagittal line, axial line]
@@ -501,7 +675,7 @@ class View extends Component {
               return {
                   frameOfReferenceUID: '1.2.3.4.5',
                   rows: 91,
-                  columns: 109,
+                  columns: 109+20,
                   rowCosines:     [1,  0,  0], 
                   columnCosines:  [ 0,  0, 1],
                   imagePositionPatient: [cY, scale*id+cX, cZ], //sagittal plane에서 [coroanl line, xxx, axial line]
@@ -512,11 +686,11 @@ class View extends Component {
           else if (direction === 'axial'){
               return {
                   frameOfReferenceUID: '1.2.3.4.5',
-                  rows: 109,
-                  columns: 91,
+                  rows: 109+20,
+                  columns: 91+40,
                   rowCosines:     [ 0, 1,  0], 
                   columnCosines:  [ -1,  0,  0],
-                  imagePositionPatient: [cY+109, cX, -scale*id+cZ+91], //axial plane에서  [coronal line, sagittal line, xxx]
+                  imagePositionPatient: [cY+109+20, cX, -scale*id+cZ+91], //axial plane에서  [coronal line, sagittal line, xxx]
                   columnPixelSpacing: 1,
                   rowPixelSpacing: 1,
               }
@@ -548,6 +722,7 @@ const mapStateToProps = (state) => ({
   isLogged:state.isLogged,
   stackManager:state.stackManager,
   sliceList: state.sliceList,
+  fileList: state.fileList,
 });
 
 const mapDispatchToProps = (dispatch) => ({

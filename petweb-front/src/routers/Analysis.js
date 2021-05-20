@@ -91,10 +91,22 @@ class Analysis extends Component {
   componentWillUnmount() {
     ReactDOM.findDOMNode(this).removeEventListener('wheel', this.handleWheel);
   }
+  niftiDownload = async () =>{
+    const {counter, stackManager} = this.props;
+    console.log('download nifti')
+    const token = localStorage.getItem('token')
+    const username = localStorage.getItem('username')
+    const fileID = stackManager?.[counter.tabX].fileID;
+    const downloadUrl = IPinUSE+'result/download/'+username+'/database/'+fileID+"/"+"output_"+fileID+".nii";
+    // // res = await services.TokenVerify({'token':token})
+    // const res = await services.downloadNifti({'token':token});
+    setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
+  }
   render(){
     const {subRegion} = this.state;
+    const {niftiDownload} = this;
     // console.log('state: ', subRegion)
-    const { counter, isLogged, increment, decrement, listSelected } = this.props;
+    const { counter, isLogged, increment, decrement, listSelected, stackManager } = this.props;
     // const counter = useSelector(state => state.counter);
     // const isLogged = useSelector(state => state.isLogged);
     // const dispatch = useDispatch();
@@ -113,7 +125,6 @@ class Analysis extends Component {
       slidesToScroll: 1,
       accessibility: false,
     };
-  
     return (
       <div className="content" onClick={()=>this.setState({showMenu:false})}>
         {/* <Sidebar/>
@@ -147,22 +158,22 @@ class Analysis extends Component {
           </div>
 
           <div  className="content-title">
-            <div className="content-info" >
-              <div style={{marginRight:"25px"}}>
+            <div className="content-info" style={{border:'0px red solid'}}>
+              <div style={{marginRight:"10px", maxWidth:'1200px', height:"60px"}}>
                 Patient Name
-                <div className="content-var">Daewoon Kim</div>
+                <div className="content-var">{stackManager?.[counter.tabX].PatientName}</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
+              <div style={{margin: "0px 10px"}}>
                 Patient ID
-                <div className="content-var" >2020-0000</div>
+                <div className="content-var" >{stackManager?.[counter.tabX].PatientID}</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
-                Age
-                <div className="content-var" >50</div>
+              <div style={{margin: "0px 10px"}}>
+                Birth Date
+                <div className="content-var" >{stackManager?.[counter.tabX].Age}</div>
               </div>
-              <div style={{margin: "0px 25px"}}>
+              <div style={{margin: "0px 10px"}}>
                 Sex
-                <div className="content-var" >Male</div>
+                <div className="content-var" >{stackManager?.[counter.tabX].Sex}</div>
               </div>
             </div>
 
@@ -171,10 +182,10 @@ class Analysis extends Component {
                 <IconBurger className={`view-icon ${this.state.showMenu && 'show'}`}/>
                 {this.state.showMenu && 
                   <div className="view-menu" onClick={(e)=>e.stopPropagation()}>
-                    <div>Save</div>
+                    {/* <div>Save</div>
                     <div>Delete</div>
-                    <div>Export PNG</div>
-                    <div>Export Nifti</div>
+                    <div>Export PNG</div> */}
+                    <div onClick={niftiDownload}>Export Nifti</div>
                   </div>}
               </div>
             </div>
@@ -199,7 +210,7 @@ const mapStateToProps = (state) => ({
   // storeCount: state.count.count,
   counter:state.counter,
   isLogged:state.isLogged,
-  listSelected:state.stackManager,
+  stackManager:state.stackManager,
 });
 
 const mapDispatchToProps = (dispatch) => ({

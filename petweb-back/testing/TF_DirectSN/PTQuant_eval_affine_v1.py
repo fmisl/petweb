@@ -20,11 +20,11 @@ from django.conf import settings
 
 import numpy as np
 from scipy.ndimage import gaussian_filter
-FLAGS = tf.flags.FLAGS
+# FLAGS = tf.flags.FLAGS
 stages = 3
 
 
-def train(inout_path, caseID):
+def train_pib(inout_path, caseID):
 
     # checkpoint_dir = r".\testing\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
     checkpoint_dir = os.path.join(os.getcwd(), 'testing', 'TF_DirectSN', '02_14_20_10_CascadedGAN_Unet_augment_v1',)
@@ -72,7 +72,7 @@ def train(inout_path, caseID):
             def_list.append(affine_flow)
 
         for i in range(0, stages):
-            deform = dgan.autoencoder(gimg, scope='gen_' + str(i), reuse=False)
+            deform = dgan.autoencoder_pib(gimg, scope='gen_' + str(i), reuse=False)
             gimg = dst._transform(gimg, deform[:, :, :, :, 0], deform[:, :, :, :, 1], deform[:, :, :, :, 2])
             def_list.append(deform)
 
@@ -116,12 +116,11 @@ def train(inout_path, caseID):
                 inp_img = inp_img * maxp
                 test = dst._transform_spline(inp_img, defosr[:, :, :, :, 1], defosr[:, :, :, :, 0],
                                              defosr[:, :, :, :, 2])
-
                 name = 'test'
 
                 gimg_tmp = test.transpose([0, 3, 2, 1])
                 gimg_tmp = gimg_tmp[0, 10:101, 1:110, 10:101].flatten()
-                gimg_tmp = gaussian_filter(gimg_tmp, sigma=4/2.355/2)
+                # gimg_tmp = gaussian_filter(gimg_tmp, sigma=4/2.355/2)
                 gimg_tmp = gimg_tmp.astype(dtype=np.int16)
                 gimg_tmp.tofile(os.path.join(inout_path, out_file + ".img"))
                 # shutil.copy(os.path.join(hdrBasePath, name + '.hdr'), os.path.join(tfi, 'eval_gimg_' + name + '.hdr'))

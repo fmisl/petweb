@@ -572,8 +572,56 @@ class deformedGAN():
     def __init(self):
         pass
 
-    def autoencoder(self, x, width=384, height=384, scope='gen_', reuse=False):
+    def autoencoder(self, x_in, y_in, width=384, height=384, scope='gen_', reuse=False):
         with tf.variable_scope(scope, reuse=reuse):
+            x = tf.concat([x_in, y_in], axis=-1)
+
+            skips = [x]
+
+            n = x
+            n = conv_instnorm_lr('enc_conv1', n, 32, stride=2, up=False)
+            skips.append(n)
+
+            n = conv_instnorm_lr('enc_conv2_2', n, 64, stride=2, up=False)
+            skips.append(n)
+
+            n = conv_instnorm_lr('enc_conv3_2', n, 128, stride=2, up=False)
+            skips.append(n)
+
+            n = conv_instnorm_lr('enc_conv4_2', n, 256, stride=2, up=False)
+            skips.append(n)
+
+            n = conv_instnorm_lr('enc_conv5_2', n, 512, stride=1, up=False)
+
+            n = tf.concat([n, skips.pop()], axis=-1)
+            n = conv_instnorm_lr('enc_deconv0', n, 256, stride=1, up=False)
+            n = conv_instnorm_lr('enc_deconv1', n, 256, stride=2, up=True)
+
+            n = tf.concat([n, skips.pop()], axis=-1)
+            n = conv_instnorm_lr('enc_deconv2', n, 128, stride=1, up=False)
+            n = conv_instnorm_lr('enc_deconv3', n, 128, stride=2, up=True)
+
+            n = tf.concat([n, skips.pop()], axis=-1)
+            n = conv_instnorm_lr('enc_deconv4', n, 64, stride=1, up=False)
+            n = conv_instnorm_lr('enc_deconv5', n, 64, stride=2, up=True)
+
+            n = tf.concat([n, skips.pop()], axis=-1)
+            n = conv_instnorm_lr('enc_deconv7', n, 32, stride=1, up=False)
+            n = conv_instnorm_lr('enc_deconv8', n, 32, stride=2, up=True)
+
+            n = conv_instnorm_lr('enc_deconv9', n, 32, stride=1, up=False)
+            n = tf.layers.conv3d(inputs=n, filters=3,
+                             kernel_size=3, use_bias=False, name= 'fout', padding='SAME')
+            # deform = n
+
+            # dst = Dense3DSpatialTransformer()
+            # n = dst._transform(x, deform[:, :, :, :, 0], deform[:, :, :, :, 1], deform[:, :, :, :, 2])
+
+            return n
+
+    def autoencoder_pib(self, x, width=384, height=384, scope='gen_', reuse=False):
+        with tf.variable_scope(scope, reuse=reuse):
+
             skips = [x]
 
             n = x
