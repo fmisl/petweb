@@ -170,11 +170,13 @@ class View extends Component {
     const inoutSelect = isSNed ? "output":"input"
     const invertSelect = isInverted ? "invert":"right"
     const IdxSlice = sliceList.findIndex(v=>v.fileID==counter.fileID)
-    const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
+    this.Completed = sliceList[IdxSlice]?.B64.length == 792;
+    // const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
+    console.log(sliceList[IdxSlice]?.B64.length)
     // console.log('prevProps.stackManager.length != stackManager.length', prevProps.stackManager.length != stackManager.length)
-    if (true){
+    if (this.Completed){
       if (prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
-        console.log('componentDidUpdate with counter', counter, Completed)
+        console.log('componentDidUpdate with counter', counter, this.Completed)
         // const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
         // const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
         // const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
@@ -357,7 +359,8 @@ class View extends Component {
     // const centerSUVR = (viewportC !== undefined) ? ((viewportC.voi.windowCenter/32767)*(suvr_max-suvr_min)):1;
     // const Completed = counter?.fileID && fileList.filter((v,i)=>{v.fileID == counter.fileID})[0];
     // console.log(counter.fileID, fileList.filter((v,i)=>{v.fileID == counter.id}));
-    const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
+    // const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
+    
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
         {/* <Sidebar />
@@ -365,7 +368,7 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{position: "absolute", top:"140px", left:"300px",width:"1550px", height:"937px"}}>
-              {true ? <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>:<div style={{height:"90%", display:"flex", alignItems:"center", justifyContent:"center"}}><img src={viewer_spinner}/></div>}
+              {this.Completed ? <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>:<div style={{height:"90%", display:"flex", alignItems:"center", justifyContent:"center"}}><img src={viewer_spinner}/></div>}
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
