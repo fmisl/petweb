@@ -6,10 +6,10 @@ const COLORS = ['#b2f711', '#118AF7', '#1AFFD6', '#FF6D4C'];
 export default class WeeklyPie extends PureComponent {
   render() {
     const data = [
-      { name: '[11C]PIB', count: this.props.NofPIB },
-      { name: '[18F]FMM', count: this.props.NofFMM },
-      { name: '[18F]FBP', count: this.props.NofFBP },
-      { name: '[18F]FBB', count: this.props.NofFBB },
+      { name: `[\u00B9\u00B9C]PIB`, count: this.props.NofPIB },
+      { name: `[\u00B9\u2078F]FMM`, count: this.props.NofFMM },
+      { name: `[\u00B9\u2078F]FBP`, count: this.props.NofFBP },
+      { name: `[\u00B9\u2078F]FBB`, count: this.props.NofFBB },
     ];
     return (
       <PieChart width={350} height={400}>

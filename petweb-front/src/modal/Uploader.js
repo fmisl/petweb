@@ -42,7 +42,11 @@ function Uploader({ setListID, listID, setFetchState, fetchState, setaddToWorkli
     if (alarm) {
       setAlarm(false);
       // alert(`Selected: [\u00B9\u2078F] `+tracer);
-      setTimeout(() => alert(`Selected: [\u00B9\u2078F] `+tracer), 100);
+      if (tracer=="Pittsburg Compound B(PIB)"){
+        setTimeout(() => alert(`Selected: [\u00B9\u00B9C] `+tracer), 100);
+      } else {
+        setTimeout(() => alert(`Selected: [\u00B9\u2078F] `+tracer), 100);
+      }
     }
   },[alarm])
   const handleMouseHover=()=> {
