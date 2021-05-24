@@ -6,7 +6,9 @@ import * as cornerstone from "cornerstone-core";
 import '../App.css';
 import {useSelector, useDispatch} from 'react-redux';
 import viewer_spinner from '../images/gif/viewer_spinner3.gif'
+import viewer_spinner2 from '../images/gif/viewer_spinner2.gif'
 import IconPlayPNG from '../images/play.png';
+import PngReset from '../images/IconReset.png';
 import IconReset from '../images/IconReset';
 import IconPause from '../images/IconPause';
 import IconPlay from '../images/IconPlay';
@@ -30,6 +32,8 @@ import "react-input-range/lib/css/index.css";
 // function View({}) {
 class View extends Component {
   state = {
+    Completed: false,
+    ImageReady: false,
     selectedColormap: 'gray',
     value5: {
       min: 0,
@@ -59,8 +63,12 @@ class View extends Component {
     petAStack: {},
   };
   componentDidMount(){
+    console.log('CDM')
     const {username, inoutSelect} = this.state;
-    const {counter, stackManager} = this.props;
+    const {counter, stackManager, sliceList, fileList} = this.props;
+    const IdxSlice = sliceList.findIndex(v=>v.fileID==counter.fileID)
+    const ImageReady = sliceList[IdxSlice]?.B64.length == 792;
+    const Completed = fileList.find(v=>v.fileID==counter.fileID).Complete;
     // const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
     // const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
     // const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
@@ -139,6 +147,8 @@ class View extends Component {
       }
     };
     this.setState({
+      ImageReady,
+      Completed,
       // imageIdC,
       // imageIdS,
       // imageIdA,
@@ -170,33 +180,14 @@ class View extends Component {
     const inoutSelect = isSNed ? "output":"input"
     const invertSelect = isInverted ? "invert":"right"
     const IdxSlice = sliceList.findIndex(v=>v.fileID==counter.fileID)
-    this.Completed = sliceList[IdxSlice]?.B64.length == 792;
+    const ImageReady = sliceList[IdxSlice]?.B64.length == 792;
+    const Completed = fileList.find(v=>v.fileID==counter.fileID).Complete;
     // const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
-    console.log(sliceList[IdxSlice]?.B64.length)
+    // console.log(this.Completed)
     // console.log('prevProps.stackManager.length != stackManager.length', prevProps.stackManager.length != stackManager.length)
-    if (this.Completed){
+    if (sliceList[IdxSlice]?.B64.length == 792){
       if (prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
-        console.log('componentDidUpdate with counter', counter, this.Completed)
-        // const imageIdC = [...Array(109).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png'));
-        // const imageIdS = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_sagittal_'+i+'.png'));
-        // const imageIdA = [...Array(91).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_axial_'+i+'.png'));
-        // const imageIdM = [...Array(90).keys()].map((v,i)=>(IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'));
-        // const stackCoronal = {
-        //   imageIds: imageIdC,
-        //   currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC
-        // };
-        // const stackSaggital = {
-        //   imageIds: imageIdS,
-        //   currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS
-        // };
-        // const stackAxial = {
-        //   imageIds: imageIdA,
-        //   currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA
-        // };
-        // const stackMip = {
-        //   imageIds: imageIdM,
-        //   currentImageIdIndex: 0
-        // };
+        console.log('componentDidUpdate with counter', counter, ImageReady)
         const petCStack = {
           imageIds: [...Array(109+20).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+invertSelect+"/"+i)),
           currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
@@ -256,6 +247,8 @@ class View extends Component {
             imageLoader(inoutSelect, isInverted);
             metaDataLoader(inoutSelect, isInverted);
             this.setState({
+              ImageReady,
+              Completed,
               inoutSelect,
               // imageIdC,
               // imageIdS,
@@ -294,35 +287,6 @@ class View extends Component {
         }
       })
     }
-    // if (this.state.isInverted){
-    //   console.log('handleWindowChange update')
-    //   const newWC = WC;
-    //   // console.log('handleWindowChange1(WC, newWC):', WC, newWC)
-    //   // const newMax=Math.min(32767,32767 - (WC-WW/2));
-    //   // const newMin=Math.max(0,32767 - (WC+WW/2));
-    //   const newMax=Math.min(32767,newWC+WW/2);
-    //   const newMin=Math.max(0,newWC-WW/2);
-    //   if (value5.min != newMin || value5.max != newMax){
-    //     this.setState({
-    //       value5:{
-    //         max: newMax,
-    //         min: newMin,
-    //       }
-    //     })
-    //   }
-
-    // } else {
-    //   const newMax=Math.min(32767,WC+WW/2);
-    //   const newMin=Math.max(0,WC-WW/2);
-    //   if (value5.min != newMin || value5.max != newMax){
-    //     this.setState({
-    //       value5:{
-    //         max: newMax,
-    //         min: newMin,
-    //       }
-    //     })
-    //   }
-    // }
   };
   niftiDownload = async () =>{
     const {counter, stackManager} = this.props;
@@ -347,9 +311,24 @@ class View extends Component {
     //   centerSUVR,
     // });
   }
+  resetSlice = async (fileID) => {
+    alert('resetSlices')
+    const token = localStorage.getItem('token')
+    this.props.resetSlices({'token':token, 'fileID':fileID})
+  }
+    // Promise.all(stackManager.map((v,i)=>{ 
+    //   // console.log('stackManager:', v.fileID)
+    //   try{
+    //     const foundItem = sliceList.find((value,index)=>value.fileID == v.fileID)
+    //     console.log(foundItem.fileID + ' is already exist in sliceList')
+    //   } catch(e){
+    //     console.log(v.fileID + ' is not found in sliceList, so fetch')
+    //     dispatch(loadSlices({'token':token, 'fileID':v.fileID}))
+    //   }
+    // }))
   render() {
-    const {updateSUVR_min_max, setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed, handleWindowChange, niftiDownload, changeColormap} = this;
-    const {suvr_max, suvr_min, widthSUVR, centerSUVR, selectedColormap, value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
+    const {updateSUVR_min_max, setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed, handleWindowChange, niftiDownload, changeColormap, resetSlice} = this;
+    const {Completed, ImageReady, suvr_max, suvr_min, widthSUVR, centerSUVR, selectedColormap, value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
     // const {} = this.state;
     const {counter, stackManager, fileList} = this.props;
     // console.log(this.state.selectedColormap)
@@ -360,7 +339,7 @@ class View extends Component {
     // const Completed = counter?.fileID && fileList.filter((v,i)=>{v.fileID == counter.fileID})[0];
     // console.log(counter.fileID, fileList.filter((v,i)=>{v.fileID == counter.id}));
     // const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
-    
+    console.log('ImageReady, Completed', ImageReady, Completed)
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
         {/* <Sidebar />
@@ -368,7 +347,15 @@ class View extends Component {
         <div className="content-page">
           {/* <div className="view-box"> */}
             <div style={{position: "absolute", top:"140px", left:"300px",width:"1550px", height:"937px"}}>
-              {this.Completed ? <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>:<div style={{height:"90%", display:"flex", alignItems:"center", justifyContent:"center"}}><img src={viewer_spinner}/></div>}
+              {
+                ImageReady ? 
+                  <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
+                  :
+                  // Completed ? 
+                  // <div class="view-image"><img src={PngReset} onClick={()=>resetSlice(counter.fileID)}/></div>
+                  //   :
+                  <div class="view-image"><img src={viewer_spinner} onClick={()=>resetSlice(counter.fileID)}/></div>
+              }
               {/* <Home caseID={caseID}/> */}
             </div>
           {/* </div> */}
@@ -732,6 +719,7 @@ const mapDispatchToProps = (dispatch) => ({
   increment: () => dispatch(actions.increment()),
   decrement: () => dispatch(actions.decrement()),
   addStack: (Stack)=> dispatch(actions.addStack(Stack)),
+  resetSlices: (Data)=>dispatch(actions.resetSlices(Data)),
   updateStack: (Stack)=> dispatch(actions.updateStack(Stack)),
   removeStack: (Stack)=> dispatch(actions.removeStack(Stack)),
   login: () => dispatch(actions.login()),
