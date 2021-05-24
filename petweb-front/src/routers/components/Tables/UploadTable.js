@@ -45,12 +45,19 @@ class UploadTable extends Component {
         const res = await services.testing({'token':token})
         let newdata = res.data
         // console.log("interval: ",data!=this.state.data, data,this.state.data)
-        console.log('UploadTable-componentDidMount-updateCentiloid')
+        // console.log('UploadTable-componentDidMount-updateCentiloid')
         if (newdata!=this.state.data){
             // console.log('data changed: ', newdata, fileList, fileList.map((v,i)=>{return {...v, Centiloid:newdata.filter(vv=>vv.id==v.id).Centiloid}}))
             this.props.updateCentiloid(newdata)
             try{
-                const newfileList = fileList.map((v,i)=>{return {...v, Centiloid:newdata.filter(vv=>vv.id==v.id)[0].Centiloid}});
+                const newfileList = fileList.map((v,i)=>{
+                    const foundData = newdata.find(vv=>vv.id==v.id);
+                    return {
+                        ...v, 
+                        Centiloid:foundData.Centiloid,
+                        Complete:foundData.Complete,
+                    }
+                });
                 this.setState({
                     data:newfileList,
                 })
@@ -68,14 +75,32 @@ class UploadTable extends Component {
     }
     myTimer = async()=>{
         this.myInterval = setInterval(async ()=>{
+            const {fileList} = this.props;
             const token = localStorage.getItem('token')
             const res = await services.testing({'token':token})
-            let data = res.data
+            let newdata = res.data
             // console.log("interval: ",data!=this.state.data, data,this.state.data)
             console.log('UploadTable-componentDidMount-myTimer')
-            if (data!=this.state.data){
+            if (newdata!=this.state.data){
                 // console.log('data changed: ', this.state.data)
-                this.props.updateCentiloid(data)
+                this.props.updateCentiloid(newdata)
+                // try{
+                //     const newfileList = fileList.map((v,i)=>{
+                //         const foundData = newdata.find(vv=>vv.id==v.id);
+                //         return {
+                //             ...v, 
+                //             Centiloid:foundData.Centiloid,
+                //             Complete:foundData.Complete,
+                //         }
+                //     });
+                //     this.setState({
+                //         data:newfileList,
+                //     })
+                // } catch (e) {
+                //     this.setState({
+                //         data:newdata,
+                //     })
+                // }
             }
         }, 10000)
     }

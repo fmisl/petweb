@@ -37,6 +37,27 @@ export const addSlices = (slices,fileID) =>{
     fileID: fileID,
   }
 }
+export function resetSlices (data){
+  return async dispatch => {
+    try {
+      const dataRes = await axios.get(IPinUSE+"testing/viewer/"+data.fileID+"/",{
+          headers:{
+            'Authorization':'jwt '+data.token
+            }
+        }).then(res => res.data)
+        dispatch(updateSlices(dataRes,data.fileID));
+    } catch (err) {
+
+    }
+  }
+}
+export const updateSlices = (slices,fileID) =>{
+  return{
+    type: 'UPDATE_SLICES',
+    slices: slices,
+    fileID: fileID,
+  }
+}
 // export const removeSlices = (fileID) =>{
 //   return{
 //     type: 'REMOVE_SLICES',
