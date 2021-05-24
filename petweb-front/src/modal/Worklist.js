@@ -9,7 +9,7 @@ import {BrowserRouter as Router, Switch, Route, Redirect, useHistory, useParams,
 import * as services from '../services/fetchApi'
 import {IPinUSE} from '../services/IPs'
 
-function Worklist({ isShowing, hide, lock }) {
+function Worklist({ isShowing, hide, lock, closeWorklist }) {
   const dispatch = useDispatch();
   const counter = useSelector(state => state.counter);
   const stackManager = useSelector(state => state.stackManager);
@@ -48,8 +48,8 @@ function Worklist({ isShowing, hide, lock }) {
       <React.Fragment >
         {/* aria-modal aria-hidden tabIndex={-1} role="dialog"  */}
         <div className={`modal-right-wrapper ${isShowing && 'show'}`}>
-          <div className="modal-right" onClick={(e)=>e.stopPropagation()} tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}} onClick={lock}>
-            <div className="modal-right-btn"><div></div></div>
+          <div className="modal-right" onClick={(e)=>{e.stopPropagation(); lock()}} tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
+            <div className="modal-right-btn" onClick={(e)=>{e.stopPropagation(); hide()}}><div></div></div>
             <div className="modal-right-header" >
               WORKLIST 
             </div>

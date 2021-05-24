@@ -2041,17 +2041,17 @@ input:-webkit-autofill:active {
   opacity: 0.5;
   overflow: hidden;
 
-  /* border: yellow solid;
-  box-sizing: border-box; */
+  border: yellow solid;
+  box-sizing: border-box;
 }
 
 .modal-right-wrapper.show {
   animation: right-sidebar-out 0.5s forwards;
 }
 
-.modal-right-wrapper:hover {
+/* .modal-right-wrapper:hover {
   animation: right-sidebar-out 0.5s forwards;
-}
+} */
 
 @keyframes right-sidebar-out {
   0% {
@@ -2128,7 +2128,9 @@ input:-webkit-autofill:active {
   background: #383c41;
   border-radius: 25px 0px 0px 25px;
   border: 1px #383c41 solid;
-  /* border: 1px red solid; */
+}
+.modal-right-btn:hover{
+  border: 1px white solid;
 }
 
 .modal-right-btn > div {
