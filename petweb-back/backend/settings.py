@@ -43,15 +43,24 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken',
-    'rest_auth',   # rest_auth 추가
+    # 'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
 
     'django.contrib.sites',
     'allauth',
     'allauth.account',
-    'rest_auth.registration',
     'testing',
+
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    # 'rest_auth',   # rest_auth 추가
+    # 'rest_auth.registration',
+#django-allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
+AUTH_USER_MODEL = 'accounts.User'
 SITE_ID = 1
 
 MIDDLEWARE = [
@@ -71,9 +80,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        # 'djangorestframework-simplejwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
     ),
@@ -117,7 +129,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(os.path.join(BASE_DIR, "db.sqlite3")),
     }
 }
 
