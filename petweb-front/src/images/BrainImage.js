@@ -4,7 +4,7 @@ import brainStroke from './brainStroke.png';
 export default function BrainImage(props){
   // console.log(props.color)
   return (
-    <div style={{position:"relative", height:"85%"}}>
+    <div style={{position:"relative", height:"85%", transform:"scaleX(-1)"}}>
       <svg style={{position:"absolute", top:"7%", left:"5px"}} className={props.className} id="layer_1" data-name="layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 75.9" >
         <title>brainRegions</title>
         {props.region === "global" ? 

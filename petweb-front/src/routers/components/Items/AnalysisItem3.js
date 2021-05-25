@@ -45,12 +45,24 @@ class Analysisitem3 extends Component {
             <div className="AnalysisItem3-Default">
                 <div className="AnalysisItem3-Surface" >
                     {/* IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+inoutSelect+'_coronal_'+i+'.png' */}
-                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rlat_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>Right Lateral</div>
-                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_llat_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>Left Lateral</div>
+                    <div>
+                        <img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rlat_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>
+                        <div>Right Lateral</div>
+                    </div>
+                    <div>
+                        <img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_llat_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>
+                        <div>Left Lateral</div>
+                    </div>
                 </div>
                 <div className="AnalysisItem3-Surface" >
-                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rmed_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>Right Medial</div>
-                    <div><img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_lmed_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>Left Medial</div>
+                    <div>
+                        <img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_rmed_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>
+                        <div>Right Medial</div>
+                    </div>
+                    <div>
+                        <img src={IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/_lmed_'+parseFloat(currentStepIndex).toFixed(1)+'.png'} height="220px"/>
+                        <div>Left Medial</div>
+                    </div>
                 </div>
                 <div className="AnalysisItem3-Threshold">
                     <span>SUVR &nbsp;</span>
