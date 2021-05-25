@@ -27,7 +27,7 @@ stages = 3
 
 
 def train(inout_path, caseID):
-    checkpoint_dir = r"C:\Users\dwnusa\workspace\04_09_22_35_transfer"
+    checkpoint_dir = r"C:\Users\SNUH-FMISL\workspace\04_09_22_35_transfer"
     # checkpoint_dir = r".\testing\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
     # V1 = 'C:\\Users\SKKang\Downloads\\fMNI152_T1_2mm.img'
     in_file = "input_" + caseID
@@ -60,7 +60,7 @@ def train(inout_path, caseID):
         gimg = pet
 
         # TODO: change the path of template MR
-        aa = np.fromfile(r'C:\Users\dwnusa\workspace\petweb\petweb-back\testing\TF_DirectSN\src\fMNI152_T1_2mm.img',
+        aa = np.fromfile(r'C:\Users\SNUH-FMISL\workspace\petweb\petweb-back\testing\TF_DirectSN\src\fMNI152_T1_2mm.img',
                  dtype=np.int16)
         aa = aa.astype(dtype=np.float32) - np.min(aa)
         aa = aa / np.max(aa)

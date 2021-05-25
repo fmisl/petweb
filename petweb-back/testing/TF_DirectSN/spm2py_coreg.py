@@ -17,7 +17,7 @@ from dipy.align.transforms import TranslationTransform3D
 
 def coreg_mrc1(V2):
     # Average template
-    V1 = r'C:\Users\dwnusa\workspace\petweb\petweb-back\testing\TF_DirectSN\src\output_averageTM2.nii'
+    V1 = r'C:\Users\SNUH-FMISL\workspace\petweb\petweb-back\testing\TF_DirectSN\src\output_averageTM2.nii'
 
     I = load(V2)
     if len(I.shape) == 4:

@@ -1,6 +1,11 @@
 ## django integration setting
 from django.conf import settings
-import tensorflow as tf
+# import tensorflow as tf2
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
+import tensorflow_addons as tfa
+
 from testing.TF_DirectSN.utils import Dense3DSpatialTransformer
 # import TF_DirectSN.inputs as inp
 from scipy.ndimage.filters import gaussian_filter
@@ -15,15 +20,15 @@ import random
 
 import scipy.ndimage
 
-FLAGS = tf.flags.FLAGS
-tf.flags.DEFINE_integer('batch_size', 1,
-                            """Number of images to process in a batch.""")
-tf.flags.DEFINE_integer('batch_size_eval', 1,
-                            """Number of images to process in a batch.""")
-tf.flags.DEFINE_string('data_dir1', '.\testing\TF_DirectSN\dataset_withSeg',
-                           """Path to the training data directory.""")
-tf.flags.DEFINE_string('data_dir2', 'E:\\RT_HJAn\\trainset_cycGAN_CTw',
-                           """Path to the training data directory.""")
+# FLAGS = tf.flags.FLAGS
+# tf.flags.DEFINE_integer('batch_size', 1,
+#                             """Number of images to process in a batch.""")
+# tf.flags.DEFINE_integer('batch_size_eval', 1,
+#                             """Number of images to process in a batch.""")
+# tf.flags.DEFINE_string('data_dir1', '.\testing\TF_DirectSN\dataset_withSeg',
+#                            """Path to the training data directory.""")
+# tf.flags.DEFINE_string('data_dir2', 'E:\\RT_HJAn\\trainset_cycGAN_CTw',
+#                            """Path to the training data directory.""")
 
 init_learning_rate = 1e-3
 
@@ -335,8 +340,14 @@ def spectral_norm(w, iteration=1):
 
    return w_norm
 
+def instance_norm_tf2(input_tensor, name=None):
+    instance_norma = tfa.layers.InstanceNormalization(axis = -1)
+    instance_norma._name = name
+    return instance_norma(input_tensor)
+
 def instance_norm(x, scope='instance_norm'):
-    return tf.contrib.layers.instance_norm(x, scope=scope)
+    return instance_norm_tf2(x, name=scope)
+    # return tf.layers.instance_norm(x, scope=scope)
 
 #----------------------------------------------------------------------------
 # Get/create weight tensor for a convolutional or fully-connected layer.
@@ -365,7 +376,7 @@ def conv2d_bias(x, fmaps, kernel, gain=np.sqrt(2)):
 
 def conv3d_bias_spectral(x, filter, kernel, stride=1, use_bias=True, padding='SAME', layer_name="spectral_conv"):
     with tf.variable_scope(layer_name):
-        w = tf.get_variable("kernel", shape=[kernel, kernel, kernel, x.shape[4].value, filter], initializer=tf.contrib.layers.xavier_initializer(), regularizer=None)
+        w = tf.get_variable("kernel", shape=[kernel, kernel, kernel, x.shape[4].value, filter], initializer=tf.initializers.glorot_normal(), regularizer=None)
         bias = tf.get_variable("bias", [filter], initializer=tf.constant_initializer(0.0))
         x = tf.nn.conv3d(input=x, filter=w,  strides=[1, stride, stride, stride, 1], padding=padding)
         if use_bias:
@@ -375,7 +386,7 @@ def conv3d_bias_spectral(x, filter, kernel, stride=1, use_bias=True, padding='SA
 def conv3d_bias_spectral_up(x, filter, kernel, stride=1, use_bias=True, padding='SAME', layer_name="spectral_conv"):
     xdim = x.get_shape().as_list()
     with tf.variable_scope(layer_name):
-        w = tf.get_variable("kernel", shape=[kernel, kernel, kernel, filter, x.shape[4].value], initializer=tf.contrib.layers.xavier_initializer(), regularizer=None)
+        w = tf.get_variable("kernel", shape=[kernel, kernel, kernel, filter, x.shape[4].value], initializer=tf.initializers.glorot_normal(), regularizer=None)
         bias = tf.get_variable("bias", [filter], initializer=tf.constant_initializer(0.0))
         x = tf.nn.conv3d_transpose(value=x,
                                    filter=w,
@@ -442,7 +453,7 @@ def conv_instnorm_lr(name, x, fmaps, stride, up):
 
 def dense_layer_spectral(x, filter, use_bias=False, layer_name="spectral_dense"):
     with tf.variable_scope(layer_name):
-        w = tf.get_variable("kernel", shape=[x.get_shape()[-1], filter], initializer=tf.contrib.layers.xavier_initializer(), regularizer=None)
+        w = tf.get_variable("kernel", shape=[x.get_shape()[-1], filter], initializer=tf.initializers.glorot_normal(), regularizer=None)
         bias = tf.get_variable("bias", [filter], initializer=tf.constant_initializer(0.0))
         x = tf.matmul(x, w)
         if use_bias:

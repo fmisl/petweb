@@ -1,7 +1,9 @@
 # from keras.layers.core import Layer
 
 # from keras.layers.core import Layer
-import tensorflow as tf
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import numpy as np
 import elasticdeform
 # from TF_DirectSN.warp import batch_warp3d
@@ -300,7 +302,7 @@ def det3x3(M):
 
 def convolve(opName, inputLayer, outputChannel, kernelSize, stride, stddev=1e-2, reuse=False, weights_init='uniform_scaling'):
     return tf.layers.conv3d(inputLayer, outputChannel, kernelSize, strides=stride,
-                                  padding='same', activation='linear', name=opName, reuse=reuse, kernel_initializer=tf.contrib.layers.xavier_initializer())
+                                  padding='same', activation='linear', name=opName, reuse=reuse, kernel_initializer=tf.initializers.glorot_normal())
 
 
 def convolveLeakyReLU(opName, inputLayer, outputChannel, kernelSize, stride, alpha=0.1, stddev=1e-2, reuse=False):
