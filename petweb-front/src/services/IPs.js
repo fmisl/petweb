@@ -6,4 +6,4 @@ const developIP2 = "http://172.16.122.76:8000/"
 const localIP = "http://localhost:8023/";
 const releaseIP = "http://147.47.238.30:2021/"
 
-export const IPinUSE = localIP;
+export const IPinUSE = releaseIP;

@@ -66,6 +66,12 @@
   /* background: #383C41; */
   height: 50px;
 }
+.UploaderTable.filterable-table>thead>tr>th {
+  /* background: #383C41; */
+  /* height: 50px; */
+  border: 0px red solid;
+  box-sizing:border-box;
+}
 
 
 .UploaderTable.filterable-table>thead>tr>th:nth-child(1) {
@@ -201,7 +207,8 @@
   line-height: 24px;
   text-align: center;
   height: 56px;
-  /* border: red solid; */
+  border: 0px blue solid;
+  box-sizing:border-box;
 }
 
 .pagination {

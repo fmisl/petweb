@@ -1100,7 +1100,7 @@ input:-webkit-autofill:active {
 .sidebar-grp1-splitter {
   /* height: 5px; */
   /* border-top: 2px #292D30 solid; */
-  border-bottom: 4px #292d30 solid;
+  border-bottom: 2px #292d30 solid;
 }
 
 .sidebar-grp1-menu {
