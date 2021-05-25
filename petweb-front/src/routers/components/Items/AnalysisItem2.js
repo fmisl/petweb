@@ -5,8 +5,7 @@ import './AnalysisItem2.css'
 const FilterableTable = require('react-filterable-table');
 
 const subRegionName = [
-  'Composite1',
-  'Composite2',
+  'Centiloid_Composite',
   'Frontal_L',
   'Frontal_R',
   'Medial_temporal_L', 
@@ -99,6 +98,14 @@ export default class AnalysisItem2 extends Component {
           </div>
       );
   }
+  renderIndex = (props) => {
+      const {data} = this.state;
+      return(
+          <div className={`AnalysisItem2Table-Default ${props.record.Select && 'sel'}`} >
+              {props.record.id+1}
+          </div>
+      );
+  }
   renderSelect = (props) => {
       const {data} = this.state;
       return(
@@ -146,7 +153,8 @@ export default class AnalysisItem2 extends Component {
   render() {
     const {data} = this.state;
     const fields = [
-      { render: this.renderSelect, name: 'Select', displayName: "", inputFilterable: true, sortable: true },
+      { render: this.renderIndex, name: 'id', displayName: "", inputFilterable: true, sortable: true },
+      // { render: this.renderSelect, name: 'Select', displayName: "", inputFilterable: true, sortable: true },
       { render: this.renderClick, name: 'SubRegion', displayName: "SubRegion", inputFilterable: true, exactFilterable: false, sortable: true },
       { render: this.renderClick, name: 'SUVR', displayName: "SUVR", inputFilterable: true, exactFilterable: false, sortable: true },
       { render: this.renderCentiloid, name: 'Centiloid', displayName: "Centiloid", inputFilterable: true, exactFilterable: false, sortable: true },

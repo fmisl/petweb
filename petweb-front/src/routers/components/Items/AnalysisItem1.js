@@ -15,8 +15,8 @@ export default class AnalysisItem1 extends Component {
     const {subRegion} = this.props;
     // console.log(colors)
     const maxSUVR = 2;
-    const globalR = subRegion.Composite1;
-    const globalL = subRegion.Composite2;
+    const globalR = subRegion.Global;
+    const globalL = subRegion.Global;
     const frontalR = subRegion.Frontal_R;
     const frontalL = subRegion.Frontal_L;
     const parietalR = subRegion.Parietal_R;
@@ -26,8 +26,8 @@ export default class AnalysisItem1 extends Component {
     const occipitalR = subRegion.Occipital_R;
     const occipitalL = subRegion.Occipital_L;
 
-    const globalRPercentile = Math.round(Math.max(0,subRegion.Composite1-1)/maxSUVR*100);
-    const globalLPercentile = Math.round(Math.max(0,subRegion.Composite2-1)/maxSUVR*100);
+    const globalRPercentile = Math.round(Math.max(0,subRegion.Global-1)/maxSUVR*100);
+    const globalLPercentile = Math.round(Math.max(0,subRegion.Global-1)/maxSUVR*100);
     const frontalRPercentile = Math.round(Math.max(0,subRegion.Frontal_R-1)/maxSUVR*100);
     const frontalLPercentile = Math.round(Math.max(0,subRegion.Frontal_L-1)/maxSUVR*100);
     const parietalRPercentile = Math.round(Math.max(0,subRegion.Parietal_R-1)/maxSUVR*100);
@@ -45,15 +45,10 @@ export default class AnalysisItem1 extends Component {
                 Global Lobe
               </div>
               <div style={{height:"100%", width:"520px"}}>
-                <div className="analysis-score" style={{width:`${globalLPercentile}%`, minWidth:"45px", borderRight:`10px ${colors[globalLPercentile]} solid`}}>
-                  L
-                  <br/>
+                <div className="analysis-score" style={{display:"flex", alignItems:"center", justifyContent:"flex-end", height:"100%", width:`${globalLPercentile}%`, minWidth:"45px", borderRight:`10px ${colors[globalLPercentile]} solid`}}>
+                  {/* All */}
+                  {/* <br/> */}
                   {globalL?.toFixed(2)}
-                </div>
-                <div className="analysis-score" style={{width:`${globalRPercentile}%`, minWidth:"45px", borderRight:`10px ${colors[globalRPercentile]} solid`}}>
-                  R
-                  <br/>
-                  {globalR?.toFixed(2)}
                 </div>
               </div>
             </div>

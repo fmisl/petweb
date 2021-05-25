@@ -46,8 +46,8 @@ const subRegionName = [
     'Medial_temporal_R','Medial_temporal_R_C', 
     'Basal_ganglia_L','Basal_ganglia_L_C', 
     'Basal_ganglia_R','Basal_ganglia_R_C',
-    'Composite1', 'Composite1_C',
-    'Composite2', 'Composite2_C',]
+    'Global', 'Global_C',
+    'Centiloid_Composite', 'Centiloid_Composite_C',]
 
 // function Analysis() {
 class Analysis extends Component {

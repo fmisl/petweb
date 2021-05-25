@@ -51,7 +51,8 @@
 
 .AnalysisItem2Table-Default.sel {
   /* width: 100%; */
-  background: #292D30;
+  /* background: #292D30; */
+  color: #118AF7;
 }
 
 .AnalysisItem2Table-Default.sel.focus {
@@ -59,7 +60,7 @@
 }
 
 .AnalysisItem2Table-Default.focus {
-  color: #118AF7;
+  /* color: #118AF7; */
 }
 
 .AnalysisItem2Table-Default {
@@ -70,6 +71,7 @@
   height: 100%;
   /* border: red solid; */
   box-sizing: border-box;
+  user-select: none;
 }
 
 .AnalysisItem2Table-Select {

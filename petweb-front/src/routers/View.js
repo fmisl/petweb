@@ -425,8 +425,8 @@ class View extends Component {
                 <select id="colormap" name="colormap" onChange={this.changeColormap} value={this.state.selectedColormap}
                 style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
                   
-                  <option value="invertedGray">Inverted gray</option>
-                  <option value="gray">gray (colormap)</option>
+                  <option value="invertedGray">gray (colormap)</option>
+                  {/* <option value="gray">gray (colormap)</option> */}
                   <option value="hot">Hot (colormap)</option>
                   <option value="jet">Jet (colormap)</option>
                   {/* <option value="hot_inverted" >Hot_inverted (colormap)</option> */}
