@@ -254,10 +254,12 @@ class ImageViewer extends Component {
         {(viewportC !== undefined) && 
           <div class='colorbar1' >
             {/* 상단 배경*/}
+            {selectedColormap === 'invertedGray' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'black':'black'} solid`, width: '30px', height:`${false ? (wc)/32768*100:100-(wc)/32768*100}%`, background:`${isInverted ? 'white':'black'}`}}></div>}
             {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'white'} solid`, width: '30px', height:`${false ? (wc)/32768*100:100-(wc)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
             {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'black'} solid`, width: '30px', height:`${false ? (wc)/32768*100:100-(wc)/32768*100}%`, background:`${isInverted ? 'black':'white'}`}}></div>}
             {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'white'} solid`, width: '30px', height:`${false ? (wc)/32768*100:100-(wc)/32768*100}%`, background:`${isInverted ? 'blue':'red'}`}}></div>}
             {/* 이미지 컬러맵 */}
+            {selectedColormap === 'invertedGray' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(wc)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? graycmap:invertedgraycmap}/>}
             {selectedColormap === 'gray' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(wc)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedgraycmap:graycmap}/>}
             {selectedColormap === 'hot' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(wc)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedhotcmap:hotcmap}/>}
             {selectedColormap === 'jet' && <img style={{userDrag:'none', userSelect:'none', boxSizing:'border-box', borderTop:'1px white solid', borderBottom:'1px white solid', position:'absolute', width: '70px', top:`${100-(wc)/32768*100-(viewportC.voi.windowWidth/32768*50)}%`, height:`${viewportC.voi.windowWidth/32768*100}%` }} src={isInverted ? invertedjetcmap:jetcmap}/>}
@@ -268,6 +270,7 @@ class ImageViewer extends Component {
             {/* 하단 글자 */}
             <div style={{borderBottom:"0px black solid", position:'absolute', width:'68px', top:`${false ? -4+(wc)/32768*100+viewportC.voi.windowWidth/32768*50:100-4-(wc)/32768*100+viewportC.voi.windowWidth/32768*50}%`, height:`${viewportC.voi.windowWidth/32768*5}%`, fontSize:'12px'}}>{(centerSUVR-widthSUVR/2)?.toFixed(2)}</div>
             {/* 하단배경 */}
+            {selectedColormap === 'invertedGray' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'black'} solid`, width: '30px', height:`${false ? 100-(wc)/32768*100:(wc)/32768*100}%`, background:`${isInverted ? 'black':'white'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
             {selectedColormap === 'gray' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'black':'white'} solid`, width: '30px', height:`${false ? 100-(wc)/32768*100:(wc)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
             {selectedColormap === 'hot' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'black':'white'} solid`, width: '30px', height:`${false ? 100-(wc)/32768*100:(wc)/32768*100}%`, background:`${isInverted ? 'white':'black'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
             {selectedColormap === 'jet' &&<div style={{boxSizing:'border-box', border:`1px ${false ? 'white':'white'} solid`, width: '30px', height:`${false ? 100-(wc)/32768*100:(wc)/32768*100}%`, background:`${isInverted ? 'red':'blue'}`, display:'flex', flexDirection:'column-reverse'}}></div>}
@@ -339,23 +342,41 @@ class ImageViewer extends Component {
     } catch (e){
       console.error('onImageRendered')
     }
-
-    // let viewportC = cornerstone.getViewport(this.elementC);
-    // let viewportS = cornerstone.getViewport(this.elementS);
-    // let viewportA = cornerstone.getViewport(this.elementA);
-
-    // this.setState({
-    //   // ...this.state,
-    //   stackC: this.props.stackC,
-    //   stackS: this.props.stackS,
-    //   stackA: this.props.stackA,
-    //   imageIdC: this.props.stackC.imageIds,
-    //   imageIdS: this.props.stackS.imageIds,
-    //   imageIdA: this.props.stackA.imageIds,
-    //   viewportC,
-    //   viewportS,
-    //   viewportA,
-    // });
+    let viewportC = cornerstone.getViewport(this.elementC);
+    const prevSelectedColormap = viewportC.colormap;
+    if (prevSelectedColormap != this.props.selectedColormap){
+      let viewportC = cornerstone.getViewport(this.elementC);
+      let viewportS = cornerstone.getViewport(this.elementS);
+      let viewportA = cornerstone.getViewport(this.elementA);
+      let viewportM = cornerstone.getViewport(this.elementM);
+      // console.log("onImageRendered: ", prevSelectedColormap, this.props.selectedColormap)
+      viewportC.colormap = this.props.selectedColormap;
+      viewportS.colormap = this.props.selectedColormap;
+      viewportA.colormap = this.props.selectedColormap;
+      viewportM.colormap = this.props.selectedColormap;
+      cornerstone.setViewport(this.elementC, viewportC);
+      cornerstone.setViewport(this.elementS, viewportS);
+      cornerstone.setViewport(this.elementA, viewportA);
+      cornerstone.setViewport(this.elementM, viewportM);
+    }
+  //     const elementC = this.elementC;
+  //     const elementS = this.elementS;
+  //     const elementA = this.elementA;
+  //     const elementM = this.elementM;
+  //     let viewportC = cornerstone.getViewport(elementC);
+  //     let viewportS = cornerstone.getViewport(elementS);
+  //     let viewportA = cornerstone.getViewport(elementA);
+  //     let viewportM = cornerstone.getViewport(elementM);
+  //     // console.log('viewportC:',viewportC)
+  //     viewportC.colormap = this.props.selectedColormap;
+  //     viewportS.colormap = this.props.selectedColormap;
+  //     viewportA.colormap = this.props.selectedColormap;
+  //     viewportM.colormap = this.props.selectedColormap;
+  //     cornerstone.setViewport(elementC, viewportC);
+  //     cornerstone.setViewport(elementS, viewportS);
+  //     cornerstone.setViewport(elementA, viewportA);
+  //     cornerstone.setViewport(elementM, viewportM);
+  //     console.log('onNewImage: ', this.props.selectedColormap)
   }
 
   onNewImage() {
@@ -518,7 +539,7 @@ class ImageViewer extends Component {
         let viewportS = cornerstone.getViewport(elementS);
         let viewportA = cornerstone.getViewport(elementA);
         let viewportM = cornerstone.getViewport(elementM);
-        console.log('viewportC:',viewportC)
+        // console.log('viewportC:',viewportC)
         viewportC.colormap = selectedColormap;
         viewportS.colormap = selectedColormap;
         viewportA.colormap = selectedColormap;
@@ -558,7 +579,7 @@ class ImageViewer extends Component {
         const LRDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineX0:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineX0;
         const APDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineY1:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineY1;
         const SIDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineZ2:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineZ2;
-        console.log("Direction", LRDirection, APDirection, SIDirection)
+        // console.log("Direction", LRDirection, APDirection, SIDirection)
         // const SIDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineZ2:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineZ2;
         this.SagittalLeftSide = APDirection < 0 ? "A":"P";
         this.SagittalRightSide = APDirection < 0 ? "P":"A";
@@ -584,7 +605,7 @@ class ImageViewer extends Component {
         // const OSagittalRightSide = this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].eval(inoutSelect+'OutputAffineZ2')>0 ? "P":"A";
         // console.log("Input:",IAxialLeftSide,IAxialRightSide,ICoronalLeftSide,ICoronalRightSide,ISagittalLeftSide,ISagittalRightSide)
         // console.log("Output:",OAxialLeftSide,OAxialRightSide,OCoronalLeftSide,OCoronalRightSide,OSagittalLeftSide,OSagittalRightSide)
-        console.log('loadImage with counter',this.props.counter)
+        // console.log('loadImage with counter',this.props.counter)
         this.loadImage(this.elementC, this.elementS, this.elementA, this.elementM);
       } 
       // console.log(isPlayed==true && prevProps.currentStepIndex !== currentStepIndex)
@@ -603,7 +624,7 @@ class ImageViewer extends Component {
       }
       if (prevProps.isCrosshaired != isCrosshaired){
         this.controlViewport();
-        console.log('constrolViewport isCrosshaired: ',isCrosshaired)
+        // console.log('constrolViewport isCrosshaired: ',isCrosshaired)
         // let AlayerPET = cornerstone.getLayer(Aelement, AlayerId[1]);
         // let layerPET = cornerstone.getLayer(elementC, AlayerId[1]);
         // layerPET.viewport.colormap = "jet";
@@ -670,7 +691,7 @@ class ImageViewer extends Component {
 
   loadImage=(elementC, elementS, elementA, elementM)=>{
     const { isCrosshaired, isPlayed,selectedColormap } = this.props;
-    console.log('promise')
+    // console.log('promise')
     // console.log('loadImage')
     // const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
     // const stackDataS = cornerstoneTools.getToolState(this.elementS, "stack");
@@ -691,7 +712,7 @@ class ImageViewer extends Component {
         cornerstone.displayImage(elementC, image);
 
         const stack = this.props.stackC;
-        console.log('stackC', stack)
+        // console.log('stackC', stack)
         cornerstoneTools.addStackStateManager(elementC, ["stack", 'referenceLines', 'crosshairs']);
         cornerstoneTools.addToolState(elementC, "stack", stack);
 
@@ -876,6 +897,7 @@ class ImageViewer extends Component {
         console.error('FastSkip Promise',e)
       }
     });
+    // const elementC = this.elementC;
   }
 
   controlViewport=()=>{

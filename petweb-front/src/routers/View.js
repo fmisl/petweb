@@ -34,7 +34,7 @@ class View extends Component {
   state = {
     Completed: false,
     ImageReady: false,
-    selectedColormap: 'gray',
+    selectedColormap: 'invertedGray',
     value5: {
       min: 0,
       max: 32767,
@@ -99,7 +99,7 @@ class View extends Component {
         opacity: 1,
         visible: true,
         viewport: {
-          colormap: 'gray',
+          colormap: 'invertedGray',
         },
         name: 'PET'
       }
@@ -113,7 +113,7 @@ class View extends Component {
         opacity: 1,
         visible: true,
         viewport: {
-          colormap: 'gray',
+          colormap: 'invertedGray',
         },
         name: 'PET'
       }
@@ -127,7 +127,7 @@ class View extends Component {
         opacity: 1,
         visible: true,
         viewport: {
-          colormap: 'gray',
+          colormap: 'invertedGray',
         },
         name: 'PET'
       }
@@ -141,7 +141,7 @@ class View extends Component {
         opacity: 1,
         visible: true,
         viewport: {
-          colormap: 'gray',
+          colormap: 'invertedGray',
         },
         name: 'PET'
       }
@@ -174,7 +174,7 @@ class View extends Component {
   // const [isSNed, setIsSNed] = useState(true)
   // const [inoutSelect, setInoutSelect] = useState("output")
   componentDidUpdate(prevProps, prevState){
-    const {isSNed, username, isInverted} = this.state;
+    const {isSNed, username, isInverted, selectedColormap} = this.state;
     const {counter, stackManager, sliceList, fileList} = this.props;
     const {imageLoader, metaDataLoader} = this;
     const inoutSelect = isSNed ? "output":"input"
@@ -186,53 +186,53 @@ class View extends Component {
     // console.log(this.Completed)
     // console.log('prevProps.stackManager.length != stackManager.length', prevProps.stackManager.length != stackManager.length)
     if (sliceList[IdxSlice]?.B64.length == 792){
-      if (prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
+      if (prevState.selectedColormap != selectedColormap || prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
         console.log('componentDidUpdate with counter', counter, ImageReady)
         const petCStack = {
-          imageIds: [...Array(109+20).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+invertSelect+"/"+i)),
+          imageIds: [...Array(109+20).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+invertSelect+"/"+selectedColormap+"/"+i)),
           currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
           options: {
             opacity: 1,
             visible: true,
             viewport: {
-              colormap: 'gray',
+              colormap: 'invertedGray',
             },
             name: 'PET'
           }
         };
         const petSStack = {
-          imageIds: [...Array(91+40).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+invertSelect+"/"+i)),
+          imageIds: [...Array(91+40).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+invertSelect+"/"+selectedColormap+"/"+i)),
           currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
           options: {
             opacity: 1,
             visible: true,
             viewport: {
-              colormap: 'gray',
+              colormap: 'invertedGray',
             },
             name: 'PET'
           }
         };
         const petAStack = {
-          imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/axial/"+invertSelect+"/"+i)),
+          imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/axial/"+invertSelect+"/"+selectedColormap+"/"+i)),
           currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
           options: {
             opacity: 1,
             visible: true,
             viewport: {
-              colormap: 'gray',
+              colormap: 'invertedGray',
             },
             name: 'PET'
           }
         };
         const petMStack = {
           // IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'
-          imageIds: [...Array(45).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/mip/"+invertSelect+"/"+i)),
+          imageIds: [...Array(45).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/mip/"+invertSelect+"/"+selectedColormap+"/"+i)),
           currentImageIdIndex: 0,
           options: {
             opacity: 1,
             visible: true,
             viewport: {
-              colormap: 'gray',
+              colormap: 'invertedGray',
             },
             name: 'PET'
           }
@@ -244,7 +244,7 @@ class View extends Component {
           if (sliceList.length != 0 && stackManager.length != 0 && isExistSlice >= 0){
 
             console.log('isExistSlice ',isExistSlice)
-            imageLoader(inoutSelect, isInverted);
+            imageLoader(inoutSelect);
             metaDataLoader(inoutSelect, isInverted);
             this.setState({
               ImageReady,
@@ -415,7 +415,7 @@ class View extends Component {
                 <IconReset className="view-icon" />
               </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>
-              <div className="view-btn" onClick={()=>setIsInverted(!isInverted)}>{isInverted ? <IconInvert className="view-icon"/>:<IconInvertOff className="view-icon"/>}</div>
+              <div className="view-btn" onClick={()=>setIsInverted(!isInverted)}>{isInverted ? <IconInvertOff className="view-icon"/>:<IconInvert className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsSNed(!isSNed)}>{isSNed ? <IconSN className="view-icon"/>:<IconSNOff className="view-icon"/>}</div>
               {/* <div className="view-btn opacity-bar" >
                 Opacity:&nbsp;
@@ -424,9 +424,11 @@ class View extends Component {
               <div className="view-btn colormap-select">
                 <select id="colormap" name="colormap" onChange={this.changeColormap} value={this.state.selectedColormap}
                 style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
-                  <option value="gray">gray</option>
-                  <option value="hot">Hot</option>
-                  <option value="jet">Jet</option>
+                  
+                  <option value="invertedGray">Inverted gray</option>
+                  <option value="gray">gray (colormap)</option>
+                  <option value="hot">Hot (colormap)</option>
+                  <option value="jet">Jet (colormap)</option>
                   {/* <option value="hot_inverted" >Hot_inverted (colormap)</option> */}
                   {/* <option value="jet_inverted">Jet_inverted (colormap)</option> */}
                 </select>
@@ -462,7 +464,7 @@ class View extends Component {
       </div>
     );
   }
-  imageLoader = async (inoutSelect, isInverted) => {
+  imageLoader = async (inoutSelect) => {
 
     "use strict";
 
@@ -556,7 +558,8 @@ class View extends Component {
       let slice = identifier[2] //0
       let direction=identifier[3]
       let Inverter=identifier[4]
-      let id=Number(identifier[5])
+      let colormap=identifier[5]
+      let id=Number(identifier[6])
       var width = 91;
       var height = 91;
       if(direction === 'coronal') {width=91+40; height=91}
@@ -588,16 +591,33 @@ class View extends Component {
 
       function getPixelData()
       {
-        if (Inverter === "right"){
-          if (direction === "coronal"){return petCoronalOutputData[id]}
-          else if (direction === "sagittal"){return petSagittalOutputData[id]}
-          else if (direction === "axial"){return petAxialOutputData[id]}
-          else if (direction === "mip"){return petMipOutputData[id]}
+        // if (colormap == "gray"){
+        //   Inverter = "invert";
+        // }
+        if (colormap == "gray"){
+          if (Inverter === "right"){
+            if (direction === "coronal"){return petCoronalOutputData[id]}
+            else if (direction === "sagittal"){return petSagittalOutputData[id]}
+            else if (direction === "axial"){return petAxialOutputData[id]}
+            else if (direction === "mip"){return petMipOutputData[id]}
+          } else {
+            if (direction === "coronal"){return Inv_petCoronalOutputData[id]}
+            else if (direction === "sagittal"){return Inv_petSagittalOutputData[id]}
+            else if (direction === "axial"){return Inv_petAxialOutputData[id]}
+            else if (direction === "mip"){return Inv_petMipOutputData[id]}
+          }
         } else {
-          if (direction === "coronal"){return Inv_petCoronalOutputData[id]}
-          else if (direction === "sagittal"){return Inv_petSagittalOutputData[id]}
-          else if (direction === "axial"){return Inv_petAxialOutputData[id]}
-          else if (direction === "mip"){return Inv_petMipOutputData[id]}
+          if (Inverter === "right"){
+            if (direction === "coronal"){return petCoronalOutputData[id]}
+            else if (direction === "sagittal"){return petSagittalOutputData[id]}
+            else if (direction === "axial"){return petAxialOutputData[id]}
+            else if (direction === "mip"){return petMipOutputData[id]}
+          } else {
+            if (direction === "coronal"){return Inv_petCoronalOutputData[id]}
+            else if (direction === "sagittal"){return Inv_petSagittalOutputData[id]}
+            else if (direction === "axial"){return Inv_petAxialOutputData[id]}
+            else if (direction === "mip"){return Inv_petMipOutputData[id]}
+          }
         }
         // else if (direction === "mip" && inout === "output"){return petMipOutputData[id]}
 
@@ -627,7 +647,8 @@ class View extends Component {
       let slice = identifier[2] //0
       let direction=identifier[3]
       let Inverter=identifier[4]
-      let id=Number(identifier[5])
+      let colormap=identifier[5]
+      let id=Number(identifier[6])
       let scale = 1;
       let cX = 1;
       let cY = 1;

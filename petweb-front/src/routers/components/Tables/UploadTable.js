@@ -226,7 +226,7 @@ class UploadTable extends Component {
                 <div className={`UploadTable-SUVR ${props.record.Tracer.slice(-3)}`}>
                     {props.value != null ? 
                     // <span>{Number(props.value).toFixed(2)}</span>
-                    <span>{Number(props.value).toFixed(2)}</span>
+                    <span>{Number(props.value).toFixed(1)}</span>
                     :<span>processing... &emsp;</span>}
                     {props.value != null ? 
                     <div style={{width: "150px", height:"5px", borderRadius:"5px",boxSizing:"border-box", background:"#383C41"}}>
@@ -254,8 +254,8 @@ class UploadTable extends Component {
         return (
             <FilterableTable
                 ref={this.wrapper}
-                // className="UploadTable"
-                // tableClassName="UploadTable"
+                className="UploadTable"
+                tableClassName="UploadTable"
                 // trClassName="WorklistTable"
                 namespace="UploadTable"
                 initialSort="Update"

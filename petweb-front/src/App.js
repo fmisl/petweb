@@ -174,7 +174,7 @@ function App() {
     }
     setIsShowingWorklist(!isShowingWorklist);
   }
-  console.log(isShowingWorklist)
+  // console.log(isShowingWorklist)
   return (
     <React.Fragment>
       {!isLogged && 
