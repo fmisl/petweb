@@ -147,6 +147,7 @@ class uploader(APIView):
 
                 print("Step5: Quantification")
                 aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize, tracer_name=tracerName)
+                # aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize, tracer_name=tracerName)
                 # print(aal_region, centil_suvr)
                 full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
                 # full_path2 = os.path.join(inout_path, 'global_centil.txt')

@@ -168,7 +168,7 @@ function Dashboard(props) {
           <div className="dashboard-box2">
             <span>Amyloid Tracers</span>
             <span></span>
-            <span>53</span>
+            <span>{NofPIB+NofFMM+NofFBB+NofFBP}</span>
             <span>Total</span>
             <br/>
             <br/>

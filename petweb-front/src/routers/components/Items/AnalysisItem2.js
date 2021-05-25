@@ -5,21 +5,22 @@ import './AnalysisItem2.css'
 const FilterableTable = require('react-filterable-table');
 
 const subRegionName = [
-  'Composite',
+  'Composite1',
+  'Composite2',
   'Frontal_L',
   'Frontal_R',
-  'Parietal_L', 
-  'Parietal_R', 
-  'Temporal_L', 
-  'Temporal_R',
-  'Cingulate_L', 
-  'Cingulate_R', 
-  'Striatum_L', 
-  'Striatum_R', 
+  'Medial_temporal_L', 
+  'Medial_temporal_R', 
+  'Basal_ganglia_L', 
+  'Basal_ganglia_R',
+  'Precuneus_PCC_L', 
+  'Precuneus_PCC_R', 
+  'Lateral_temporal_L', 
+  'Lateral_temporal_R', 
   'Occipital_L', 
   'Occipital_R', 
-  'Thalamus_L', 
-  'Thalamus_R', 
+  'Parietal_L', 
+  'Parietal_R', 
 ]
 
 export default class AnalysisItem2 extends Component {
@@ -88,7 +89,7 @@ export default class AnalysisItem2 extends Component {
                   }
               >
               <div className={`AnalysisItem2Table-SUVR`}>
-                  <span>{Number(props.value).toFixed(2)}</span>
+                  <span>{Number(props.value)?.toFixed(1)}</span>
                   {/* <progress value={props.value} min={0} max={5} /> */}
                   <div style={{width: "100px", height:"5px", borderRadius:"5px",
                   boxSizing:"border-box", background:"#91919C"}}>
@@ -138,7 +139,7 @@ export default class AnalysisItem2 extends Component {
                 }
               }
             >
-              {props.value}
+              {isNaN(Number(props.value)) ? props.value:Number(props.value)?.toFixed(2)}
           </div>
       );
   }

@@ -13,12 +13,14 @@
   width: 100%;
   height: 710px;
   background: #383C41;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 }
 
 .AnalysisItem2Table.filterable-table {
   width: 100%;
   height: 100%;
+  /* border: 1px red solid;
+  box-sizing: border-box; */
 }
 
 .AnalysisItem2Table.filterable-table>thead {

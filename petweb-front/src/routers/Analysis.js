@@ -15,28 +15,45 @@ import AnalysisItem2 from './components/Items/AnalysisItem2'
 import AnalysisItem3 from './components/Items/AnalysisItem3'
 import axios from 'axios';
 import {IPinUSE} from '../services/IPs'
+// const subRegionName = [
+//     'Frontal_L', 'Frontal_L_C',
+//     'Frontal_R', 'Frontal_R_C',
+//     'Cingulate_L','Cingulate_L_C', 
+//     'Cingulate_R','Cingulate_R_C', 
+//     'Striatum_L','Striatum_L_C', 
+//     'Striatum_R','Striatum_R_C', 
+//     'Thalamus_L','Thalamus_L_C', 
+//     'Thalamus_R','Thalamus_R_C', 
+//     'Occipital_L','Occipital_L_C', 
+//     'Occipital_R','Occipital_R_C', 
+//     'Parietal_L','Parietal_L_C', 
+//     'Parietal_R','Parietal_R_C', 
+//     'Temporal_L','Temporal_L_C', 
+//     'Temporal_R','Temporal_R_C',
+//     'Composite', 'Composite_C',]
 const subRegionName = [
     'Frontal_L', 'Frontal_L_C',
     'Frontal_R', 'Frontal_R_C',
-    'Cingulate_L','Cingulate_L_C', 
-    'Cingulate_R','Cingulate_R_C', 
-    'Striatum_L','Striatum_L_C', 
-    'Striatum_R','Striatum_R_C', 
-    'Thalamus_L','Thalamus_L_C', 
-    'Thalamus_R','Thalamus_R_C', 
-    'Occipital_L','Occipital_L_C', 
-    'Occipital_R','Occipital_R_C', 
+    'Precuneus_PCC_L','Precuneus_PCC_L_C', 
+    'Precuneus_PCC_R','Precuneus_PCC_R_C', 
+    'Lateral_temporal_L','Lateral_temporal_L_C', 
+    'Lateral_temporal_R','Lateral_temporal_R_C', 
     'Parietal_L','Parietal_L_C', 
     'Parietal_R','Parietal_R_C', 
-    'Temporal_L','Temporal_L_C', 
-    'Temporal_R','Temporal_R_C',
-    'Composite', 'Composite_C',]
+    'Occipital_L','Occipital_L_C', 
+    'Occipital_R','Occipital_R_C', 
+    'Medial_temporal_L','Medial_temporal_L_C', 
+    'Medial_temporal_R','Medial_temporal_R_C', 
+    'Basal_ganglia_L','Basal_ganglia_L_C', 
+    'Basal_ganglia_R','Basal_ganglia_R_C',
+    'Composite1', 'Composite1_C',
+    'Composite2', 'Composite2_C',]
 
 // function Analysis() {
 class Analysis extends Component {
    constructor(props) {
     super(props);
-    this.handleWheel = this.handleWheel.bind(this);
+    // this.handleWheel = this.handleWheel.bind(this);
     this.state = {
       showMenu: false,
       subRegion:{},
@@ -63,11 +80,11 @@ class Analysis extends Component {
         }
     }
 }
-  handleWheel(e) {
-    e.preventDefault();
-    // console.log(e.deltaY)
-    e.deltaY > 0 ? this.slider.slickNext() : this.slider.slickPrev();
-  }
+  // handleWheel(e) {
+  //   e.preventDefault();
+  //   // console.log(e.deltaY)
+  //   e.deltaY > 0 ? this.slider.slickNext() : this.slider.slickPrev();
+  // }
   componentDidMount() {
     const {counter} = this.props;
     const username = localStorage.getItem('username')
@@ -85,11 +102,11 @@ class Analysis extends Component {
     } catch (err) {
 
     }
-    ReactDOM.findDOMNode(this).addEventListener('wheel', this.handleWheel);
+    // ReactDOM.findDOMNode(this).addEventListener('wheel', this.handleWheel);
   }
 
   componentWillUnmount() {
-    ReactDOM.findDOMNode(this).removeEventListener('wheel', this.handleWheel);
+    // ReactDOM.findDOMNode(this).removeEventListener('wheel', this.handleWheel);
   }
   niftiDownload = async () =>{
     const {counter, stackManager} = this.props;
@@ -130,10 +147,9 @@ class Analysis extends Component {
         {/* <Sidebar/>
         <Headerbar/> */}
         <div className="content-page">
-
           <div className="analysis-box">
-            <Slider ref={slider => this.slider = slider} {...settings} >
-              <CustomSlide index={1}>
+            {/* <Slider ref={slider => this.slider = slider} {...settings} > */}
+              {/* <CustomSlide index={1}> */}
                 <div  style={{display:"flex", whiteSpace:"nowrap", margin:"0px 0px 15px"}}>
                   <div className="analysis-box1">
                     <div className="analysis-box1-title">Regional SUVR</div>
@@ -145,16 +161,16 @@ class Analysis extends Component {
                     <AnalysisItem2 subRegion={subRegion}/>
                   </div>
                 </div>
-              </CustomSlide>
-              <CustomSlide index={2}>
+              {/* </CustomSlide>
+              <CustomSlide index={2}> */}
                 <div style={{display:"flex", whiteSpace:"nowrap", margin:"0px 0px 15px"}}>
                   <div className="analysis-box3">
                     <div className="analysis-box3-title">Brain Surface</div>
                     <AnalysisItem3/>
                   </div>
                 </div>
-              </CustomSlide>
-            </Slider>
+              {/* </CustomSlide> */}
+            {/* </Slider> */}
           </div>
 
           <div  className="content-title">

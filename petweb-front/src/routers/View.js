@@ -48,7 +48,7 @@ class View extends Component {
     showMenu: false,
     isPlayed: false,
     isCrosshaired: true,
-    isInverted: true,
+    isInverted: false,
     isSNed: true,
     inoutSelect: 'output',
     imageIdC: [],
@@ -424,10 +424,10 @@ class View extends Component {
               <div className="view-btn colormap-select">
                 <select id="colormap" name="colormap" onChange={this.changeColormap} value={this.state.selectedColormap}
                 style={{height:"100%", width: "100%", background:"#383C41", border:"0px", color:"white", textAlignLast:"center"}}>
-                  <option value="gray">Gray (colormap)</option>
-                  <option value="hot" >Hot (colormap)</option>
+                  <option value="gray">gray</option>
+                  <option value="hot">Hot</option>
+                  <option value="jet">Jet</option>
                   {/* <option value="hot_inverted" >Hot_inverted (colormap)</option> */}
-                  <option value="jet">Jet (colormap)</option>
                   {/* <option value="jet_inverted">Jet_inverted (colormap)</option> */}
                 </select>
               </div>
