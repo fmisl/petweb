@@ -103,27 +103,6 @@ function App() {
     }
   }, [isLogged])
 
-  function openWorklist() {
-    setIsShowingWorklist(true);
-  }
-  const toggleWorklist = async () => {
-    if (isShowingWorklist == false) {
-      // check if any items have selected
-      const checkIfAnySelected = fileList.find(item=>{return item.Select == true && item.Group==0});
-      if (checkIfAnySelected !== undefined) {
-        console.log('checkIfAnySelected: ',checkIfAnySelected)
-        const token = localStorage.getItem('token')
-        const res = await services.groupSelection({'token':token, obj:{method:'groupSelection', list:fileList.filter(item=>item.Select==true)}})
-        const groupUpdated = res.data.map((v,i)=>{return {...v, Select:fileList[i].Select, Opened:fileList[i].Opened}})
-        // const groupDone = res.data
-        // console.log('toggleWorklist:',groupUpdated)
-        // groupDone = groupDone.map((item,idx)=>{return item.Select = fileList.Select})
-        dispatch(fetchItems(groupUpdated))
-        // dispatch(groupItem(1))
-      }
-    }
-    setIsShowingWorklist(!isShowingWorklist);
-  }
 
   const changePageByKey = (e) =>{
     const MaxstackManager = stackManager.length;
@@ -168,6 +147,34 @@ function App() {
     // console.log('press up or down key only:',e.keyCode)
   }
   // console.log('what')
+  function openWorklist() {
+    // alert('openWorklist')
+    setIsShowingWorklist(true);
+  }
+  function closeWorklist() {
+    setIsShowingWorklist(false);
+  }
+  const toggleWorklist = async () => {
+    if (isShowingWorklist == false) {
+      // check if any items have selected
+      const checkIfAnySelected = fileList.find(item=>{return item.Select == true && item.Group==0});
+      if (checkIfAnySelected !== undefined) {
+        console.log('checkIfAnySelected: ',checkIfAnySelected)
+        const token = localStorage.getItem('token')
+        const res = await services.groupSelection({'token':token, obj:{method:'groupSelection', list:fileList.filter(item=>item.Select==true)}})
+        const groupUpdated = res.data.map((v,i)=>{return {...v, Select:fileList[i].Select, Opened:fileList[i].Opened}})
+        // const groupDone = res.data
+        // console.log('toggleWorklist:',groupUpdated)
+        // groupDone = groupDone.map((item,idx)=>{return item.Select = fileList.Select})
+        dispatch(fetchItems(groupUpdated))
+        // dispatch(groupItem(1))
+      }
+    } else {
+      // alert('toggleWorklist: '+isShowingWorklist.toString())
+    }
+    setIsShowingWorklist(!isShowingWorklist);
+  }
+  console.log(isShowingWorklist)
   return (
     <React.Fragment>
       {!isLogged && 
@@ -190,7 +197,7 @@ function App() {
         <div className="App" tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
           <Sidebar/>
           <Headerbar/>
-          <Worklist isShowing={isShowingWorklist} hide={toggleWorklist} lock={openWorklist}/>
+          <Worklist isShowing={isShowingWorklist} hide={toggleWorklist} lock={openWorklist} closeWorklist={closeWorklist}/>
           {/*  */}
           {/* <Headerbar/> */}
           {/* <Sidebar/> */}
