@@ -2041,8 +2041,8 @@ input:-webkit-autofill:active {
   opacity: 0.5;
   overflow: hidden;
 
-  border: yellow solid;
-  box-sizing: border-box;
+  /* border: yellow solid;
+  box-sizing: border-box; */
 }
 
 .modal-right-wrapper.show {
