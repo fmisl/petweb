@@ -46,7 +46,7 @@ export default class AnalysisItem1 extends Component {
               </div>
               <div style={{height:"100%", width:"520px"}}>
                 <div className="analysis-score" style={{display:"flex", alignItems:"center", justifyContent:"flex-end", height:"100%", width:`${globalLPercentile}%`, minWidth:"45px", borderRight:`10px ${colors[globalLPercentile]} solid`}}>
-                  L-R
+                  L R
                   <br/>
                   {globalL?.toFixed(2)}
                 </div>
