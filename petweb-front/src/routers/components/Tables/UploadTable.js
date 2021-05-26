@@ -281,7 +281,7 @@ class UploadTable extends Component {
     }
     render() {
         const {data, filterState} = this.state;
-        console.log(filterState);
+        // console.log(filterState);
         const fields = [
             { render: this.renderSelect, name: 'Select', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Select</div>, inputFilterable: false, sortable: false},
             { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Tracer').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, sortable: true },
