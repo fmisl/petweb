@@ -13,9 +13,9 @@ import os
 # CHANGE the path (C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin) to your dcmtk path
 # CHANGE the SAVE_DIREC
 
-PACS_server = '127.0.0.1 4242'
+PACS_server = '172.16.60.69 1201'
 
-SAVE_DIRECTORY = r'D:\D_download'
+SAVE_DIRECTORY = r'C:\Users\dwnusa\workspace\dcmtkfiles'
 
 
 def find_dcmtk(date = None, ptid = None):
@@ -168,8 +168,9 @@ def get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, num=None):
             # You can add conditinos for early or late phase
             MATCHING = 'betaben'
             # Except for CT images
-            if study_level[1][idx_series].rstrip('\x00').find(MATCHING) is not -1 and study_level[2][idx_series].rstrip(
-                    '\x00').find('CT') is -1:
+            if study_level[1][idx_series].rstrip('\x00').find(MATCHING) is not -1 \
+                    and study_level[1][idx_series].rstrip('\x00').find('CT') is -1 \
+                    and study_level[1][idx_series].rstrip('\x00').find('early') is -1:
                 print('Downloading specific Dicoms series ##########################################\n')
                 print(
                     'Series description: {} ...\n'.format(study_level[1][idx_series])
@@ -189,5 +190,5 @@ def get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, num=None):
     print('\n\n#############  ALL PROCESS WAS DONE #############\n\n')
 
 if __name__ == "__main__":
-    Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = find_dcmtk()
+    Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = find_dcmtk(date='20210526')
     get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, [0, 1])

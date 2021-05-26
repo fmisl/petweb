@@ -1,5 +1,7 @@
 const fileListReducer = (state = [], action) => {
   switch(action.type){
+    case 'RESET_ITEMS':
+      return []
     case 'FETCH_ITEMS':
       return [...action.items]
     case 'UPDATE_CENTILOID':

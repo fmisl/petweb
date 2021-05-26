@@ -1,5 +1,7 @@
 const sliceListReducer = (state = [], action) => {
   switch(action.type){
+    case 'EMPTY_SLICES':
+      return []
     case 'ADD_SLICES':
       return [
         ...state, 

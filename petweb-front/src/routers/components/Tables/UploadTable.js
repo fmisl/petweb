@@ -164,9 +164,9 @@ class UploadTable extends Component {
                 ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[6].addEventListener('click', this.handleSort);
                 ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[7].addEventListener('click', this.handleSort);
                 ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[8].addEventListener('click', this.handleSort);
-                console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
-                console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[1])
-                console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[2])
+                // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
+                // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[1])
+                // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[2])
                 this.setState({clickListenerState:true})
             }catch(e){
                 // console.log('findDOMNode error when componentDidUpdate')

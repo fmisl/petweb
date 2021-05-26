@@ -1,5 +1,7 @@
 const stackManagerReducer = (state = [], action) => {
   switch(action.type){
+    case 'RESET_STACK':
+      return []
     case 'ADD_STACK':
       return [...action.Stack];
     case 'UPDATE_STACK':

@@ -30,6 +30,11 @@ export function loadSlices (data){
     }
   }
 }
+export const emptySlices = () =>{
+  return{
+    type: 'EMPTY_SLICES',
+  }
+}
 export const addSlices = (slices,fileID) =>{
   return{
     type: 'ADD_SLICES',
@@ -64,6 +69,11 @@ export const updateSlices = (slices,fileID) =>{
 //     fileID: fileID,
 //   }
 // }
+export const resetItems = () =>{
+  return{
+    type: 'RESET_ITEMS',
+  }
+}
 export const fetchItems = (items) =>{
   return{
     type: 'FETCH_ITEMS',
@@ -112,6 +122,11 @@ export const profile = (text) =>{
     username: text
   };
 };
+export const resetStack = () =>{
+  return {
+    type: 'RESET_STACK',
+  }
+}
 export const addStack = (Stack) =>{
   return {
     type: 'ADD_STACK',

@@ -32,6 +32,7 @@ import "react-input-range/lib/css/index.css";
 // function View({}) {
 class View extends Component {
   state = {
+    completeSlices: 0,
     Completed: false,
     ImageReady: false,
     selectedColormap: 'invertedGray',
@@ -180,95 +181,112 @@ class View extends Component {
     const inoutSelect = isSNed ? "output":"input"
     const invertSelect = isInverted ? "invert":"right"
     const IdxSlice = sliceList.findIndex(v=>v.fileID==counter.fileID)
-    const ImageReady = sliceList[IdxSlice]?.B64.length == 792;
+    const completeSlices = sliceList[IdxSlice]?.B64.length;
+    const ImageReady = completeSlices == 792;
     const Completed = fileList.find(v=>v.fileID==counter.fileID).Complete;
     // const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
     // console.log(this.Completed)
     // console.log('prevProps.stackManager.length != stackManager.length', prevProps.stackManager.length != stackManager.length)
-    // if (sliceList[IdxSlice]?.B64.length == 792){
-    if (true){
-      if (prevState.selectedColormap != selectedColormap || prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
-        console.log('componentDidUpdate with counter', counter, ImageReady)
-        const petCStack = {
-          imageIds: [...Array(109+20).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+invertSelect+"/"+selectedColormap+"/"+i)),
-          currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
-          options: {
-            opacity: 1,
-            visible: true,
-            viewport: {
-              colormap: 'invertedGray',
-            },
-            name: 'PET'
-          }
-        };
-        const petSStack = {
-          imageIds: [...Array(91+40).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+invertSelect+"/"+selectedColormap+"/"+i)),
-          currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
-          options: {
-            opacity: 1,
-            visible: true,
-            viewport: {
-              colormap: 'invertedGray',
-            },
-            name: 'PET'
-          }
-        };
-        const petAStack = {
-          imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/axial/"+invertSelect+"/"+selectedColormap+"/"+i)),
-          currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
-          options: {
-            opacity: 1,
-            visible: true,
-            viewport: {
-              colormap: 'invertedGray',
-            },
-            name: 'PET'
-          }
-        };
-        const petMStack = {
-          // IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'
-          imageIds: [...Array(45).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/mip/"+invertSelect+"/"+selectedColormap+"/"+i)),
-          currentImageIdIndex: 0,
-          options: {
-            opacity: 1,
-            visible: true,
-            viewport: {
-              colormap: 'invertedGray',
-            },
-            name: 'PET'
-          }
-        };
+    // if (prevState.completeSlices !== completeSlices){
+    //   console.log('state not same',completeSlices, ImageReady)
+    //   this.setState({
+    //     completeSlices,
+    //   })
+    // } else 
+    
+    // if (prevState.completeSlices !== completeSlices){
+    //   console.log('state not same',completeSlices, ImageReady)
+    //   this.setState({
+    //     completeSlices,
+    //   })
+    // }
+    // else
+    {
+      console.log('state same',completeSlices, ImageReady)
+      if (ImageReady){
+        if (prevState.selectedColormap != selectedColormap || prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
+          console.log('componentDidUpdate with counter', counter, ImageReady)
+          const petCStack = {
+            imageIds: [...Array(109+20).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/coronal/"+invertSelect+"/"+selectedColormap+"/"+i)),
+            currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
+            options: {
+              opacity: 1,
+              visible: true,
+              viewport: {
+                colormap: 'invertedGray',
+              },
+              name: 'PET'
+            }
+          };
+          const petSStack = {
+            imageIds: [...Array(91+40).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+invertSelect+"/"+selectedColormap+"/"+i)),
+            currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
+            options: {
+              opacity: 1,
+              visible: true,
+              viewport: {
+                colormap: 'invertedGray',
+              },
+              name: 'PET'
+            }
+          };
+          const petAStack = {
+            imageIds: [...Array(91).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/axial/"+invertSelect+"/"+selectedColormap+"/"+i)),
+            currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
+            options: {
+              opacity: 1,
+              visible: true,
+              viewport: {
+                colormap: 'invertedGray',
+              },
+              name: 'PET'
+            }
+          };
+          const petMStack = {
+            // IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'
+            imageIds: [...Array(45).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/mip/"+invertSelect+"/"+selectedColormap+"/"+i)),
+            currentImageIdIndex: 0,
+            options: {
+              opacity: 1,
+              visible: true,
+              viewport: {
+                colormap: 'invertedGray',
+              },
+              name: 'PET'
+            }
+          };
 
-        try{
-          console.log('imageLoader update from sliceList B64Data')
-          const isExistSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
-          if (sliceList.length != 0 && stackManager.length != 0 && isExistSlice >= 0){
+          try{
+            console.log('imageLoader update from sliceList B64Data')
+            const isExistSlice = this.props.sliceList.findIndex(v=>v.fileID==this.props.counter.fileID)
+            if (sliceList.length != 0 && stackManager.length != 0 && isExistSlice >= 0){
 
-            console.log('isExistSlice ',isExistSlice)
-            imageLoader(inoutSelect);
-            metaDataLoader(inoutSelect, isInverted);
-            this.setState({
-              ImageReady,
-              Completed,
-              inoutSelect,
-              // imageIdC,
-              // imageIdS,
-              // imageIdA,
-              // stackCoronal,
-              // stackSaggital,
-              // stackAxial,
-              // stackMip,
-              petCStack,
-              petSStack,
-              petAStack,
-              petMStack,
-            })
+              console.log('isExistSlice ',isExistSlice)
+              imageLoader(inoutSelect);
+              metaDataLoader(inoutSelect, isInverted);
+              this.setState({
+                ImageReady,
+                Completed,
+                inoutSelect,
+                // imageIdC,
+                // imageIdS,
+                // imageIdA,
+                // stackCoronal,
+                // stackSaggital,
+                // stackAxial,
+                // stackMip,
+                petCStack,
+                petSStack,
+                petAStack,
+                petMStack,
+              })
+            }
+          } catch (e){
+            console.log('imageLoader metaDataLoader fail')
           }
-        } catch (e){
-          console.log('imageLoader metaDataLoader fail')
+          // console.log("2");
+          // this.metaDataLoader();
         }
-        // console.log("2");
-        // this.metaDataLoader();
       }
     }
   }
@@ -313,7 +331,7 @@ class View extends Component {
     // });
   }
   resetSlice = async (fileID) => {
-    alert('resetSlices')
+    // alert('resetSlices')
     const token = localStorage.getItem('token')
     this.props.resetSlices({'token':token, 'fileID':fileID})
   }
@@ -355,6 +373,7 @@ class View extends Component {
                   // Completed ? 
                   // <div class="view-image"><img src={PngReset} onClick={()=>resetSlice(counter.fileID)}/></div>
                   //   :
+                  // <div class="view-image"><img src={viewer_spinner}/></div>
                   <div class="view-image"><img src={viewer_spinner} onClick={()=>resetSlice(counter.fileID)}/></div>
               }
               {/* <Home caseID={caseID}/> */}

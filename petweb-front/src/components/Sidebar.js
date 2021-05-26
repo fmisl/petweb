@@ -2,7 +2,7 @@ import React, {useState, useEffect } from 'react';
 import '../App.css'
 import {useHistory, Redirect, Link, useLocation, useParams} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux';
-import {logout, increment, decrement, tab_location, fetchItems} from '../reduxs/actions';
+import {logout, increment, decrement, tab_location, resetItems, resetStack, emptySlices} from '../reduxs/actions';
 // import logoWhite from '../../images/logo-white.png'
 import LogoWhite from '../images/LogoWhite';
 import IconDashboard from '../images/IconDashboard';
@@ -104,7 +104,7 @@ function Sidebar() {
         </div> */}
       </ul>
       <ul className='sidebar-grp2'>
-        <div className={`sidebar-grp2-menu`} onClick={()=> {dispatch(fetchItems([]));dispatch(logout());localStorage.removeItem("token");}} >
+        <div className={`sidebar-grp2-menu`} onClick={()=> {dispatch(resetItems());dispatch(resetStack());dispatch(emptySlices());dispatch(logout());localStorage.removeItem("token");history.push('/')}} >
           <div className={`sidebar-grp2-menu-title`}><IconLogout size={'40'} stroke={"#ccccda"}/><li>Logout</li></div>
         </div>
       </ul>
