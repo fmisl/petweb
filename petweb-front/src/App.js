@@ -194,7 +194,7 @@ function App() {
       }
       {isLogged && 
         // <div className="App" tabIndex={0} onKeyDown={(e)=>{if (e.keyCode == 40){dispatch(increment(menuList.length))} else if (e.keyCode == 38) {dispatch(decrement(menuList.length))};}}>
-        <div className="App" tabIndex={0} onKeyDown={(e)=>{changePageByKey(e)}}>
+        <div className="App" onKeyDown={(e)=>{changePageByKey(e)}}>
           <Sidebar/>
           <Headerbar/>
           <Worklist isShowing={isShowingWorklist} hide={toggleWorklist} lock={openWorklist} closeWorklist={closeWorklist}/>

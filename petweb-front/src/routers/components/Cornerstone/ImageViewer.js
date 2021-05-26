@@ -564,6 +564,7 @@ class ImageViewer extends Component {
       //   })
       // }
 
+      // if (prevProps.sliceList !== this.props.sliceList){
       if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
         const in_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.in_suvr_max
         const in_suvr_min = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.in_suvr_min
@@ -947,6 +948,7 @@ const mapStateToProps = (state) => ({
   counter:state.counter,
   isLogged:state.isLogged,
   stackManager:state.stackManager,
+  sliceList: state.sliceList,
 });
 
 const mapDispatchToProps = (dispatch) => ({

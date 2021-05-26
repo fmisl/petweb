@@ -1,13 +1,13 @@
 .App {
   display: flex;
   text-align: center;
-  /* height: 100vh; */
+  height: 100vh;
 
   background: #292d30;
   overflow: hidden;
   /* background: white; */
 
-  /* border: red solid;
+  /* border: 1px red solid;
   box-sizing: border-box; */
 }
 
