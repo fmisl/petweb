@@ -185,7 +185,8 @@ class View extends Component {
     // const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
     // console.log(this.Completed)
     // console.log('prevProps.stackManager.length != stackManager.length', prevProps.stackManager.length != stackManager.length)
-    if (sliceList[IdxSlice]?.B64.length == 792){
+    // if (sliceList[IdxSlice]?.B64.length == 792){
+    if (true){
       if (prevState.selectedColormap != selectedColormap || prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
         console.log('componentDidUpdate with counter', counter, ImageReady)
         const petCStack = {
@@ -339,7 +340,7 @@ class View extends Component {
     // const Completed = counter?.fileID && fileList.filter((v,i)=>{v.fileID == counter.fileID})[0];
     // console.log(counter.fileID, fileList.filter((v,i)=>{v.fileID == counter.id}));
     // const Completed = fileList.filter((v,i)=>{return v.fileID==counter.fileID})[0].Complete;
-    console.log('ImageReady, Completed', ImageReady, Completed)
+    // console.log('ImageReady, Completed', ImageReady, Completed)
     return (
       <div className="content" onClick={()=>setShowMenu(false)}>
         {/* <Sidebar />

@@ -175,6 +175,7 @@ class ImageViewer extends Component {
     const centerSUVR = (viewportC !== undefined) ? ((wc/32767)*(suvr_max-suvr_min)):1;
     // const suvrMax = wc + ww/2;
     // const suvrMin = wc - ww/2;
+    // console.log(suvr_max, suvr_min, this.CoronalLeftSide,this.SagittalLeftSide,this.AxialLeftSide)
     return (
       <div style={divWrapper}>
         <div
@@ -563,23 +564,18 @@ class ImageViewer extends Component {
       //     centerSUVR,
       //   })
       // }
-
-      // if (prevProps.sliceList !== this.props.sliceList){
-      if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
-        const in_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.in_suvr_max
-        const in_suvr_min = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.in_suvr_min
-        const out_suvr_max = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.out_suvr_max
-        const out_suvr_min = stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0]?.out_suvr_min
+      const current_suvr_max = stackManager.find((v)=>v.fileID==this.props.counter.fileID)?.out_suvr_max
+      if (this.state.out_suvr_max != current_suvr_max){
+        console.log('working position')
+        const target_stackManager = stackManager.find((v)=>v.fileID==this.props.counter.fileID)
+        const in_suvr_max = target_stackManager?.in_suvr_max
+        const in_suvr_min = target_stackManager?.in_suvr_min
+        const out_suvr_max = target_stackManager?.out_suvr_max
+        const out_suvr_min = target_stackManager?.out_suvr_min
         // console.log(in_suvr_max, in_suvr_min,out_suvr_max,out_suvr_min)
-        this.setState({
-          in_suvr_max,
-          in_suvr_min,
-          out_suvr_max,
-          out_suvr_min,
-        })
-        const LRDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineX0:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineX0;
-        const APDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineY1:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineY1;
-        const SIDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineZ2:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineZ2;
+        const LRDirection = isSNed ? target_stackManager?.outputAffineX0:target_stackManager?.inputAffineX0;
+        const APDirection = isSNed ? target_stackManager?.outputAffineY1:target_stackManager?.inputAffineY1;
+        const SIDirection = isSNed ? target_stackManager?.outputAffineZ2:target_stackManager?.inputAffineZ2;
         // console.log("Direction", LRDirection, APDirection, SIDirection)
         // const SIDirection = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineZ2:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineZ2;
         this.SagittalLeftSide = APDirection < 0 ? "A":"P";
@@ -590,6 +586,15 @@ class ImageViewer extends Component {
         this.AxialRightSide = LRDirection < 0 ? "L":"R";
         this.CoronalUppderSide = SIDirection < 0 ? "I":"S";
         this.CoronalUnderSide = SIDirection < 0 ? "S":"I";
+        this.setState({
+          in_suvr_max,
+          in_suvr_min,
+          out_suvr_max,
+          out_suvr_min,
+        })
+      }
+      // if (prevProps.sliceList !== this.props.sliceList){
+      if (prevProps.stackC.imageIds[0] !== this.props.stackC.imageIds[0]){
         // const AxialLeftSide = isSNed ? this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].outputAffineX0:this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].inputAffineX0;
         // console.log("test:",LRDirection, this.AxialLeftSide, this.AxialRightSide)
         // const IAxialLeftSide = this.props.stackManager.filter((v)=>v.fileID==this.props.counter.fileID)[0].eval(inoutSelect+'AffineX0')>0 ? "L":"R";

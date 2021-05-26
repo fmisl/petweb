@@ -18,8 +18,18 @@ class UploadTable extends Component {
       super(props);
       this.wrapper = React.createRef();
       this.handleSelect = this.handleSelect.bind(this);
+      this.handleSort = this.handleSort.bind(this);
       this.state={
-          filterState:{Select:false, Tracer:false, Centiloid:false, PatientName:false, PatientID:false, BirthDate:false, Sex:false, ScanDate:false, Update:false},
+          filterState:[
+              {title:'Tracer', state:false},
+              {title:'Centiloid', state:false},
+              {title:'PatientName', state:false},
+              {title:'PatientID', state:false},
+              {title:'BirthDate', state:false},
+              {title:'Sex', state:false},
+              {title:'ScanDate', state:false},
+              {title:'Update', state:false}
+            ],//{Select:false, Tracer:false, Centiloid:false, PatientName:false, PatientID:false, BirthDate:false, Sex:false, ScanDate:false, Update:false},
           data: [],
           selectAll: false,
           clickListenerState: false,
@@ -41,6 +51,16 @@ class UploadTable extends Component {
             })
         }
         // console.log('Enter: ' + this.props.menuItem.caption.toUpperCase());
+    }
+    handleSort = e => {
+        const {filterState} = this.state;
+        const targetColumn = e.target.textContent.split(' ')[0].trim();
+        // console.log(filterState.map(v=>));
+        this.setState({
+            filterState:[
+                ...filterState.map((v)=>{if (v.title==targetColumn) {return {...v, state: !v.state}} else {return {...v, state: false}}}),
+            ]
+        })
     }
     componentDidMount = async() =>{
         const {fileList} = this.props;
@@ -111,6 +131,14 @@ class UploadTable extends Component {
         clearInterval(this.myInterval);
         try{
             ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].removeEventListener('click', this.handleSelect);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[1].removeEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[2].removeEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[3].removeEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[4].removeEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[5].removeEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[6].removeEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[7].removeEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[8].removeEventListener('click', this.handleSort);
             this.setState({clickListenerState:false})
         } catch(e){
             console.log('findDOMNode error when componentWillUnmount')
@@ -128,6 +156,17 @@ class UploadTable extends Component {
             try{
                 // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
                 ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].addEventListener('click', this.handleSelect);
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[1].addEventListener('click', this.handleSort);
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[2].addEventListener('click', this.handleSort);
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[3].addEventListener('click', this.handleSort);
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[4].addEventListener('click', this.handleSort);
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[5].addEventListener('click', this.handleSort);
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[6].addEventListener('click', this.handleSort);
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[7].addEventListener('click', this.handleSort);
+                ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[8].addEventListener('click', this.handleSort);
+                console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
+                console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[1])
+                console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[2])
                 this.setState({clickListenerState:true})
             }catch(e){
                 // console.log('findDOMNode error when componentDidUpdate')
@@ -241,18 +280,19 @@ class UploadTable extends Component {
         );
     }
     render() {
-        const {data} = this.state;
+        const {data, filterState} = this.state;
+        console.log(filterState);
         const fields = [
             { render: this.renderSelect, name: 'Select', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Select</div>, inputFilterable: false, sortable: false},
-            { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, sortable: true },
-            { render: this.renderCentiloid, name: 'Centiloid', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Centiloid &nbsp;<img style={{width: "15px"}} src={IconAscending}/>&nbsp;<img className='UploadTable-IconQuestion' src={IconQuestion} width={'30px'} height={'30px'}/><span className="UploadTable-msg" >Centiloid composite ROI relative to whole cerebellum</span></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Tracer').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, sortable: true },
+            { render: this.renderCentiloid, name: 'Centiloid', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Centiloid &nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Centiloid').state ? IconAscending:IconDescending}/>&nbsp;<img className='UploadTable-IconQuestion' src={IconQuestion} width={'30px'} height={'30px'}/><span className="UploadTable-msg" >Centiloid composite ROI relative to whole cerebellum</span></div>, inputFilterable: true, exactFilterable: false, sortable: true },
             // { render: this.renderCentiloid, name: 'Centiloid', displayName: <div>Centiloid<IconQuestion width={'25px'} height={'25px'}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'PatientName', displayName: <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'PatientID', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientID&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Age', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>BirthDate&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Sex', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Sex&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'AcquisitionDateTime', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>ScanDate&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Update', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Update&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true, visible: true },
+            { render: this.renderClick, name: 'PatientName', displayName: <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='PatientName').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'PatientID', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientID&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='PatientID').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Age', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>BirthDate&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='BirthDate').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Sex', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Sex&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Sex').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'AcquisitionDateTime', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>ScanDate&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='ScanDate').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Update', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Update&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Update').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true, visible: true },
         ];
         return (
             <FilterableTable
