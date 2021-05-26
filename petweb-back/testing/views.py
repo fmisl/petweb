@@ -99,10 +99,11 @@ class uploader(APIView):
                 os.mkdir(target_folder)
                 nimg3D = nib.load(target_file) # 이미지 불러오기
                 copy_nimg3D = nimg3D.get_data().copy()
+
                 sign_of_x_axis = np.sign(nimg3D.affine[0][0])
-                # if sign_of_x_axis < 0:
-                #     copy_nimg3D = np.flip(copy_nimg3D, axis=0)
-                #     nimg3D.affine[0][0] = nimg3D.affine[0][0]*sign_of_x_axis
+                if sign_of_x_axis > 0:
+                    copy_nimg3D = np.flip(copy_nimg3D, axis=0).copy()
+                    nimg3D.affine[0][0] = -nimg3D.affine[0][0]
 
                 sign_of_y_axis = np.sign(nimg3D.affine[1][1])
                 if sign_of_y_axis < 0:
@@ -414,7 +415,23 @@ class uploader(APIView):
                 # print("----------complete train & quantification------------")
 
                 target_file = os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".img")
+                # nimg3D = nib.load(target_file) # 이미지 불러오기
+
+                ############################################################## L R flip
                 nimg3D = nib.load(target_file) # 이미지 불러오기
+                copy_nimg3D = nimg3D.get_data().copy()
+
+                sign_of_x_axis = np.sign(nimg3D.affine[0][0])
+                if sign_of_x_axis > 0:
+                    copy_nimg3D = np.flip(copy_nimg3D, axis=0).copy()
+                    nimg3D.affine[0][0] = -nimg3D.affine[0][0]
+
+                sign_of_y_axis = np.sign(nimg3D.affine[1][1])
+                if sign_of_y_axis < 0:
+                    copy_nimg3D = np.flip(copy_nimg3D, axis=1).copy()
+                    nimg3D.affine[1][1] = nimg3D.affine[1][1]*sign_of_y_axis
+                ##############################################################
+
                 OutputAffineX0 = nimg3D.affine[0][0]
                 OutputAffineY1 = nimg3D.affine[1][1]
                 OutputAffineZ2 = nimg3D.affine[2][2]
