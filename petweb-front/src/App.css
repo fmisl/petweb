@@ -1,7 +1,7 @@
 .App {
   display: flex;
   text-align: center;
-  height: 100vh;
+  /* height: 100vh; */
 
   background: #292d30;
   overflow: hidden;
