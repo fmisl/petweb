@@ -8,6 +8,8 @@ import * as services from '../../../services/fetchApi'
 import { withRouter } from 'react-router-dom';
 // import IconQuestion from '../../../images/IconQuestion'
 import IconQuestion from '../../../images/IconQuestion.png'
+import IconAscending from '../../../images/ascending.png'
+import IconDescending from '../../../images/descending.png'
 
 const FilterableTable = require('react-filterable-table');
  
@@ -17,6 +19,7 @@ class UploadTable extends Component {
       this.wrapper = React.createRef();
       this.handleSelect = this.handleSelect.bind(this);
       this.state={
+          filterState:{Select:false, Tracer:false, Centiloid:false, PatientName:false, PatientID:false, BirthDate:false, Sex:false, ScanDate:false, Update:false},
           data: [],
           selectAll: false,
           clickListenerState: false,
@@ -240,16 +243,16 @@ class UploadTable extends Component {
     render() {
         const {data} = this.state;
         const fields = [
-            { render: this.renderSelect, name: 'Select', displayName: "Select", inputFilterable: false, sortable: false},
-            { render: this.renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
-            { render: this.renderCentiloid, name: 'Centiloid', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Centiloid &nbsp;&nbsp;&nbsp;<img className='UploadTable-IconQuestion' src={IconQuestion} width={'30px'} height={'30px'}/><span className="UploadTable-msg" >Centiloid composite ROI relative to whole cerebellum</span></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderSelect, name: 'Select', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Select</div>, inputFilterable: false, sortable: false},
+            { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, sortable: true },
+            { render: this.renderCentiloid, name: 'Centiloid', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Centiloid &nbsp;<img style={{width: "15px"}} src={IconAscending}/>&nbsp;<img className='UploadTable-IconQuestion' src={IconQuestion} width={'30px'} height={'30px'}/><span className="UploadTable-msg" >Centiloid composite ROI relative to whole cerebellum</span></div>, inputFilterable: true, exactFilterable: false, sortable: true },
             // { render: this.renderCentiloid, name: 'Centiloid', displayName: <div>Centiloid<IconQuestion width={'25px'} height={'25px'}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Age', displayName: "Birth Date", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Sex', displayName: "Sex", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'AcquisitionDateTime', displayName: "ScanDate", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Update', displayName: "Update", inputFilterable: true, exactFilterable: false, sortable: true, visible: true },
+            { render: this.renderClick, name: 'PatientName', displayName: <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'PatientID', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientID&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Age', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>BirthDate&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Sex', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Sex&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'AcquisitionDateTime', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>ScanDate&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Update', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Update&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true, visible: true },
         ];
         return (
             <FilterableTable

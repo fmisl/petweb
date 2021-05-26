@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import IconDelete from '../../../images/IconDelete';
 import './UploaderTable.css'
+import IconAscending from '../../../images/ascending.png'
+import IconDescending from '../../../images/descending.png'
 
 const FilterableTable = require('react-filterable-table');
 
@@ -119,9 +121,9 @@ export default class UploaderTable extends Component {
     const {fileList, getJPGURL} = this.props;
     // console.log("uploaderTable",fileList)
     const fields = [
-      { render: this.renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
-      { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
-      { render: this.renderClick, name: 'FileName', displayName: "FileName", inputFilterable: true, exactFilterable: false, sortable: true },
+      { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, sortable: true },
+      { render: this.renderClick, name: 'PatientName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+      { render: this.renderClick, name: 'FileName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>FileName&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
       { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
     ];
     return (

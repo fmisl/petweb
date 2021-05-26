@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import * as actions from '../../../reduxs/actions';
 import IconDelete from '../../../images/IconDelete';
 import * as services from '../../../services/fetchApi'
+import IconAscending from '../../../images/ascending.png'
+import IconDescending from '../../../images/descending.png'
 
 const FilterableTable = require('react-filterable-table');
 
@@ -210,13 +212,13 @@ class WorklistTable extends Component {
     render() {
         const {data} = this.state;
         const fields = [
-            { render: this.renderSelect, name: 'Select', displayName: "Select", inputFilterable: false, sortable: false},
-            { render: this.renderTracer, name: 'Tracer', displayName: "Tracer", inputFilterable: true, sortable: true },
+            { render: this.renderSelect, name: 'Select', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Select&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: false, sortable: false},
+            { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, sortable: true },
             // { render: this.renderSUVR, name: 'SUVR', displayName: "SUVR", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'PatientName', displayName: "PatientName", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'PatientID', displayName: "PatientID", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Age', displayName: "Birth Date", inputFilterable: true, exactFilterable: false, sortable: true },
-            { render: this.renderClick, name: 'Sex', displayName: "Sex", inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'PatientName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'PatientID', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientID&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Age', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Birth Date&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderClick, name: 'Sex', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Sex&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
             // { render: this.renderClick, name: 'Update', displayName: "Update", inputFilterable: true, exactFilterable: false, sortable: true },
         ];

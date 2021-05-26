@@ -443,7 +443,7 @@ class uploader(APIView):
 
                 # Converting to SUVR scale
                 img3D = img3D / sn_crbl_idx
-                img3D = nd.gaussian_filter(img3D, 2/2.355/2)
+                img3D = nd.gaussian_filter(img3D, 3.5/2.355/2)
                 img3D_2mm = img3D
 
                 # nii 파일을 database 폴더에 생성하기....
