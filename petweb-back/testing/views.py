@@ -698,8 +698,8 @@ class uploader(APIView):
                 Sex=None,
                 AcquisitionDateTime=None,
                 Tracer=selectedTracer,
-                SUVR=None,
-                Centiloid=None,
+                Global=None,
+                Composite=None,
             )
             newCase.save()
 

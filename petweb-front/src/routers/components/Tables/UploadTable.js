@@ -70,14 +70,14 @@ class UploadTable extends Component {
         // console.log("interval: ",data!=this.state.data, data,this.state.data)
         // console.log('UploadTable-componentDidMount-updateCentiloid')
         if (newdata!=this.state.data){
-            // console.log('data changed: ', newdata, fileList, fileList.map((v,i)=>{return {...v, Centiloid:newdata.filter(vv=>vv.id==v.id).Centiloid}}))
+            // console.log('data changed: ', newdata, fileList, fileList.map((v,i)=>{return {...v, Centiloid:newdata.filter(vv=>vv.id==v.id).Composite_C}}))
             this.props.updateCentiloid(newdata)
             try{
                 const newfileList = fileList.map((v,i)=>{
                     const foundData = newdata.find(vv=>vv.id==v.id);
                     return {
                         ...v, 
-                        Centiloid:foundData.Centiloid,
+                        Centiloid:foundData.Composite_C,
                         Complete:foundData.Complete,
                     }
                 });
@@ -112,7 +112,7 @@ class UploadTable extends Component {
                 //         const foundData = newdata.find(vv=>vv.id==v.id);
                 //         return {
                 //             ...v, 
-                //             Centiloid:foundData.Centiloid,
+                //             Centiloid:foundData.Composite_C,
                 //             Complete:foundData.Complete,
                 //         }
                 //     });
@@ -185,7 +185,7 @@ class UploadTable extends Component {
         const {data} = this.state;
         return(
             <div className={`UploadTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
-                        onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
+                        onClick={()=>{{props.record.Composite_C != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                 >
                 <div className={`UploadTable-Select ${props.value && 'act'}`} >
                     <div></div>
@@ -196,23 +196,23 @@ class UploadTable extends Component {
     renderClick = (props) => {
         const {data} = this.state;
         return(
-            <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
-                            onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
+            <div className={`UploadTable-Default ${props.record.Composite_C == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
+                            onClick={()=>{{props.record.Composite_C != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
                                 const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
                                 const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
-                                {props.record.Centiloid != null && (this.props.openItem(props.record.id))}
+                                {props.record.Composite_C != null && (this.props.openItem(props.record.id))}
                                 // {console.log('counter: ',this.props.counter, props.record.fileID)}
                                 // ...fileList.filter((v,i)=>{if(v.Opened == false && v.Select == true) return {fileID:v.fileID, currentC:50, currentS:50, currentA:50}})
-                                {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
-                                {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                                {props.record.Composite_C != null && this.props.addStack(nextStackManager)};
+                                {(props.record.Composite_C != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
                                 // {console.log('stackManager: ', nextStackManager.length)}
-                                // {props.record.Centiloid != null && this.props.tab_location({...this.props.counter, tabX:this.props.stackManger.length-1, fileID: props.record.fileID})}
+                                // {props.record.Composite_C != null && this.props.tab_location({...this.props.counter, tabX:this.props.stackManger.length-1, fileID: props.record.fileID})}
                                 // this.props.tab_location({...this.props.counter, tabX:0, fileID:props.record.fileID});
-                                // {props.record.Centiloid != null && (this.props.tab_location({...this.props.counter, tabX: this.props.counter.tabX+1, fileID:props.record.fileID}))}
+                                // {props.record.Composite_C != null && (this.props.tab_location({...this.props.counter, tabX: this.props.counter.tabX+1, fileID:props.record.fileID}))}
 
-                                {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
+                                {props.record.Composite_C != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
                             }}
                 >
                 {props.value}
@@ -222,17 +222,17 @@ class UploadTable extends Component {
     renderTracer = (props) => {
         const {data} = this.state;
         return(
-            <div className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
-                            onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
+            <div className={`UploadTable-Default ${props.record.Composite_C == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
+                            onClick={()=>{{props.record.Composite_C != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
                                 const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
                                 const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
-                                {props.record.Centiloid != null && this.props.openItem(props.record.id)}
-                                {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
-                                {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
-                                // {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300)}
-                                {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
+                                {props.record.Composite_C != null && this.props.openItem(props.record.id)}
+                                {props.record.Composite_C != null && this.props.addStack(nextStackManager)};
+                                {(props.record.Composite_C != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                                // {props.record.Composite_C != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300)}
+                                {props.record.Composite_C != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
                            }}
                 >
                 <div className={`UploadTable-Tracer ${props.value.slice(-3)}`} >
@@ -251,20 +251,20 @@ class UploadTable extends Component {
             borderRadius:"5px",
         }
         return(
-            <div  className={`UploadTable-Default ${props.record.Centiloid == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
-                            onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
+            <div  className={`UploadTable-Default ${props.record.Composite_C == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
+                            onClick={()=>{{props.record.Composite_C != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                             onDoubleClick={()=>{
                                 const nextStackManager = [...this.props.stackManager, ...this.props.fileList.filter((v, i)=>v.Opened == false && v.fileID == props.record.fileID).map(v=>{return {fileID:v.fileID, currentC:50, currentS:50, currentA:50, PatientName:v.PatientName, PatientID:v.PatientID, Age:v.Age, Sex:v.Sex, in_suvr_max:v.in_suvr_max, in_suvr_min:v.in_suvr_min, out_suvr_max:v.out_suvr_max, out_suvr_min:v.out_suvr_min}})];
                                 const isNewlyOpened = nextStackManager.length!==this.props.stackManager.length
                                 // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
-                                {props.record.Centiloid != null && this.props.openItem(props.record.id)}
-                                {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
-                                {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
-                                // {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 500)}
-                                {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
+                                {props.record.Composite_C != null && this.props.openItem(props.record.id)}
+                                {props.record.Composite_C != null && this.props.addStack(nextStackManager)};
+                                {(props.record.Composite_C != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                                // {props.record.Composite_C != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 500)}
+                                {props.record.Composite_C != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
                             }}
                 >
-                    {/* {console.log(props.record.Select && (props.record.Centiloid != null))} */}
+                    {/* {console.log(props.record.Select && (props.record.Composite_C != null))} */}
                 <div className={`UploadTable-SUVR ${props.record.Tracer.slice(-3)}`}>
                     {props.value != null ? 
                     // <span>{Number(props.value).toFixed(2)}</span>
@@ -285,7 +285,7 @@ class UploadTable extends Component {
         const fields = [
             { render: this.renderSelect, name: 'Select', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Select</div>, inputFilterable: false, sortable: false},
             { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Tracer').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, sortable: true },
-            { render: this.renderCentiloid, name: 'Centiloid', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Centiloid &nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Centiloid').state ? IconAscending:IconDescending}/>&nbsp;<img className='UploadTable-IconQuestion' src={IconQuestion} width={'30px'} height={'30px'}/><span className="UploadTable-msg" >Centiloid composite ROI relative to whole cerebellum</span></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+            { render: this.renderCentiloid, name: 'Composite_C', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Centiloid &nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Centiloid').state ? IconAscending:IconDescending}/>&nbsp;<img className='UploadTable-IconQuestion' src={IconQuestion} width={'30px'} height={'30px'}/><span className="UploadTable-msg" >Centiloid composite ROI relative to whole cerebellum</span></div>, inputFilterable: true, exactFilterable: false, sortable: true },
             // { render: this.renderCentiloid, name: 'Centiloid', displayName: <div>Centiloid<IconQuestion width={'25px'} height={'25px'}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientName', displayName: <div style={{display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='PatientName').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
             { render: this.renderClick, name: 'PatientID', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientID&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='PatientID').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
