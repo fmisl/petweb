@@ -167,7 +167,7 @@ class WorklistTable extends Component {
         const {data} = this.state;
         return(
             <div className={`WorklistTable-Default ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`} 
-                    onClick={()=>{{props.record.Centiloid != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
+                    onClick={()=>{{props.record.Composite_C != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
                     // onClick={()=>{{props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id)}}}
                     >
                 <div className={`WorklistTable-Select ${props.value && 'act'}`}>
@@ -187,11 +187,11 @@ class WorklistTable extends Component {
                     // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                     // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
 
-                    {props.record.Centiloid != null && this.props.openItem(props.record.id)}
-                    {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
-                    {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
-                    // {props.record.Centiloid != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300)}
-                    // {props.record.Centiloid != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
+                    {props.record.Composite_C != null && this.props.openItem(props.record.id)}
+                    {props.record.Composite_C != null && this.props.addStack(nextStackManager)};
+                    {(props.record.Composite_C != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                    // {props.record.Composite_C != null && setTimeout(() => this.props.history.push('/analysis/suvr/'+this.props.counter.tabX), 300)}
+                    // {props.record.Composite_C != null && (setTimeout(() => this.props.history.push('/analysis/suvr/'+props.record.fileID), 100))}
                     // alert('double')
                     // this.setState({
                     //     // data:[...data, props.record]
@@ -220,9 +220,9 @@ class WorklistTable extends Component {
                             // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
                             // {props.record.Opened ? this.props.closeItem(props.record.id):this.props.openItem(props.record.id)}
         
-                            {props.record.Centiloid != null && this.props.openItem(props.record.id)}
-                            {props.record.Centiloid != null && this.props.addStack(nextStackManager)};
-                            {(props.record.Centiloid != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
+                            {props.record.Composite_C != null && this.props.openItem(props.record.id)}
+                            {props.record.Composite_C != null && this.props.addStack(nextStackManager)};
+                            {(props.record.Composite_C != null && isNewlyOpened) ? this.props.tab_location({...this.props.counter, tabX:nextStackManager.length-1, fileID: props.record.fileID}):this.props.tab_location({...this.props.counter, tabX:this.props.stackManager.findIndex(item=>item.fileID==props.record.fileID), fileID: props.record.fileID})};
                                 // this.setState({
                                 //     // data:[...data, props.record]
                                 //     data: data.map(

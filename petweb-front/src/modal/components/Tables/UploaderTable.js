@@ -12,27 +12,7 @@ export default class UploaderTable extends Component {
     this.renderRemove = this.renderRemove.bind(this);
     this.renderClick = this.renderClick.bind(this);
     this.renderTracer = this.renderTracer.bind(this);
-    // this.runFiles = this.runFiles.bind(this);
-    // this.state = {
-    //   data:[],
-      // data: [
-      //   { id:0, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_101.nii", Remove: "" },
-      //   { id:1, Focus:false, Select: true, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_102.nii", Remove: "" },
-      //   { id:2, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_103.nii", Remove: "" },
-      //   { id:3, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_104.nii", Remove: "" },
-      //   { id:4, Focus:false, Select: false, Tracer:"FBP", PatientName: "Sandwich Eater", FileName: "SNUH_105.nii", Remove: ""    },
-      //   { id:5, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_101.nii", Remove: "" },
-      //   { id:6, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_102.nii", Remove: "" },
-      //   { id:7, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_103.nii", Remove: "" },
-      //   { id:8, Focus:false, Select: false, Tracer:"C-PIB", PatientName: "Sandwich Eater", FileName: "SNUH_104.nii", Remove: "" },
-      //   { id:9, Focus:false, Select: false, Tracer:"FBP", PatientName: "Sandwich Eater", FileName: "SNUH_105.nii", Remove: ""    },
-      // ],
-    // };
   }
-  // runFiles = async () =>{
-  //   const {data} = this.state;
-  //   console.log(data)
-  // }
   renderRemove = (props) => {
     // const { data } = this.state;
       return(
@@ -121,9 +101,9 @@ export default class UploaderTable extends Component {
     const {fileList, getJPGURL} = this.props;
     // console.log("uploaderTable",fileList)
     const fields = [
-      { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, sortable: true },
-      { render: this.renderClick, name: 'PatientName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
-      { render: this.renderClick, name: 'FileName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>FileName&nbsp;<img style={{width: "15px"}} src={IconAscending}/></div>, inputFilterable: true, exactFilterable: false, sortable: true },
+      { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;</div>, inputFilterable: false, sortable: false },
+      { render: this.renderClick, name: 'PatientName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
+      { render: this.renderClick, name: 'FileName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>FileName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
       { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
     ];
     return (

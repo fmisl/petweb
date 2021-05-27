@@ -7,4 +7,5 @@ urlpatterns = [
     path('uploader/', views.uploader.as_view(), name='uploader'),
     path('viewer/<int:fileID>/', views.viewer.as_view(), name='viewer'),
     path('export/', views.export.as_view(), name='export'),
+    path('pacs/', views.pacs.as_view(), name='pacs'),
 ]

@@ -103,7 +103,7 @@ class UploadTable extends Component {
             const res = await services.testing({'token':token})
             let newdata = res.data
             // console.log("interval: ",data!=this.state.data, data,this.state.data)
-            console.log('UploadTable-componentDidMount-myTimer')
+            // console.log('UploadTable-componentDidMount-myTimer', newdata)
             if (newdata!=this.state.data){
                 // console.log('data changed: ', this.state.data)
                 this.props.updateCentiloid(newdata)
@@ -250,6 +250,7 @@ class UploadTable extends Component {
             background:'red',
             borderRadius:"5px",
         }
+        // console.log(props)
         return(
             <div  className={`UploadTable-Default ${props.record.Composite_C == null && 'unact'} ${props.record.Select && 'sel'} ${props.record.Opened && 'opened'}`}
                             onClick={()=>{{props.record.Composite_C != null && (props.record.Select ? this.props.unselectItem(props.record.id):this.props.selectItem(props.record.id))}}}
@@ -281,7 +282,7 @@ class UploadTable extends Component {
     }
     render() {
         const {data, filterState} = this.state;
-        // console.log(filterState);
+        // console.log('state', data);
         const fields = [
             { render: this.renderSelect, name: 'Select', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Select</div>, inputFilterable: false, sortable: false},
             { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Tracer').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, sortable: true },

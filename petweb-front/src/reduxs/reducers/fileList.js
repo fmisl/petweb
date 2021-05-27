@@ -6,10 +6,10 @@ const fileListReducer = (state = [], action) => {
       return [...action.items]
     case 'UPDATE_CENTILOID':
       return state.map((v, i) => {
-          if (v.Centiloid == null) {
+          if (v.Composite_C == null) {
             return {
               ...v, 
-              Centiloid:action.items.find((item)=>item.fileID==v.fileID).Centiloid, 
+              Composite_C:action.items.find((item)=>item.fileID==v.fileID).Composite_C, 
               Complete:action.items.find((item)=>item.fileID==v.fileID).Complete
             }
           }

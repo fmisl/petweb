@@ -76,3 +76,10 @@ export function downloadNifti(data) {
     }
   })
 }
+export function getPacs(data) {
+  return axios.get(IPinUSE+"testing/pacs/",{
+    headers:{
+    'Authorization':'jwt '+data.token
+    }
+  })
+}

@@ -2,6 +2,7 @@ import React,{useState, useRef, useEffect,useCallback } from 'react';
 import '../App.css';
 // import useWorklist from '../modal/useWorklist';
 import Uploader from "../modal/Uploader";
+import ConnectPACS from "../modal/ConnectPACS";
 import {useSelector, useDispatch} from 'react-redux';
 import {increment, decrement, addToList, removeFromList,loadItems, fetchItems, openSelect, tab_location, addStack} from '../reduxs/actions';
 import IconView from '../images/IconView';
@@ -23,6 +24,7 @@ function Upload({toggleWorklist}) {
   const stackManager = useSelector(state => state.stackManager);
   const [isShowingWorklist, setIsShowingWorklist] = useState(false);
   const [isShowingUploader, setIsShowingUploader] = useState(false);
+  const [isShowingPACS, setIsShowingPACS] = useState(false);
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const [uploaderFileList, setUploaderFileList] = useState([]);
@@ -51,6 +53,9 @@ function Upload({toggleWorklist}) {
       }
     }
     setIsShowingUploader(!isShowingUploader);
+  };
+  const togglePACS=(state)=>{
+    setIsShowingPACS(state);
   };
 
   const runFiles = async (selectTracer, addToWorklist) =>{
@@ -140,6 +145,7 @@ function Upload({toggleWorklist}) {
       <Headerbar/> */}
       {/* <Worklist isShowing={isShowingWorklist} hide={toggleWorklist}/> */}
       <Uploader setListID={setListID} listID={listID} setFetchState={setFetchState} fetchState={fetchState} selectTracer={selectTracer} setSelectTracer={setSelectTracer} setaddToWorklist={setaddToWorklist} fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
+      <ConnectPACS setListID={setListID} listID={listID} setFetchState={setFetchState} fetchState={false} selectTracer={selectTracer} setSelectTracer={setSelectTracer} setaddToWorklist={setaddToWorklist} fileList={uploaderFileList} isShowing={isShowingPACS} hide={togglePACS} removeFileList={removeFileList} updateFileList={updateFileList}/>
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>
@@ -149,7 +155,7 @@ function Upload({toggleWorklist}) {
             <div className="upload-btn" onClick={()=>{deleteSelections(fileList.filter(items=>items.Select==true));}}><IconDelete className="upload-icon"/>Delete</div>
           </div>
           <div style={{display:"flex", color:"white", alignItems:'center'}} >
-            <div className="upload-btn" style={{width:"199px", marginLeft:"40px"}} >Connect to PACS</div>
+            <div className="upload-btn" onClick={()=>togglePACS(true)} style={{width:"199px", marginLeft:"40px"}} >Connect to PACS</div>
             <label for="upload-input" className="upload-btn upload" >Upload</label>
             <input style={{display:"none"}} multiple type="file" id="upload-input" onChange={(e)=>toggleUploader(e)} onClick={(e)=>e.target.value=null} />
           </div>

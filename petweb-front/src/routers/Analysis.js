@@ -157,7 +157,7 @@ class Analysis extends Component {
                   </div>
 
                   <div className="analysis-box2">
-                    <div className="analysis-box2-title">Sub-regional SUVR</div>
+                    <div className="analysis-box2-title">Sub-regional SUVR and Centiloid</div>
                     <AnalysisItem2 subRegion={subRegion}/>
                   </div>
                 </div>
