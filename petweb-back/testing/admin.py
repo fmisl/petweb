@@ -10,7 +10,7 @@ class CaseAdmin(admin.ModelAdmin):
     list_display = (
                     "Opened", "Select", "Focus", "Group",
                     "fileID","FileName","PatientID","PatientName","Age","Sex",
-                    "Tracer","SUVR","Centiloid",
+                    "Tracer","SUVR","Composite",
                     )
 
 admin.site.register(Case, CaseAdmin)
