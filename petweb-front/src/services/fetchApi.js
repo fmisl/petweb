@@ -76,10 +76,10 @@ export function downloadNifti(data) {
     }
   })
 }
-export function getPacs(data) {
-  return axios.get(IPinUSE+"testing/pacs/",{
+export function postPacs(data) {
+  return axios.post(IPinUSE+"testing/pacs/",{PatientID:data.PatientID, StudyDate:data.StudyDate},{
     headers:{
-    'Authorization':'jwt '+data.token
+      'Authorization':'jwt '+data.token,
     }
   })
 }
