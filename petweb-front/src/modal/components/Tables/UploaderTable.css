@@ -1,12 +1,14 @@
 .filterable-table-container.UploaderTable {
   position: relative;
-  top:-100px;
+  /* top:-100px; */
   display: flex;
   justify-content: center;
   /* align-items: center; */
   /* overflow-y: scroll; */
-  width: 850px;
+  width: 840px;
   height: 100%;
+  
+  /* padding-right:-10px; */
 
   font-family: Montserrat;
   font-style: normal;

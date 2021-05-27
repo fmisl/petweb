@@ -126,7 +126,7 @@ class WorklistTable extends Component {
     }
     handleSort = e => {
         const {filterState} = this.state;
-        const targetColumn = e.target.textContent.split(' ')[0].trim();
+        const targetColumn = e.currentTarget.textContent.split(' ')[0].trim();
         // console.log(filterState.map(v=>));
         this.setState({
             filterState:[

@@ -34,38 +34,46 @@ class uploader(APIView):
         database_path = os.path.join(user_path, 'database')
         userID = models.User.objects.filter(username=username)[0]
         case = models.Case.objects.filter(UserID=userID, fileID=myfile['fileID'])[0]
+
         case.Frontal_L = round(float(Qresult[0][0]), 2)
         case.Frontal_L_C = round(float(Qresult[0][1]), 2)
         case.Frontal_R = round(float(Qresult[1][0]), 2)
         case.Frontal_R_C = round(float(Qresult[1][1]), 2)
+
         case.Cingulate_L = round(float(Qresult[2][0]), 2)
         case.Cingulate_L_C = round(float(Qresult[2][1]), 2)
         case.Cingulate_R = round(float(Qresult[3][0]), 2)
         case.Cingulate_R_C = round(float(Qresult[3][1]), 2)
+
         case.Striatum_L = round(float(Qresult[4][0]), 2)
         case.Striatum_L_C = round(float(Qresult[4][1]), 2)
         case.Striatum_R = round(float(Qresult[5][0]), 2)
         case.Striatum_R_C = round(float(Qresult[5][1]), 2)
+
         case.Thalamus_L = round(float(Qresult[6][0]), 2)
         case.Thalamus_L_C = round(float(Qresult[6][1]), 2)
         case.Thalamus_R = round(float(Qresult[7][0]), 2)
         case.Thalamus_R_C = round(float(Qresult[7][1]), 2)
+
         case.Occipital_L = round(float(Qresult[8][0]), 2)
         case.Occipital_L_C = round(float(Qresult[8][1]), 2)
         case.Occipital_R = round(float(Qresult[9][0]), 2)
         case.Occipital_R_C = round(float(Qresult[9][1]), 2)
+
         case.Parietal_L = round(float(Qresult[10][0]), 2)
         case.Parietal_L_C = round(float(Qresult[10][1]), 2)
         case.Parietal_R = round(float(Qresult[11][0]), 2)
         case.Parietal_R_C = round(float(Qresult[11][1]), 2)
+
         case.Temporal_L = round(float(Qresult[12][0]), 2)
         case.Temporal_L_C = round(float(Qresult[12][1]), 2)
         case.Temporal_R = round(float(Qresult[13][0]), 2)
         case.Temporal_R_C = round(float(Qresult[13][1]), 2)
-        case.Composite = round(float(Qresult[14][0]), 2)
-        case.Composite_C = round(float(Qresult[14][1]), 2)
+
         case.SUVR = round(float(Qresult[14][0]), 2)
-        case.Centiloid = round(float(Qresult[14][1]), 2)
+        case.SUVR_C = round(float(Qresult[14][1]), 2)
+        case.Composite = round(float(Qresult[15][0]), 2)
+        case.Composite_C = round(float(Qresult[15][1]), 2)
         case.save()
 
     # in_suvr_max

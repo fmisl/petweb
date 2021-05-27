@@ -47,10 +47,13 @@ class Case(TimeStampedModel):
     out_suvr_max = models.FloatField(blank=True, null=True)
     out_suvr_min = models.FloatField(blank=True, null=True)
     Tracer = models.CharField(max_length=150, blank=True, null=True)
+
     SUVR = models.FloatField(blank=True, default=None, null=True)
-    Centiloid = models.FloatField(blank=True, default=None, null=True)
+    SUVR_C = models.FloatField(blank=True, default=None, null=True)
 
     Composite = models.FloatField(blank=True, null=True)
+    Composite_C = models.FloatField(blank=True, null=True)
+
     Frontal_L = models.FloatField(blank=True, null=True)
     Frontal_R = models.FloatField(blank=True, null=True)
     Parietal_L = models.FloatField(blank=True, null=True)
@@ -80,7 +83,6 @@ class Case(TimeStampedModel):
     Parietal_R_C = models.FloatField(blank=True, null=True)
     Temporal_L_C = models.FloatField(blank=True, null=True)
     Temporal_R_C = models.FloatField(blank=True, null=True)
-    Composite_C = models.FloatField(blank=True, null=True)
 
     #
     # ScanDate = models.CharField(max_length=150, blank=True, null=True)

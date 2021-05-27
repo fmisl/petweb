@@ -1,11 +1,51 @@
 .filterable-table-container.AnalysisItem2Table {
+  /* margin-top:100px; */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  width: 100%;
+  height: 100%;
+
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 22px;
+  /* identical to box height */
+
+  text-align: center;
+  color: #FFFFFF;
+
+  /* border: yellow solid; */
+  /* background: red; */
+}
+/* .filterable-table-container.AnalysisItem2Table {
   width: 100%;
   height: 670px;
-  /* border: red solid; */
   background: #383C41;
-  position: relative;
-  top: -80px;
+} */
+
+.filterable-table-container.AnalysisItem2Table>div:first-child {
+  display: none;
 }
+
+.filterable-table-container.AnalysisItem2Table>.table-container {
+  width: 100%;
+  /* width: 80%;
+  height: 80%; */
+  /* border: white solid; */
+  /* background: red; */
+  /* position: relative; */
+  background: rgba(41, 45, 48, 0.7);
+  /* overflow: auto; */
+  height: 810px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  /* border: red solid;
+  box-sizing: border-box; */
+}
+
 
 .filterable-table-container.AnalysisItem2Table>.table-container {
   /* border: yellow solid; */
@@ -17,19 +57,54 @@
 }
 
 .AnalysisItem2Table.filterable-table {
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
-  /* border: 1px red solid;
+  /* border: 1px yellow solid;
   box-sizing: border-box; */
+  /* position: relative; */
+  /* background: red; */
+  margin-top:40px;
 }
 
 .AnalysisItem2Table.filterable-table>thead {
   background: #292D30;
   border-radius: 5px;
+  /* border: 1px red solid;
+  box-sizing:border-box; */
+  /* background: blue; */
+  /* position: fixed; */
+  user-select: none;
+  position: absolute;
+  top:0px;
+  /* left:0px; */
+  width:665px;
 }
 
 .AnalysisItem2Table.filterable-table>thead>tr {
   height: 38px;
+}
+.AnalysisItem2Table.filterable-table>thead>tr>th{
+  /* border: 1px white solid;
+  box-sizing:border-box; */
+}
+.AnalysisItem2Table.filterable-table>thead>tr>th:nth-child(1){
+  width:40px;
+}
+.AnalysisItem2Table.filterable-table>thead>tr>th:nth-child(2){
+  width:300px;
+}
+.AnalysisItem2Table.filterable-table>thead>tr>th:nth-child(3){
+  width:100px;
+}
+.AnalysisItem2Table.filterable-table>thead>tr>th:nth-child(4){
+  width:200px;
+}
+.AnalysisItem2Table.filterable-table>tbody{
+  /* border: 1px green solid;
+  box-sizing: border-box; */
+  /* position: absolute; */
+  /* top:40px; */
+  /* height:100%; */
 }
 
 .AnalysisItem2Table.filterable-table>tbody>tr {
@@ -37,17 +112,24 @@
   /* background:red; */
 }
 
-.AnalysisItem2Table.filterable-table>tbody>tr>td:nth-child(1) {
-  /* background: red; */
-  width: 30px;
-  height: 100%;
-}
-
 .AnalysisItem2Table.filterable-table>tbody>tr>td {
   /* width: 100%; */
   height: 40px;
   /* background: red; */
 }
+.AnalysisItem2Table.filterable-table>tbody>tr>td:nth-child(1){
+  width:40px;
+}
+.AnalysisItem2Table.filterable-table>tbody>tr>td:nth-child(2){
+  width:300px;
+}
+.AnalysisItem2Table.filterable-table>tbody>tr>td:nth-child(3){
+  width:100px;
+}
+.AnalysisItem2Table.filterable-table>tbody>tr>td:nth-child(4){
+  width:200px;
+}
+
 
 .AnalysisItem2Table-Default.sel {
   /* width: 100%; */

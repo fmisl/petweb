@@ -1,4 +1,4 @@
-.filterable-table-container {
+.filterable-table-container.UploadTable {
     margin-top:100px;
     display: flex;
     justify-content: center;
@@ -19,11 +19,11 @@
     /* border: yellow solid; */
 }
 
-.filterable-table-container>div:first-child {
+.filterable-table-container.UploadTable>div:first-child {
     display: none;
 }
 
-.filterable-table-container>.table-container {
+.filterable-table-container.UploadTable>.table-container {
     width: 100%;
     /* width: 80%;
     height: 80%; */

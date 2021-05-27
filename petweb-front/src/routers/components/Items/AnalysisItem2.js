@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom';
 import IconDelete from '../../../images/IconDelete';
 import './AnalysisItem2.css'
+import IconAscending from '../../../images/ascending.png'
+import IconDescending from '../../../images/descending.png'
 
 const FilterableTable = require('react-filterable-table');
 
@@ -8,18 +11,18 @@ const subRegionName = [
   'Centiloid_Composite',
   'Frontal_L',
   'Frontal_R',
-  'Medial_temporal_L', 
-  'Medial_temporal_R', 
-  'Basal_ganglia_L', 
-  'Basal_ganglia_R',
   'Precuneus_PCC_L', 
   'Precuneus_PCC_R', 
   'Lateral_temporal_L', 
   'Lateral_temporal_R', 
-  'Occipital_L', 
-  'Occipital_R', 
   'Parietal_L', 
   'Parietal_R', 
+  'Occipital_L', 
+  'Occipital_R', 
+  'Medial_temporal_L', 
+  'Medial_temporal_R', 
+  'Basal_ganglia_L', 
+  'Basal_ganglia_R',
 ]
 
 export default class AnalysisItem2 extends Component {
@@ -28,7 +31,15 @@ export default class AnalysisItem2 extends Component {
     this.renderSelect = this.renderSelect.bind(this);
     this.renderClick = this.renderClick.bind(this);
     this.renderCentiloid = this.renderCentiloid.bind(this);
+    this.handleSort = this.handleSort.bind(this);
     this.state = {
+      filterState:[
+          {title:'ID', state:true},
+          {title:'SubRegion', state:false},
+          {title:'SUVR', state:false},
+          {title:'Centiloid', state:false},
+        ],
+      clickListenerState: false,
       data: subRegionName.map((v,i)=>{return {id:i, Focus:false, Select: false, SubRegion:v, SUVR:this.props.subRegion[v], Centiloid:this.props.subRegion[v+'_C']}}),
       // data: [
       //   { id:0, Focus:false, Select: true, SubRegion:"Composite",              SUVR: 0.85, Centiloid: 60.8},
@@ -55,7 +66,19 @@ export default class AnalysisItem2 extends Component {
       // ],
     };
   }
-  componentDidUpdate(prevProps){
+  componentWillUnmount(){
+      clearInterval(this.myInterval);
+      try{
+          ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].removeEventListener('click', this.handleSort);
+          ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[1].removeEventListener('click', this.handleSort);
+          ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[2].removeEventListener('click', this.handleSort);
+          ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[3].removeEventListener('click', this.handleSort);
+          this.setState({clickListenerState:false})
+      } catch(e){
+          console.log('findDOMNode error when componentWillUnmount')
+      }
+  }
+  componentDidUpdate(prevProps, prevState){
     // console.log('componentDidUpdate in analysis2')
     if (prevProps.subRegion !== this.props.subRegion){
       const data=subRegionName.map((v,i)=>{return {id:i, Focus:false, Select: false, SubRegion:v, SUVR:this.props.subRegion[v], Centiloid:this.props.subRegion[v+'_C']}});
@@ -64,6 +87,32 @@ export default class AnalysisItem2 extends Component {
       })
       // console.log(data)
     }
+    // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[1])
+    if (this.state.clickListenerState==false){
+        try{
+            // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0].addEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[1].addEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[2].addEventListener('click', this.handleSort);
+            ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[3].addEventListener('click', this.handleSort);
+            // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[0])
+            // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[1])
+            // console.log(ReactDOM.findDOMNode(this).children[1].children[0].children[0].children[0].children[0].children[2])
+            this.setState({clickListenerState:true})
+        }catch(e){
+            // console.log('findDOMNode error when componentDidUpdate')
+        }
+    }
+  }
+  handleSort = e => {
+      const {filterState} = this.state;
+      const targetColumn = e.currentTarget.textContent.split(' ')[0].trim();
+      // console.log(e.currentTarget);
+      this.setState({
+          filterState:[
+              ...filterState.map((v)=>{if (v.title==targetColumn) {return {...v, state: !v.state}} else {return {...v, state: false}}}),
+          ]
+      })
   }
   renderCentiloid = (props) => {
       const {data} = this.state;
@@ -151,13 +200,18 @@ export default class AnalysisItem2 extends Component {
       );
   }
   render() {
-    const {data} = this.state;
+    const {data, filterState} = this.state;
+    // console.log(filterState)
     const fields = [
-      { render: this.renderIndex, name: 'id', displayName: "", inputFilterable: true, sortable: true },
+      // { render: this.renderIndex, name: 'id', displayName: "ID", inputFilterable: true, sortable: true },
+      { render: this.renderIndex, name: 'id', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>ID&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='ID').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, sortable: true },
       // { render: this.renderSelect, name: 'Select', displayName: "", inputFilterable: true, sortable: true },
-      { render: this.renderClick, name: 'SubRegion', displayName: "SubRegion", inputFilterable: true, exactFilterable: false, sortable: true },
-      { render: this.renderClick, name: 'SUVR', displayName: "SUVR", inputFilterable: true, exactFilterable: false, sortable: true },
-      { render: this.renderCentiloid, name: 'Centiloid', displayName: "Centiloid", inputFilterable: true, exactFilterable: false, sortable: true },
+      { render: this.renderClick, name: 'SubRegion', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>SubRegion&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='SubRegion').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, sortable: true },
+      { render: this.renderClick, name: 'SUVR', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>SUVR&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='SUVR').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, sortable: true },
+      { render: this.renderCentiloid, name: 'Centiloid', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Centiloid&nbsp;<img style={{width: "15px"}} src={filterState.find(v=>v.title=='Centiloid').state ? IconAscending:IconDescending}/></div>, inputFilterable: true, sortable: true },
+      // { render: this.renderClick, name: 'SubRegion', displayName: "SubRegion", inputFilterable: true, exactFilterable: false, sortable: true },
+      // { render: this.renderClick, name: 'SUVR', displayName: "SUVR", inputFilterable: true, exactFilterable: false, sortable: true },
+      // { render: this.renderCentiloid, name: 'Centiloid', displayName: "Centiloid", inputFilterable: true, exactFilterable: false, sortable: true },
     ];
     return (
       <FilterableTable
