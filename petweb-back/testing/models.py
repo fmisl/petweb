@@ -48,8 +48,8 @@ class Case(TimeStampedModel):
     out_suvr_min = models.FloatField(blank=True, null=True)
     Tracer = models.CharField(max_length=150, blank=True, null=True)
 
-    SUVR = models.FloatField(blank=True, default=None, null=True)
-    SUVR_C = models.FloatField(blank=True, default=None, null=True)
+    Global = models.FloatField(blank=True, default=None, null=True)
+    Global_C = models.FloatField(blank=True, default=None, null=True)
 
     Composite = models.FloatField(blank=True, null=True)
     Composite_C = models.FloatField(blank=True, null=True)

@@ -70,8 +70,8 @@ class uploader(APIView):
         case.Temporal_R = round(float(Qresult[13][0]), 2)
         case.Temporal_R_C = round(float(Qresult[13][1]), 2)
 
-        case.SUVR = round(float(Qresult[14][0]), 2)
-        case.SUVR_C = round(float(Qresult[14][1]), 2)
+        case.Global = round(float(Qresult[14][0]), 2)
+        case.Global_C = round(float(Qresult[14][1]), 2)
         case.Composite = round(float(Qresult[15][0]), 2)
         case.Composite_C = round(float(Qresult[15][1]), 2)
         case.save()
