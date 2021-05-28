@@ -77,7 +77,7 @@ export function downloadNifti(data) {
   })
 }
 export function postPacs(data) {
-  return axios.post(IPinUSE+"testing/pacs/",{PatientID:data.PatientID, StudyDate:data.StudyDate},{
+  return axios.post(IPinUSE+"testing/pacs/",{Method:data.Method, PatientID:data.PatientID, StudyDate:data.StudyDate},{
     headers:{
       'Authorization':'jwt '+data.token,
     }

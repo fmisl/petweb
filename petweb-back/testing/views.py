@@ -1278,19 +1278,14 @@ class pacs(APIView):
         print('\n\n#############  ALL PROCESS WAS DONE #############\n\n')
 
     def post(self, request, format=None):
-        print(request.data['PatientID'])
-        print(request.data['StudyDate'])
-        PatientID = request.data['PatientID']
-        StudyDate = request.data['StudyDate']
-        if StudyDate == '':
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
-        print('step1')
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         if not os.path.exists(user_path):
             os.mkdir(user_path)
         uploader_path = os.path.join(user_path, 'uploader')
+
+        filenames = os.listdir(uploader_path)
+        [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
 
         if not os.path.exists(uploader_path):
             os.mkdir(uploader_path)
@@ -1299,67 +1294,90 @@ class pacs(APIView):
         dcm_folder_path = os.path.join(uploader_path, file_name)
         if not os.path.exists(dcm_folder_path):
             os.mkdir(dcm_folder_path)
-        print("step2")
 
-        self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, [0, 1], target_path=dcm_folder_path)
-        print('step3')
-
-        dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')
-        # subprocess.run([dcm2niix_path, "-o", r'uploads\dwnusa\uploader', "-f", "%t_%p_%s", dcm_folder_path])
-        try:
-            subprocess.run(
-                [dcm2niix_path, "-o", uploader_path, "-b", "y", "-ba", "n", "-f", "%t_%p_%s", dcm_folder_path],
-                check=True)
-        except subprocess.CalledProcessError as e:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        print('step4')
-
+        print(request.data['Method'])
+        print(request.data['PatientID'])
+        print(request.data['StudyDate'])
+        Method = request.data['Method']
+        PatientID = request.data['PatientID']
+        StudyDate = request.data['StudyDate']
         InputAffineX0 = []
         InputAffineY1 = []
         InputAffineZ2 = []
-        database_files = os.listdir(uploader_path)
-        for idx, myfile in enumerate(database_files):
-            if (myfile.split(".")[-1] == 'nii'):
-                print(myfile)
-                NiiPath = os.path.join(uploader_path, myfile)
-                nimg3D = nib.load(NiiPath)
-                InputAffineX0.append(nimg3D.affine[0][0])
-                InputAffineY1.append(nimg3D.affine[1][1])
-                InputAffineZ2.append(nimg3D.affine[2][2])
-                np.array(nimg3D.header['pixdim'][1:4])
-                dsfactor = [float(f) / w for w, f in
-                            zip([2, 2, 2], nimg3D.header['pixdim'][1:4])]  # 픽셀크기 2mm로 변환용 factor
-                img3D = np.squeeze(np.array(nimg3D.dataobj))
-                img3D = nd.interpolation.zoom(img3D, zoom=dsfactor)  # 2mm 픽셀로 스케일 변환
-                # vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
-                vx, vy, vz = img3D.shape
-                # Save jpg files
-                hz = int(vz / 2)
-                hy = int(vy / 2)
-                hx = int(vx / 2)
-                saveJPGPath_hz = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hz.jpg")
-                saveJPGPath_hy = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hy.jpg")
-                saveJPGPath_hx = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hx.jpg")
-                uint8_img2D = img3D[:, :, hz]
-                uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
-                uint8_img2D = 255 * uint8_img2D
-                uint8_img2D = np.rot90(uint8_img2D)
-                Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hz)
-                uint8_img2D = img3D[:, hy, :]
-                uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
-                uint8_img2D = 255 * uint8_img2D
-                uint8_img2D = np.rot90(uint8_img2D)
-                Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hy)
-                uint8_img2D = img3D[hx, :, :]
-                uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
-                uint8_img2D = 255 * uint8_img2D
-                uint8_img2D = np.rot90(uint8_img2D)
-                Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
-        print('step5')
-        filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
-        fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': 'Sandwich Eater', 'Group': 0, 'fileID': None,
-                     'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
-                     for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
-        # return Response(status=status.HTTP_200_OK)
-        print('step6')
-        return Response(data=fileList, status=status.HTTP_200_OK)
+
+        if Method == 'find':
+            if StudyDate == '':
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
+            print('step1')
+            print("step2")
+            # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            findResult = [{'id': i, 'Focus': False,'Group': 0,
+                         'FileName': None, 'Tracer': '[18F]Florbetaben',
+                         'PatientName': Patient_name[i], 'PatientID':Patient_ID[i], 'BirthDate':Date_of_birth[i],
+                         'StudyDate':Study_date[i], 'Modality':Modality[i], 'StudyDescription':Study_description[i],
+                         } for i, patientID in enumerate(Patient_ID)]
+            return Response(data=findResult, status=status.HTTP_200_OK)
+
+        if Method == 'get':
+            Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
+            print([Patient_name, Patient_ID])
+            self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, [0, 1], target_path=dcm_folder_path)
+            print('step3')
+
+            dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')
+            # subprocess.run([dcm2niix_path, "-o", r'uploads\dwnusa\uploader', "-f", "%t_%p_%s", dcm_folder_path])
+            try:
+                subprocess.run(
+                    [dcm2niix_path, "-o", uploader_path, "-b", "y", "-ba", "n", "-f", "%t_%p_%s", dcm_folder_path],
+                    check=True)
+            except subprocess.CalledProcessError as e:
+                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            print('step4')
+
+            database_files = os.listdir(uploader_path)
+            for idx, myfile in enumerate(database_files):
+                if (myfile.split(".")[-1] == 'nii'):
+                    print(myfile)
+                    NiiPath = os.path.join(uploader_path, myfile)
+                    nimg3D = nib.load(NiiPath)
+                    InputAffineX0.append(nimg3D.affine[0][0])
+                    InputAffineY1.append(nimg3D.affine[1][1])
+                    InputAffineZ2.append(nimg3D.affine[2][2])
+                    np.array(nimg3D.header['pixdim'][1:4])
+                    dsfactor = [float(f) / w for w, f in
+                                zip([2, 2, 2], nimg3D.header['pixdim'][1:4])]  # 픽셀크기 2mm로 변환용 factor
+                    img3D = np.squeeze(np.array(nimg3D.dataobj))
+                    img3D = nd.interpolation.zoom(img3D, zoom=dsfactor)  # 2mm 픽셀로 스케일 변환
+                    # vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
+                    vx, vy, vz = img3D.shape
+                    # Save jpg files
+                    hz = int(vz / 2)
+                    hy = int(vy / 2)
+                    hx = int(vx / 2)
+                    saveJPGPath_hz = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hz.jpg")
+                    saveJPGPath_hy = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hy.jpg")
+                    saveJPGPath_hx = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hx.jpg")
+                    uint8_img2D = img3D[:, :, hz]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hz)
+                    uint8_img2D = img3D[:, hy, :]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hy)
+                    uint8_img2D = img3D[hx, :, :]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
+            print('step5')
+            filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': Patient_name[i], 'Group': 0, 'fileID': None,
+                         'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
+                         for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+            # return Response(status=status.HTTP_200_OK)
+            print('step6')
+            return Response(data=fileList, status=status.HTTP_200_OK)
