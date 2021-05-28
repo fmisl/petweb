@@ -138,41 +138,30 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
             <div className="modal-body">
                 <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{setFelectItem(Math.floor(Math.random() * 20+30))}}>
                     <div style={{display:"flex", alignItems:"center", justifyContent:"space-around", height:"12%", width:"100%", border:"0px red solid", boxSizing:"border-box"}}>
-                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"22%"}}>
-                            <label for="PatientID">Patient ID
+                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"35%"}}>
+                            <label for="PatientID">Patient_ID
                                 <input name="PatientID" type="text" placeholder="PatientID"
                                     value={PatientID}
                                     onChange={handleChange}/>
                             </label>
                         </div>
-                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"22%"}}>
-                            <label for="StudyDate">Study Date
+                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"35%"}}>
+                            <label for="StudyDate">StudyDate
                                 <input name="StudyDate" type="text" placeholder="StudyDate"
                                     value={StudyDate}
                                     onChange={handleChange}/>
                             </label>
                         </div>
-                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"25%"}}>
-                            <label for="StudyDate">Study Description
-                                <input name="StudyDate" type="text" placeholder="StudyDescription"
-                                    value={StudyDate}
-                                    onChange={handleChange}/>
-                            </label>
-                        </div>
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
-                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head('');findHandler(); handleReset()}}>Search</div>
+                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head('');getHandler(); handleReset()}}>Search</div>
                         </div>
                     </div>
                     {/* <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"35%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
                         {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div> */}
-                    <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"35%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
-                        {finddata.map((v,i)=>{return <div style={{border:"1px red solid"}}>{v.PatientName}</div>})}
-                    </div>
-                    
-                    {/* <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
+                    <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
                         {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
-                    </div> */}
+                    </div>
                 </div>
                 <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
                     <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
