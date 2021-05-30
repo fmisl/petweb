@@ -115,7 +115,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log(res.data);
     // setGetdata(res.data);
     setGetdata(res.data)
-    setStep(0); 
+    setStep(2); 
     handleReset();
     setFetching(false);
     // const uploadList = res.data
@@ -158,7 +158,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
             </div>
             <div className="modal-body">
                 <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{setFelectItem(Math.floor(Math.random() * 20+30))}}>
-                    <div style={{display:"flex", alignItems:"center", justifyContent:"space-around", height:"12%", width:"100%", border:"0px red solid", boxSizing:"border-box"}}>
+                    <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", height:"12%", width:"100%", border:"0px red solid", boxSizing:"border-box", background:"#2c3033"}}>
                         <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"23%"}}>
                             <label for="PatientID">Patient_ID
                                 <input name="PatientID" type="text" placeholder="PatientID"
@@ -182,19 +182,22 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         </div>
                         {/* findHandler();  */}
                         {stepChecker == 0 && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
-                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); findHandler();}}>Search</div>
+                            <div style={{}} className="pacs-btn" onClick={()=>{setCurrentJPGURL_head(''); findHandler();}}>Search</div>
                         </div>}
                         {/* getHandler();   */}
                         {stepChecker == 1 && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
                             <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); getHandler();}}>Download</div>
                         </div>}
+                        {stepChecker == 2 && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); }}>Loading</div>
+                        </div>}
                     </div>
-                    {/* <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"35%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
+                    {stepChecker == 1 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"35%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
                         {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
-                    </div> */}
-                    <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
+                    </div>}
+                    {stepChecker == 2 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
                         {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
-                    </div>
+                    </div>}
                 </div>
                 <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
                     <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
