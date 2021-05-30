@@ -28,7 +28,7 @@ function Upload({toggleWorklist}) {
   const isLogged = useSelector(state => state.isLogged);
   const dispatch = useDispatch();
   const [uploaderFileList, setUploaderFileList] = useState([]);
-  const [selectTracer, setSelectTracer] = useState('[18F]FBP');
+  const [selectTracer, setSelectTracer] = useState('[18F]FBB');
   const [addToWorklist, setaddToWorklist] = useState(true);
   // useEffect(() => {
   //   console.log('useEffect called in Upload (uploaderFileList)',fileList)

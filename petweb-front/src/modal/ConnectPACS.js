@@ -22,10 +22,11 @@ const styleDiv ={
   // background: "black",
 }
 function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
-  const [data, setData] = useState([]);
+  const [finddata, setFinddata] = useState([]);
+  const [getdata, setGetdata] = useState([]);
   const [inputs, setInputs] = useState({
     PatientID: '', 	//사용할 문자열들을 저장하는 객체 형태로 관리!
-    StudyDate: '',
+    StudyDate: '20210527',
   });
   const { PatientID, StudyDate } = inputs; 
   const [hoverState, setHoverState] = useState(false);
@@ -41,8 +42,8 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
   const dispatch = useDispatch();
   useEffect(() => {
     if (isShowing) {
-        setCurrentJPGURL_head('')
-        deleteFiles();
+        // setCurrentJPGURL_head('')
+        // deleteFiles();
     } else {
         setCurrentJPGURL_head('')
         deleteFiles();
@@ -71,17 +72,33 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     const token = localStorage.getItem('token')
     const res = await services.deleteFile({'token':token})
     const uploadList = res.data
-    setData([])
+    setFinddata([])
+    setGetdata([])
   }
-  const searchHandler = async () =>{
-    //   alert('searchHandler')
+  const findHandler = async () =>{
+    //   alert('getHandler')
     // setFetchState(true);
     // setListID(null);
     setFetching(true);
     const token = localStorage.getItem('token')
-    const res = await services.postPacs({'PatientID':PatientID, 'StudyDate':StudyDate, 'token':token})
+    const res = await services.postPacs({'Method':'find','PatientID':PatientID, 'StudyDate':StudyDate, 'token':token})
     console.log(res.data);
-    setData(res.data)
+    setFinddata(res.data);
+    // setData(res.data)
+    setFetching(false);
+    // const uploadList = res.data
+    // setFileList(uploadList)
+  }
+  const getHandler = async () =>{
+    //   alert('getHandler')
+    // setFetchState(true);
+    // setListID(null);
+    setFetching(true);
+    const token = localStorage.getItem('token')
+    const res = await services.postPacs({'Method':'get','PatientID':PatientID, 'StudyDate':StudyDate, 'token':token})
+    console.log(res.data);
+    // setGetdata(res.data);
+    setGetdata(res.data)
     setFetching(false);
     // const uploadList = res.data
     // setFileList(uploadList)
@@ -104,7 +121,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
 
   const runFiles = async (selectTracer, addToWorklist) =>{
     const token = localStorage.getItem('token')
-    const res = await services.runFile({'token':token, 'obj':data, 'Tracer':selectTracer, 'addToWorklist':addToWorklist})
+    const res = await services.runFile({'token':token, 'obj':getdata, 'Tracer':selectTracer, 'addToWorklist':addToWorklist})
     const putList = res.data
     dispatch(fetchItems(putList))
   }
@@ -136,32 +153,35 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                             </label>
                         </div>
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
-                            <div style={{}} className="pacs-btn type1" onClick={()=>{searchHandler(); handleReset()}}>Search</div>
+                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head('');getHandler(); handleReset()}}>Search</div>
                         </div>
                     </div>
+                    {/* <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"35%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
+                        {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                    </div> */}
                     <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
-                        {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={data} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                        {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>
                 </div>
                 <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
                     <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
-                    {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${fileList[listID]?.InputAffineX0 < 0 ? "-1":"1"}, ${fileList[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hy.jpg'} alt=" "/>}
+                    {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineX0 < 0 ? "-1":"1"}, ${getdata[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hy.jpg'} alt=" "/>}
                     </div>
                     <div style={{...styleDiv, ...{top:"", left:"50%"}}} >
                     
-                    {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${fileList[listID]?.InputAffineY1 < 0 ? "-1":"1"}, ${fileList[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hx.jpg'} alt=" "/>}
+                    {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineY1 < 0 ? "-1":"1"}, ${getdata[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hx.jpg'} alt=" "/>}
                     </div>
                     <div style={{...styleDiv, ...{top:"50%", left:"0"}}} >
-                    {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${fileList[listID]?.InputAffineX0 < 0 ? "1":"-1"}, ${fileList[listID]?.InputAffineY1 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hz.jpg'} alt=" "/>}
+                    {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineX0 < 0 ? "1":"-1"}, ${getdata[listID]?.InputAffineY1 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hz.jpg'} alt=" "/>}
                     </div>
                     <div style={{...styleDiv, ...{top:"50%", left:"50%"}}} >
                     </div>
-                    {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>R</div><div>L</div></div>}
-                    {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"52%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>P</div><div>A</div></div>}
-                    {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"70%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>R</div><div>L</div></div>}
-                    {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"23%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>S</div><div>I</div></div>}
-                    {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"73%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>S</div><div>I</div></div>}
-                    {fileList[listID] && <div style={{position:"absolute", border:"0px red solid", top:"50%", left:"23%", height:"45%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>A</div><div>P</div></div>}
+                    {getdata[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>R</div><div>L</div></div>}
+                    {getdata[listID] && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"52%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>P</div><div>A</div></div>}
+                    {getdata[listID] && <div style={{position:"absolute", border:"0px red solid", top:"70%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>R</div><div>L</div></div>}
+                    {getdata[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"23%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>S</div><div>I</div></div>}
+                    {getdata[listID] && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"73%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>S</div><div>I</div></div>}
+                    {getdata[listID] && <div style={{position:"absolute", border:"0px red solid", top:"50%", left:"23%", height:"45%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>A</div><div>P</div></div>}
                 </div>
             </div>
             <div style={{display:"flex", marginTop:"21px", justifyContent:"space-between", alignItems:"center"}}>
