@@ -1298,9 +1298,11 @@ class pacs(APIView):
         print(request.data['Method'])
         print(request.data['PatientID'])
         print(request.data['StudyDate'])
+        print(request.data['StudyDescription'])
         Method = request.data['Method']
         PatientID = request.data['PatientID']
         StudyDate = request.data['StudyDate']
+        StudyDescription = request.data['StudyDescription']
         InputAffineX0 = []
         InputAffineY1 = []
         InputAffineZ2 = []
@@ -1312,8 +1314,12 @@ class pacs(APIView):
             print('step1')
             print("step2")
             # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            if StudyDescription=='betaben':
+                tracer = '[11C]PIB'
+            else:
+                tracer = '[11C]PIB'
             findResult = [{'id': i, 'Focus': False,'Group': 0,
-                         'FileName': None, 'Tracer': '[18F]Florbetaben',
+                         'FileName': None, 'Tracer': tracer,
                          'PatientName': Patient_name[i], 'PatientID':Patient_ID[i], 'BirthDate':Date_of_birth[i],
                          'StudyDate':Study_date[i], 'Modality':Modality[i], 'StudyDescription':Study_description[i],
                          } for i, patientID in enumerate(Patient_ID)]
