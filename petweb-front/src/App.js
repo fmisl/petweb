@@ -138,11 +138,11 @@ function App() {
           else if (counter.tabY > 1) history.push('/'+menuList[counter.tabY]+'/'+stackManager[keyLeftPage].fileID);
         }
         break;
-      case 9:
-        toggleWorklist()
-        break;
+      // case 9:
+      //   toggleWorklist()
+      //   break;
       default:
-        console.log('press up or down key only', e.keyCode)
+        // console.log('press up or down key only', e.keyCode)
     }
     // console.log('press up or down key only:',e.keyCode)
   }

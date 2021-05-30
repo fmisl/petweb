@@ -24,11 +24,18 @@ const styleDiv ={
 function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
   const [finddata, setFinddata] = useState([]);
   const [getdata, setGetdata] = useState([]);
+  const [stepChecker, setStep] = useState(0);
+  const [stepInfo, setStepInfo] = useState({
+    PatientID: '', 	//사용할 문자열들을 저장하는 객체 형태로 관리!
+    StudyDate: '',
+    StudyDescription: '',
+  });
   const [inputs, setInputs] = useState({
     PatientID: '', 	//사용할 문자열들을 저장하는 객체 형태로 관리!
     StudyDate: '20210527',
+    StudyDescription: 'betaben',
   });
-  const { PatientID, StudyDate } = inputs; 
+  const { PatientID, StudyDate, StudyDescription } = inputs; 
   const [hoverState, setHoverState] = useState(false);
   const [alarm, setAlarm] = useState(false);
   const [fetching, setFetching] = useState(false);
@@ -40,6 +47,13 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
   const [addToWorklist, setaddToWorklist] = useState(true);
   const username = localStorage.getItem('username');
   const dispatch = useDispatch();
+  useEffect(()=>{
+    if (inputs !== stepInfo){
+      setStep(0);
+    }
+    // if (stepInfo.PatientID != '' && stepInfo.StudyDate != '' && stepInfo.StudyDescription !=''){
+    // }
+  }, [inputs])
   useEffect(() => {
     if (isShowing) {
         // setCurrentJPGURL_head('')
@@ -81,10 +95,12 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setListID(null);
     setFetching(true);
     const token = localStorage.getItem('token')
-    const res = await services.postPacs({'Method':'find','PatientID':PatientID, 'StudyDate':StudyDate, 'token':token})
+    const res = await services.postPacs({'Method':'find','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
     console.log(res.data);
     setFinddata(res.data);
     // setData(res.data)
+    setStep(1); 
+    setStepInfo(inputs); 
     setFetching(false);
     // const uploadList = res.data
     // setFileList(uploadList)
@@ -95,10 +111,12 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setListID(null);
     setFetching(true);
     const token = localStorage.getItem('token')
-    const res = await services.postPacs({'Method':'get','PatientID':PatientID, 'StudyDate':StudyDate, 'token':token})
+    const res = await services.postPacs({'Method':'get','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
     console.log(res.data);
     // setGetdata(res.data);
     setGetdata(res.data)
+    setStep(0); 
+    handleReset();
     setFetching(false);
     // const uploadList = res.data
     // setFileList(uploadList)
@@ -113,10 +131,11 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
   };
   
   const handleReset = () => {
-    setInputs({
+    setStepInfo({
       PatientID: '',
       StudyDate: '',
-    });
+      StudyDescription: '',
+    })
   };
 
   const runFiles = async (selectTracer, addToWorklist) =>{
@@ -125,36 +144,50 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     const putList = res.data
     dispatch(fetchItems(putList))
   }
+  console.log("inputs:",inputs)
+  console.log("stepInfo:", stepInfo)
   return (
     isShowing ? 
     ReactDOM.createPortal(
       <React.Fragment>
         <div className="modal-overlay"/>
-        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog" onClick={()=>{hide(false); deleteFiles();}}>
+        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog" onClick={()=>{hide(false); deleteFiles();handleReset();}}>
           <div className="modal" onClick={(e)=>e.stopPropagation()}>
             <div className="modal-header" >
-              PACS <span onClick={()=>{hide(false); deleteFiles();}} ><IconDelete className="worklist-delete" /></span>
+              PACS <span onClick={()=>{hide(false); deleteFiles();handleReset();}} ><IconDelete className="worklist-delete" /></span>
             </div>
             <div className="modal-body">
                 <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{setFelectItem(Math.floor(Math.random() * 20+30))}}>
                     <div style={{display:"flex", alignItems:"center", justifyContent:"space-around", height:"12%", width:"100%", border:"0px red solid", boxSizing:"border-box"}}>
-                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"35%"}}>
+                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"23%"}}>
                             <label for="PatientID">Patient_ID
                                 <input name="PatientID" type="text" placeholder="PatientID"
                                     value={PatientID}
                                     onChange={handleChange}/>
                             </label>
                         </div>
-                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"35%"}}>
+                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"21%"}}>
                             <label for="StudyDate">StudyDate
                                 <input name="StudyDate" type="text" placeholder="StudyDate"
                                     value={StudyDate}
                                     onChange={handleChange}/>
                             </label>
                         </div>
-                        <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
-                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head('');getHandler(); handleReset()}}>Search</div>
+                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"23%"}}>
+                            <label for="StudyDescription">StudyDescription
+                                <input name="StudyDescription" type="text" placeholder="StudyDescription"
+                                    value={StudyDescription}
+                                    onChange={handleChange}/>
+                            </label>
                         </div>
+                        {/* findHandler();  */}
+                        {stepChecker == 0 && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); findHandler();}}>Search</div>
+                        </div>}
+                        {/* getHandler();   */}
+                        {stepChecker == 1 && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); getHandler();}}>Download</div>
+                        </div>}
                     </div>
                     {/* <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"35%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
                         {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
@@ -192,8 +225,8 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                     Automatically add to worklist
                 </div>
                 <div style={{display: "flex"}}>
-                    <div style={{}} className="upload-btn"  onClick={()=>{hide(false); deleteFiles();}}>Cancel</div>
-                    <div style={{}} className="upload-btn type1" onClick={()=>{hide(false); runFiles(selectTracer, addToWorklist);}}>Run</div>
+                    <div style={{}} className="upload-btn"  onClick={()=>{hide(false); deleteFiles();handleReset();}}>Cancel</div>
+                    <div style={{}} className="upload-btn type1" onClick={()=>{hide(false); runFiles(selectTracer, addToWorklist);handleReset();}}>Run</div>
                 </div>
             </div>
           </div>
