@@ -60,10 +60,10 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
   }, [inputs])
   useEffect(()=>{
     console.log('tick with tickCounter, dcmCount and allDcmCount', tickCounter, dcmCount, allDcmCount)
-    const tick = () =>{
-        return setTimeout(()=>{
+    const tick = async () =>{
+        return setTimeout( async ()=>{
             const token = localStorage.getItem('token')
-            const res = services.dicomsCheck({'token':token})
+            const res = await services.dicomsCheck({'token':token})
             let newdata = res.data
             console.log(res)
             setDcmCount(newdata.dcmCount)
