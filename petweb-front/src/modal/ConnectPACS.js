@@ -148,6 +148,16 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
 
   const runFiles = async (selectTracer, addToWorklist) =>{
     const token = localStorage.getItem('token')
+    tracer = ""
+    if (selectTracer == "betaben"){
+        tracer = "[18F]FBB";
+    } else if (selectTracer == "betapir"){
+        tracer = "[18F]FBP";
+    } else if (selectTracer == "pib"){
+        tracer = "[11C]PIB"
+    } else {
+        tracer = "[18F]FBB";
+    }
     const res = await services.runFile({'token':token, 'obj':getdata, 'Tracer':selectTracer, 'addToWorklist':addToWorklist})
     const putList = res.data
     dispatch(fetchItems(putList))
@@ -271,7 +281,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                 </div>
                 <div style={{display: "flex"}}>
                     <div style={{}} className="upload-btn"  onClick={()=>{hide(false); deleteFiles();handleReset();}}>Cancel</div>
-                    <div style={{}} className="upload-btn type1" onClick={(e)=>{setCurrentJPGURL_head("");runner(e); runFiles(selectTracer, addToWorklist);handleReset();}}>Run</div>
+                    <div style={{}} className="upload-btn type1" onClick={(e)=>{setCurrentJPGURL_head("");runFiles(StudyDescription, addToWorklist);handleReset();}}>Run</div>
                 </div>
             </div>
           </div>
