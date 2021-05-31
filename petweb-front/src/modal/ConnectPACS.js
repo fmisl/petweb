@@ -56,13 +56,13 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // }
   }, [inputs])
   useEffect(() => {
+    const myInterval = setInterval(async ()=>{
+        const token = localStorage.getItem('token')
+        const res = await services.dicomsCheck({'token':token})
+        let newdata = res.data
+        console.log(newdata);
+    }, 1000)
     if (isShowing) {
-        const myInterval = setInterval(async ()=>{
-            const token = localStorage.getItem('token')
-            const res = await services.dicomsCheck({'token':token})
-            let newdata = res.data
-            console.log(newdata);
-        }, 1000)
     } else {
         setCurrentJPGURL_head('');
         clearInterval(myInterval);
