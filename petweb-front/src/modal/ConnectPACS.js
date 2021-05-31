@@ -117,7 +117,6 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setGetdata(res.data);
     setGetdata(res.data)
     setStep(2); 
-    handleReset();
     setStepInfo({
       PatientID: '',
       StudyDate: '',
