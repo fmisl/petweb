@@ -25,6 +25,7 @@ const styleDiv ={
 function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTracer, setSelectTracer, fileList, isShowing, runner, hide, removeFileList, updateFileList }) {
   const [finddata, setFinddata] = useState([]);
   const [getdata, setGetdata] = useState([]);
+  const [dcmCount, setDcmCount] = useState(0);
   const [stepChecker, setStep] = useState(0);
   const [stepInfo, setStepInfo] = useState({
     PatientID: '', 	//사용할 문자열들을 저장하는 객체 형태로 관리!
@@ -61,8 +62,10 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
         const res = await services.dicomsCheck({'token':token})
         let newdata = res.data
         console.log(newdata);
+        setDcmCount(newdata.dcmCount)
     }, 1000)
     if (isShowing) {
+
     } else {
         setCurrentJPGURL_head('');
         clearInterval(myInterval);
@@ -268,10 +271,10 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         } */}
                     </div>
                     {stepChecker == 1 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"35%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
-                        {fetching ? <img src={loadingGIF}/>:<PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                        {fetching ? <div>{dcmCount}<img src={loadingGIF}/></div>:<PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>}
                     {stepChecker == 2 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
-                        {fetching ? <img src={loadingGIF}/>:<PACsTable2 setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                        {fetching ? <div>{dcmCount}<img src={loadingGIF}/></div>:<PACsTable2 setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>}
                 </div>
                 <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
