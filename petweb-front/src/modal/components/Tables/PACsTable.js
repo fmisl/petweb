@@ -38,8 +38,8 @@ export default class PACsTable extends Component {
                   //         : {...item,...{Focus:false}} // 기존의 값을 그대로 유지
                   //   ),
                   // });
-                  this.props.getJPGURL(props.record.FileName)
-                  this.props.setListID(props.record.id)
+                //   this.props.getJPGURL(props.record.FileName)
+                //   this.props.setListID(props.record.id)
                 }
               }
             >
@@ -61,8 +61,8 @@ export default class PACsTable extends Component {
                 //       : {...item,...{Focus:false}} // 기존의 값을 그대로 유지
                 //   ),
                 // });
-                this.props.getJPGURL(props.record.FileName)
-                this.props.setListID(props.record.id)
+                // this.props.getJPGURL(props.record.FileName)
+                // this.props.setListID(props.record.id)
               }
             }
           >
