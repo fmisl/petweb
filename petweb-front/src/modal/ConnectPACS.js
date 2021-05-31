@@ -110,6 +110,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setFetchState(true);
     // setListID(null);
     setFetching(true);
+    myTimer();
     const token = localStorage.getItem('token')
     const res = await services.postPacs({'Method':'get','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
     console.log(res.data);
@@ -121,6 +122,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
       StudyDate: '',
       StudyDescription: '',
     })
+    clearMyTimer();
     setFetching(false);
     // const uploadList = res.data
     // setFileList(uploadList)
@@ -158,7 +160,6 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
         tracer = "[18F]FBB";
     }
     console.log("getdata: ",getdata)
-    myTimer();
     const res = await services.runFile({'token':token, 'obj':getdata, 'Tracer':tracer, 'addToWorklist':addToWorklist})
     const putList = res.data
     dispatch(fetchItems(putList))
@@ -166,7 +167,6 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log("fileList:", fileList)
     handleReset();
     deleteFiles();
-    clearMyTimer();
   }
   const myTimer = async()=>{
       this.myInterval = setInterval(async ()=>{
