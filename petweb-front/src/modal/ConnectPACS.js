@@ -213,7 +213,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         </div>}
                         {stepChecker == 1 && fetching &&
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
-                            <div style={{}} className="pacs-btn type1">Loading...</div>
+                            <div style={{}} className="pacs-btn">Loading...</div>
                         </div>}
                         {stepChecker == 2 && !fetching &&
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
