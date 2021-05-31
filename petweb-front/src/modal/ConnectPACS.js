@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 // import '../App.css';
 import './ConnectPACS.css';
 import IconDelete from '../images/IconDelete';
-import PACsTable from './components/Tables/PACsTable'
+import PACsTable from './components/Tables/PACsTable';
+import PACsTable2 from './components/Tables/PACsTable2';
 import loadingGIF from '../images/gif/spinner.gif'
 // import * as services from '../services/fetchApi'
 import {IPinUSE} from '../services/IPs'
@@ -205,7 +206,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         {fetching ? <img src={loadingGIF}/>:<PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>}
                     {stepChecker == 2 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
-                        {fetching ? <img src={loadingGIF}/>:<PACsTable setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                        {fetching ? <img src={loadingGIF}/>:<PACsTable2 setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>}
                 </div>
                 <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
