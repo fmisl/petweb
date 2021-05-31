@@ -79,6 +79,17 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
       }
     }
   },[alarm])
+  useEffect(()=>{
+    this.myInterval = setInterval(async ()=>{
+        const token = localStorage.getItem('token')
+        const res = await services.dicomsCheck({'token':token})
+        let newdata = res.data
+        console.log(newdata);
+    }, 1000)
+    return ()=>{
+        clearInterval(this.myInterval);
+    };
+  },[])
   const handleMouseHover=()=> {
     setHoverState(!hoverState);
   }
@@ -110,7 +121,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setFetchState(true);
     // setListID(null);
     setFetching(true);
-    myTimer();
+    // myTimer();
     const token = localStorage.getItem('token')
     const res = await services.postPacs({'Method':'get','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
     console.log(res.data);
@@ -122,7 +133,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
       StudyDate: '',
       StudyDescription: '',
     })
-    clearMyTimer();
+    // clearMyTimer();
     setFetching(false);
     // const uploadList = res.data
     // setFileList(uploadList)
