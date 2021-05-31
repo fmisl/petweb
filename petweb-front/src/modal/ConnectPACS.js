@@ -137,6 +137,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
       StudyDate: '',
       StudyDescription: '',
     })
+    setStep(0); 
   };
 
   const runFiles = async (selectTracer, addToWorklist) =>{
@@ -191,17 +192,25 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                             </label>
                         </div>
                         {/* findHandler();  */}
-                        {(stepChecker == 0 || stepChecker == 2 && !fetching) && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                        {(stepChecker == 0 && !fetching) && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
                             <div style={{}} className="pacs-btn" onClick={()=>{setCurrentJPGURL_head(''); findHandler();}}>Search</div>
                         </div>}
                         {/* getHandler();   */}
-                        {stepChecker == 1 && fetching &&
-                        <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
-                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); }}>Loading</div>
+                        {(stepChecker == 0 && fetching) && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn" >Searching</div>
                         </div>}
+                        {/* getHandler();   */}
                         {stepChecker == 1 && !fetching &&
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
                             <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); getHandler();}}>Download</div>
+                        </div>}
+                        {stepChecker == 1 && fetching &&
+                        <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn type1">Loading</div>
+                        </div>}
+                        {stepChecker == 2 && !fetching &&
+                        <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn" onClick={()=>{setCurrentJPGURL_head(''); handleReset();}}>Reset</div>
                         </div>}
                         {/* {stepChecker == 2 && fetching && 
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
