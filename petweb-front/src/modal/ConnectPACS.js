@@ -25,8 +25,9 @@ const styleDiv ={
 function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTracer, setSelectTracer, fileList, isShowing, runner, hide, removeFileList, updateFileList }) {
   const [finddata, setFinddata] = useState([]);
   const [getdata, setGetdata] = useState([]);
+  const [tickCounter,setTickCounter] = useState(0);
   const [dcmCount, setDcmCount] = useState(0);
-  const [allDcmCount, setAllDcmCount] = useState(148);
+  const [allDcmCount, setAllDcmCount] = useState(0);
   const [stepChecker, setStep] = useState(0);
   const [stepInfo, setStepInfo] = useState({
     PatientID: '', 	//사용할 문자열들을 저장하는 객체 형태로 관리!
@@ -57,20 +58,41 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // if (stepInfo.PatientID != '' && stepInfo.StudyDate != '' && stepInfo.StudyDescription !=''){
     // }
   }, [inputs])
-  useEffect(() => {
-    const myInterval = setInterval(async ()=>{
-        const token = localStorage.getItem('token')
-        const res = await services.dicomsCheck({'token':token})
-        let newdata = res.data
-        console.log(newdata);
-        setDcmCount(newdata.dcmCount)
-    }, 1000)
-    if (isShowing) {
-
-    } else {
-        setCurrentJPGURL_head('');
-        clearInterval(myInterval);
+  useEffect(()=>{
+    console.log('tick with tickCounter, dcmCount and allDcmCount', tickCounter, dcmCount, allDcmCount)
+    const tick = () =>{
+        return setTimeout(()=>{
+            const token = localStorage.getItem('token')
+            const res = services.dicomsCheck({'token':token})
+            let newdata = res.data
+            setDcmCount(newdata.dcmCount)
+            setTickCounter(tickCounter+1)
+        },1000);
     }
+    if(dcmCount == allDcmCount) {
+        console.log('reset tickCounter to 0')
+        setTickCounter(0)
+        return undefined
+    };
+    tick();
+    return ()=>clearTimeout(tick);
+  },[tickCounter, allDcmCount])
+  useEffect(() => {
+    if (isShowing) {
+        // const myInterval = setInterval(async ()=>{
+        //     const token = localStorage.getItem('token')
+        //     const res = await services.dicomsCheck({'token':token})
+        //     let newdata = res.data
+        //     console.log(newdata);
+        //     setDcmCount(newdata.dcmCount)
+        // }, 1000)
+        console.log("useEffect-isShowing: true")
+        setCurrentJPGURL_head('');
+    } else {
+        console.log("useEffect-isShowing: false")
+        setCurrentJPGURL_head('');
+    }
+    // return  _ => clearInterval(myInterval);
   },[isShowing])
   const getJPGURL=(filename)=>{
     const fname = filename.split('.').slice(0,-1).join()
