@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 // import '../App.css';
 import './ConnectPACS.css';
 import IconDelete from '../images/IconDelete';
-import UploaderTable from './components/Tables/UploaderTable'
+import PACsTable from './components/Tables/PACsTable'
 import loadingGIF from '../images/gif/spinner.gif'
 // import * as services from '../services/fetchApi'
 import {IPinUSE} from '../services/IPs'
@@ -193,10 +193,10 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         </div>}
                     </div>
                     {stepChecker == 1 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"35%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
-                        {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                        {fetching ? <img src={loadingGIF}/>:<PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>}
                     {stepChecker == 2 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
-                        {fetching ? <img src={loadingGIF}/>:<UploaderTable setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                        {fetching ? <img src={loadingGIF}/>:<PACsTable setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>}
                 </div>
                 <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
