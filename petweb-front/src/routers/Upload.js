@@ -145,7 +145,7 @@ function Upload({toggleWorklist}) {
       <Headerbar/> */}
       {/* <Worklist isShowing={isShowingWorklist} hide={toggleWorklist}/> */}
       <Uploader setListID={setListID} listID={listID} setFetchState={setFetchState} fetchState={fetchState} selectTracer={selectTracer} setSelectTracer={setSelectTracer} setaddToWorklist={setaddToWorklist} fileList={uploaderFileList} isShowing={isShowingUploader} hide={toggleUploader} removeFileList={removeFileList} updateFileList={updateFileList}/>
-      <ConnectPACS setListID={setListID} listID={listID} setFetchState={setFetchState} fetchState={false} selectTracer={selectTracer} setSelectTracer={setSelectTracer} setaddToWorklist={setaddToWorklist} fileList={uploaderFileList} isShowing={isShowingPACS} hide={togglePACS} removeFileList={removeFileList} updateFileList={updateFileList}/>
+      <ConnectPACS setListID={setListID} listID={listID} setFetchState={setFetchState} fetchState={false} selectTracer={selectTracer} setSelectTracer={setSelectTracer} setaddToWorklist={setaddToWorklist} fileList={uploaderFileList} isShowing={isShowingPACS} runner={toggleUploader} hide={togglePACS} removeFileList={removeFileList} updateFileList={updateFileList}/>
       <div className="content-page">
         <div className="upload-title">
           <div style={{display:"flex"}}>

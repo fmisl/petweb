@@ -22,7 +22,7 @@ const styleDiv ={
   height:"46%",
   // background: "black",
 }
-function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTracer, setSelectTracer, fileList, isShowing, hide, removeFileList, updateFileList }) {
+function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTracer, setSelectTracer, fileList, isShowing, runner, hide, removeFileList, updateFileList }) {
   const [finddata, setFinddata] = useState([]);
   const [getdata, setGetdata] = useState([]);
   const [stepChecker, setStep] = useState(0);
@@ -152,6 +152,16 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     const putList = res.data
     dispatch(fetchItems(putList))
   }
+  const myTimer = async()=>{
+      this.myInterval = setInterval(async ()=>{
+          const token = localStorage.getItem('token')
+          const res = await services.testing({'token':token})
+          let newdata = res.data
+      }, 1000)
+  }
+  const clearMyTimer = () =>{
+    clearInterval(this.myInterval);
+  }
   console.log("inputs:",inputs)
   console.log("stepInfo:", stepInfo)
   return (
@@ -261,7 +271,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                 </div>
                 <div style={{display: "flex"}}>
                     <div style={{}} className="upload-btn"  onClick={()=>{hide(false); deleteFiles();handleReset();}}>Cancel</div>
-                    <div style={{}} className="upload-btn type1" onClick={()=>{hide(false); runFiles(selectTracer, addToWorklist);handleReset();}}>Run</div>
+                    <div style={{}} className="upload-btn type1" onClick={(e)=>{setCurrentJPGURL_head("");runner(e); runFiles(selectTracer, addToWorklist);handleReset();}}>Run</div>
                 </div>
             </div>
           </div>
