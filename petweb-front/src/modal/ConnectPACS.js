@@ -138,6 +138,8 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
       StudyDescription: '',
     })
     setStep(0); 
+    setFinddata([]);
+    setGetdata([]);
   };
 
   const runFiles = async (selectTracer, addToWorklist) =>{
