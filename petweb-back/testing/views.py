@@ -1104,6 +1104,21 @@ class export(APIView):
 
 
 class pacs(APIView):
+    def get(self, request, format=None):
+        username = request.user.username
+        user_path = os.path.join(settings.MEDIA_ROOT, str(username))
+        if not os.path.exists(user_path):
+            os.mkdir(user_path)
+        uploader_path = os.path.join(user_path, 'uploader')
+        if not os.path.exists(uploader_path):
+            os.mkdir(uploader_path)
+        file_name = "dicoms"
+        dcm_folder_path = os.path.join(uploader_path, file_name)
+        if not os.path.exists(dcm_folder_path):
+            return Response(data="nothing exist", status=status.HTTP_200_OK)
+        dcmCount = [_ for _ in os.listdir(dcm_folder_path)]
+        return Response(data="dicom number: "+len(dcmCount), status=status.HTTP_200_OK)
+
     def __init__(self):
         self.PACS_server = '172.16.60.69 1201'
         self.SAVE_DIRECTORY = r'C:\Users\dwnusa\workspace\dcmtkfiles'
