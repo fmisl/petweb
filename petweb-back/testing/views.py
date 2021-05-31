@@ -1315,8 +1315,10 @@ class pacs(APIView):
             print("step2")
             # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
             if StudyDescription=='betaben':
-                tracer = '[11C]PIB'
-            else:
+                tracer = '[18F]FBB'
+            elif StudyDescription== 'betapir':
+                tracer = '[18F]FBP'
+            elif StudyDescription== 'pib':
                 tracer = '[11C]PIB'
             findResult = [{'id': i, 'Focus': False,'Group': 0,
                          'FileName': None, 'Tracer': tracer,

@@ -173,11 +173,20 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                                     onChange={handleChange}/>
                             </label>
                         </div>
-                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"23%"}}>
+                        {/*<div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"23%"}}>
                             <label for="StudyDescription">StudyDescription
                                 <input name="StudyDescription" type="text" placeholder="StudyDescription"
                                     value={StudyDescription}
                                     onChange={handleChange}/>
+                            </label>
+                        </div> */}
+                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"28%"}}>
+                            <label for="StudyDescription">StudyDescription
+                                <select name="StudyDescription" onChange={handleChange} value={StudyDescription} style={{border:"0px", color:"white", textAlignLast:"center"}}>
+                                    <option value="betaben">{"[\u00B9\u2078F]Florbetaben"}</option>
+                                    <option value="betapir">{"[\u00B9\u2078F]Florbetapir"}</option>
+                                    <option value="pib">{"[\u00B9\u00B9C]Pittsburg Compound B"}</option>
+                                </select>
                             </label>
                         </div>
                         {/* findHandler();  */}
