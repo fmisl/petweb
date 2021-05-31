@@ -161,7 +161,6 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     const res = await services.runFile({'token':token, 'obj':getdata, 'Tracer':selectTracer, 'addToWorklist':addToWorklist})
     const putList = res.data
     dispatch(fetchItems(putList))
-    handleReset();
   }
   const myTimer = async()=>{
       this.myInterval = setInterval(async ()=>{
@@ -282,7 +281,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                 </div>
                 <div style={{display: "flex"}}>
                     <div style={{}} className="upload-btn"  onClick={()=>{hide(false); deleteFiles();handleReset();}}>Cancel</div>
-                    <div style={{}} className="upload-btn type1" onClick={(e)=>{setCurrentJPGURL_head("");hide(false); runFiles(StudyDescription, addToWorklist);}}>Run</div>
+                    <div style={{}} className="upload-btn type1" onClick={(e)=>{setCurrentJPGURL_head("");hide(false); runFiles(StudyDescription, addToWorklist);handleReset();}}>Run</div>
                 </div>
             </div>
           </div>
