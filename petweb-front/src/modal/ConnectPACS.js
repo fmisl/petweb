@@ -158,7 +158,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     } else {
         tracer = "[18F]FBB";
     }
-    const res = await services.runFile({'token':token, 'obj':getdata, 'Tracer':selectTracer, 'addToWorklist':addToWorklist})
+    const res = await services.runFile({'token':token, 'obj':getdata, 'Tracer':tracer, 'addToWorklist':addToWorklist})
     const putList = res.data
     dispatch(fetchItems(putList))
   }
@@ -212,8 +212,8 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                             <label for="StudyDescription">StudyDescription
                                 <select name="StudyDescription" onChange={handleChange} value={StudyDescription} style={{border:"0px", color:"white", textAlignLast:"left"}}>
                                     <option value="betaben">{"[\u00B9\u2078F]Florbetaben"}</option>
-                                    <option value="betapir">{"[\u00B9\u2078F]Florbetapir"}</option>
-                                    <option value="pib">{"[\u00B9\u00B9C]Pittsburg Compound B"}</option>
+                                    {/* <option value="betapir">{"[\u00B9\u2078F]Florbetapir"}</option>
+                                    <option value="pib">{"[\u00B9\u00B9C]Pittsburg Compound B"}</option> */}
                                 </select>
                             </label>
                         </div>
