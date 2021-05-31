@@ -1322,6 +1322,12 @@ class pacs(APIView):
         InputAffineX0 = []
         InputAffineY1 = []
         InputAffineZ2 = []
+        if StudyDescription=='betaben':
+            tracer = '[18F]FBB'
+        elif StudyDescription== 'betapir':
+            tracer = '[18F]FBP'
+        elif StudyDescription== 'pib':
+            tracer = '[11C]PIB'
 
         if Method == 'find':
             if StudyDate == '':
@@ -1330,12 +1336,6 @@ class pacs(APIView):
             print('step1')
             print("step2")
             # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
-            if StudyDescription=='betaben':
-                tracer = '[18F]FBB'
-            elif StudyDescription== 'betapir':
-                tracer = '[18F]FBP'
-            elif StudyDescription== 'pib':
-                tracer = '[11C]PIB'
             findResult = [{'id': i, 'Focus': False,'Group': 0,
                          'FileName': None, 'Tracer': tracer,
                          'PatientName': Patient_name[i], 'PatientID':Patient_ID[i], 'BirthDate':Date_of_birth[i],
@@ -1399,7 +1399,7 @@ class pacs(APIView):
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
             print('step5')
             filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
-            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': Patient_name[i], 'Group': 0, 'fileID': None,
+            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': Patient_name[i], 'Group': 0, 'fileID': None,
                          'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
                          for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
             # return Response(status=status.HTTP_200_OK)
