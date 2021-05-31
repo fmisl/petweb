@@ -161,6 +161,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     const res = await services.runFile({'token':token, 'obj':getdata, 'Tracer':tracer, 'addToWorklist':addToWorklist})
     const putList = res.data
     dispatch(fetchItems(putList))
+    console.log(putList, fileList)
   }
   const myTimer = async()=>{
       this.myInterval = setInterval(async ()=>{
@@ -172,8 +173,8 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
   const clearMyTimer = () =>{
     clearInterval(this.myInterval);
   }
-  console.log("inputs:",inputs)
-  console.log("stepInfo:", stepInfo)
+//   console.log("inputs:",inputs)
+//   console.log("stepInfo:", stepInfo)
   return (
     isShowing ? 
     ReactDOM.createPortal(
