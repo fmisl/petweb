@@ -29,7 +29,7 @@ export default class PACsTable extends Component {
       return(
           <div className={`PACsTable-Default ${props.record.Select && 'sel'} ${props.record.Focus && 'focus'}`} 
             onClick={(e)=>{
-                //   this.props.updateFileList(props.record)
+                  this.props.updateFileList(props.record)
                   // this.setState({
                   //   // data:[...data, props.record]
                   //   data: data.map(
@@ -52,7 +52,7 @@ export default class PACsTable extends Component {
       return(
         <div className={`PACsTable-Default ${props.record.Select && 'sel'} ${props.record.Focus && 'focus'}`} 
             onClick={(e)=>{
-                // this.props.updateFileList(props.record)
+                this.props.updateFileList(props.record)
                 // this.setState({
                 //   // data:[...data, props.record]
                 //   data: data.map(
