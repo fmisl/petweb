@@ -65,7 +65,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
             const token = localStorage.getItem('token')
             const res = services.dicomsCheck({'token':token})
             let newdata = res.data
-            console.log(newdata)
+            console.log(res)
             setDcmCount(newdata.dcmCount)
             setTickCounter(tickCounter+1)
         },1000);
