@@ -83,3 +83,10 @@ export function postPacs(data) {
     }
   })
 }
+export function dicomsCheck(data){
+  return axios.get(IPinUSE+"testing/pacs/",{
+    headers:{
+    'Authorization':'jwt '+data.token
+    }
+  })
+}

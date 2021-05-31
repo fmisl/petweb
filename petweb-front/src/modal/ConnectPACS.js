@@ -158,6 +158,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
         tracer = "[18F]FBB";
     }
     console.log("getdata: ",getdata)
+    myTimer();
     const res = await services.runFile({'token':token, 'obj':getdata, 'Tracer':tracer, 'addToWorklist':addToWorklist})
     const putList = res.data
     dispatch(fetchItems(putList))
@@ -165,12 +166,14 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log("fileList:", fileList)
     handleReset();
     deleteFiles();
+    clearMyTimer();
   }
   const myTimer = async()=>{
       this.myInterval = setInterval(async ()=>{
           const token = localStorage.getItem('token')
-          const res = await services.testing({'token':token})
+          const res = await services.dicomsCheck({'token':token})
           let newdata = res.data
+          console.log(newdata);
       }, 1000)
   }
   const clearMyTimer = () =>{
