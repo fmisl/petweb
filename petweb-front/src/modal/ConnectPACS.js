@@ -118,6 +118,11 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     setGetdata(res.data)
     setStep(2); 
     handleReset();
+    setStepInfo({
+      PatientID: '',
+      StudyDate: '',
+      StudyDescription: '',
+    })
     setFetching(false);
     // const uploadList = res.data
     // setFileList(uploadList)
