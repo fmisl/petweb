@@ -1117,7 +1117,8 @@ class pacs(APIView):
         if not os.path.exists(dcm_folder_path):
             return Response(data="nothing exist", status=status.HTTP_200_OK)
         dcmCount = [_ for _ in os.listdir(dcm_folder_path)]
-        return Response(data="dicom number: "+len(dcmCount), status=status.HTTP_200_OK)
+        packet = {"dcmCount": str(len(dcmCount))}
+        return Response(data=packet, status=status.HTTP_200_OK)
 
     def __init__(self):
         self.PACS_server = '172.16.60.69 1201'
