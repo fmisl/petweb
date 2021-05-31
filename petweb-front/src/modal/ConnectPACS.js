@@ -80,14 +80,14 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     }
   },[alarm])
   useEffect(()=>{
-    this.myInterval = setInterval(async ()=>{
+    const myInterval = setInterval(async ()=>{
         const token = localStorage.getItem('token')
         const res = await services.dicomsCheck({'token':token})
         let newdata = res.data
         console.log(newdata);
     }, 1000)
     return ()=>{
-        clearInterval(this.myInterval);
+        clearInterval(myInterval);
     };
   },[])
   const handleMouseHover=()=> {
@@ -179,17 +179,17 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     handleReset();
     deleteFiles();
   }
-  const myTimer = async()=>{
-      this.myInterval = setInterval(async ()=>{
-          const token = localStorage.getItem('token')
-          const res = await services.dicomsCheck({'token':token})
-          let newdata = res.data
-          console.log(newdata);
-      }, 1000)
-  }
-  const clearMyTimer = () =>{
-    clearInterval(this.myInterval);
-  }
+//   const myTimer = async()=>{
+//       this.myInterval = setInterval(async ()=>{
+//           const token = localStorage.getItem('token')
+//           const res = await services.dicomsCheck({'token':token})
+//           let newdata = res.data
+//           console.log(newdata);
+//       }, 1000)
+//   }
+//   const clearMyTimer = () =>{
+//     clearInterval(this.myInterval);
+//   }
 //   console.log("inputs:",inputs)
 //   console.log("stepInfo:", stepInfo)
   return (
