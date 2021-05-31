@@ -57,10 +57,15 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
   }, [inputs])
   useEffect(() => {
     if (isShowing) {
-        // setCurrentJPGURL_head('')
-        // deleteFiles();
+        const myInterval = setInterval(async ()=>{
+            const token = localStorage.getItem('token')
+            const res = await services.dicomsCheck({'token':token})
+            let newdata = res.data
+            console.log(newdata);
+        }, 1000)
     } else {
-        setCurrentJPGURL_head('')
+        setCurrentJPGURL_head('');
+        clearInterval(myInterval);
     }
   },[isShowing])
   const getJPGURL=(filename)=>{
@@ -79,17 +84,17 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
       }
     }
   },[alarm])
-  useEffect(()=>{
-    const myInterval = setInterval(async ()=>{
-        const token = localStorage.getItem('token')
-        const res = await services.dicomsCheck({'token':token})
-        let newdata = res.data
-        console.log(newdata);
-    }, 1000)
-    return ()=>{
-        clearInterval(myInterval);
-    };
-  },[])
+//   useEffect(()=>{
+//     const myInterval = setInterval(async ()=>{
+//         const token = localStorage.getItem('token')
+//         const res = await services.dicomsCheck({'token':token})
+//         let newdata = res.data
+//         console.log(newdata);
+//     }, 1000)
+//     return ()=>{
+//         clearInterval(myInterval);
+//     };
+//   },[])
   const handleMouseHover=()=> {
     setHoverState(!hoverState);
   }
