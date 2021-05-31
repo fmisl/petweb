@@ -61,7 +61,6 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
         // deleteFiles();
     } else {
         setCurrentJPGURL_head('')
-        deleteFiles();
     }
   },[isShowing])
   const getJPGURL=(filename)=>{
@@ -165,6 +164,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log("putList:",putList)
     console.log("fileList:", fileList)
     handleReset();
+    deleteFiles();
   }
   const myTimer = async()=>{
       this.myInterval = setInterval(async ()=>{
