@@ -94,9 +94,13 @@ export default class PACsTable extends Component {
     // console.log("PACsTable",fileList)
     const fields = [
       { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;</div>, inputFilterable: false, sortable: false },
+      { render: this.renderClick, name: 'PatientID', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
       { render: this.renderClick, name: 'PatientName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
-      { render: this.renderClick, name: 'FileName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>FileName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
-      { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
+      { render: this.renderClick, name: 'BirthDate', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
+      { render: this.renderClick, name: 'StudyDate', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
+      { render: this.renderClick, name: 'Modality', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>PatientName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
+    //   { render: this.renderClick, name: 'FileName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>FileName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
+    //   { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
     ];
     return (
       <FilterableTable
