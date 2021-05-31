@@ -148,7 +148,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
 
   const runFiles = async (selectTracer, addToWorklist) =>{
     const token = localStorage.getItem('token')
-    tracer = ""
+    let tracer = ""
     if (selectTracer == "betaben"){
         tracer = "[18F]FBB";
     } else if (selectTracer == "betapir"){
