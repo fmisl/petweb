@@ -108,7 +108,7 @@ export default class PACsTable extends Component {
           tableClassName="PACsTable"
           // trClassName="WorklistTable"
           namespace="PACsTable"
-          initialSort="name"
+          initialSort="PatientName"
           data={fileList}
           fields={fields}
           noRecordsMessage="There are no people to display"
