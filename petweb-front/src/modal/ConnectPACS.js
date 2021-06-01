@@ -189,6 +189,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     setStep(0); 
     setFinddata([]);
     setGetdata([]);
+    setFetching(false);
   };
 
   const runFiles = async (selectTracer, addToWorklist) =>{
