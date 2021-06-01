@@ -989,7 +989,7 @@ class uploader(APIView):
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
 
             filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
-            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': 'Sandwich Eater', 'Group': 0, 'fileID': None,
+            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': 'Anonymous', 'Group': 0, 'fileID': None,
                          'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
                          for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
 
