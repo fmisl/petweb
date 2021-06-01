@@ -1139,10 +1139,15 @@ class pacs(APIView):
 
         # Change here
         # insert patient information
+        # output = os.popen(r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\findscu.exe ' +
+        #                   '-S -k 0008,0052="STUDY" -k "PatientName" -k ' + ptidfield +
+        #                   ' -k "PatientBirthDate" -k ' + datefield +
+        #                   ' -k "StudyInstanceUID" -k "StudyDescription=betaben" -k "ModalitiesInStudy" ' + self.PACS_server).read()
+
         output = os.popen(r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\findscu.exe ' +
                           '-S -k 0008,0052="STUDY" -k "PatientName" -k ' + ptidfield +
                           ' -k "PatientBirthDate" -k ' + datefield +
-                          ' -k "StudyInstanceUID" -k "StudyDescription=betaben" -k "ModalitiesInStudy" ' + self.PACS_server).read()
+                          ' -k "StudyInstanceUID" -k "StudyDescription=betaben" -k "ModalitiesInStudy=PT" ' + self.PACS_server).read()
 
         output_splt = output.split('I: ---------------------------\n')
         num_of_studies = len(output_splt) - 1
@@ -1208,11 +1213,17 @@ class pacs(APIView):
 
                     Study_description.append(study_info_splt[find1 + 1:find2])
 
+            # series_info_cmd = os.popen(
+            #     r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\findscu.exe -S -k 0008,0052="SERIES" -k "PatientID=' +
+            #     Patient_ID[i - 1] +
+            #     '" -k "StudyInstanceUID=' + Study_instanceUID[i - 1].rstrip('\x00') +
+            #     '" -k "Modality=PT" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID" ' + self.PACS_server).read()
+
             series_info_cmd = os.popen(
                 r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\findscu.exe -S -k 0008,0052="SERIES" -k "PatientID=' +
                 Patient_ID[i - 1] +
                 '" -k "StudyInstanceUID=' + Study_instanceUID[i - 1].rstrip('\x00') +
-                '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID" ' + self.PACS_server).read()
+                '" -k "Modality=PT" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID" ' + self.PACS_server).read()
 
             series_splt = series_info_cmd.split('I: ---------------------------\n')
             num_of_series = len(output_splt)
@@ -1281,9 +1292,18 @@ class pacs(APIView):
                         'Series description: {} ...\n'.format(study_level[1][idx_series])
                     )
 
+                    # os.popen(
+                    #     r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\getscu.exe -d -S -k 0008,0052="SERIES" -k "PatientID='
+                    #     + Patient_ID[idx_study] + '" -k "StudyInstanceUID='
+                    #     + Study_instanceUID[idx_study].rstrip(
+                    #         '\x00') + '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID='
+                    #     # study_level[3] describes the series instnaceuid
+                    #     + study_level[3][idx_series].rstrip(
+                    #         '\x00') + '" -od "' + target_path + '" ' + self.PACS_server).read()
+
                     os.popen(
                         r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\getscu.exe -d -S -k 0008,0052="SERIES" -k "PatientID='
-                        + Patient_ID[idx_study] + '" -k "StudyInstanceUID='
+                        + Patient_ID[idx_study].rstrip('\x00') + '" -k "StudyInstanceUID='
                         + Study_instanceUID[idx_study].rstrip(
                             '\x00') + '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID='
                         # study_level[3] describes the series instnaceuid
@@ -1347,7 +1367,7 @@ class pacs(APIView):
         if Method == 'get':
             Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
             print([Patient_name, Patient_ID])
-            self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, [0, 1], target_path=dcm_folder_path)
+            self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, range(0,len(Patient_ID)), target_path=dcm_folder_path)
             print('step3')
 
             dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')

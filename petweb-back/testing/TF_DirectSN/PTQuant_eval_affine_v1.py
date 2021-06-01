@@ -9,7 +9,9 @@ import os, shutil
 from shutil import copyfile
 
 # TODO: Change the model paths
-import tensorflow as tf
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import testing.TF_DirectSN.layers_coregpy as lays
 from testing.TF_DirectSN.PTQuant_utils import Dense3DSpatialTransformer, VTNAffineStem
 
