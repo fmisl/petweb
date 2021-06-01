@@ -287,7 +287,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         </div>}
                         {stepChecker == 2 && !fetching &&
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
-                            <div style={{}} className="pacs-btn" onClick={()=>{setCurrentJPGURL_head(''); handleReset();}}>Reset</div>
+                            <div style={{}} className="pacs-btn" onClick={()=>{setCurrentJPGURL_head(''); handleReset();deleteFiles();}}>Reset</div>
                         </div>}
                         {/* {stepChecker == 2 && fetching && 
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
