@@ -6,17 +6,30 @@ const fileListReducer = (state = [], action) => {
       return [...action.items]
     case 'UPDATE_CENTILOID':
       return state.map((v, i) => {
+          const findItem = action.items.find((item)=>item.fileID==v.fileID);
           if (v.Composite_C == null) {
             return {
               ...v, 
-              Composite_C:action.items.find((item)=>item.fileID==v.fileID).Composite_C, 
-              Complete:action.items.find((item)=>item.fileID==v.fileID).Complete
+              Composite_C:findItem.Composite_C, 
+              Complete:findItem.Complete,
+              InputAffineParamsX0:findItem.InputAffineParamsX0,
+              InputAffineParamsY1:findItem.InputAffineParamsY1,
+              InputAffineParamsZ2:findItem.InputAffineParamsZ2,
+              OutputAffineParamsX0:findItem.OutputAffineParamsX0,
+              OutputAffineParamsY1:findItem.OutputAffineParamsY1,
+              OutputAffineParamsZ2:findItem.OutputAffineParamsZ2,
             }
           }
           else {
             return {
               ...v,
-              Complete:action.items.find((item)=>item.fileID==v.fileID).Complete
+              Complete:findItem.Complete,
+              InputAffineParamsX0:findItem.InputAffineParamsX0,
+              InputAffineParamsY1:findItem.InputAffineParamsY1,
+              InputAffineParamsZ2:findItem.InputAffineParamsZ2,
+              OutputAffineParamsX0:findItem.OutputAffineParamsX0,
+              OutputAffineParamsY1:findItem.OutputAffineParamsY1,
+              OutputAffineParamsZ2:findItem.OutputAffineParamsZ2,
             }
           }
         });
