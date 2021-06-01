@@ -847,9 +847,9 @@ class uploader(APIView):
         InputAffineX0 = []
         InputAffineY1 = []
         InputAffineZ2 = []
-        PatientID = []
-        PatientName = []
-        FileName = []
+        dcmPatientID = []
+        dcmPatientName = []
+        dcmFileName = []
         # Save files in user_path/uploader
         if Format == "dcm":
             print('dcm')
@@ -902,9 +902,9 @@ class uploader(APIView):
                     print(dcm_header)
                     NiiPath = os.path.join(uploader_path, myfile)
                     nimg3D = nib.load(NiiPath)
-                    PatientID.append(dcm_header['PatientID'])
-                    PatientName.append(dcm_header['PatientName'])
-                    FileName.append(myfile)
+                    dcmPatientID.append(dcm_header['PatientID'])
+                    dcmPatientName.append(dcm_header['PatientName'])
+                    dcmFileName.append(myfile)
                     InputAffineX0.append(nimg3D.affine[0][0])
                     InputAffineY1.append(nimg3D.affine[1][1])
                     InputAffineZ2.append(nimg3D.affine[2][2])
@@ -938,9 +938,9 @@ class uploader(APIView):
                     uint8_img2D = np.rot90(uint8_img2D)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
             # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
-            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': PatientName[i], 'Group': 0, 'fileID': None,
+            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
                          'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
-                         for i, filename in enumerate(FileName) if (filename.split(".")[-1]=='nii')]
+                         for i, filename in enumerate(dcmFileName) if (filename.split(".")[-1]=='nii')]
         # elif Format == "analyze":
         #     print('analyze')
         elif Format == "nifti":
@@ -1339,6 +1339,9 @@ class pacs(APIView):
         InputAffineX0 = []
         InputAffineY1 = []
         InputAffineZ2 = []
+        dcmPatientID = []
+        dcmPatientName = []
+        dcmFileName = []
         if StudyDescription=='betaben':
             tracer = '[18F]FBB'
         elif StudyDescription== 'betapir':
@@ -1379,12 +1382,19 @@ class pacs(APIView):
             database_files = os.listdir(uploader_path)
             for idx, myfile in enumerate(database_files):
                 if (myfile.split(".")[-1] == 'nii'):
-                    print(myfile)
+                    myfilename=myfile.split(".")[:-1]
+                    target_nifti_path = os.path.join(uploader_path, myfilename[0]+'.json')
+                    with open(target_nifti_path) as f:
+                        dcm_header = json.load(f)
+                    print(dcm_header)
                     NiiPath = os.path.join(uploader_path, myfile)
                     nimg3D = nib.load(NiiPath)
                     InputAffineX0.append(nimg3D.affine[0][0])
                     InputAffineY1.append(nimg3D.affine[1][1])
                     InputAffineZ2.append(nimg3D.affine[2][2])
+                    dcmPatientID.append(dcm_header['PatientID'])
+                    dcmPatientName.append(dcm_header['PatientName'])
+                    dcmFileName.append(myfile)
                     np.array(nimg3D.header['pixdim'][1:4])
                     dsfactor = [float(f) / w for w, f in
                                 zip([2, 2, 2], nimg3D.header['pixdim'][1:4])]  # 픽셀크기 2mm로 변환용 factor
@@ -1415,10 +1425,13 @@ class pacs(APIView):
                     uint8_img2D = np.rot90(uint8_img2D)
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
             print('step5')
-            filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
-            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': Patient_name[i], 'Group': 0, 'fileID': None,
+            # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
                          'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
-                         for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+                         for i, filename in enumerate(dcmFileName) if (filename.split(".")[-1]=='nii')]
+            # fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': Patient_name[i], 'Group': 0, 'fileID': None,
+            #              'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
+            #              for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
             # return Response(status=status.HTTP_200_OK)
             print('step6')
             return Response(data=fileList, status=status.HTTP_200_OK)
