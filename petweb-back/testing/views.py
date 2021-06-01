@@ -1446,7 +1446,7 @@ class pacs(APIView):
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
             print('step5')
             # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
-            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
+            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
                          'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
                          for i, filename in enumerate(dcmFileName) if (filename.split(".")[-1]=='nii')]
             # fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': Patient_name[i], 'Group': 0, 'fileID': None,
