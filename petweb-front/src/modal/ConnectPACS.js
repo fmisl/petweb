@@ -72,13 +72,13 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     }
     if(dcmCount == allDcmCount) {
         console.log('reset tickCounter to 0')
-        // setTickCounter(0)
+        setTickCounter(0)
         setDcmCount(allDcmCount);
         return undefined
     };
     tick();
     return ()=>clearTimeout(tick);
-  },[dcmCount, allDcmCount])
+  },[tickCounter, dcmCount, allDcmCount])
   useEffect(() => {
     if (isShowing) {
         // const myInterval = setInterval(async ()=>{
