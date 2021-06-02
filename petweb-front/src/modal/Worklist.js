@@ -18,20 +18,20 @@ function Worklist({ isShowing, hide, lock, closeWorklist }) {
   // const [isShown, setIsShown] = useState(false);
   const changePageByKey = (e) =>{
     switch (e.keyCode){
-      case 17:
-        hide()
-        break;
+      // case 17:
+      //   hide()
+      //   break;
       default:
         console.log('press up or down key only', e.keyCode)
     }
   }
   const niftiDownload = async () =>{
-    console.log('download nifti')
+    // console.log('download nifti')
     const token = localStorage.getItem('token')
     const username = localStorage.getItem('username')
     // // res = await services.TokenVerify({'token':token})
     const selectedList = fileList.filter((v, i)=>v.Select == true && v.Group == 1);
-    console.log(selectedList.length)
+    // console.log(selectedList.length)
     if (selectedList.length != 0){
       const res = await services.downloadNifti({'token':token, 'selectedList':selectedList});
       if (res.status == 200){

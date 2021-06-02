@@ -159,7 +159,7 @@ function App() {
       // check if any items have selected
       const checkIfAnySelected = fileList.find(item=>{return item.Select == true && item.Group==0});
       if (checkIfAnySelected !== undefined) {
-        console.log('checkIfAnySelected: ',checkIfAnySelected)
+        // console.log('checkIfAnySelected: ',checkIfAnySelected)
         const token = localStorage.getItem('token')
         const res = await services.groupSelection({'token':token, obj:{method:'groupSelection', list:fileList.filter(item=>item.Select==true)}})
         const groupUpdated = res.data.map((v,i)=>{return {...v, Select:fileList[i].Select, Opened:fileList[i].Opened}})
