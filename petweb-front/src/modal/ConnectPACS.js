@@ -317,7 +317,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         </div>
                         } */}
                     </div>
-                    {(stepChecker == 0 || stepChecker == 1) && 
+                    {stepChecker == 1 && 
                     <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"80%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
                         {fetching ? 
                         <div style={{border: "0px red solid", position:"relative"}}><div style={{position:"absolute", top:"29%", left:"32%", display:"flex", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"28px", border:"0px blue solid"}}><div>{(dcmCount/148).toFixed(0)}/{finddata.length}</div><div>{(dcmCount/allDcmCount*100).toFixed(0)}%</div></div><img width="200px" src={loadingGIF}/></div>
