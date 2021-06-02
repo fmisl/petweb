@@ -67,11 +67,11 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
             let newdata = res.data
             // console.log(res)
             setDcmCount(newdata.dcmCount)
-            setTickCounter(tickCounter+1)
+            // setTickCounter(tickCounter+1)
         },1000);
     }
     if(dcmCount == allDcmCount) {
-        console.log('reset tickCounter to 0')
+        console.log('reset tickCounter to 0',dcmCount, )
         setTickCounter(0)
         setDcmCount(allDcmCount);
         return undefined
