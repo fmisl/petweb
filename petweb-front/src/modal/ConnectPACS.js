@@ -77,7 +77,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     };
     tick();
     return ()=>clearTimeout(tick);
-  },[tickCounter, allDcmCount])
+  },[tickCounter])
   useEffect(() => {
     if (isShowing) {
         // const myInterval = setInterval(async ()=>{
