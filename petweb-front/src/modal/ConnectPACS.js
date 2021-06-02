@@ -342,7 +342,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                 </div>
                 <div style={{display: "flex"}}>
                     <div style={{}} className="upload-btn"  onClick={()=>{hide(false); deleteFiles();handleReset();}}>Cancel</div>
-                    <div style={{}} className="upload-btn type1" onClick={(e)=>{setCurrentJPGURL_head("");hide(false); runFiles(StudyDescription, addToWorklist);}}>Run</div>
+                    <div style={{}} className={`upload-btn ${stepChecker == 2 && "type1"}`} onClick={(e)=>{setCurrentJPGURL_head("");hide(false); runFiles(StudyDescription, addToWorklist);}}>Run</div>
                 </div>
             </div>
           </div>
