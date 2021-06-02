@@ -144,7 +144,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setData(res.data)
     setStep(1); 
     setStepInfo(inputs); 
-    setAllDcmCount(res.data.length*148);
+    setAllDcmCount(res.data.length*148+10);
     setFetching(false);
     // const uploadList = res.data
     // setFileList(uploadList)
@@ -212,6 +212,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log("fileList:", fileList)
     handleReset();
     deleteFiles();
+    setDcmCount(allDcmCount);
   }
 //   const myTimer = async()=>{
 //       this.myInterval = setInterval(async ()=>{
