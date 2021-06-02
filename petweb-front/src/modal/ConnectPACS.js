@@ -149,7 +149,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
         setFinddata(res.data);
         setStepInfo(inputs);
         setDcmCount(0);
-        setAllDcmCount(res.data.length*148);
+        setAllDcmCount(res.data.length*1.01*148);
     }
     setFetching(false);
   }
