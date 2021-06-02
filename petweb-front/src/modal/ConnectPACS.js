@@ -326,14 +326,14 @@ console.log(getdata);
                 </div>
                 <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
                     <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
-                    {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineX0 < 0 ? "-1":"1"}, ${getdata[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hy.jpg'} alt=" "/>}
+                    {currentJPGURL_head != "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineX0 < 0 ? "-1":"1"}, ${getdata[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hy.jpg'} alt=" "/>}
                     </div>
                     <div style={{...styleDiv, ...{top:"", left:"50%"}}} >
                     
-                    {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineY1 < 0 ? "-1":"1"}, ${getdata[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hx.jpg'} alt=" "/>}
+                    {currentJPGURL_head != "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineY1 < 0 ? "-1":"1"}, ${getdata[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hx.jpg'} alt=" "/>}
                     </div>
                     <div style={{...styleDiv, ...{top:"50%", left:"0"}}} >
-                    {currentJPGURL_head !== "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineX0 < 0 ? "1":"-1"}, ${getdata[listID]?.InputAffineY1 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hz.jpg'} alt=" "/>}
+                    {currentJPGURL_head != "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineX0 < 0 ? "1":"-1"}, ${getdata[listID]?.InputAffineY1 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hz.jpg'} alt=" "/>}
                     </div>
                     <div style={{...styleDiv, ...{top:"50%", left:"50%"}}} >
                     </div>
