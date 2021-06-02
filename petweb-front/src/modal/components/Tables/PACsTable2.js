@@ -9,14 +9,26 @@ const FilterableTable = require('react-filterable-table');
 export default class PACsTable extends Component {
   constructor(props) {
     super(props);
+    this.state = { 
+        data:[] 
+    };
     this.renderRemove = this.renderRemove.bind(this);
     this.renderClick = this.renderClick.bind(this);
     this.renderTracer = this.renderTracer.bind(this);
+  }
+  componentDidMount(){
+      this.setState({
+          data:this.props.fileList,
+      })
   }
   renderRemove = (props) => {
     // const { data } = this.state;
       return(
         <div className={`PACsTable-Default ${props.record.Select && 'sel'}`} 
+            onClick={()=>{
+                    this.setState({data:this.props.fileList.filter((v,i)=>{return v.id != props.record.id})});
+                }
+            }
           >
           <div style={{userSelect:"none"}}>
               <IconDelete className="UploaderIcon-Delete"/>
@@ -29,7 +41,7 @@ export default class PACsTable extends Component {
       return(
           <div className={`PACsTable-Default ${props.record.Select && 'sel'} ${props.record.Focus && 'focus'}`} 
             onClick={(e)=>{
-                  this.props.updateFileList(props.record)
+                //   this.props.updateFileList(props.record)
                   // this.setState({
                   //   // data:[...data, props.record]
                   //   data: data.map(
@@ -52,7 +64,7 @@ export default class PACsTable extends Component {
       return(
         <div className={`PACsTable-Default ${props.record.Select && 'sel'} ${props.record.Focus && 'focus'}`} 
             onClick={(e)=>{
-                this.props.updateFileList(props.record)
+                // this.props.updateFileList(props.record)
                 // this.setState({
                 //   // data:[...data, props.record]
                 //   data: data.map(
@@ -89,7 +101,7 @@ export default class PACsTable extends Component {
   //   }
   // }
   render() {
-    // const {data} = this.state;
+    const {data} = this.state;
     const {fileList, getJPGURL} = this.props;
     // console.log("PACsTable",fileList)
     const fields = [
@@ -105,7 +117,7 @@ export default class PACsTable extends Component {
           // trClassName="WorklistTable"
           namespace="PACsTable"
           initialSort="PatientName"
-          data={fileList}
+          data={data}
           fields={fields}
           noRecordsMessage="There are no people to display"
           noFilteredRecordsMessage="No people match your filters!"
