@@ -317,8 +317,12 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         </div>
                         } */}
                     </div>
-                    {stepChecker == 0 || stepChecker == 1 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"80%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
-                        {fetching ? <div style={{border: "0px red solid", position:"relative"}}><div style={{position:"absolute", top:"39%", left:"32%", display:"flex", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"30px", border:"0px blue solid"}}>{(dcmCount/allDcmCount*100).toFixed(0)}%</div><img width="200px" src={loadingGIF}/></div>:<PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                    {(stepChecker == 0 || stepChecker == 1) && 
+                    <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"80%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
+                        {fetching ? 
+                        <div style={{border: "1px red solid", position:"relative"}}><div style={{position:"absolute", top:"29%", left:"32%", display:"flex", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"28px", border:"0px blue solid"}}><div>{(dcmCount/148).toFixed(0)}/{finddata.length}</div><div>{(dcmCount/allDcmCount*100).toFixed(0)}%</div></div><img width="200px" src={loadingGIF}/></div>
+                        :
+                        <PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>}
                     {stepChecker == 2 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
                         {fetching ? <div></div>:<PACsTable2 setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeIteminGetData} updateFileList={updateFileList}/>}

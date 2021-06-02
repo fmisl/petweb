@@ -1291,9 +1291,9 @@ class pacs(APIView):
     def get_oneItem_dcmtk(self, Patient_ID, Study_instanceUID, Series_info, num=None, target_path=None):
 
         for idx_study, study_level in enumerate(Series_info):
-            if num is not None:
-                if not idx_study in num:
-                    continue
+            # if num is not None:
+                # if not idx_study in num:
+                #     continue
             for idx_series in range(0, len(study_level[0])):
                 # Search for betaben PET series
                 # AC and NAC data can be obtained togegher
