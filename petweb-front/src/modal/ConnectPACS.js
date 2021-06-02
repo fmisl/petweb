@@ -73,7 +73,6 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     if(dcmCount == allDcmCount) {
         console.log('reset tickCounter to 0',dcmCount, )
         setTickCounter(0)
-        setDcmCount(allDcmCount);
         return undefined
     };
     tick();
@@ -163,7 +162,6 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log(res.data);
     // setGetdata(res.data);
     setGetdata(res.data)
-    setDcmCount(allDcmCount);
     setTimeout(()=>console.log("complete download"),1000);
     setStepInfo({
       PatientID: '',
@@ -191,6 +189,8 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
       StudyDate: '',
       StudyDescription: '',
     })
+    setDcmCount(0);
+    setAllDcmCount(0);
     setStep(0); 
     setFinddata([]);
     setGetdata([]);

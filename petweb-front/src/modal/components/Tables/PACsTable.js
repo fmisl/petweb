@@ -111,7 +111,7 @@ export default class PACsTable extends Component {
           initialSort="PatientName"
           data={fileList}
           fields={fields}
-          noRecordsMessage="There are no people to display"
+          noRecordsMessage="There are no people to display or query timeout"
           noFilteredRecordsMessage="No people match your filters!"
           pageSize={500}
       />
