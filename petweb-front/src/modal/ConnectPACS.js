@@ -72,7 +72,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     }
     if(dcmCount == allDcmCount) {
         console.log('reset tickCounter to 0',dcmCount, tickCounter)
-        setTickCounter(0)
+        // setTickCounter(0)
         return undefined
     };
     tick();
@@ -158,7 +158,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setFetchState(true);
     // setListID(null);
     setFetching(true);
-    setTickCounter(tickCounter+1)
+    // setTickCounter(tickCounter+1)
     // myTimer();
     const token = localStorage.getItem('token')
     const res = await services.postPacs({'Method':'get','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
