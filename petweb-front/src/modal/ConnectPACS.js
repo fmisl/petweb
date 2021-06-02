@@ -242,6 +242,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
 //   }
 //   console.log("inputs:",inputs)
 //   console.log("stepInfo:", stepInfo)
+console.log(getdata);
   return (
     isShowing ? 
     ReactDOM.createPortal(
