@@ -109,14 +109,14 @@ class WorklistTable extends Component {
     handleSelect = event => {
         const {selectAll} = this.state;
         if (selectAll==false) {
-            console.log('selectAll: true')
+            // console.log('selectAll: true')
             this.props.selectAllGroup(1);
             this.setState({
                 selectAll: true,
             })
         }
         else {
-            console.log('selectAll: false')
+            // console.log('selectAll: false')
             this.props.unSelectAllGroup(1);
             this.setState({
                 selectAll: false,
@@ -136,9 +136,9 @@ class WorklistTable extends Component {
     }
     ungroupAsync = async (data) =>{
         const res = await services.ungroupIndividual(data)
-        console.log('res.data:',res.data)
+        // console.log('res.data:',res.data)
         const groupUpdated = res.data.map((v,i)=>{return {...v, Select:this.props.fileList[i].Select, Opened:this.props.fileList[i].Opened}})
-        console.log('fileList:',this.props.fileList)
+        // console.log('fileList:',this.props.fileList)
         this.props.fetchItems(groupUpdated)
     }
     renderRemove = (props) => {

@@ -59,19 +59,19 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // }
   }, [inputs])
   useEffect(()=>{
-    // console.log('tick with tickCounter, dcmCount and allDcmCount', tickCounter, dcmCount, allDcmCount)
+    // // console.log('tick with tickCounter, dcmCount and allDcmCount', tickCounter, dcmCount, allDcmCount)
     const tick = async () =>{
         return setTimeout( async ()=>{
             const token = localStorage.getItem('token')
             const res = await services.dicomsCheck({'token':token})
             let newdata = res.data
-            // console.log(res)
+            // // console.log(res)
             setDcmCount(newdata.dcmCount)
             setTickCounter(tickCounter+1)
         },1000);
     }
     if(dcmCount == allDcmCount) {
-        console.log('reset tickCounter to 0',dcmCount, tickCounter)
+        // console.log('reset tickCounter to 0',dcmCount, tickCounter)
         // setTickCounter(0)
         return undefined
     };
@@ -84,13 +84,13 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
         //     const token = localStorage.getItem('token')
         //     const res = await services.dicomsCheck({'token':token})
         //     let newdata = res.data
-        //     console.log(newdata);
+        //     // console.log(newdata);
         //     setDcmCount(newdata.dcmCount)
         // }, 1000)
-        console.log("useEffect-isShowing: true")
+        // console.log("useEffect-isShowing: true")
         setCurrentJPGURL_head('');
     } else {
-        console.log("useEffect-isShowing: false")
+        // console.log("useEffect-isShowing: false")
         setCurrentJPGURL_head('');
     }
     // return  _ => clearInterval(myInterval);
@@ -120,7 +120,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
 //         const token = localStorage.getItem('token')
 //         const res = await services.dicomsCheck({'token':token})
 //         let newdata = res.data
-//         console.log(newdata);
+//         // console.log(newdata);
 //     }, 1000)
 //     return ()=>{
 //         clearInterval(myInterval);
@@ -143,7 +143,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     setFetching(true);
     const token = localStorage.getItem('token')
     const res = await services.postPacs({'Method':'find','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
-    console.log(res.data);
+    // console.log(res.data);
     if (res.data.length == 0){
         setStep(0); 
         alert('No data found from PACs, Search other options')
@@ -168,7 +168,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     setTickCounter(tickCounter+1)
     const token = localStorage.getItem('token')
     const res = await services.postPacs({'Method':'get','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
-    console.log(res.data);
+    // console.log(res.data);
     // setGetdata(res.data);
     setGetdata(res.data)
     setStepInfo({
@@ -224,12 +224,12 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     } else {
         tracer = "[18F]FBB";
     }
-    console.log("getdata: ",getdata)
+    // console.log("getdata: ",getdata)
     const res = await services.runFile({'token':token, 'obj':getdata, 'Tracer':tracer, 'addToWorklist':addToWorklist})
     const putList = res.data
     dispatch(fetchItems(putList))
-    console.log("putList:",putList)
-    console.log("fileList:", fileList)
+    // console.log("putList:",putList)
+    // console.log("fileList:", fileList)
     handleReset();
     deleteFiles();
   }
@@ -238,15 +238,15 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
 //           const token = localStorage.getItem('token')
 //           const res = await services.dicomsCheck({'token':token})
 //           let newdata = res.data
-//           console.log(newdata);
+//           // console.log(newdata);
 //       }, 1000)
 //   }
 //   const clearMyTimer = () =>{
 //     clearInterval(this.myInterval);
 //   }
-//   console.log("inputs:",inputs)
-//   console.log("stepInfo:", stepInfo)
-console.log(currentJPGURL_head ,listID);
+//   // console.log("inputs:",inputs)
+//   // console.log("stepInfo:", stepInfo)
+// // console.log(currentJPGURL_head ,listID);
   return (
     isShowing ? 
     ReactDOM.createPortal(
@@ -346,7 +346,7 @@ console.log(currentJPGURL_head ,listID);
                 </div>
             </div>
             <div style={{display:"flex", marginTop:"21px", justifyContent:"space-between", alignItems:"center"}}>
-                <div className="upload-checkbox-label" onClick={()=>{setaddToWorklist(!isChecked); setIsChecked(!isChecked);console.log("isChecked:", isChecked.toString())}}>
+                <div className="upload-checkbox-label" onClick={()=>{setaddToWorklist(!isChecked); setIsChecked(!isChecked);}}>
                     <div className={`upload-checkbox ${isChecked && 'act'}`}>
                     <div></div>
                     </div>

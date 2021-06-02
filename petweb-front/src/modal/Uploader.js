@@ -111,7 +111,7 @@ function Uploader({ setListID, listID, setFetchState, fetchState, setaddToWorkli
               </div>
             </div>
             <div style={{display:"flex", marginTop:"21px", justifyContent:"space-between", alignItems:"center"}}>
-              <div className="upload-checkbox-label" onClick={()=>{setaddToWorklist(!isChecked); setIsChecked(!isChecked);console.log("isChecked:", isChecked.toString())}}>
+              <div className="upload-checkbox-label" onClick={()=>{setaddToWorklist(!isChecked); setIsChecked(!isChecked);}}>
                 <div className={`upload-checkbox ${isChecked && 'act'}`}>
                   <div></div>
                 </div>

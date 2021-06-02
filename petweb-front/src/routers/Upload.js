@@ -73,7 +73,7 @@ function Upload({toggleWorklist}) {
     const token = localStorage.getItem('token')
     const res = await services.deleteFile({'token':token})
     const uploadList = res.data
-    console.log(uploadList)
+    // console.log(uploadList)
     // setFileList(uploadList)
   }
 
@@ -134,7 +134,7 @@ function Upload({toggleWorklist}) {
     const token = localStorage.getItem('token')
     const res = await services.deleteSelection({'token':token, obj:record})
     const uploadList = res.data
-    console.log(uploadList)
+    // console.log(uploadList)
     dispatch(fetchItems(uploadList));
     // setFileList(uploadList)
   }
