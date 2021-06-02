@@ -141,7 +141,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     const res = await services.postPacs({'Method':'find','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
     console.log(res.data);
     if (res.data.length == 0){
-        setStep(1); 
+        setStep(0); 
         setFinddata([]);
     } else {
         setStep(1); 
