@@ -140,16 +140,16 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     const token = localStorage.getItem('token')
     const res = await services.postPacs({'Method':'find','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
     console.log(res.data);
-    // if (res.data.length == 0){
-    //     setStep(0); 
-    //     setFinddata();
-    // } else {
+    if (res.data.length == 0){
+        setStep(1); 
+        setFinddata([]);
+    } else {
         setStep(1); 
         setFinddata(res.data);
         setStepInfo(inputs);
         setDcmCount(0);
         setAllDcmCount(res.data.length*148);
-    // }
+    }
     setFetching(false);
   }
   const getHandler = async () =>{
