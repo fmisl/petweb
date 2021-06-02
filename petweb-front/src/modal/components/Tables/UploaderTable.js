@@ -19,6 +19,7 @@ export default class UploaderTable extends Component {
         <div className={`UploaderTable-Default ${props.record.Select && 'sel'}`} 
           onClick={()=>{
                 this.props.removeFileList(props.record)
+                this.props.getJPGURL('')
                 // this.setState({
                 //   data: data.filter(item => item.id !== props.record.id)
                 // })
