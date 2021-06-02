@@ -180,6 +180,10 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // const uploadList = res.data
     // setFileList(uploadList)
   }
+  const removeIteminGetData =(id)=>{
+      const filteredGetData = getdata.filter((v,i)=>{return v.id!=id})
+      setGetdata(filteredGetData);
+  }
   const handleChange = (e) => { 
     const { name, value }  = e.target;
     if (fetching == false){
@@ -312,7 +316,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         {fetching ? <div style={{border: "0px red solid", position:"relative"}}><div style={{position:"absolute", top:"39%", left:"32%", display:"flex", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"30px", border:"0px blue solid"}}>{(dcmCount/allDcmCount*100).toFixed(0)}%</div><img width="200px" src={loadingGIF}/></div>:<PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>}
                     {stepChecker == 2 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
-                        {fetching ? <div></div>:<PACsTable2 setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                        {fetching ? <div></div>:<PACsTable2 setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeIteminGetData} updateFileList={updateFileList}/>}
                     </div>}
                 </div>
                 <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>

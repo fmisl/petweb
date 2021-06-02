@@ -9,24 +9,25 @@ const FilterableTable = require('react-filterable-table');
 export default class PACsTable extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
-        data:[] 
-    };
+    // this.state = { 
+    //     data:[] 
+    // };
     this.renderRemove = this.renderRemove.bind(this);
     this.renderClick = this.renderClick.bind(this);
     this.renderTracer = this.renderTracer.bind(this);
   }
-  componentDidMount(){
-      this.setState({
-          data:this.props.fileList,
-      })
-  }
+//   componentDidMount(){
+//       this.setState({
+//           data:this.props.fileList,
+//       })
+//   }
   renderRemove = (props) => {
     // const { data } = this.state;
       return(
         <div className={`PACsTable-Default ${props.record.Select && 'sel'}`} 
             onClick={()=>{
-                    this.setState({data:this.props.fileList.filter((v,i)=>{return v.id != props.record.id})});
+                    this.props.removeFileList(props.record.id);
+                    // this.setState({data:this.props.fileList.filter((v,i)=>{return v.id != props.record.id})});
                 }
             }
           >
@@ -101,8 +102,8 @@ export default class PACsTable extends Component {
   //   }
   // }
   render() {
-    const {data} = this.state;
-    const {fileList, getJPGURL} = this.props;
+    // const {data} = this.state;
+    const {fileList, getJPGURL, removeFileList} = this.props;
     // console.log("PACsTable",fileList)
     const fields = [
         { render: this.renderTracer, name: 'Tracer', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Tracer&nbsp;</div>, inputFilterable: false, sortable: false },
@@ -117,7 +118,7 @@ export default class PACsTable extends Component {
           // trClassName="WorklistTable"
           namespace="PACsTable"
           initialSort="PatientName"
-          data={data}
+          data={fileList}
           fields={fields}
           noRecordsMessage="There are no people to display"
           noFilteredRecordsMessage="No people match your filters!"
