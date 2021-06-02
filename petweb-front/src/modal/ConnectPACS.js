@@ -165,7 +165,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log(res.data);
     // setGetdata(res.data);
     setGetdata(res.data)
-    setTimeout(()=>console.log("complete download"),1000);
+    // setTimeout(()=>console.log("complete download"),1000);
     setStepInfo({
       PatientID: '',
       StudyDate: '',
@@ -173,6 +173,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     })
     setStep(2); 
     // clearMyTimer();
+    setDcmCount(allDcmCount);
     setFetching(false);
     // const uploadList = res.data
     // setFileList(uploadList)
@@ -342,7 +343,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                 </div>
                 <div style={{display: "flex"}}>
                     <div style={{}} className="upload-btn"  onClick={()=>{hide(false); deleteFiles();handleReset();}}>Cancel</div>
-                    <div style={{}} className={`upload-btn ${stepChecker == 2 && "type1"}`} onClick={(e)=>{setCurrentJPGURL_head("");hide(false); runFiles(StudyDescription, addToWorklist);}}>Run</div>
+                    <div style={{}} className={`upload-btn ${stepChecker == 2 && "type1"}`} onClick={(e)=>{if (stepChecker == 2){setCurrentJPGURL_head("");hide(false); runFiles(StudyDescription, addToWorklist);}}}>Run</div>
                 </div>
             </div>
           </div>
