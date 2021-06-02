@@ -156,6 +156,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setFetchState(true);
     // setListID(null);
     setFetching(true);
+    setTickCounter(tickCounter+1)
     // myTimer();
     const token = localStorage.getItem('token')
     const res = await services.postPacs({'Method':'get','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
