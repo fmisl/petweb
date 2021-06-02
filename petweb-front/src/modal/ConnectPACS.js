@@ -96,12 +96,12 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // return  _ => clearInterval(myInterval);
   },[isShowing])
   const getJPGURL=(filename)=>{
-    if (getdata.length != 0){
+    if (filename == ''){
+        setCurrentJPGURL_head('')
+    } else {
         const fname = filename.split('.').slice(0,-1).join()
         const tempURL_head = IPinUSE+'result/download/'+username+'/uploader/'+fname
         setCurrentJPGURL_head(tempURL_head)
-    } else {
-        setCurrentJPGURL_head('')
     }
   }
   useEffect(() => {
