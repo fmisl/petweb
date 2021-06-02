@@ -179,11 +179,12 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
   }
   const handleChange = (e) => { 
     const { name, value }  = e.target;
-    
-    setInputs({
-      ...inputs,
-      [name]: value,
-    });
+    if (fetching == false){
+        setInputs({
+          ...inputs,
+          [name]: value,
+        });
+    }
   };
   
   const handleReset = () => {
