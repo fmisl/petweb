@@ -67,17 +67,18 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
             let newdata = res.data
             // console.log(res)
             setDcmCount(newdata.dcmCount)
-            setTickCounter(tickCounter+1)
+            // setTickCounter(tickCounter+1)
         },1000);
     }
     if(dcmCount == allDcmCount) {
         console.log('reset tickCounter to 0')
-        setTickCounter(0)
+        // setTickCounter(0)
+        setDcmCount(allDcmCount);
         return undefined
     };
     tick();
     return ()=>clearTimeout(tick);
-  },[tickCounter, allDcmCount])
+  },[dcmCount, allDcmCount])
   useEffect(() => {
     if (isShowing) {
         // const myInterval = setInterval(async ()=>{
@@ -144,6 +145,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setData(res.data)
     setStep(1); 
     setStepInfo(inputs); 
+    setDcmCount(0);
     setAllDcmCount(res.data.length*148);
     setFetching(false);
     // const uploadList = res.data
