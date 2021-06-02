@@ -160,12 +160,14 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log(res.data);
     // setGetdata(res.data);
     setGetdata(res.data)
-    setStep(2); 
+    setDcmCount(allDcmCount);
+    setTimeout(()=>console.log("complete download"),1000);
     setStepInfo({
       PatientID: '',
       StudyDate: '',
       StudyDescription: '',
     })
+    setStep(2); 
     // clearMyTimer();
     setFetching(false);
     // const uploadList = res.data

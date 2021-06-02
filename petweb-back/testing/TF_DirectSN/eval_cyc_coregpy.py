@@ -7,7 +7,10 @@ from django.conf import settings
 import time
 import os, shutil
 
-import tensorflow as tf
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
 from testing.TF_DirectSN import layers_coregpy as lays
 from testing.TF_DirectSN.utils import Dense3DSpatialTransformer, VTNAffineStem
 from testing.TF_DirectSN.spm2py_coreg import coreg_mrc1
@@ -23,7 +26,7 @@ stages = 3
 
 
 def train(inout_path, caseID):
-    checkpoint_dir = r"C:\Users\dwnusa\workspace\04_09_22_35_transfer"
+    checkpoint_dir = r"C:\Users\SNUH-FMISL\workspace\04_09_22_35_transfer"
     # checkpoint_dir = r".\testing\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
     # V1 = 'C:\\Users\SKKang\Downloads\\fMNI152_T1_2mm.img'
     in_file = "input_" + caseID
@@ -56,7 +59,7 @@ def train(inout_path, caseID):
         gimg = pet
 
         # TODO: change the path of template MR
-        aa = np.fromfile(r'C:\Users\dwnusa\workspace\petweb\petweb-back\testing\TF_DirectSN\src\fMNI152_T1_2mm.img',
+        aa = np.fromfile(r'C:\Users\SNUH-FMISL\workspace\petweb\petweb-back\testing\TF_DirectSN\src\fMNI152_T1_2mm.img',
                          dtype=np.int16)
         aa = aa.astype(dtype=np.float32) - np.min(aa)
         aa = aa / np.max(aa)
@@ -84,7 +87,7 @@ def train(inout_path, caseID):
 
             def_list.append(affine_flow)
 
-        for i in range(0, stages):
+        for i in range(0, 3):
             deform = dgan.autoencoder(gimg, mrTemplate, scope='gen_' + str(i), reuse=False)
             gimg = dst._transform(gimg, deform[:, :, :, :, 0], deform[:, :, :, :, 1], deform[:, :, :, :, 2])
             def_list.append(deform)
@@ -96,7 +99,8 @@ def train(inout_path, caseID):
         gimg = dst._transform(pet, defos[:, :, :, :, 0], defos[:, :, :, :, 1], defos[:, :, :, :, 2], interp='linear')
         # gimg_mr = dst._transform(mr, defos[:, :, :, :, 0], defos[:, :, :, :, 1], defos[:, :, :, :, 2], interp='nearest')
 
-        saver_re = tf.train.Saver()
+        g_vars = tf.trainable_variables()
+        saver_re = tf.train.Saver(var_list = g_vars)
 
         with tf.Session() as sess:
             ckpt = tf.train.get_checkpoint_state(checkpoint_dir)
@@ -107,7 +111,7 @@ def train(inout_path, caseID):
                 print('No checkpoint file found')
                 return
 
-            for i in range(0, 1):
+            for i in range(0, 3):
                 [xr, defosr] = sess.run(
                     [gimg, defos], feed_dict={pet_in: coreged})
                 # xr = xr*maxp

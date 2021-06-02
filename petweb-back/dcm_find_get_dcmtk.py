@@ -35,7 +35,7 @@ def find_dcmtk(date = None, ptid = None):
     output = os.popen(r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\findscu.exe ' +
                       '-S -k 0008,0052="STUDY" -k "PatientName" -k ' + ptidfield +
                       ' -k "PatientBirthDate" -k ' + datefield +
-                      ' -k "StudyInstanceUID" -k "StudyDescription=betaben" -k "ModalitiesInStudy" ' + PACS_server).read()
+                      ' -k "StudyInstanceUID" -k "StudyDescription=betaben" -k "ModalitiesInStudy=PT" ' + PACS_server).read()
 
 
     output_splt = output.split('I: ---------------------------\n')
@@ -106,7 +106,7 @@ def find_dcmtk(date = None, ptid = None):
             r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\findscu.exe -S -k 0008,0052="SERIES" -k "PatientID=' +
             Patient_ID[i - 1] +
             '" -k "StudyInstanceUID=' + Study_instanceUID[i - 1].rstrip('\x00') +
-            '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID" ' + PACS_server).read()
+            '" -k "Modality=PT" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID" ' + PACS_server).read()
 
         series_splt = series_info_cmd.split('I: ---------------------------\n')
         num_of_series = len(output_splt)
@@ -178,7 +178,7 @@ def get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, num=None):
 
                 os.popen(
                     r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\getscu.exe -d -S -k 0008,0052="SERIES" -k "PatientID='
-                    + Patient_ID[idx_study] + '" -k "StudyInstanceUID='
+                    + Patient_ID[idx_study].rstrip('\x00') + '" -k "StudyInstanceUID='
                     + Study_instanceUID[idx_study].rstrip(
                         '\x00') + '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID='
                     # study_level[3] describes the series instnaceuid
@@ -190,5 +190,5 @@ def get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, num=None):
     print('\n\n#############  ALL PROCESS WAS DONE #############\n\n')
 
 if __name__ == "__main__":
-    Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = find_dcmtk(date='20210526')
+    Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = find_dcmtk(date='20210528')
     get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, [0, 1])
