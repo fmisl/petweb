@@ -67,17 +67,17 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
             let newdata = res.data
             // console.log(res)
             setDcmCount(newdata.dcmCount)
-            // setTickCounter(tickCounter+1)
+            setTickCounter(tickCounter+1)
         },1000);
     }
     if(dcmCount == allDcmCount) {
-        console.log('reset tickCounter to 0',dcmCount, )
+        console.log('reset tickCounter to 0',dcmCount, tickCounter)
         setTickCounter(0)
         return undefined
     };
     tick();
     return ()=>clearTimeout(tick);
-  },[tickCounter, dcmCount, allDcmCount])
+  },[tickCounter, allDcmCount])
   useEffect(() => {
     if (isShowing) {
         // const myInterval = setInterval(async ()=>{
@@ -142,7 +142,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log(res.data);
     if (res.data.length == 0){
         setStep(0); 
-        alert('No data found from PACs: Search other options')
+        alert('No data found from PACs, Search other options')
         setFinddata([]);
     } else {
         setStep(1); 
