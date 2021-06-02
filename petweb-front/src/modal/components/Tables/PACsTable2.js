@@ -27,6 +27,7 @@ export default class PACsTable extends Component {
         <div className={`PACsTable-Default ${props.record.Select && 'sel'}`} 
             onClick={()=>{
                     this.props.removeFileList(props.record.id);
+                    this.props.getJPGURL('')
                     // this.setState({data:this.props.fileList.filter((v,i)=>{return v.id != props.record.id})});
                 }
             }
