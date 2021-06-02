@@ -28,6 +28,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
   const [tickCounter,setTickCounter] = useState(0);
   const [dcmCount, setDcmCount] = useState(0);
   const [allDcmCount, setAllDcmCount] = useState(0);
+  const [patientCount, setPatientCount] = useState(0);
   const [stepChecker, setStep] = useState(0);
   const [stepInfo, setStepInfo] = useState({
     PatientID: '', 	//사용할 문자열들을 저장하는 객체 형태로 관리!
@@ -154,6 +155,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
         setStepInfo(inputs);
         setDcmCount(0);
         setAllDcmCount(res.data.length*1.01*148);
+        setPatientCount(res.data.length)
     }
     setFetching(false);
   }
@@ -320,7 +322,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                     {stepChecker == 1 && 
                     <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"80%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
                         {fetching ? 
-                        <div style={{border: "0px red solid", position:"relative"}}><div style={{position:"absolute", top:"29%", left:"32%", display:"flex", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"28px", border:"0px blue solid"}}><div>{(dcmCount/148).toFixed(0)}/{finddata.length}</div><div>{(dcmCount/allDcmCount*100).toFixed(0)}%</div></div><img width="200px" src={loadingGIF}/></div>
+                        <div style={{border: "0px red solid", position:"relative"}}><div style={{position:"absolute", top:"29%", left:"32%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"28px", border:"0px blue solid"}}><div>{(dcmCount/148).toFixed(0)}/{patientCount}</div><div>{(dcmCount/allDcmCount*100).toFixed(0)}%</div></div><img width="200px" src={loadingGIF}/></div>
                         :
                         <PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
                     </div>}
