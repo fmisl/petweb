@@ -142,6 +142,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     console.log(res.data);
     if (res.data.length == 0){
         setStep(0); 
+        setFinddata([]);
     } else {
         setStep(1); 
         setFinddata(res.data);
