@@ -155,7 +155,6 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
         setStepInfo(inputs);
         setDcmCount(0);
         setAllDcmCount(res.data.length*1.01*148);
-        setPatientCount(res.data.length)
     }
     setFetching(false);
   }
@@ -171,6 +170,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     const Array_PatientName = finddata.map(v=>v.PatientName)
     const Array_StudyInstanceUID = finddata.map(v=>v.StudyInstanceUID)
     const Array_SeriesInfo = finddata.map(v=>v.SeriesInfo)
+    setPatientCount(Array_PatientID.length)
     setTickCounter(tickCounter+1)
     const token = localStorage.getItem('token')
     const res = await services.postPacs({'Method':'get',
