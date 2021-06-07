@@ -193,9 +193,14 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     // setFileList(uploadList)
   }
   const removeIteminFindData =(id)=>{
-      const filteredGetData = finddata.filter((v,i)=>{return v.id!=id})
-      setFinddata(filteredGetData);
-      console.log('removeIteminFindData')
+    
+      const filteredFindData = finddata.filter((v,i)=>{return v.id!=id})
+      setFinddata(filteredFindData);
+      if (filteredFindData.length == 0){
+        alert('No dicom to download on the list, Try search again')
+        handleReset();
+        setCurrentJPGURL_head('');
+      }
   }
   const removeIteminGetData =(id)=>{
       const filteredGetData = getdata.filter((v,i)=>{return v.id!=id})
