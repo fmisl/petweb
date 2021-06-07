@@ -1350,6 +1350,21 @@ class pacs(APIView):
             tracer = '[11C]PIB'
 
         if Method == 'find':
+            # _Patient_name=['abc', 'def']
+            # _Patient_ID=['1234', '5678']
+            # _Date_of_birth=['20210309', '20210808']
+            # _Study_date=["131313","3133111"]
+            # _Modality=["PT", "CT"]
+            # _Study_description=['hahahah', 'hello world']
+            # _Study_instanceUID=["1111111111", "2222222222"]
+            # _Series_info=['3333333333', '4444444444']
+            # findResult = [{'id': i, 'Focus': False,'Group': 0,
+            #              'FileName': None, 'Tracer': tracer,
+            #              'PatientName': _Patient_name[i], 'PatientID':_Patient_ID[i], 'BirthDate':_Date_of_birth[i],
+            #              'StudyDate':_Study_date[i], 'Modality':_Modality[i], 'StudyDescription':_Study_description[i], 'StudyInstanceUID':_Study_instanceUID[i], 'SeriesInfo':_Series_info[i],
+            #              } for i, patientID in enumerate(_Patient_ID)]
+            # return Response(data=findResult, status=status.HTTP_200_OK)
+
             if StudyDate == '':
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
@@ -1359,13 +1374,16 @@ class pacs(APIView):
             findResult = [{'id': i, 'Focus': False,'Group': 0,
                          'FileName': None, 'Tracer': tracer,
                          'PatientName': Patient_name[i], 'PatientID':Patient_ID[i], 'BirthDate':Date_of_birth[i],
-                         'StudyDate':Study_date[i], 'Modality':Modality[i], 'StudyDescription':Study_description[i],
+                         'StudyDate':Study_date[i], 'Modality':Modality[i], 'StudyDescription':Study_description[i], 'StudyInstanceUID':Study_instanceUID[i], 'SeriesInfo':Series_info[i],
                          } for i, patientID in enumerate(Patient_ID)]
             return Response(data=findResult, status=status.HTTP_200_OK)
 
         if Method == 'get':
-            Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
-            print([Patient_name, Patient_ID])
+            Patient_ID = request.data['PatientID']
+            Study_instanceUID = request.data['StudyInstanceUID']
+            Series_info = request.data['SeriesInfo']
+            # Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
+            # print([Patient_name, Patient_ID])
             self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, [0, 1], target_path=dcm_folder_path)
             print('step3')
 

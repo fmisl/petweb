@@ -17,6 +17,12 @@ export default class PACsTable extends Component {
     // const { data } = this.state;
       return(
         <div className={`PACsTable-Default ${props.record.Select && 'sel'}`} 
+              onClick={()=>{
+                this.props.removeFileList(props.record.id);
+                this.props.getJPGURL('')
+                // this.setState({data:this.props.fileList.filter((v,i)=>{return v.id != props.record.id})});
+              }
+            }
           >
           <div style={{userSelect:"none"}}>
               <IconDelete className="UploaderIcon-Delete"/>
@@ -100,7 +106,7 @@ export default class PACsTable extends Component {
       { render: this.renderClick, name: 'StudyDate', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>StudyDate&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
       { render: this.renderClick, name: 'Modality', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Modality&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
     //   { render: this.renderClick, name: 'FileName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>FileName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
-    //   { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: true, exactFilterable: false, sortable: true },
+      { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: false, exactFilterable: false, sortable: false },
     ];
     return (
       <FilterableTable
