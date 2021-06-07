@@ -144,7 +144,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     setFetching(true);
     const token = localStorage.getItem('token')
     const res = await services.postPacs({'Method':'find','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
-    // console.log(res.data);
+    console.log(res.data);
     if (res.data.length == 0){
         setStep(0); 
         alert('No data found from PACs, Search other options')
@@ -166,10 +166,16 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     setFetching(true);
     // setTickCounter(tickCounter+1)
     // myTimer();
-    
+    console.log(finddata.map(v=>v.PatientID))
+    const Array_PatientID = finddata.map(v=>v.PatientID)
+    const Array_PatientName = finddata.map(v=>v.PatientName)
+    const Array_StudyInstanceUID = finddata.map(v=>v.StudyInstanceUID)
+    const Array_SeriesInfo = finddata.map(v=>v.SeriesInfo)
     setTickCounter(tickCounter+1)
     const token = localStorage.getItem('token')
-    const res = await services.postPacs({'Method':'get','PatientID':PatientID, 'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
+    const res = await services.postPacs({'Method':'get',
+    'PatientID':Array_PatientID, 'PatientName':Array_PatientName, 'StudyInstanceUID':Array_StudyInstanceUID, 'SeriesInfo':Array_SeriesInfo, 
+    'StudyDate':StudyDate, 'StudyDescription':StudyDescription, 'token':token})
     // console.log(res.data);
     // setGetdata(res.data);
     setGetdata(res.data)
@@ -185,6 +191,11 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
     setFetching(false);
     // const uploadList = res.data
     // setFileList(uploadList)
+  }
+  const removeIteminFindData =(id)=>{
+      const filteredGetData = finddata.filter((v,i)=>{return v.id!=id})
+      setFinddata(filteredGetData);
+      console.log('removeIteminFindData')
   }
   const removeIteminGetData =(id)=>{
       const filteredGetData = getdata.filter((v,i)=>{return v.id!=id})
@@ -249,6 +260,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
 //   // console.log("inputs:",inputs)
 //   // console.log("stepInfo:", stepInfo)
 // // console.log(currentJPGURL_head ,listID);
+console.log("finddata: ", finddata);
   return (
     isShowing ? 
     ReactDOM.createPortal(
@@ -324,7 +336,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         {fetching ? 
                         <div style={{border: "0px red solid", position:"relative"}}><div style={{position:"absolute", top:"29%", left:"32%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"28px", border:"0px blue solid"}}><div>{(dcmCount/148).toFixed(0)}/{patientCount}</div><div>{(dcmCount/allDcmCount*100).toFixed(0)}%</div></div><img width="200px" src={loadingGIF}/></div>
                         :
-                        <PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeFileList} updateFileList={updateFileList}/>}
+                        <PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeIteminFindData} updateFileList={updateFileList}/>}
                     </div>}
                     {stepChecker == 2 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
                         {fetching ? <div></div>:<PACsTable2 setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeIteminGetData} updateFileList={updateFileList}/>}
