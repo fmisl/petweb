@@ -29,8 +29,8 @@ function Dashboard(props) {
   useEffect( async ()=>{
     const PIBList = fileList.filter((v,i)=>v.Tracer=='[11C]PIB');
     const FMMList = fileList.filter((v,i)=>v.Tracer=='[18F]FMM');
-    const FBPList = fileList.filter((v,i)=>v.Tracer=='[18F]FBB');
-    const FBBList = fileList.filter((v,i)=>v.Tracer=='[18F]FBP');
+    const FBPList = fileList.filter((v,i)=>v.Tracer=='[18F]FBP');
+    const FBBList = fileList.filter((v,i)=>v.Tracer=='[18F]FBB');
     setNofPIB(PIBList.length);
     setNofFMM(FMMList.length);
     setNofFBP(FBPList.length);
