@@ -457,6 +457,16 @@ class uploader(APIView):
                 # nii 파일을 database 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".nii"))
 
+                # output_filename_1 = myfile['PatientName']
+                # output_filename_2 = myfile['PatientID']
+                # output_filename_3 = myfile['AcquisitionDateTime']
+                # output_filename_4 = myfile['Tracer']
+                # if output_filename_2 == '-':
+                #     output_filename_2 = "00000000"
+                # if output_filename_3 == '-':
+                #     output_filename_3 = "0000-00-00"
+                # nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], output_filename_3+"_"+output_filename_2+"_"+output_filename_1+"_"+output_filename_4+".nii"))
+
 
                 # img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor, order=1) # 2mm 픽셀로 스케일 변환
                 img3D_2mm = np.pad(img3D_2mm, ((50,50),(50,50),(50,50)), mode='constant')
@@ -726,7 +736,7 @@ class uploader(APIView):
                 newCase.FileName = str(newFileID)+".nii"
                 # newCase.Tracer = "[11C]PIB"
                 # newCase.PatientName = v['FileName']
-                newCase.PatientName = 'Anonymous ('+v['FileName']+')'
+                newCase.PatientName = 'Anonymous('+''.join(v['FileName'].split(".")[:-1])+')'
                 newCase.PatientID = '-'
                 newCase.Age = '-'
                 newCase.Sex = '-'
