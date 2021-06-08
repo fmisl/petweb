@@ -66,12 +66,29 @@ class ImageViewer extends Component {
       in_suvr_max:0, 
       in_suvr_min:0,
       out_suvr_max:0,
-      out_suvr_min:0
+      out_suvr_min:0,
+
+      // petAStack: props.petAStack,
+      // petCStack: props.petCStack,
+      // petSStack: props.petSStack,
+      ClayerId: [],
+      AlayerId: [],
+      SlayerId: [],
+      viewerReady: false,
     };
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onImageRendered = this.onImageRendered.bind(this);
     this.onNewImage = this.onNewImage.bind(this);
     this.onWindowResize = this.onWindowResize.bind(this);
+    this.onALayerAdded = this.onALayerAdded.bind(this);
+    this.onCLayerAdded = this.onCLayerAdded.bind(this);
+    this.onSLayerAdded = this.onSLayerAdded.bind(this);
+    this.Arenderer_findImageFn = this.Arenderer_findImageFn.bind(this);
+    this.Crenderer_findImageFn = this.Crenderer_findImageFn.bind(this);
+    this.Srenderer_findImageFn = this.Srenderer_findImageFn.bind(this);
+    this.Arenderer = new cornerstoneTools.stackRenderers.FusionRenderer();
+    this.Crenderer = new cornerstoneTools.stackRenderers.FusionRenderer();
+    this.Srenderer = new cornerstoneTools.stackRenderers.FusionRenderer();
     this.wwwcsynchronizer = new cornerstoneTools.Synchronizer("cornerstoneimagerendered", cornerstoneTools.wwwcSynchronizer);
     this.synchronizer = new cornerstoneTools.Synchronizer("cornerstonenewimage", cornerstoneTools.updateImageSynchronizer);
     // var synchronizer = new cornerstoneTools.Synchronizer("cornerstonenewimage", cornerstoneTools.updateImageSynchronizer);
@@ -462,7 +479,12 @@ class ImageViewer extends Component {
       // cornerstoneTools.crosshairsTouch.enable(elementS, this.synchronizer);
       // cornerstoneTools.crosshairsTouch.enable(elementA, this.synchronizer);
       // Load the first image in the stack
+
       this.loadImage(elementC, elementS, elementA, elementM);
+      // console.log('componentDidMount: loadImage')
+      // this.setState({
+      //   viewerReady: true,
+      // })
     } catch(e){
       console.error('fast skip by wheel')
     }
@@ -669,34 +691,131 @@ class ImageViewer extends Component {
     // cornerstone.setViewport(this.elementA, newViewportA);
   }
 
-  // renderer_findImageFn = function(imageIds, targetImageId) {
-  //   var minDistance = 1;
-  //   var targetImagePlane = cornerstone.metaData.get('imagePlaneModule', targetImageId);
-  //   // console.log("imagePositionPatient: ", targetImagePlane)
-  //   var imagePositionZ = targetImagePlane.imagePositionPatient[2];
+  onALayerAdded (e) {
+    const {AlayerId} = this.state;
+    let eventData = e.detail;
+    let layer = cornerstone.getLayer(eventData.element, eventData.layerId);
+    this.setState({
+        AlayerId: [...AlayerId, layer.layerId],
+    })
+  }
+  onCLayerAdded (e) {
+      const {ClayerId} = this.state;
+      let eventData = e.detail;
+      let layer = cornerstone.getLayer(eventData.element, eventData.layerId);
+      this.setState({
+          ClayerId: [...ClayerId, layer.layerId],
+      })
+  }
+  onSLayerAdded (e) {
+      const {SlayerId} = this.state;
+      let eventData = e.detail;
+      let layer = cornerstone.getLayer(eventData.element, eventData.layerId);
+      this.setState({
+          SlayerId: [...SlayerId, layer.layerId],
+      })
+  }
 
-  //   var closest;
-  //   // console.log(targetImageId);
-  //   // console.log(imageIds, targetImageId)
-  //   // imageIds.forEach(function(imageId) {
-  //   //     var imagePlane = cornerstone.metaData.get('imagePlaneModule', imageId);
-  //   //     //frameOfReferenceUID
-  //   //     // console.log(imageId)
-  //   //     // console.log(imagePlane.frameOfReferenceUID)
-  //   //     var imgPosZ = imagePlane.imagePositionPatient[2];
-  //   //     var distance = Math.abs(imgPosZ - imagePositionZ);
-  //   //     if (distance < minDistance) {
-  //   //         minDistance = distance;
-  //   //         // console.log("renderer distance: ", imageId)
-  //   //         closest = imageId;
-  //   //     }
-  //   // });
+  Crenderer_findImageFn = function(imageIds, targetImageId) {
+      var minDistance = 1;
+      var targetImagePlane = cornerstone.metaData.get('imagePlaneModule', targetImageId);
+      var imagePositionX = targetImagePlane.imagePositionPatient[0];
+      var imagePositionY = targetImagePlane.imagePositionPatient[1];
+      var imagePositionZ = targetImagePlane.imagePositionPatient[2];
+      console.log("(X,Y,Z): ", imagePositionX, imagePositionY, imagePositionZ)
 
-  //   return closest;
-  // };
+      var closest;
+      // console.log(targetImageId);
+      // console.log(imageIds, targetImageId)
+      imageIds.forEach(function(imageId) {
+          var imagePlane = cornerstone.metaData.get('imagePlaneModule', imageId);
+          //frameOfReferenceUID
+          // console.log(imageId)
+          // console.log(imagePlane.frameOfReferenceUID)
+          var imgPosX = imagePlane.imagePositionPatient[0];
+          var distance = Math.abs(imgPosX - imagePositionX);
+          if (distance < minDistance) {
+              minDistance = distance;
+              // console.log("renderer distance: ", imageId)
+              closest = imageId;
+          }
+      });
+
+      return closest;
+  };
+  Srenderer_findImageFn = function(imageIds, targetImageId) {
+      var minDistance = 1;
+      var targetImagePlane = cornerstone.metaData.get('imagePlaneModule', targetImageId);
+      var imagePositionX = targetImagePlane.imagePositionPatient[0];
+      var imagePositionY = targetImagePlane.imagePositionPatient[1];
+      var imagePositionZ = targetImagePlane.imagePositionPatient[2];
+      console.log("(X,Y,Z): ", imagePositionX, imagePositionY, imagePositionZ)
+
+      var closest;
+      // console.log(targetImageId);
+      // console.log(imageIds, targetImageId)
+      imageIds.forEach(function(imageId) {
+          var imagePlane = cornerstone.metaData.get('imagePlaneModule', imageId);
+          //frameOfReferenceUID
+          // console.log(imageId)
+          // console.log(imagePlane.frameOfReferenceUID)
+          var imgPosY = imagePlane.imagePositionPatient[1];
+          var distance = Math.abs(imgPosY - imagePositionY);
+          if (distance < minDistance) {
+              minDistance = distance;
+              // console.log("renderer distance: ", imageId)
+              closest = imageId;
+          }
+      });
+
+      return closest;
+  };
+  Arenderer_findImageFn = function(imageIds, targetImageId) {
+      var minDistance = 1;
+      var targetImagePlane = cornerstone.metaData.get('imagePlaneModule', targetImageId);
+      var imagePositionX = targetImagePlane.imagePositionPatient[0];
+      var imagePositionY = targetImagePlane.imagePositionPatient[1];
+      var imagePositionZ = targetImagePlane.imagePositionPatient[2];
+      console.log("(X,Y,Z): ", imagePositionX, imagePositionY, imagePositionZ)
+
+      var closest;
+      // console.log(targetImageId);
+      // console.log(imageIds, targetImageId)
+      imageIds.forEach(function(imageId) {
+          var imagePlane = cornerstone.metaData.get('imagePlaneModule', imageId);
+          //frameOfReferenceUID
+          // console.log(imageId)
+          // console.log(imagePlane.frameOfReferenceUID)
+          var imgPosZ = imagePlane.imagePositionPatient[2];
+          var distance = Math.abs(imgPosZ - imagePositionZ);
+          if (distance < minDistance) {
+              minDistance = distance;
+              // console.log("renderer distance: ", imageId)
+              closest = imageId;
+          }
+      });
+
+      return closest;
+  };
 
   loadImage=(elementC, elementS, elementA, elementM)=>{
     const { isCrosshaired, isPlayed,selectedColormap } = this.props;
+    // if (this.state.AlayerId.length === 2 && this.state.ClayerId.length === 2 && this.state.ClayerId.length === 2) {
+    //     // console.log("right after temp_initializeVieport: ", this.state.AlayerId);
+    //     try {
+    //         cornerstone.setActiveLayer(this.Aelement, this.state.AlayerId[1]);
+    //         // cornerstone.updateImage(this.Aelement);
+    //         cornerstone.setActiveLayer(this.Celement, this.state.ClayerId[1]);
+    //         // cornerstone.updateImage(this.Celement);
+    //         cornerstone.setActiveLayer(this.Selement, this.state.SlayerId[1]);
+    //         // cornerstone.updateImage(this.Selement);
+    //     } catch (e){
+    //         console.error("setActiveLayer Logic is not proper")
+    //     }
+    // }
+    this.Crenderer.findImageFn = this.Crenderer_findImageFn;
+    this.Srenderer.findImageFn = this.Srenderer_findImageFn;
+    this.Arenderer.findImageFn = this.Arenderer_findImageFn;
     // console.log('promise')
     // console.log('loadImage')
     // const stackDataC = cornerstoneTools.getToolState(this.elementC, "stack");
@@ -720,7 +839,11 @@ class ImageViewer extends Component {
         const stack = this.props.stackC;
         // console.log('stackC', stack)
         cornerstoneTools.addStackStateManager(elementC, ["stack", 'referenceLines', 'crosshairs']);
+        const MNIstack = this.props.MNIstackC;
+        cornerstoneTools.addToolState(elementC, 'stack', MNIstack);
         cornerstoneTools.addToolState(elementC, "stack", stack);
+        cornerstoneTools.addToolState(elementC, 'stackRenderer', this.Crenderer);
+        this.Crenderer.render(elementC);
 
         // let layerPET = cornerstone.getLayer(elementC);
         // console.log(layerPET)
@@ -747,6 +870,7 @@ class ImageViewer extends Component {
         // enable reference Lines tool
         {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementC, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementC)}
         cornerstoneTools.stackScrollKeyboard.activate(elementC);
+        elementC.addEventListener("cornerstonelayeradded", this.onCLayerAdded);
         elementC.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementC.addEventListener("cornerstonenewimage", this.onNewImage);
         window.addEventListener("resize", this.onWindowResize);
@@ -762,7 +886,12 @@ class ImageViewer extends Component {
 
         const stack = this.props.stackS;
         cornerstoneTools.addStackStateManager(elementS, ["stack", 'referenceLines', 'crosshairs']);
+        const MNIstack = this.props.MNIstackS;
+        cornerstoneTools.addToolState(elementS, 'stack', MNIstack);
         cornerstoneTools.addToolState(elementS, "stack", stack);
+        cornerstoneTools.addToolState(elementS, 'stackRenderer', this.Srenderer);
+        this.Srenderer.render(elementS);
+
         // cornerstoneTools.stackScroll.activate(elementS, 1);
         // cornerstoneTools.dragProbe.activate(elementS, 2);
         // cornerstoneTools.dragProbeTouch.activate(elementS);
@@ -776,6 +905,7 @@ class ImageViewer extends Component {
         // enable reference Lines tool
         {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementS, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementS)}
         cornerstoneTools.stackScrollKeyboard.activate(elementS);
+        elementS.addEventListener("cornerstonelayeradded", this.onSLayerAdded);
         elementS.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementS.addEventListener("cornerstonenewimage", this.onNewImage);
         window.addEventListener("resize", this.onWindowResize);
@@ -791,7 +921,12 @@ class ImageViewer extends Component {
 
         const stack = this.props.stackA;
         cornerstoneTools.addStackStateManager(elementA, ["stack", 'referenceLines', 'crosshairs']);
+        const MNIstack = this.props.MNIstackA;
+        cornerstoneTools.addToolState(elementA, 'stack', MNIstack);
         cornerstoneTools.addToolState(elementA, "stack", stack);
+        cornerstoneTools.addToolState(elementA, 'stackRenderer', this.Arenderer);
+        this.Arenderer.render(elementA);
+
         // cornerstoneTools.stackScroll.activate(elementA, 1);
         // cornerstoneTools.dragProbe.activate(elementA, 2);
         // cornerstoneTools.dragProbeTouch.activate(elementA);
@@ -805,6 +940,7 @@ class ImageViewer extends Component {
         // enable reference Lines tool
         {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementA, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementA)}
         cornerstoneTools.stackScrollKeyboard.activate(elementA);
+        elementA.addEventListener("cornerstonelayeradded", this.onALayerAdded);
         elementA.addEventListener("cornerstoneimagerendered",this.onImageRendered);
         elementA.addEventListener("cornerstonenewimage", this.onNewImage);
         window.addEventListener("resize", this.onWindowResize);

@@ -28,6 +28,9 @@ import {login, logout, increment, decrement, loadItems, loadSlices, profile, tab
 
 import InputRange from 'react-input-range';
 import "react-input-range/lib/css/index.css";
+import MNI_Axial from "../MNI152_T1_2mm_z"
+import MNI_Coronal from "../MNI152_T1_2mm_y"
+import MNI_Sagittal from "../MNI152_T1_2mm_x"
 
 // function View({}) {
 class View extends Component {
@@ -64,7 +67,7 @@ class View extends Component {
     petAStack: {},
   };
   componentDidMount(){
-    console.log('CDM')
+    // console.log('CDM')
     const {username, inoutSelect} = this.state;
     const {counter, stackManager, sliceList, fileList} = this.props;
     const IdxSlice = sliceList.findIndex(v=>v.fileID==counter.fileID)
@@ -147,16 +150,73 @@ class View extends Component {
         name: 'PET'
       }
     };
+    const mniCStack = {
+      // patient: "anonymous",
+      // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
+      imageIds: [],
+      currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
+      options: {
+        opacity: 1,
+        visible: true,
+        viewport: {
+          colormap: 'invertedGray',
+        },
+        name: 'MNI'
+      }
+    };
+    const mniSStack = {
+      // patient: "anonymous",
+      // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
+      imageIds: [],
+      currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
+      options: {
+        opacity: 1,
+        visible: true,
+        viewport: {
+          colormap: 'invertedGray',
+        },
+        name: 'MNI'
+      }
+    };
+    const mniAStack = {
+      // patient: "anonymous",
+      // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
+      imageIds: [],
+      currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
+      options: {
+        opacity: 1,
+        visible: true,
+        viewport: {
+          colormap: 'invertedGray',
+        },
+        name: 'MNI'
+      }
+    };
+    const mniMStack = {
+      // patient: "anonymous",
+      // studyID:  "1.3.6.1.4.1.5962.99.1.2237260787.1662717184.1234892907507.1411.0",
+      imageIds: [],
+      currentImageIdIndex: 0,
+      options: {
+        opacity: 1,
+        visible: true,
+        viewport: {
+          colormap: 'invertedGray',
+        },
+        name: 'MNI'
+      }
+    };
     this.setState({
       ImageReady,
       Completed,
       // imageIdC,
       // imageIdS,
       // imageIdA,
-      // stackCoronal,
-      // stackSaggital,
-      // stackAxial,
-      // stackMip,
+      mniCStack,
+      mniSStack,
+      mniAStack,
+      mniMStack,
+
       petCStack,
       petSStack,
       petAStack,
@@ -202,7 +262,7 @@ class View extends Component {
     // }
     // else
     {
-      console.log('state same',completeSlices, ImageReady)
+      // console.log('state same',completeSlices, ImageReady)
       if (ImageReady){
         if (prevState.selectedColormap != selectedColormap || prevProps.counter != counter || prevState.isSNed != isSNed || prevState.isInverted != isInverted || (stackManager.length != 0 && prevProps.sliceList.length != sliceList.length)){
           console.log('componentDidUpdate with counter', counter, ImageReady)
@@ -255,6 +315,55 @@ class View extends Component {
               name: 'PET'
             }
           };
+          const mniCStack = {
+            imageIds: [...Array(109+20).keys()].map((v,i)=>("mni:"+inoutSelect+"/"+IdxSlice+"/coronal/"+invertSelect+"/"+selectedColormap+"/"+i)),
+            currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
+            options: {
+              opacity: 1,
+              visible: true,
+              viewport: {
+                colormap: 'invertedGray',
+              },
+              name: 'MNI'
+            }
+          };
+          const mniSStack = {
+            imageIds: [...Array(91+40).keys()].map((v,i)=>("mni:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+invertSelect+"/"+selectedColormap+"/"+i)),
+            currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
+            options: {
+              opacity: 1,
+              visible: true,
+              viewport: {
+                colormap: 'invertedGray',
+              },
+              name: 'MNI'
+            }
+          };
+          const mniAStack = {
+            imageIds: [...Array(91).keys()].map((v,i)=>("mni:"+inoutSelect+"/"+IdxSlice+"/axial/"+invertSelect+"/"+selectedColormap+"/"+i)),
+            currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
+            options: {
+              opacity: 1,
+              visible: true,
+              viewport: {
+                colormap: 'invertedGray',
+              },
+              name: 'MNI'
+            }
+          };
+          const mniMStack = {
+            // IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+'mip_'+inoutSelect+'_axial_'+i+'.png'
+            imageIds: [...Array(45).keys()].map((v,i)=>("mni:"+inoutSelect+"/"+IdxSlice+"/mip/"+invertSelect+"/"+selectedColormap+"/"+i)),
+            currentImageIdIndex: 0,
+            options: {
+              opacity: 1,
+              visible: true,
+              viewport: {
+                colormap: 'invertedGray',
+              },
+              name: 'MNI'
+            }
+          };
 
           try{
             console.log('imageLoader update from sliceList B64Data')
@@ -271,10 +380,11 @@ class View extends Component {
                 // imageIdC,
                 // imageIdS,
                 // imageIdA,
-                // stackCoronal,
-                // stackSaggital,
-                // stackAxial,
-                // stackMip,
+                mniCStack,
+                mniSStack,
+                mniAStack,
+                mniMStack,
+
                 petCStack,
                 petSStack,
                 petAStack,
@@ -347,9 +457,14 @@ class View extends Component {
     // }))
   render() {
     const {updateSUVR_min_max, setShowMenu,setIsCrosshaired,setIsInverted,setIsSNed,setInoutSelect, resetDataReady, setIsPlayed, handleWindowChange, niftiDownload, changeColormap, resetSlice} = this;
-    const {Completed, ImageReady, suvr_max, suvr_min, widthSUVR, centerSUVR, selectedColormap, value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, petCStack,petSStack,petAStack, petMStack, currentStepIndex} = this.state;
+    const {Completed, ImageReady, suvr_max, suvr_min, widthSUVR, centerSUVR, selectedColormap, value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, 
+      petCStack,petSStack,petAStack, petMStack, 
+      mniCStack,mniSStack,mniAStack, mniMStack, 
+      currentStepIndex} = this.state;
     // const {} = this.state;
     const {counter, stackManager, fileList} = this.props;
+    // console.log('arrayData', typeof(arrayData))
+    // console.log(arrayData[0])
     // console.log(this.state.selectedColormap)
     // const suvr_max = isSNed ? out_suvr_max:in_suvr_max;
     // const suvr_min = Math.max(0, isSNed ? out_suvr_min:in_suvr_min);
@@ -368,7 +483,10 @@ class View extends Component {
             <div style={{position: "absolute", top:"140px", left:"300px",width:"1550px", height:"937px"}}>
               {
                 ImageReady ? 
-                  <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}/>
+                  <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} 
+                  stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}
+                  MNIstackC={{ ...mniCStack }} MNIstackS={{ ...mniSStack }} MNIstackA={{ ...mniAStack }} stackM={{...mniMStack}}
+                  />
                   :
                   // Completed ? 
                   // <div class="view-image"><img src={PngReset} onClick={()=>resetSlice(counter.fileID)}/></div>
@@ -571,6 +689,82 @@ class View extends Component {
     var Inv_petSagittalOutputData = [...Array(91+40).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='sagittal' && v.Type==inoutSelect)[i].B64Data)));
     var Inv_petMipOutputData = [...Array(45).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
 
+    var mniAxialOutputData = MNI_Axial.map((v,i)=>(getPixelData(v)));
+    var mniCoronalOutputData = MNI_Coronal.map((v,i)=>(getPixelData(v)));
+    var mniSagittalOutputData = MNI_Sagittal.map((v,i)=>(getPixelData(v)));
+    var mniMipOutputData = [...Array(45).keys()].map((v,i)=>(getPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
+
+    var Inv_mniAxialOutputData = MNI_Axial.map((v,i)=>(getInvertedPixelData(v)));
+    var Inv_mniCoronalOutputData = MNI_Coronal.map((v,i)=>(getInvertedPixelData(v)));
+    var Inv_mniSagittalOutputData = MNI_Sagittal.map((v,i)=>(getInvertedPixelData(v)));
+    var Inv_mniMipOutputData = [...Array(45).keys()].map((v,i)=>(getInvertedPixelData(this.props.sliceList[IdxSlice].B64.filter(v=>v.Direction=='mip' && v.Type==inoutSelect)[i].B64Data)));
+
+    function getMNIImage(imageId) {
+      let identifier=imageId.split(/[:,/]+/)
+      let device = identifier[0]//pet
+      let inout = identifier[1]//output
+      let slice = identifier[2] //0
+      let direction=identifier[3]
+      let Inverter=identifier[4]
+      let colormap=identifier[5]
+      let id=Number(identifier[6])
+      var width = 91;
+      var height = 91;
+      if(direction === 'coronal') {width=91+40; height=91}
+      else if(direction === 'sagittal') {width=109+20; height=91}
+      else if(direction === 'axial') {width=91+40; height=109+20}
+      else if (direction === "mip"){width = 109+20; height = 91}
+      // else if(direction === 'mip'){width = 69; height = 51}
+      // console.log("ID: ", ID, " Direction: ", Direction, " w/h: ", width,"/",height)
+
+      var image = {
+        imageId: imageId,
+
+        minPixelValue : 0,
+        maxPixelValue : 32767,
+        slope: 1.0,
+        intercept: 0,
+        windowCenter : 16384,
+        windowWidth : 32767,
+        getPixelData: getPixelData,
+        rows: height,
+        columns: width,
+        height: height,
+        width: width,
+        color: false,
+        columnPixelSpacing: 2,
+        rowPixelSpacing: 2,
+        sizeInBytes: width * height * 2,
+      };
+
+      function getPixelData()
+      {
+        // if (colormap == "gray"){
+        //   Inverter = "invert";
+        // }
+        if (Inverter === "right"){
+          if (direction === "coronal"){return mniCoronalOutputData[id]}
+          else if (direction === "sagittal"){return mniSagittalOutputData[id]}
+          else if (direction === "axial"){return mniAxialOutputData[id]}
+          else if (direction === "mip"){return mniMipOutputData[id]}
+        } else {
+          if (direction === "coronal"){return Inv_mniCoronalOutputData[id]}
+          else if (direction === "sagittal"){return Inv_mniSagittalOutputData[id]}
+          else if (direction === "axial"){return Inv_mniAxialOutputData[id]}
+          else if (direction === "mip"){return Inv_mniMipOutputData[id]}
+        }
+        // else if (direction === "mip" && inout === "output"){return petMipOutputData[id]}
+
+        throw "unknown imageId";
+      }
+
+      return {
+        promise: new Promise((resolve) => {
+          resolve(image);
+        }),
+        cancelFn: undefined
+      };
+    }
     function getPETImage(imageId) {
       let identifier=imageId.split(/[:,/]+/)
       let device = identifier[0]//pet
@@ -614,30 +808,16 @@ class View extends Component {
         // if (colormap == "gray"){
         //   Inverter = "invert";
         // }
-        if (colormap == "gray"){
-          if (Inverter === "right"){
-            if (direction === "coronal"){return petCoronalOutputData[id]}
-            else if (direction === "sagittal"){return petSagittalOutputData[id]}
-            else if (direction === "axial"){return petAxialOutputData[id]}
-            else if (direction === "mip"){return petMipOutputData[id]}
-          } else {
-            if (direction === "coronal"){return Inv_petCoronalOutputData[id]}
-            else if (direction === "sagittal"){return Inv_petSagittalOutputData[id]}
-            else if (direction === "axial"){return Inv_petAxialOutputData[id]}
-            else if (direction === "mip"){return Inv_petMipOutputData[id]}
-          }
+        if (Inverter === "right"){
+          if (direction === "coronal"){return petCoronalOutputData[id]}
+          else if (direction === "sagittal"){return petSagittalOutputData[id]}
+          else if (direction === "axial"){return petAxialOutputData[id]}
+          else if (direction === "mip"){return petMipOutputData[id]}
         } else {
-          if (Inverter === "right"){
-            if (direction === "coronal"){return petCoronalOutputData[id]}
-            else if (direction === "sagittal"){return petSagittalOutputData[id]}
-            else if (direction === "axial"){return petAxialOutputData[id]}
-            else if (direction === "mip"){return petMipOutputData[id]}
-          } else {
-            if (direction === "coronal"){return Inv_petCoronalOutputData[id]}
-            else if (direction === "sagittal"){return Inv_petSagittalOutputData[id]}
-            else if (direction === "axial"){return Inv_petAxialOutputData[id]}
-            else if (direction === "mip"){return Inv_petMipOutputData[id]}
-          }
+          if (direction === "coronal"){return Inv_petCoronalOutputData[id]}
+          else if (direction === "sagittal"){return Inv_petSagittalOutputData[id]}
+          else if (direction === "axial"){return Inv_petAxialOutputData[id]}
+          else if (direction === "mip"){return Inv_petMipOutputData[id]}
         }
         // else if (direction === "mip" && inout === "output"){return petMipOutputData[id]}
 
@@ -652,6 +832,7 @@ class View extends Component {
       };
     }
 
+    cornerstone.registerImageLoader('mni', getMNIImage);
     cornerstone.registerImageLoader('pet', getPETImage);
   };
 
