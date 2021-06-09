@@ -14,6 +14,7 @@ import AnalysisItem1 from './components/Items/AnalysisItem1'
 import AnalysisItem2 from './components/Items/AnalysisItem2'
 import AnalysisItem3 from './components/Items/AnalysisItem3'
 import axios from 'axios';
+import * as services from '../services/fetchApi'
 import {IPinUSE} from '../services/IPs'
 // const subRegionName = [
 //     'Frontal_L', 'Frontal_L_C',
@@ -109,15 +110,35 @@ class Analysis extends Component {
     // ReactDOM.findDOMNode(this).removeEventListener('wheel', this.handleWheel);
   }
   niftiDownload = async () =>{
-    const {counter, stackManager} = this.props;
-    console.log('download nifti')
+    const {counter, stackManager, fileList} = this.props;
+    // console.log('download nifti')
     const token = localStorage.getItem('token')
     const username = localStorage.getItem('username')
-    const fileID = stackManager?.[counter.tabX].fileID;
-    const downloadUrl = IPinUSE+'result/download/'+username+'/database/'+fileID+"/"+"output_"+fileID+".nii";
     // // res = await services.TokenVerify({'token':token})
-    // const res = await services.downloadNifti({'token':token});
-    setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
+    // console.log(counter.fileID, fileList)
+    const selectedList = fileList.filter((v, i)=>v.fileID == counter.fileID);
+    // console.log(selectedList.length)
+    if (selectedList.length != 0){
+      const res = await services.downloadNifti({'token':token, 'selectedList':selectedList});
+      if (res.status == 200){
+        const downloadUrl = IPinUSE+'result/download/'+username+'/downloader/brightonix_imaging.zip';
+        setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
+      } else{
+        alert('Download failed');
+      }
+    } else {
+      alert('No files selected')
+    }
+    
+    // const {counter, stackManager} = this.props;
+    // console.log('download nifti')
+    // const token = localStorage.getItem('token')
+    // const username = localStorage.getItem('username')
+    // const fileID = stackManager?.[counter.tabX].fileID;
+    // const downloadUrl = IPinUSE+'result/download/'+username+'/database/'+fileID+"/"+"output_"+fileID+".nii";
+    // // // res = await services.TokenVerify({'token':token})
+    // // const res = await services.downloadNifti({'token':token});
+    // setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
   }
   render(){
     const {subRegion} = this.state;
@@ -227,6 +248,7 @@ const mapStateToProps = (state) => ({
   counter:state.counter,
   isLogged:state.isLogged,
   stackManager:state.stackManager,
+  fileList: state.fileList,
 });
 
 const mapDispatchToProps = (dispatch) => ({
