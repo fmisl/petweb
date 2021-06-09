@@ -24,7 +24,17 @@ function Signup(){
       } catch (e){
         // alert('Failed')
         console.log(e.response.data)
-        alert(e.response.data.username[0]+"\n"+e.response.data.email[0])
+        if (e.response.data.username){
+          alert("A user with that username already exists.")
+        }
+        if (e.response.data.email){
+          alert("Email field may not be blank.")
+        }
+        if (e.response.data.password1){
+          alert("password is too common")
+        }
+        // const errMsg = e.response.data
+        // alert(errMsg)
       } finally{
         console.log(res)
       }
