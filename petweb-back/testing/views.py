@@ -1119,9 +1119,30 @@ class export(APIView):
         # selectedCase = models.Case.objects.filter(Group=1)
         # create a ZipFile object
         zipObj = ZipFile(target_path, 'w')
+        # print(selectedCase[''])
+
         for idx, filename in enumerate(selectedCase):
+            output_filename_1 = filename.AcquisitionDateTime
+            output_filename_2 = filename.PatientID
+            output_filename_3 = filename.PatientName
+            output_filename_4 = filename.Tracer
+            if output_filename_1 == '-':
+                output_filename_1 = "00000000"
+            else:
+                output_filename_1 = ''.join(output_filename_1.split('-'))
+            if output_filename_2 == '-':
+                output_filename_2 = "00000000"
+            if output_filename_4 == '[11C]PIB':
+                output_filename_4 = "11CPiB"
+            elif output_filename_4 == '[18F]FBB':
+                output_filename_4 = "18FFlorbetaben"
+            elif output_filename_4 == '[18F]FBP':
+                output_filename_4 = "18FFlorbetapir"
+            elif output_filename_4 == '[18F]FMM':
+                output_filename_4 = "18FFlutemetamol"
+            niiFilename = output_filename_1+"_"+output_filename_2+"_"+output_filename_3+"_"+output_filename_4+".nii"
             fullpath = os.path.join(database_path, filename.fileID, "output_"+filename.FileName)
-            targetpath = os.path.join(database_path, filename.fileID, str(idx)+"_"+filename.PatientName+".nii")
+            targetpath = os.path.join(database_path, filename.fileID, niiFilename)
             # Add multiple files to the zip
             zipObj.write(fullpath, os.path.basename(targetpath))
         # close the Zip File
