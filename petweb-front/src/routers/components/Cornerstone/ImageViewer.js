@@ -193,6 +193,7 @@ class ImageViewer extends Component {
     // const suvrMax = wc + ww/2;
     // const suvrMin = wc - ww/2;
     // console.log(suvr_max, suvr_min, this.CoronalLeftSide,this.SagittalLeftSide,this.AxialLeftSide)
+    console.log(this.state.ClayerId, this.state.SlayerId, this.state.AlayerId)
     return (
       <div style={divWrapper}>
         <div
@@ -519,6 +520,17 @@ class ImageViewer extends Component {
     // const elementA = this.elementA;
     // let viewportS = cornerstone.getViewport(elementS);
     // let viewportA = cornerstone.getViewport(elementA);
+    const elementC = this.elementC;
+    const elementS = this.elementS;
+    const elementA = this.elementA;
+    const elementM = this.elementM;
+    try{
+      cornerstone.setActiveLayer(elementA, this.state.AlayerId[0]);
+      cornerstone.setActiveLayer(elementC, this.state.ClayerId[0]);
+      cornerstone.setActiveLayer(elementS, this.state.SlayerId[0]);
+    }catch(e){
+      console.log('setActiveLayer error')
+    }
     try{
       // 상위의 state (ww, wc) 를 받아서 viewport를 업데이트 시킴
       if (prevProps.value5 != value5){
@@ -667,6 +679,12 @@ class ImageViewer extends Component {
       console.error(e)
       // console.log("componentDidUpdate:error")
     }
+    if (isPlayed==true) {
+      cornerstoneTools.playClip(this.elementM, currentStepIndex);
+      // let viewportC = cornerstone.getViewport(this.elementC);
+      // viewportC.voi.windowCenter = 16384/2;
+      // cornerstone.setViewport(this.elementC, viewportC);
+    }
     try{
       // console.log('viewportC', viewportC)
       // console.log('stackC.options.viewport', this.props.stackC.options.viewport)
@@ -680,6 +698,26 @@ class ImageViewer extends Component {
       // cornerstone.setViewport(this.elementC, viewportC);
       // cornerstone.setViewport(this.elementS, viewportS);
       // cornerstone.setViewport(this.elementA, viewportA);
+      console.log('ComponentDidUpdate: getlayer start')
+      const elementC = this.elementC;
+      const elementS = this.elementS;
+      const elementA = this.elementA;
+      const elementM = this.elementM;
+      // cornerstone.setActiveLayer(elementA, this.state.AlayerId[1]);
+      // cornerstone.setActiveLayer(elementC, this.state.ClayerId[1]);
+      // cornerstone.setActiveLayer(elementS, this.state.SlayerId[1]);
+
+      const {AlayerId, ClayerId, SlayerId} = this.state;
+      let ClayerPET = cornerstone.getLayer(elementC, ClayerId[1]);
+      ClayerPET.options.opacity=0;
+      let SlayerPET = cornerstone.getLayer(elementS, SlayerId[1]);
+      SlayerPET.options.opacity=0;
+      let AlayerPET = cornerstone.getLayer(elementA, AlayerId[1]);
+      AlayerPET.options.opacity=0;
+      // cornerstone.updateImage(elementC);
+      // cornerstone.updateImage(elementS);
+      // cornerstone.updateImage(elementA);
+      console.log('ComponentDidUpdate: getlayer end')
     }catch(e){
 
     }
@@ -840,8 +878,8 @@ class ImageViewer extends Component {
         // console.log('stackC', stack)
         cornerstoneTools.addStackStateManager(elementC, ["stack", 'referenceLines', 'crosshairs']);
         const MNIstack = this.props.MNIstackC;
-        cornerstoneTools.addToolState(elementC, 'stack', MNIstack);
         cornerstoneTools.addToolState(elementC, "stack", stack);
+        cornerstoneTools.addToolState(elementC, 'stack', MNIstack);
         cornerstoneTools.addToolState(elementC, 'stackRenderer', this.Crenderer);
         this.Crenderer.render(elementC);
 
@@ -887,8 +925,8 @@ class ImageViewer extends Component {
         const stack = this.props.stackS;
         cornerstoneTools.addStackStateManager(elementS, ["stack", 'referenceLines', 'crosshairs']);
         const MNIstack = this.props.MNIstackS;
-        cornerstoneTools.addToolState(elementS, 'stack', MNIstack);
         cornerstoneTools.addToolState(elementS, "stack", stack);
+        cornerstoneTools.addToolState(elementS, 'stack', MNIstack);
         cornerstoneTools.addToolState(elementS, 'stackRenderer', this.Srenderer);
         this.Srenderer.render(elementS);
 
@@ -922,8 +960,8 @@ class ImageViewer extends Component {
         const stack = this.props.stackA;
         cornerstoneTools.addStackStateManager(elementA, ["stack", 'referenceLines', 'crosshairs']);
         const MNIstack = this.props.MNIstackA;
-        cornerstoneTools.addToolState(elementA, 'stack', MNIstack);
         cornerstoneTools.addToolState(elementA, "stack", stack);
+        cornerstoneTools.addToolState(elementA, 'stack', MNIstack);
         cornerstoneTools.addToolState(elementA, 'stackRenderer', this.Arenderer);
         this.Arenderer.render(elementA);
 
