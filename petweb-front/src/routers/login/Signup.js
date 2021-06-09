@@ -25,13 +25,13 @@ function Signup(){
         // alert('Failed')
         console.log(e.response.data)
         if (e.response.data.username){
-          alert("A user with that username already exists.")
+          alert(e.response.data.username)
         }
         if (e.response.data.email){
-          alert("Email field may not be blank.")
+          alert(e.response.data.email)
         }
         if (e.response.data.password1){
-          alert("password is too common")
+          alert(e.response.data.password1)
         }
         // const errMsg = e.response.data
         // alert(errMsg)
