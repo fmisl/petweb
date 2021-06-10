@@ -23,6 +23,8 @@ const styleDiv ={
   // background: "black",
 }
 function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTracer, setSelectTracer, fileList, isShowing, runner, hide, removeFileList, updateFileList }) {
+  const date0 = new Date();
+  const currentDate = date0.getFullYear()+('0' + (date0.getMonth()+1)).slice(-2)+('0' + date0.getDate()).slice(-2);
   const [finddata, setFinddata] = useState([]);
   const [getdata, setGetdata] = useState([]);
   const [tickCounter,setTickCounter] = useState(0);
@@ -37,7 +39,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
   });
   const [inputs, setInputs] = useState({
     PatientID: '', 	//사용할 문자열들을 저장하는 객체 형태로 관리!
-    StudyDate: '20210527',
+    StudyDate: currentDate,
     StudyDescription: 'betaben',
   });
   const { PatientID, StudyDate, StudyDescription } = inputs; 
@@ -302,12 +304,17 @@ console.log("finddata: ", finddata);
                         </div> */}
                         <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"28%"}}>
                             <label for="StudyDescription">StudyDescription
+                                <input name="StudyDescription" type="text" placeholder="StudyDescription"
+                                    value={StudyDescription}
+                                    onChange={handleChange}/>
+                            </label>
+                            {/* <label for="StudyDescription">StudyDescription
                                 <select name="StudyDescription" onChange={handleChange} value={StudyDescription} style={{border:"0px", color:"white", textAlignLast:"left"}}>
                                     <option value="betaben">{"[\u00B9\u2078F]Florbetaben"}</option>
-                                    {/* <option value="betapir">{"[\u00B9\u2078F]Florbetapir"}</option>
-                                    <option value="pib">{"[\u00B9\u00B9C]Pittsburg Compound B"}</option> */}
+                                    <option value="betapir">{"[\u00B9\u2078F]Florbetapir"}</option>
+                                    <option value="pib">{"[\u00B9\u00B9C]Pittsburg Compound B"}</option>
                                 </select>
-                            </label>
+                            </label> */}
                         </div>
                         {/* findHandler();  */}
                         {(stepChecker == 0 && !fetching) && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
