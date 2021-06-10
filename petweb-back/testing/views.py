@@ -1430,12 +1430,18 @@ class pacs(APIView):
             return Response(data=findResult, status=status.HTTP_200_OK)
 
         if Method == 'get':
+<<<<<<< HEAD
             Patient_ID = request.data['PatientID']
             Study_instanceUID = request.data['StudyInstanceUID']
             Series_info = request.data['SeriesInfo']
             # Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
             # print([Patient_name, Patient_ID])
             self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, [0, 1], target_path=dcm_folder_path)
+=======
+            Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
+            print([Patient_name, Patient_ID])
+            self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, range(0,len(Patient_ID)), target_path=dcm_folder_path)
+>>>>>>> cefc79309533bba097c3d5f7c83c21caef8786c0
             print('step3')
 
             dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')
@@ -1495,7 +1501,11 @@ class pacs(APIView):
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
             print('step5')
             # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+<<<<<<< HEAD
             fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientID':dcmPatientID[i], 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
+=======
+            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
+>>>>>>> cefc79309533bba097c3d5f7c83c21caef8786c0
                          'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
                          for i, filename in enumerate(dcmFileName) if (filename.split(".")[-1]=='nii')]
             # fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': Patient_name[i], 'Group': 0, 'fileID': None,
