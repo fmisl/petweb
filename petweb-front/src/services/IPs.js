@@ -5,6 +5,6 @@ const developIP2 = "http://172.16.122.76:8000/"
 // const developIP = "http://172.16.122.76:8022/"
 const localIP1 = "http://localhost:8023/";
 const localIP2 = "http://localhost:8021/";
-const releaseIP = "http://147.47.238.30:8021/"
+const releaseIP = "http://172.16.122.76:8021/"
 
-export const IPinUSE = localIP2;
+export const IPinUSE = releaseIP;
