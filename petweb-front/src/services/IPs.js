@@ -7,8 +7,4 @@ const localIP1 = "http://localhost:8023/";
 const localIP2 = "http://localhost:8021/";
 const releaseIP = "http://172.16.122.76:8021/"
 
-<<<<<<< HEAD
 export const IPinUSE = releaseIP;
-=======
-export const IPinUSE = localIP2;
->>>>>>> cefc79309533bba097c3d5f7c83c21caef8786c0
