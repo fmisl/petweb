@@ -29,7 +29,7 @@ stages = 3
 def train_pib(inout_path, caseID):
 
     # checkpoint_dir = r".\testing\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
-    checkpoint_dir = os.path.join(os.getcwd(), 'testing', 'TF_DirectSN', '02_14_20_10_CascadedGAN_Unet_augment_v1',)
+    checkpoint_dir = os.path.join(os.getcwd(), 'testing', 'TF_DirectSN', '02_14_param_pib',)
 
     in_file = "input_" + caseID
     out_file = "output_" + caseID

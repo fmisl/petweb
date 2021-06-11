@@ -44,31 +44,24 @@ def coreg_mrc1(V2):
 
 
     static = J.get_fdata()
-    # static = np.pad(static, ((0,0), (0,0), (10,11)), mode="constant")
     static_grid2world = J.affine
 
     moving = I.get_fdata()
-    moving = scipy.ndimage.filters.gaussian_filter(moving, sigma = 4 / 2.354)
     moving_grid2world = I.affine
+
+    # PET to MR dimension
+    tic = time.time()
 
     c_of_mass = transform_centers_of_mass(static, static_grid2world,
                                           moving, moving_grid2world)
 
-    # translation_affine = np.array([[1, 0, 0, (-np.sign(I.affine[0,0])*90 - I.affine[0, 3])],
-    #                                [0, 1, 0, (-np.sign(I.affine[1,1])*126 - I.affine[1, 3])],
-    #                                [0, 0, 1, (-np.sign(I.affine[2,2])*72 - I.affine[2, 3])],
-    #                                [0, 0, 0, 1]])
-    # whole_affine = translation_affine.dot(I.affine)
-    # moving_grid2world = whole_affine
-
-    nbins = 8
+    nbins = 12
     metric = MutualInformationMetric(nbins, sampling_proportion=80)
 
+    # Lower time cost: 10 10 5
     level_iters = [1000, 100, 10]
 
-
-    sigmas = [4.0, 2.0, 1.0]
-
+    sigmas = [3.0, 1.0, 1.0]
     factors = [4, 2, 1]
 
     affreg = AffineRegistration(metric=metric,
@@ -78,16 +71,14 @@ def coreg_mrc1(V2):
 
     transform = TranslationTransform3D()
     params0 = None
+    translation = affreg.optimize(static, moving, transform, params0, static_grid2world, moving_grid2world, starting_affine = c_of_mass.affine)
 
-    translation = affreg.optimize(static, moving, transform, params0,
-                                  static_grid2world, moving_grid2world, starting_affine = c_of_mass.affine)
 
     translation.domain_shape = (91, 109, 112)
     translation.domain_grid2world = np.asarray([[-2, 0, 0, 90], [0, 2, 0, -126], [0, 0, 2, -92], [0, 0, 0, 1]])
-
-    t_pet = translation.transform(I.get_fdata())
+    t_pet = translation.transform(moving)
 
     toc = time.time()
-    print('  Registration time: %f sec' % (toc - tic))
+    print('Elapsed time for registration: %f sec' % (toc - tic))
 
     return t_pet

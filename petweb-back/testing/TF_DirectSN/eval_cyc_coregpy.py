@@ -26,7 +26,7 @@ stages = 3
 
 
 def train(inout_path, caseID):
-    checkpoint_dir = r"C:\Users\SNUH-FMISL\workspace\04_09_22_35_transfer"
+    checkpoint_dir = r"C:\Users\BRMH\workspace\04_09_22_35_transfer"
     # checkpoint_dir = r".\testing\TF_DirectSN\02_14_20_10_CascadedGAN_Unet_augment_v1"
     # V1 = 'C:\\Users\SKKang\Downloads\\fMNI152_T1_2mm.img'
     in_file = "input_" + caseID
@@ -59,7 +59,7 @@ def train(inout_path, caseID):
         gimg = pet
 
         # TODO: change the path of template MR
-        aa = np.fromfile(r'C:\Users\SNUH-FMISL\workspace\petweb\petweb-back\testing\TF_DirectSN\src\fMNI152_T1_2mm.img',
+        aa = np.fromfile(r'C:\Users\BRMH\workspace\petweb\petweb-back\testing\TF_DirectSN\src\fMNI152_T1_2mm.img',
                          dtype=np.int16)
         aa = aa.astype(dtype=np.float32) - np.min(aa)
         aa = aa / np.max(aa)
@@ -110,14 +110,19 @@ def train(inout_path, caseID):
             else:
                 print('No checkpoint file found')
                 return
-
-            for i in range(0, 3):
+            
+            start = time.time()
+            
+            print("*************************")
+            print("***** Start time estimate")
+            for i in range(0, 1):
                 [xr, defosr] = sess.run(
                     [gimg, defos], feed_dict={pet_in: coreged})
                 # xr = xr*maxp
 
                 # for ii, in_path in enumerate(outkeys):
 
+                
                 name = 'test'
                 coreged_padded = np.pad(coreged, ((10, 11), (1, 2), (0, 0)), mode='constant')
                 test = dst._transform_spline(coreged_padded, defosr[:, :, :, :, 1], defosr[:, :, :, :, 0],
@@ -139,5 +144,8 @@ def train(inout_path, caseID):
                 # gxhr_tmp = xr[ii, :, :, :].flatten()
                 # gxhr_tmp.tofile(os.path.join(tfi, 'eval_labl' + name))
 
-                print(i, name)
-                print(maxp)
+                # print(i, name)
+                # print(maxp)
+                
+            print("Elapsed inferecne: {}".format(time.time() - start))
+            print("*********************")

@@ -24,6 +24,8 @@ import imageio
 import dicom2nifti
 import json
 from zipfile import ZipFile
+import time
+
 
 class uploader(APIView):
     # def async_function(self, request, Format, myfiles, caseID):
@@ -149,11 +151,14 @@ class uploader(APIView):
                 # start = time.perf_counter()
                 inout_path = os.path.join(database_path, myfile['fileID'])
 
+            
+
                 if tracerName.find('PIB') is not -1:
                     train_pib(inout_path, myfile['fileID'])
                 else:
                     train(inout_path, myfile['fileID'])
 
+                
                 print("Step5: Quantification")
                 aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize, tracer_name=tracerName)
                 # aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize, tracer_name=tracerName)
@@ -1169,8 +1174,8 @@ class pacs(APIView):
         return Response(data=packet, status=status.HTTP_200_OK)
 
     def __init__(self):
-        self.PACS_server = '172.16.60.69 1201'
-        self.SAVE_DIRECTORY = r'C:\Users\dwnusa\workspace\dcmtkfiles'
+        self.PACS_server = '192.168.20.38 104'
+        self.SAVE_DIRECTORY = r'C:\Users\BRMH\workspace\dcmtkfiles'
 
     def find_dcmtk(self, date=None, ptid=None):
 
@@ -1194,7 +1199,7 @@ class pacs(APIView):
         output = os.popen(r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\findscu.exe ' +
                           '-S -k 0008,0052="STUDY" -k "PatientName" -k ' + ptidfield +
                           ' -k "PatientBirthDate" -k ' + datefield +
-                          ' -k "StudyInstanceUID" -k "StudyDescription=betaben" -k "ModalitiesInStudy=PT" ' + self.PACS_server).read()
+                          ' -k "StudyInstanceUID" -k "StudyDescription" -k "ModalitiesInStudy" ' + self.PACS_server).read()
 
         output_splt = output.split('I: ---------------------------\n')
         num_of_studies = len(output_splt) - 1
@@ -1331,33 +1336,41 @@ class pacs(APIView):
                 # You can add conditinos for early or late phase
                 MATCHING = 'betaben'
                 # Except for CT images
-                if study_level[1][idx_series].rstrip('\x00').find(MATCHING) is not -1 \
-                        and study_level[1][idx_series].rstrip('\x00').find('CT') is -1 \
-                        and study_level[1][idx_series].rstrip('\x00').find('early') is -1:
-                    print('Downloading specific Dicoms series ##########################################\n')
-                    print(
-                        'Series description: {} ...\n'.format(study_level[1][idx_series])
-                    )
+                # if study_level[1][idx_series].rstrip('\x00').find(MATCHING) is not -1 \
+                #         and study_level[1][idx_series].rstrip('\x00').find('CT') is -1 \
+                #         and study_level[1][idx_series].rstrip('\x00').find('early') is -1:
+                print('Downloading specific Dicoms series ##########################################\n')
+                print(
+                    'Series description: {} ...\n'.format(study_level[1][idx_series])
+                )
 
-                    # os.popen(
-                    #     r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\getscu.exe -d -S -k 0008,0052="SERIES" -k "PatientID='
-                    #     + Patient_ID[idx_study] + '" -k "StudyInstanceUID='
-                    #     + Study_instanceUID[idx_study].rstrip(
-                    #         '\x00') + '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID='
-                    #     # study_level[3] describes the series instnaceuid
-                    #     + study_level[3][idx_series].rstrip(
-                    #         '\x00') + '" -od "' + target_path + '" ' + self.PACS_server).read()
+                # os.popen(
+                #     r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\getscu.exe -d -S -k 0008,0052="SERIES" -k "PatientID='
+                #     + Patient_ID[idx_study] + '" -k "StudyInstanceUID='
+                #     + Study_instanceUID[idx_study].rstrip(
+                #         '\x00') + '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID='
+                #     # study_level[3] describes the series instnaceuid
+                #     + study_level[3][idx_series].rstrip(
+                #         '\x00') + '" -od "' + target_path + '" ' + self.PACS_server).read()
+                
+                print('C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\getscu.exe -d -S -k 0008,0052="SERIES" -k "PatientID='
+                    + Patient_ID[idx_study].rstrip('\x00') + '" -k "StudyInstanceUID='
+                    + Study_instanceUID[idx_study].rstrip(
+                        '\x00') + '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID='
+                    # study_level[3] describes the series instnaceuid
+                    + study_level[3][idx_series].rstrip(
+                        '\x00') + '" -od "' + target_path + '" ' + self.PACS_server)
+                
+                os.popen(
+                    r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\getscu.exe -d -S -k 0008,0052="SERIES" -k "PatientID='
+                    + Patient_ID[idx_study].rstrip('\x00') + '" -k "StudyInstanceUID='
+                    + Study_instanceUID[idx_study].rstrip(
+                        '\x00') + '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID='
+                    # study_level[3] describes the series instnaceuid
+                    + study_level[3][idx_series].rstrip(
+                        '\x00') + '" -od "' + target_path + '" ' + self.PACS_server).read()
 
-                    os.popen(
-                        r'C:\ProgramData\chocolatey\lib\dcmtk\tools\dcmtk-3.6.6-win64-dynamic\bin\getscu.exe -d -S -k 0008,0052="SERIES" -k "PatientID='
-                        + Patient_ID[idx_study].rstrip('\x00') + '" -k "StudyInstanceUID='
-                        + Study_instanceUID[idx_study].rstrip(
-                            '\x00') + '" -k "Modality" -k "SeriesDescription" -k "SeriesNumber" -k "SeriesInstanceUID='
-                        # study_level[3] describes the series instnaceuid
-                        + study_level[3][idx_series].rstrip(
-                            '\x00') + '" -od "' + target_path + '" ' + self.PACS_server).read()
-
-                    print('Download was completed ###################################################\n\n')
+                print('Download was completed ###################################################\n\n')
 
         print('\n\n#############  ALL PROCESS WAS DONE #############\n\n')
 
@@ -1430,18 +1443,18 @@ class pacs(APIView):
             return Response(data=findResult, status=status.HTTP_200_OK)
 
         if Method == 'get':
-<<<<<<< HEAD
+#<<<<<<< HEAD
             Patient_ID = request.data['PatientID']
             Study_instanceUID = request.data['StudyInstanceUID']
             Series_info = request.data['SeriesInfo']
             # Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
             # print([Patient_name, Patient_ID])
             self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, [0, 1], target_path=dcm_folder_path)
-=======
-            Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
-            print([Patient_name, Patient_ID])
-            self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, range(0,len(Patient_ID)), target_path=dcm_folder_path)
->>>>>>> cefc79309533bba097c3d5f7c83c21caef8786c0
+#=======
+            # Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
+            # print([Patient_name, Patient_ID])
+            # self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, range(0,len(Patient_ID)), target_path=dcm_folder_path)
+#>>>>>>> cefc79309533bba097c3d5f7c83c21caef8786c0
             print('step3')
 
             dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')
@@ -1501,11 +1514,11 @@ class pacs(APIView):
                     Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
             print('step5')
             # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
-<<<<<<< HEAD
+#<<<<<<< HEAD
             fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientID':dcmPatientID[i], 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
-=======
-            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
->>>>>>> cefc79309533bba097c3d5f7c83c21caef8786c0
+#=======
+            # fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
+#>>>>>>> cefc79309533bba097c3d5f7c83c21caef8786c0
                          'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
                          for i, filename in enumerate(dcmFileName) if (filename.split(".")[-1]=='nii')]
             # fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': Patient_name[i], 'Group': 0, 'fileID': None,
