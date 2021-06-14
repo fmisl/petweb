@@ -724,11 +724,27 @@ class uploader(APIView):
                 newCase.fileID = str(newFileID)
                 newCase.FileName = str(newFileID)+".nii"
                 # newCase.Tracer = "[11C]PIB"
-                newCase.PatientName = json_data['PatientName']
-                newCase.PatientID = json_data['PatientID']
-                newCase.Age = json_data['PatientBirthDate']
-                newCase.Sex = json_data['PatientSex']
-                newCase.AcquisitionDateTime = json_data['AcquisitionDateTime'].split('T')[0]
+                try:
+                    newCase.PatientName = json_data['PatientName']
+                except:
+                    newCase.PatientName = 'Anonymous('+''.join(v['FileName'].split(".")[:-1])+')'
+                try:
+                    newCase.PatientID = json_data['PatientID']
+                except:
+                    newCase.PatientID = '-'
+                try:
+                    newCase.Age = json_data['PatientBirthDate']
+                except:
+                    newCase.Age = '-'
+                try:
+                    newCase.Sex = json_data['PatientSex']
+                except:
+                    newCase.Sex = '-'
+                try:
+                    newCase.AcquisitionDateTime = json_data['AcquisitionDateTime'].split('T')[0]
+                except:
+                    newCase.AcquisitionDateTime = '-'
+
                 mv(os.path.join(uploader_path, v['FileName'][:-3]+"json"), os.path.join(database_path, str(newFileID) + ".json"))
             except:
                 print('there is no json file')
