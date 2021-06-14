@@ -240,7 +240,7 @@ class uploader(APIView):
                 # uniformImg = np.ones(mip_img3D_crop.shape)
                 uniformImg = mip_img3D_crop > 1
                 for i in range(maxStep):
-                    print(i)
+                    # print(i)
                     angle1=i*8/180*np.pi
                     c1=np.cos(angle1)
                     s1=np.sin(angle1)
@@ -633,7 +633,7 @@ class uploader(APIView):
 
                 uniformImg = float_img3D > 1
                 for i in range(maxStep):
-                    print(i)
+                    # print(i)
                     angle1=i*8/180*np.pi
                     c1=np.cos(angle1)
                     s1=np.sin(angle1)
