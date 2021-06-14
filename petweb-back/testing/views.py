@@ -24,6 +24,7 @@ import imageio
 import dicom2nifti
 import json
 from zipfile import ZipFile
+import time
 
 class uploader(APIView):
     # def async_function(self, request, Format, myfiles, caseID):
@@ -97,13 +98,14 @@ class uploader(APIView):
             print(tracerName)
             #
             # Step1: File save (hdr, img, nii)
-            print("Step1: process list check: ", myfile['FileName'])
+            # print("Step1: process list check: ", myfile['FileName'])
             if os.path.exists(target_folder):
                 print("---------"+myfile['FileName']+" is already done"+"---------")
             else:
 
 
-                print("Step2: create target folder ")
+                # print("Step2: create target folder ")
+                tic_thread_start = time.time()
                 os.mkdir(target_folder)
                 nimg3D = nib.load(target_file) # 이미지 불러오기
                 copy_nimg3D = nimg3D.get_data().copy()
@@ -136,6 +138,11 @@ class uploader(APIView):
                 # nimg3D = nimg3D[offsetX:sx - offsetX - 1, offsetY:sy - offsetY - 1, offsetZ:sz - offsetZ - 1]
                 # # img hdr 파일을 생성해서 각 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "input_"+myfile['fileID']+".img"))
+                toc_thread_filp = time.time()
+                thread_flip_time = toc_thread_filp - tic_thread_start
+                print("====================Time Profile (flipping)====================")
+                print("step2: time for flipping nimg3D by the information of nifti header affine matrix ---->", thread_flip_time)
+
 
 
 
@@ -145,7 +152,7 @@ class uploader(APIView):
                 # if nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][2] and nimg3D.header['pixdim'][1]==nimg3D.header['pixdim'][3]:
                 #     dsfactor = [float(f) / w for w, f in
                 #                 zip([img3D.shape[0], img3D.shape[1], img3D.shape[2]], [91, 109, 91])]  # 픽셀크기 2mm로 변환용 factor
-                print("Step4: algorithm(DL)----------------------------------------------------------------------")
+                # print("Step4: algorithm(DL)----------------------------------------------------------------------")
                 # start = time.perf_counter()
                 inout_path = os.path.join(database_path, myfile['fileID'])
 
@@ -154,8 +161,17 @@ class uploader(APIView):
                 else:
                     train(inout_path, myfile['fileID'])
 
-                print("Step5: Quantification")
+                toc_thread_train = time.time()
+                thread_train_time = toc_thread_train - toc_thread_filp
+                print("====================train_pib or train====================")
+                print("step3: time for training nimg3D ---->", thread_train_time)
+
+                # print("Step5: Quantification")
                 aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize, tracer_name=tracerName)
+                toc_thread_quantification = time.time()
+                thread_quantification_time = toc_thread_quantification - toc_thread_train
+                print("====================quantification====================")
+                print("step4: time for quantification ---->", thread_quantification_time)
                 # aal_region, centil_suvr, sn_crbl_idx = _quantification(inout_path, inout_path, maxval=100, threshold=1.2, vmax=2.5, oriSize=oriSize, tracer_name=tracerName)
                 # print(aal_region, centil_suvr)
                 full_path1 = os.path.join(inout_path, 'aal_subregion.txt')
@@ -163,8 +179,12 @@ class uploader(APIView):
                 Qresult = np.append(aal_region[:,0,:], centil_suvr[:,0].reshape(1,2), axis=0)
                 np.savetxt(full_path1, Qresult, '%.3f')
                 self.update_quantification_DB(request, myfile, Qresult)
-                print("----------complete train & quantification--------------------------------------------------------------")
+                # print("----------complete train & quantification--------------------------------------------------------------")
 
+                toc_thread_save_quantification = time.time()
+                thread_saving_quantification_time = toc_thread_save_quantification - toc_thread_quantification
+                print("====================saving quantification textfile====================")
+                print("step5: time for saving quantification to textfile ---->", thread_saving_quantification_time)
 
                 # Converting SUVR
                 img3D = img3D / sn_crbl_idx
@@ -181,6 +201,11 @@ class uploader(APIView):
                 offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2 + xPadding), math.floor(min(109, zoomedY) / 2 + yPadding), math.floor(min(91, zoomedZ) / 2)]
                 img3D_crop = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1, cZ - offsetZ:cZ + offsetZ + 1]
 
+                toc_thread_padding_and_crop = time.time()
+                thread_padding_crop_time = toc_thread_padding_and_crop - toc_thread_save_quantification
+                print("====================padding and crop of input file (preprocessing)====================")
+                print("step6: time for padding and crop of input file ---->", thread_padding_crop_time)
+
                 # dsfactor2 = [float(f) / w for w, f in zip([img3D_crop.shape[0], img3D_crop.shape[1], img3D_crop.shape[2]], [91, 109, 91])] # 픽셀크기 2mm로 변환용 factor
                 # img3D_crop = nd.interpolation.zoom(np.squeeze(img3D_crop), zoom=dsfactor2) # 2mm 픽셀로 스케일 변환
                 # img3D_2mm = nd.interpolation.zoom(np.squeeze(img3D), zoom=dsfactor) # 2mm 픽셀로 스케일 변환
@@ -193,7 +218,7 @@ class uploader(APIView):
                 # uint8_img3D = 255 * uint8_img3D
                 # uint8_img3D = uint8_img3D.astype(np.uint8)
 
-                print("Step3: create input image")
+                # print("Step3: create input image")
                 getCase = models.Case.objects.filter(UserID=userID, fileID=myfile['fileID'])[0]
                 # tracerName = getCase.Tracer
                 getCase.InputAffineParamsX0=InputAffineX0
@@ -284,6 +309,10 @@ class uploader(APIView):
                     b64Slice.save()
                 ####################################################################################
 
+                toc_thread_input_mip_generation = time.time()
+                thread_input_mip_generation_time = toc_thread_input_mip_generation - toc_thread_padding_and_crop
+                print("====================generating mip of input image====================")
+                print("step7: time for generating mip of input image from 45 angle  ---->", thread_input_mip_generation_time)
 
 
 
@@ -405,7 +434,11 @@ class uploader(APIView):
                     )
                     b64Slice.save()
 
-                print("---------complete generating input png files--------")
+                # print("---------complete generating input png files--------")
+                toc_thread_generate_input_slices = time.time()
+                thread_generate_input_slices = toc_thread_generate_input_slices - toc_thread_input_mip_generation
+                print("====================generating generate input slices====================")
+                print("step7: time for generating generate input slices (x, y, z) all  ---->", thread_generate_input_slices)
                 #
                 # print("Step4: algorithm(DL)")
                 # # start = time.perf_counter()
@@ -457,6 +490,10 @@ class uploader(APIView):
                 # nii 파일을 database 폴더에 생성하기....
                 nib.save(nimg3D, os.path.join(database_path, myfile['fileID'], "output_"+myfile['fileID']+".nii"))
 
+                toc_thread_flip_output_image = time.time()
+                thread_flip_output_image = toc_thread_flip_output_image - toc_thread_generate_input_slices
+                print("====================flipping output image====================")
+                print("step8: time for flipping output image  ---->", thread_flip_output_image)
                 # output_filename_1 = myfile['PatientName']
                 # output_filename_2 = myfile['PatientID']
                 # output_filename_3 = myfile['AcquisitionDateTime']
@@ -476,6 +513,10 @@ class uploader(APIView):
                 offsetX, offsetY, offsetZ = [math.floor(min(91, zoomedX) / 2 + xPadding), math.floor(min(109, zoomedY) / 2 + yPadding), math.floor(min(91, zoomedZ) / 2)]
                 img3D = img3D_2mm[cX - offsetX:cX + offsetX + 1, cY - offsetY:cY + offsetY + 1, cZ - offsetZ:cZ + offsetZ + 1]
 
+                toc_thread_padding_and_crop_output = time.time()
+                thread_padding_and_crop_output = toc_thread_padding_and_crop_output - toc_thread_flip_output_image
+                print("====================padding and crop output image====================")
+                print("step9: time for padding and crop output image  ---->", thread_padding_and_crop_output)
 
                 vx, vy, vz = img3D.shape
                 out_suvr_max = img3D.max()
@@ -582,6 +623,11 @@ class uploader(APIView):
                 # uniformImg = np.ones(float_img3D.shape)
 
 
+                toc_thread_generate_output_slices = time.time()
+                thread_generate_output_slices = toc_thread_generate_output_slices - toc_thread_padding_and_crop_output
+                print("====================generate output slices====================")
+                print("step10: time for generating output slices  ---->", thread_generate_output_slices)
+
                 # dsfactor_sampled = [float(f) / w for w, f in zip(float_img3D.shape,target_mip_size)]
                 # float_img3D = nd.interpolation.zoom(float_img3D, zoom=dsfactor_sampled)
 
@@ -652,6 +698,11 @@ class uploader(APIView):
                         # InvB64Data=inverted_b64,
                     )
                     b64Slice.save()
+
+                toc_thread_generate_output_mip = time.time()
+                thread_generate_output_mip = toc_thread_generate_output_mip - toc_thread_generate_output_slices
+                print("====================generate output slices====================")
+                print("step11: time for generating output mip images  ---->", thread_generate_output_mip)
                     # imageio.imwrite(full_path,reg_img.astype(np.uint16))
 
                     # file_name = "mip_output_sagittal_" + str(i) + ".png"
@@ -660,13 +711,14 @@ class uploader(APIView):
                     # reg_img = 65535 * reg_img
                     # Image.fromarray(reg_img.astype(np.uint16)).save(full_path)
                     # # imageio.imwrite(full_path,reg_img.astype(np.uint16))
-                print("---------complete generating output png files--------")
+                # print("---------complete generating output png files--------")
             userID = models.User.objects.filter(username=username)[0]
             case = models.Case.objects.filter(UserID=userID, fileID=myfile['fileID'])[0]
             case.Complete = True
             case.save()
 
     def put(self, request, format=None):
+        tic_uploader_start = time.time()
         username = request.user.username
         user_path = os.path.join(settings.MEDIA_ROOT, str(username))
         uploader_path = os.path.join(user_path, 'uploader')
@@ -775,6 +827,7 @@ class uploader(APIView):
         # delete all files in uploader
         filenames = os.listdir(uploader_path)
         [os.remove(os.path.join(uploader_path, filename)) for i, filename in enumerate(filenames)
+
          if (filename.split(".")[-1]=='nii' or filename.split(".")[-1]=='jpg')]
 
         for filename in os.listdir(uploader_path):
@@ -787,6 +840,10 @@ class uploader(APIView):
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
 
+        toc_uploader_preparation = time.time()
+        uploader_preparation_time = toc_uploader_preparation - tic_uploader_start
+        print("====================Time Profile (uploader_file_prparation)====================")
+        print("step1: time for moving file to database and delete after saving tag information ---->", uploader_preparation_time)
         # userID = models.User.objects.filter(username=username)[0]
         # # allCases = models.Case.objects.filter(UserID=userID)[0]
         # allCases = models.Case.objects.filter(UserID=userID).values()
