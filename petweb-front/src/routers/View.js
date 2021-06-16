@@ -16,6 +16,8 @@ import IconCrosshair from '../images/IconCrosshair';
 import IconCrosshairOff from '../images/IconCrosshairOff';
 import IconInvert from '../images/IconInvert';
 import IconInvertOff from '../images/IconInvertOff';
+import IconBrain from '../images/IconBrain';
+import IconBrainOff from '../images/IconBrainOff';
 import IconSN from '../images/IconSN';
 import IconSNOff from '../images/IconSNOff';
 import IconBurger from '../images/IconBurger';
@@ -48,6 +50,8 @@ class View extends Component {
     widthSUVR:0,
     centerSUVR:0,
     currentStepIndex: 20,
+    opacityValue: 0,
+    isMNI: false,
     username: localStorage.getItem('username'),
     showMenu: false,
     isPlayed: false,
@@ -156,7 +160,7 @@ class View extends Component {
       imageIds: [],
       currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
       options: {
-        opacity: 1,
+        opacity: this.state.opacityValue,
         visible: true,
         viewport: {
           colormap: 'invertedGray',
@@ -170,7 +174,7 @@ class View extends Component {
       imageIds: [],
       currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
       options: {
-        opacity: 1,
+        opacity: this.state.opacityValue,
         visible: true,
         viewport: {
           colormap: 'invertedGray',
@@ -184,7 +188,7 @@ class View extends Component {
       imageIds: [],
       currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
       options: {
-        opacity: 1,
+        opacity: this.state.opacityValue,
         visible: true,
         viewport: {
           colormap: 'invertedGray',
@@ -198,7 +202,7 @@ class View extends Component {
       imageIds: [],
       currentImageIdIndex: 0,
       options: {
-        opacity: 1,
+        opacity: this.state.opacityValue,
         visible: true,
         viewport: {
           colormap: 'invertedGray',
@@ -306,7 +310,7 @@ class View extends Component {
           imageIds: [...Array(45).keys()].map((v,i)=>("pet:"+inoutSelect+"/"+IdxSlice+"/mip/"+invertSelect+"/"+selectedColormap+"/"+i)),
           currentImageIdIndex: 0,
           options: {
-            opacity: 1,
+            opacity: this.state.opacityValue,
             visible: true,
             viewport: {
               colormap: 'invertedGray',
@@ -318,10 +322,10 @@ class View extends Component {
           imageIds: [...Array(109+20).keys()].map((v,i)=>("mni:"+inoutSelect+"/"+IdxSlice+"/coronal/"+invertSelect+"/"+selectedColormap+"/"+i)),
           currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentC,
           options: {
-            opacity: 1,
+            opacity: this.state.opacityValue,
             visible: true,
             viewport: {
-              colormap: 'invertedGray',
+              colormap: 'gray',
             },
             name: 'MNI'
           }
@@ -330,10 +334,10 @@ class View extends Component {
           imageIds: [...Array(91+40).keys()].map((v,i)=>("mni:"+inoutSelect+"/"+IdxSlice+"/sagittal/"+invertSelect+"/"+selectedColormap+"/"+i)),
           currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentS,
           options: {
-            opacity: 1,
+            opacity: this.state.opacityValue,
             visible: true,
             viewport: {
-              colormap: 'invertedGray',
+              colormap: 'gray',
             },
             name: 'MNI'
           }
@@ -342,10 +346,10 @@ class View extends Component {
           imageIds: [...Array(91).keys()].map((v,i)=>("mni:"+inoutSelect+"/"+IdxSlice+"/axial/"+invertSelect+"/"+selectedColormap+"/"+i)),
           currentImageIdIndex: stackManager.filter(v=>v.fileID==counter.fileID)[0].currentA,
           options: {
-            opacity: 1,
+            opacity: this.state.opacityValue,
             visible: true,
             viewport: {
-              colormap: 'invertedGray',
+              colormap: 'gray',
             },
             name: 'MNI'
           }
@@ -355,10 +359,10 @@ class View extends Component {
           imageIds: [...Array(45).keys()].map((v,i)=>("mni:"+inoutSelect+"/"+IdxSlice+"/mip/"+invertSelect+"/"+selectedColormap+"/"+i)),
           currentImageIdIndex: 0,
           options: {
-            opacity: 1,
+            opacity: this.state.opacityValue,
             visible: true,
             viewport: {
-              colormap: 'invertedGray',
+              colormap: 'gray',
             },
             name: 'MNI'
           }
@@ -401,6 +405,20 @@ class View extends Component {
 
   handleInputChange = e => {
     this.setState({ currentStepIndex: e.currentTarget.value });
+  };
+  handleOpacityChange = e => {
+    if (e.currentTarget.value == 0){
+      this.setState({ 
+        isMNI: false,
+        opacityValue: e.currentTarget.value 
+      });
+    } else {
+      this.setState({ 
+        isMNI: true,
+        opacityValue: e.currentTarget.value 
+      });
+    }
+
   };
   handleWindowChange = (newMax,newMin) => {
     // this.setState({ currentStepIndex: e.currentTarget.value });
@@ -458,7 +476,7 @@ class View extends Component {
     const {Completed, ImageReady, suvr_max, suvr_min, widthSUVR, centerSUVR, selectedColormap, value5, dataReady, isPlayed, isCrosshaired, isInverted, isSNed, showMenu, imageIdC, imageIdS, imageIdA, username, inoutSelect, 
       petCStack,petSStack,petAStack, petMStack, 
       mniCStack,mniSStack,mniAStack, mniMStack, 
-      currentStepIndex} = this.state;
+      currentStepIndex, opacityValue} = this.state;
     // const {} = this.state;
     const {counter, stackManager, fileList} = this.props;
     // console.log('arrayData', typeof(arrayData))
@@ -481,7 +499,7 @@ class View extends Component {
             <div style={{position: "absolute", top:"140px", left:"300px",width:"1550px", height:"937px"}}>
               {
                 ImageReady ? 
-                  <ImageViewer updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} 
+                  <ImageViewer opacityValue={opacityValue} updateSUVR_min_max={updateSUVR_min_max} isSNed={isSNed} selectedColormap={selectedColormap} handleWindowChange={handleWindowChange} value5={value5} currentStepIndex={currentStepIndex} isSNed={isSNed} isPlayed={isPlayed} isCrosshaired={isCrosshaired} isInverted={isInverted} 
                   stackC={{ ...petCStack }} stackS={{ ...petSStack }} stackA={{ ...petAStack }} stackM={{...petMStack}}
                   MNIstackC={{ ...mniCStack }} MNIstackS={{ ...mniSStack }} MNIstackA={{ ...mniAStack }} stackM={{...mniMStack}}
                   />
@@ -516,6 +534,7 @@ class View extends Component {
               </div>
             </div>
             <div style={{display:"flex", color:"white", border:'0px red solid'}}>
+
               <div className="view-btn" onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
                 &nbsp; MIP: &nbsp;
               </div>
@@ -525,8 +544,22 @@ class View extends Component {
               <div className="view-btn opacity-bar" style={{marginLeft:"0px"}}>
                 <input type="range" style={{height:"100%", width:"100%"}} value={this.state.currentStepIndex} onInput={this.handleInputChange} step="1" min="0" max="50"/>
               </div>
+
+              <div className="view-btn" onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
+                &nbsp; MNI: &nbsp;
+              </div>
+              <div className="view-btn" onClick={()=>{this.setState({isMNI:!this.state.isMNI, opacityValue:0})}} style={{marginLeft:"0px"}} >
+                {this.state.isMNI ? <IconBrain className="view-icon"/>:<IconBrainOff className="view-icon"/>}
+              </div>
+              <div className="view-btn opacity-bar" style={{marginLeft:"0px"}}>
+                <input type="range" style={{height:"100%", width:"100%"}} value={this.state.opacityValue} onInput={this.handleOpacityChange} step="0.1" min="0" max="1"/>
+              </div>
+
               <div className="view-btn" onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
                 &nbsp; SUVR:
+              </div>
+              <div className="view-btn" style={{marginLeft:"0px"}} onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
+                <IconReset className="view-icon" />
               </div>
               <div className="view-btn opacity-bar" style={{marginLeft:"0px"}} >
                 {<InputRange
@@ -546,9 +579,6 @@ class View extends Component {
                         }
                       }
                   />}
-              </div>
-              <div className="view-btn" style={{marginLeft:"0px"}} onClick={()=>{this.setState({value5:{max:32767, min:0}})}}>
-                <IconReset className="view-icon" />
               </div>
               <div className="view-btn" onClick={()=>setIsCrosshaired(!isCrosshaired)}>{isCrosshaired ? <IconCrosshair className="view-icon"/>:<IconCrosshairOff className="view-icon"/>}</div>
               <div className="view-btn" onClick={()=>setIsInverted(!isInverted)}>{isInverted ? <IconInvertOff className="view-icon"/>:<IconInvert className="view-icon"/>}</div>

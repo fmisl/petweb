@@ -57,6 +57,7 @@ class ImageViewer extends Component {
       ClayerId: [],
       AlayerId: [],
       SlayerId: [],
+      MlayerId: [],
       viewerReady: false,
     };
     // this.onKeyPress = this.onKeyPress.bind(this);
@@ -163,26 +164,42 @@ class ImageViewer extends Component {
     this.InitialStackLoad(this.props.stackC, this.props.MNIstackC, elementC, this.onCLayerAdded, this.Crenderer)
     this.InitialStackLoad(this.props.stackS, this.props.MNIstackS, elementS, this.onSLayerAdded, this.Srenderer)
     this.InitialStackLoad(this.props.stackA, this.props.MNIstackA, elementA, this.onALayerAdded, this.Arenderer)
+    cornerstoneTools.addStackStateManager(elementM, ["stack", 'playClip']);
+    cornerstoneTools.addToolState(elementM, "stack", this.props.stackM);
+    cornerstoneTools.stackScroll.activate(elementM, 1);
+    cornerstoneTools.stackScrollWheel.activate(elementM);
+    cornerstoneTools.wwwc.activate(elementM, 4);
+    this.wwwcsynchronizer.add(elementM);
+    elementM.addEventListener("cornerstoneimagerendered",this.onImageRendered);
+    elementM.addEventListener("cornerstonenewimage", this.onNewImage);
+    window.addEventListener("resize", this.onWindowResize);
 
-    // const coronalLoadImagePromise1 = cornerstone.loadImage(this.props.MNIstackC.imageIds[currentIndex[0].currentC]).then(image => {
+    // const stack = this.props.stackM;
+
+    // const coronalLoadImagePromise = cornerstone.loadImage(this.props.MNIstackC.imageIds[30]).then(image => {
     //   try {
-    //     console.log('MIP image in coronal:', image, currentIndex[0].currentC)
-    //     // const ClayerId1 = cornerstone.getLayers(elementC);
-    //     // cornerstone.setActiveLayer(elementC, ClayerId1[1].layerId)
-    //     // let layerMIPC = cornerstone.getLayer(elementC, ClayerId[1].layerId);
+    //     // console.log('MIP image in coronal:', image, currentIndex[0].currentC)
     //     cornerstone.displayImage(elementC, image);
     //     this.synchronizer.add(elementC);
     //   } catch(e){
     //     console.log('FastSkip coronalLoadImagePromise')
     //   }
     // });
+    // const ClayerId = cornerstone.getLayer(this.elementC, this.state.ClayerId[1]);
+        // console.log(ClayerId)
+    // ClayerId.image.imageId = "mni:output/0/coronal/right/invertedGray/"+this.props.stackManager[this.props.counter.tabX].currentC
     const coronalLoadImagePromise = cornerstone.loadImage(this.props.stackC.imageIds[currentIndex[0].currentC]).then(image => {
       try {
-        // console.log('PET image in coronal:', image, currentIndex[0].currentC)
-        // const ClayerId = cornerstone.getLayers(elementC);
-        // cornerstone.setActiveLayer(elementC, ClayerId[0].layerId)
-
+        // cornerstone.loadImage(this.props.MNIstackC.imageIds[currentIndex[0].currentC]).then(MNIimage => {
+        //   console.log('MIP image in coronal:', image, MNIimage)
+        //   cornerstone.displayImage(elementC, MNIimage);
+        // })
+        // cornerstone.displayImage(elementC, this.props.MNIstackC.imageIds[30].image);
         cornerstone.displayImage(elementC, image);
+        cornerstone.loadImage(this.props.MNIstackC.imageIds[currentIndex[0].currentC]).then(MNIimage => {
+          cornerstone.setLayerImage(this.elementC, MNIimage, this.state.ClayerId[1])
+          cornerstone.updateImage(this.elementC);
+        })
         this.synchronizer.add(elementC);
       } catch(e){
         console.log('FastSkip coronalLoadImagePromise')
@@ -194,6 +211,10 @@ class ImageViewer extends Component {
       // Display the first image
       try{
         cornerstone.displayImage(elementS, image);
+        cornerstone.loadImage(this.props.MNIstackS.imageIds[currentIndex[0].currentS]).then(MNIimage => {
+          cornerstone.setLayerImage(this.elementS, MNIimage, this.state.SlayerId[1])
+          cornerstone.updateImage(this.elementS);
+        })
         this.synchronizer.add(elementS);
       } catch(e){
         console.error('FastSkip sagittalLoadImagePromise')
@@ -203,12 +224,18 @@ class ImageViewer extends Component {
     const axialLoadImagePromise = cornerstone.loadImage(this.props.stackA.imageIds[currentIndex[0].currentA]).then(image => {
       // Display the first image
       try{
+        console.log(this.props.stackA)
         cornerstone.displayImage(elementA, image);
+        cornerstone.loadImage(this.props.MNIstackA.imageIds[currentIndex[0].currentA]).then(MNIimage => {
+          cornerstone.setLayerImage(this.elementA, MNIimage, this.state.AlayerId[1])
+          cornerstone.updateImage(this.elementA);
+        })
         this.synchronizer.add(elementA);
       } catch(e){
         console.error('FastSkip axialLoadImagePromise')
       }
     });
+
 
     const mipLoadImagePromise = cornerstone.loadImage(this.props.stackM.imageIds[0]).then(image => {
       // Display the first image
@@ -222,22 +249,15 @@ class ImageViewer extends Component {
         } catch(e){
           // alert('데이터 없음->: nothing')
         }
+        const temp = cornerstone.getEnabledElement(this.elementM)
+        console.log(temp)
+        console.log(image)
+        console.log(this.props.stackM)
+        cornerstone.displayImage(elementM, image);
         // var toolStateManager = cornerstoneTools.getElementToolStateManager(elementM);
         // cornerstone.clearToolState(elementM, 'stack')
-        cornerstone.displayImage(elementM, image);
-
-        const stack = this.props.stackM;
-        cornerstoneTools.addStackStateManager(elementM, ["stack", 'playClip']);
-        cornerstoneTools.addToolState(elementM, "stack", stack);
-        // cornerstoneTools.pan.activate(elementM, 1);
-        cornerstoneTools.stackScroll.activate(elementM, 1);
-        cornerstoneTools.stackScrollWheel.activate(elementM);
-        // cornerstoneTools.stackPrefetch.enable(elementM, 3);
-        // cornerstoneTools.zoom.activate(elementM, 3);
-        cornerstoneTools.wwwc.activate(elementM, 4);
-        // cornerstoneTools.dragProbe.activate(elementM, 2);
-        // cornerstoneTools.dragProbeTouch.activate(elementM);
-        cornerstoneTools.wwwcRegion.activate(elementM, 2);
+        // cornerstone.setLayerImage(this.elementA, image, this.state.MlayerId[1])
+        // cornerstone.updateImage(this.elementM);
 
         try{
           let temp = cornerstoneTools.getElementToolStateManager(elementM)
@@ -250,13 +270,9 @@ class ImageViewer extends Component {
           console.log('error')
         }
 
-        this.wwwcsynchronizer.add(elementM);
-        elementM.addEventListener("cornerstoneimagerendered",this.onImageRendered);
-        elementM.addEventListener("cornerstonenewimage", this.onNewImage);
-        window.addEventListener("resize", this.onWindowResize);
         // cornerstone.displayImage(elementA, image);
       } catch(e){
-        console.error('FastSkip axialLoadImagePromise')
+        console.log('FastSkip axialLoadImagePromise', e)
       }
     });
 
@@ -271,6 +287,7 @@ class ImageViewer extends Component {
         cornerstoneTools.wwwcRegion.activate(elementC, 2);
         cornerstoneTools.wwwcRegion.activate(elementS, 2);
         cornerstoneTools.wwwcRegion.activate(elementA, 2);
+        cornerstoneTools.wwwcRegion.activate(elementM, 2);
         // enable reference Lines tool
         {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementC, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementC)}
         {isCrosshaired ? cornerstoneTools.referenceLines.tool.enable(elementS, this.synchronizer):cornerstoneTools.referenceLines.tool.disable(elementS)}
@@ -284,18 +301,37 @@ class ImageViewer extends Component {
         // cornerstone.setActiveLayer(elementC, ClayerId[0]);
         // cornerstone.setActiveLayer(elementS, SlayerId[0]);
         // cornerstone.setActiveLayer(elementA, AlayerId[0]);
-        let ClayerPET = cornerstone.getLayer(elementC, ClayerId[0]);
+        // let ClayerPET = cornerstone.getLayer(elementC, ClayerId[0]);
         // let ClayerPET = cornerstone.getLayer(elementC, ClayerId[0]);
         // let ClayerPET = cornerstone.getLayer(elementC, ClayerId[0]);
         // console.log(ClayerPET.image.imageId)
         // console.log(ClayerPET.image.imageId.split('/').slice(0,-1).join('/').concat('/', currentIndex[0].currentC))
         // ClayerPET.image.imageId=ClayerPET.image.imageId.split('/').slice(0,-1).join('/').concat('/', currentIndex[0].currentC)
+
+
+        //  opacity initializer
         let ClayerMNI = cornerstone.getLayer(elementC, ClayerId[1]);
-        ClayerMNI.options.opacity=0.5;
+        ClayerMNI.options.opacity=this.props.opacityValue;
         let SlayerMNI = cornerstone.getLayer(elementS, SlayerId[1]);
-        SlayerMNI.options.opacity=0.5;
+        SlayerMNI.options.opacity=this.props.opacityValue;
         let AlayerMNI = cornerstone.getLayer(elementA, AlayerId[1]);
-        AlayerMNI.options.opacity=0.5;
+        AlayerMNI.options.opacity=this.props.opacityValue;
+        
+        //  colormap initializer
+        const Clayers = cornerstone.getLayers(elementC);
+        const Slayers = cornerstone.getLayers(elementS);
+        const Alayers = cornerstone.getLayers(elementA);
+
+        let layerPETC = cornerstone.getLayer(elementC, Clayers[0].layerId);
+        layerPETC.viewport.colormap = selectedColormap;
+        let layerPETS = cornerstone.getLayer(elementS, Slayers[0].layerId);
+        layerPETS.viewport.colormap = selectedColormap;
+        let layerPETA = cornerstone.getLayer(elementA, Alayers[0].layerId);
+        layerPETA.viewport.colormap = selectedColormap;
+
+        let viewportM = cornerstone.getViewport(elementM);
+        viewportM.colormap = selectedColormap;
+        cornerstone.setViewport(elementM, viewportM);
 
         // cornerstone.updateImage(elementC);
         // cornerstone.updateImage(elementS);
@@ -315,19 +351,31 @@ class ImageViewer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const {ClayerId, SlayerId, AlayerId} = this.state;
     const { value5, handleWindowChange, isInverted, isCrosshaired, isPlayed, isSNed, currentStepIndex, selectedColormap, stackManager, updateSUVR_min_max } = this.props;
     
     const elementC = this.elementC;
     const elementS = this.elementS;
     const elementA = this.elementA;
     const elementM = this.elementM;
-
-      
+    if (prevProps.opacityValue !== this.props.opacityValue){
+      try{
+        console.log("opacity", this.props.opacityValue)
+        let ClayerMNI = cornerstone.getLayer(elementC, ClayerId[1]);
+        ClayerMNI.options.opacity=this.props.opacityValue;
+        let SlayerMNI = cornerstone.getLayer(elementS, SlayerId[1]);
+        SlayerMNI.options.opacity=this.props.opacityValue;
+        let AlayerMNI = cornerstone.getLayer(elementA, AlayerId[1]);
+        AlayerMNI.options.opacity=this.props.opacityValue;
+        cornerstone.updateImage(elementC)
+        cornerstone.updateImage(elementS)
+        cornerstone.updateImage(elementA)
+      } catch(e){
+        console.log('componentDidUpdate error: opacity')
+      }
+    }
 
     try{
-      
-
-
       // 상위의 state (ww, wc) 를 받아서 viewport를 업데이트 시킴
       if (prevProps.value5 != value5){
         const {ClayerId,SlayerId,AlayerId} = this.state;
@@ -367,6 +415,10 @@ class ImageViewer extends Component {
         layerPETS.viewport.colormap = selectedColormap;
         let layerPETA = cornerstone.getLayer(elementA, AlayerId[0].layerId);
         layerPETA.viewport.colormap = selectedColormap;
+
+        let viewportM = cornerstone.getViewport(elementM);
+        viewportM.colormap = selectedColormap;
+        cornerstone.setViewport(elementM, viewportM);
         // cornerstone.updateImage(elementC);
         // cornerstone.updateImage(elementS);
         // cornerstone.updateImage(elementA);
@@ -413,8 +465,30 @@ class ImageViewer extends Component {
       if (prevProps.isCrosshaired != isCrosshaired){
         this.controlViewport();
       }
+
+      // console.log(this.props.stackManager[this.props.counter.tabX].currentC, this.props.stackManager[this.props.counter.tabX].currentS, this.props.stackManager[this.props.counter.tabX].currentA)
+      // const CimageId = cornerstone.getLayer(this.elementC, this.state.ClayerId[1])
+      // console.log(CimageId.image.imageId)
+      if (prevProps.stackManager[this.props.counter.tabX].currentC !== this.props.stackManager[this.props.counter.tabX].currentC){
+        cornerstone.loadImage(this.props.MNIstackC.imageIds[this.props.stackManager[this.props.counter.tabX].currentC]).then(MNIimage => {
+          cornerstone.setLayerImage(this.elementC, MNIimage, this.state.ClayerId[1])
+          cornerstone.updateImage(this.elementC);
+        })
+      }
+      if (prevProps.stackManager[this.props.counter.tabX].currentS !== this.props.stackManager[this.props.counter.tabX].currentS){
+        cornerstone.loadImage(this.props.MNIstackS.imageIds[this.props.stackManager[this.props.counter.tabX].currentS]).then(MNIimage => {
+          cornerstone.setLayerImage(this.elementS, MNIimage, this.state.SlayerId[1])
+          cornerstone.updateImage(this.elementS);
+        })
+      }
+      if (prevProps.stackManager[this.props.counter.tabX].currentA !== this.props.stackManager[this.props.counter.tabX].currentA){
+        cornerstone.loadImage(this.props.MNIstackA.imageIds[this.props.stackManager[this.props.counter.tabX].currentA]).then(MNIimage => {
+          cornerstone.setLayerImage(this.elementA, MNIimage, this.state.AlayerId[1])
+          cornerstone.updateImage(this.elementA);
+        })
+      }
     } catch(e){
-      console.log('componentDidUpdate error')
+      console.log('componentDidUpdate error', e)
     }
     if (isPlayed==true) {
       cornerstoneTools.playClip(this.elementM, currentStepIndex);
@@ -435,6 +509,10 @@ class ImageViewer extends Component {
     const coronalLoadImagePromise = cornerstone.loadImage(this.props.stackC.imageIds[currentIndex[0].currentC]).then(image => {
       try {
         cornerstone.displayImage(elementC, image);
+        cornerstone.loadImage(this.props.MNIstackC.imageIds[currentIndex[0].currentC]).then(MNIimage => {
+          cornerstone.setLayerImage(this.elementC, MNIimage, this.state.ClayerId[1])
+          cornerstone.updateImage(this.elementC);
+        })
         this.synchronizer.add(elementC);
       } catch(e){
         console.error('FastSkip coronalLoadImagePromise')
@@ -444,6 +522,10 @@ class ImageViewer extends Component {
       // Display the first image
       try{
         cornerstone.displayImage(elementS, image);
+        cornerstone.loadImage(this.props.MNIstackS.imageIds[currentIndex[0].currentS]).then(MNIimage => {
+          cornerstone.setLayerImage(this.elementS, MNIimage, this.state.SlayerId[1])
+          cornerstone.updateImage(this.elementS);
+        })
         this.synchronizer.add(elementS);
       } catch(e){
         console.error('FastSkip sagittalLoadImagePromise')
@@ -453,6 +535,10 @@ class ImageViewer extends Component {
       // Display the first image
       try{
         cornerstone.displayImage(elementA, image);
+        cornerstone.loadImage(this.props.MNIstackA.imageIds[currentIndex[0].currentA]).then(MNIimage => {
+          cornerstone.setLayerImage(this.elementA, MNIimage, this.state.AlayerId[1])
+          cornerstone.updateImage(this.elementA);
+        })
         this.synchronizer.add(elementA);
       } catch(e){
         console.error('FastSkip axialLoadImagePromise')
@@ -530,18 +616,18 @@ class ImageViewer extends Component {
         // cornerstone.setActiveLayer(elementC, ClayerId[0]);
         // cornerstone.setActiveLayer(elementS, SlayerId[0]);
         // cornerstone.setActiveLayer(elementA, AlayerId[0]);
-        let ClayerPET = cornerstone.getLayer(elementC, ClayerId[0]);
+        // let ClayerPET = cornerstone.getLayer(elementC, ClayerId[0]);
         // let ClayerPET = cornerstone.getLayer(elementC, ClayerId[0]);
         // let ClayerPET = cornerstone.getLayer(elementC, ClayerId[0]);
         // console.log(ClayerPET.image.imageId)
         // console.log(ClayerPET.image.imageId.split('/').slice(0,-1).join('/').concat('/', currentIndex[0].currentC))
         // ClayerPET.image.imageId=ClayerPET.image.imageId.split('/').slice(0,-1).join('/').concat('/', currentIndex[0].currentC)
         let ClayerMNI = cornerstone.getLayer(elementC, ClayerId[1]);
-        ClayerMNI.options.opacity=0.5;
+        ClayerMNI.options.opacity=this.props.opacityValue;
         let SlayerMNI = cornerstone.getLayer(elementS, SlayerId[1]);
-        SlayerMNI.options.opacity=0.5;
+        SlayerMNI.options.opacity=this.props.opacityValue;
         let AlayerMNI = cornerstone.getLayer(elementA, AlayerId[1]);
-        AlayerMNI.options.opacity=0.5;
+        AlayerMNI.options.opacity=this.props.opacityValue;
 
         // cornerstone.updateImage(elementC);
         // cornerstone.updateImage(elementS);
@@ -761,13 +847,19 @@ class ImageViewer extends Component {
   }
 
   onNewImage(e) {
-    console.log('onNewImage start')
+    // console.log('onNewImage start')
     try{
-      const ClayerId = cornerstone.getLayers(this.elementC);
-      const ClayerId1 = cornerstone.getLayer(this.elementC, ClayerId[1].layerId);
-      const tempImageIds = this.props.MNIstackC.imageIds[50]
-      console.dir(ClayerId);
-      console.dir(ClayerId1);
+      // const ClayerId = cornerstone.getLayers(this.elementC);
+      // const ClayerId1 = cornerstone.getLayer(this.elementC, ClayerId[1].layerId);
+      // console.dir(ClayerId1);
+      // cornerstone.loadImage(this.props.MNIstackC.imageIds[50]).then(MNIimage => {
+      //   // cornerstone.loadImage(this.props.MNIstackC.imageIds[currentIndex[0].currentC]).then(MNIimage => {
+      //   cornerstone.displayImage(this.elementC, MNIimage);
+      // })
+
+
+      // const tempImageIds = this.props.MNIstackC.imageIds[50]
+      // console.dir(ClayerId);
       // if (ClayerId1[1].image != undefined){
       //   console.log(ClayerId1[1].image);
       //   // cornerstone.setActiveLayer(elementC, ClayerId[1].layerId)
@@ -775,6 +867,7 @@ class ImageViewer extends Component {
       //   // cornerstone.setLayerImage(elementC, ClayerId[1].image, ClayerId[1].layerId)
       //   // cornerstone.updateImage(elementC);
       // }
+
     } catch(e){
       console.log('onNewImage error')
     }
