@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import '../App.css';
 import IconDelete from '../images/IconDelete';
 import UploaderTable from './components/Tables/UploaderTable'
-import loadingGIF from '../images/gif/spinner.gif'
+import loadingGIF from '../images/gif/spinner-big.gif'
 // import * as services from '../services/fetchApi'
 import {IPinUSE} from '../services/IPs'
 const styleDiv ={

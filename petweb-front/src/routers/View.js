@@ -5,7 +5,7 @@ import * as actions from '../reduxs/actions';
 import * as cornerstone from "cornerstone-core";
 import '../App.css';
 import {useSelector, useDispatch} from 'react-redux';
-import viewer_spinner from '../images/gif/viewer_spinner3.gif'
+import viewer_spinner from '../images/gif/spinner-big.gif'
 import viewer_spinner2 from '../images/gif/viewer_spinner2.gif'
 import IconPlayPNG from '../images/play.png';
 import PngReset from '../images/IconReset.png';
