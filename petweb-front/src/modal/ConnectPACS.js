@@ -267,7 +267,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
 //   // console.log("inputs:",inputs)
 //   // console.log("stepInfo:", stepInfo)
 // // console.log(currentJPGURL_head ,listID);
-console.log("finddata: ", finddata);
+// console.log("finddata: ", finddata);
   return (
     isShowing ? 
     ReactDOM.createPortal(
