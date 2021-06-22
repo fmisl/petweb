@@ -1474,14 +1474,14 @@ class pacs(APIView):
             tracer = '[11C]PIB'
 
         if Method == 'find':
-            # _Patient_name=['abc', 'def']
-            # _Patient_ID=['1234', '5678']
-            # _Date_of_birth=['20210309', '20210808']
-            # _Study_date=["131313","3133111"]
-            # _Modality=["PT", "CT"]
-            # _Study_description=['hahahah', 'hello world']
-            # _Study_instanceUID=["1111111111", "2222222222"]
-            # _Series_info=['3333333333', '4444444444']
+            # _Patient_name=['BAK^SHEON SE', 'BAK^JEONG SUK', 'KIM^JEONG YEOPH', 'RYU^HYO MUN']
+            # _Patient_ID=['17555243', '26506827', '54799369', '27642694']
+            # _Date_of_birth=['19361207', '19430107', '19490712', '19440303']
+            # _Study_date=["20210618","20210618","20210618","20210618"]
+            # _Modality=["PT", "PT", "PT", "PT"]
+            # _Study_description=['hahahah', 'hello world', 'hello world', 'hello world']
+            # _Study_instanceUID=["1111111111", "2222222222", "2222222222", "2222222222"]
+            # _Series_info=['3333333333', '4444444444', '4444444444', '4444444444']
             # findResult = [{'id': i, 'Focus': False,'Group': 0,
             #              'FileName': None, 'Tracer': tracer,
             #              'PatientName': _Patient_name[i], 'PatientID':_Patient_ID[i], 'BirthDate':_Date_of_birth[i],
