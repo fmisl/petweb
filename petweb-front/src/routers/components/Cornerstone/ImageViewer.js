@@ -629,15 +629,21 @@ class ImageViewer extends Component {
         let AlayerMNI = cornerstone.getLayer(elementA, AlayerId[1]);
         AlayerMNI.options.opacity=this.props.opacityValue;
 
-        // cornerstone.updateImage(elementC);
-        // cornerstone.updateImage(elementS);
-        // cornerstone.updateImage(elementA);
-        // cornerstone.setLayerImage(elementC, ClayerMNI.image, ClayerId[1])
-        // console.log(ClayerPET, ClayerMNI, ClayerId)
-        // console.log(SlayerMNI, SlayerId)
-        // console.log(AlayerMNI, AlayerId)
-        // cornerstone.updateImage(this.elementS);
-        // cornerstone.updateImage(this.elementA);
+        //  colormap initializer
+        const Clayers = cornerstone.getLayers(elementC);
+        const Slayers = cornerstone.getLayers(elementS);
+        const Alayers = cornerstone.getLayers(elementA);
+
+        let layerPETC = cornerstone.getLayer(elementC, Clayers[0].layerId);
+        layerPETC.viewport.colormap = selectedColormap;
+        let layerPETS = cornerstone.getLayer(elementS, Slayers[0].layerId);
+        layerPETS.viewport.colormap = selectedColormap;
+        let layerPETA = cornerstone.getLayer(elementA, Alayers[0].layerId);
+        layerPETA.viewport.colormap = selectedColormap;
+
+        let viewportM = cornerstone.getViewport(elementM);
+        viewportM.colormap = selectedColormap;
+        cornerstone.setViewport(elementM, viewportM);
   
 
       } catch(e){
