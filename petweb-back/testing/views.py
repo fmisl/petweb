@@ -914,7 +914,7 @@ class uploader(APIView):
         # Input hdr/img
         elif file_format[-1] == "img" or file_format[-1] == "hdr":
             Format = "analyze"
-            if len(myfiles) != 2:
+            if len(myfiles) < 2:
                 return Response(data="Error1: a pair of .hdr and .img is required", status=status.HTTP_400_BAD_REQUEST)
         # Input Nifti
         elif file_format[-1] == "nii":
@@ -1024,8 +1024,63 @@ class uploader(APIView):
             fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
                          'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
                          for i, filename in enumerate(dcmFileName) if (filename.split(".")[-1]=='nii')]
-        # elif Format == "analyze":
-        #     print('analyze')
+        elif Format == "analyze":
+            print('analyze')
+            fs = FileSystemStorage()
+
+            for i, f in enumerate(myfiles):
+                saveNiiPath = os.path.join(uploader_path, f.name)
+                if (f.name.split(".")[-1]=='hdr'):
+                    f_name = f.name.split(".")[-1]
+                    print(f_name)
+                    # Save nii files
+                    hdr_Path = os.path.join(uploader_path, f.name)
+                    fs.save(hdr_Path, f)
+
+                    for ii, ff in enumerate(myfiles):
+                        saveNiiPath = os.path.join(uploader_path, ff.name)
+                        if (ff.name == "".join(ff.name.split(".")[:-1])+".img"):
+                            img_Path = os.path.join(uploader_path, ff.name)
+                            fs.save(img_Path, ff)
+                    nimg3D = nib.load(saveNiiPath)
+                    nib.save(nimg3D, os.path.join(uploader_path, "".join(f.name.split(".")[:-1])+".nii"))
+                    InputAffineX0.append(nimg3D.affine[0][0])
+                    InputAffineY1.append(nimg3D.affine[1][1])
+                    InputAffineZ2.append(nimg3D.affine[2][2])
+                    np.array(nimg3D.header['pixdim'][1:4])
+                    dsfactor = [float(f) / w for w, f in zip([2, 2, 2], nimg3D.header['pixdim'][1:4])] # 픽셀크기 2mm로 변환용 factor
+                    img3D = np.squeeze(np.array(nimg3D.dataobj))
+                    img3D = nd.interpolation.zoom(img3D, zoom=dsfactor) # 2mm 픽셀로 스케일 변환
+                    # vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
+                    vx, vy, vz = img3D.shape
+                    # Save jpg files
+                    hz = int(vz/2)
+                    hy = int(vy/2)
+                    hx = int(vx/2)
+                    saveJPGPath_hz = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hz.jpg")
+                    saveJPGPath_hy = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hy.jpg")
+                    saveJPGPath_hx = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hx.jpg")
+                    uint8_img2D = img3D[:,:,hz]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hz)
+                    uint8_img2D = img3D[:,hy,:]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hy)
+                    uint8_img2D = img3D[hx,:,:]
+                    uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+                    uint8_img2D = 255 * uint8_img2D
+                    uint8_img2D = np.rot90(uint8_img2D)
+                    Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
+
+            filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': '[11C]PIB', 'PatientName': 'Anonymous', 'Group': 0, 'fileID': None,
+                         'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
+                         for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+
         elif Format == "nifti":
             print('nifti')
             fs = FileSystemStorage()
