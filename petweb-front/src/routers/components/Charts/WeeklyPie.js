@@ -22,6 +22,7 @@ export default class WeeklyPie extends PureComponent {
           fill="#8884d8"
           paddingAngle={0}
           dataKey="count"
+          stroke="#383c41"
         >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
