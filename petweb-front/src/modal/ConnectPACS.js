@@ -280,7 +280,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
             </div>
             <div className="modal-body">
                 <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{setFelectItem(Math.floor(Math.random() * 20+30))}}>
-                    <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", height:"12%", width:"100%", border:"0px red solid", boxSizing:"border-box", background:"#2c3033"}}>
+                    <div style={{display:"flex", paddingLeft:"3px", alignItems:"center", justifyContent:"space-between", height:"12%", width:"100%", border:"0px red solid", boxSizing:"border-box", background:"#2c3033"}}>
                         <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"23%"}}>
                             <label for="PatientID">Patient_ID
                                 <input name="PatientID" type="text" placeholder="PatientID"
