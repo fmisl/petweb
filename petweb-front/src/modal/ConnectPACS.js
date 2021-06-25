@@ -279,6 +279,81 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
               PACS <span onClick={()=>{hide(false); deleteFiles();handleReset();}} ><IconDelete className="worklist-delete" /></span>
             </div>
             <div className="modal-body">
+                <div style={{position:"relative", width:`${stepChecker==2 ? "810px":"1585px"}`, background:"#383C41", overflow:"hidden"}} onClick={()=>{setFelectItem(Math.floor(Math.random() * 20+30))}}>
+                    <div style={{display:"flex", paddingLeft:"3px", alignItems:"center", justifyContent:"flex-start", height:"12%", width:"100%", border:"0px red solid", boxSizing:"border-box", background:"#2c3033"}}>
+                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"220px"}}>
+                            <label for="PatientID">Patient_ID
+                                <input style={{width:"190px"}} name="PatientID" type="text" placeholder="PatientID"
+                                    value={PatientID}
+                                    onChange={handleChange}/>
+                            </label>
+                        </div>
+                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"220px"}}>
+                            <label for="StudyDate">StudyDate
+                                <input style={{width:"190px"}} name="StudyDate" type="text" placeholder="StudyDate"
+                                    value={StudyDate}
+                                    onChange={handleChange}/>
+                            </label>
+                        </div>
+                        <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"220px"}}>
+                            <label for="StudyDescription">StudyDescription
+                                <input style={{width:"190px"}} name="StudyDescription" type="text" placeholder="StudyDescription"
+                                    value={StudyDescription}
+                                    onChange={handleChange}/>
+                            </label>
+                        </div>
+                        {(stepChecker == 0 && !fetching) && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn" onClick={()=>{setCurrentJPGURL_head(''); findHandler();}}>Search</div>
+                        </div>}
+                        {(stepChecker == 0 && fetching) && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn" >Searching...</div>
+                        </div>}
+                        {stepChecker == 1 && !fetching &&
+                        <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); getHandler();}}>Download</div>
+                        </div>}
+                        {stepChecker == 1 && fetching &&
+                        <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn">Loading...</div>
+                        </div>}
+                        {stepChecker == 2 && !fetching &&
+                        <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
+                            <div style={{}} className="pacs-btn" onClick={()=>{setCurrentJPGURL_head(''); handleReset();deleteFiles();}}>Reset</div>
+                        </div>}
+                    </div>
+                    {stepChecker == 1 && 
+                    <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-start", marginTop:"20px", height:"80%", width:"1585px", border:"1px white solid", boxSizing:"border-box", overflow:"hidden"}}>
+                        {fetching ? 
+                        <div style={{border: "0px red solid", position:"relative"}}><div style={{position:"absolute", top:"29%", left:"32%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"28px", border:"0px blue solid"}}><div>{(dcmCount/148).toFixed(0)}/{patientCount}</div><div>{(dcmCount/allDcmCount*100).toFixed(0)}%</div></div><img width="200px" src={loadingGIF}/></div>
+                        :
+                        <PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeIteminFindData} updateFileList={updateFileList}/>}
+                    </div>}
+                    {stepChecker == 2 && <div style={{display:"flex", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"70%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
+                        {fetching ? <div></div>:<PACsTable2 setListID={setListID} selectTracer={selectTracer} fileList={getdata} getJPGURL={getJPGURL} removeFileList={removeIteminGetData} updateFileList={updateFileList}/>}
+                    </div>}
+                </div>
+                {stepChecker == 2 && <div style={{position:"relative",width:"750px",height:"100%", background:"#383C41", border:"0px red solid"}}>
+                    <div style={{...styleDiv, ...{top:"0", left:"0"}}} >
+                    {currentJPGURL_head != "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineX0 < 0 ? "-1":"1"}, ${getdata[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hy.jpg'} alt=" "/>}
+                    </div>
+                    <div style={{...styleDiv, ...{top:"", left:"50%"}}} >
+                    
+                    {currentJPGURL_head != "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineY1 < 0 ? "-1":"1"}, ${getdata[listID]?.InputAffineZ2 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hx.jpg'} alt=" "/>}
+                    </div>
+                    <div style={{...styleDiv, ...{top:"50%", left:"0"}}} >
+                    {currentJPGURL_head != "" && <img width={'400px'} style={{transform:`scale(${getdata[listID]?.InputAffineX0 < 0 ? "1":"-1"}, ${getdata[listID]?.InputAffineY1 < 0 ? "-1":"1"})`, border:"1px white solid", boxSizing:"border-box"}} src={currentJPGURL_head+'_hz.jpg'} alt=" "/>}
+                    </div>
+                    <div style={{...styleDiv, ...{top:"50%", left:"50%"}}} >
+                    </div>
+                    {currentJPGURL_head != "" && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>R</div><div>L</div></div>}
+                    {currentJPGURL_head != "" && <div style={{position:"absolute", border:"0px red solid", top:"20%", left:"52%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>P</div><div>A</div></div>}
+                    {currentJPGURL_head != "" && <div style={{position:"absolute", border:"0px red solid", top:"70%", left:"2%", width:"40%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'row'}}><div>R</div><div>L</div></div>}
+                    {currentJPGURL_head != "" && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"23%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>S</div><div>I</div></div>}
+                    {currentJPGURL_head != "" && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"73%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>S</div><div>I</div></div>}
+                    {currentJPGURL_head != "" && <div style={{position:"absolute", border:"0px red solid", top:"50%", left:"23%", height:"45%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>A</div><div>P</div></div>}
+                </div>}
+            </div>
+            {/* <div className="modal-body">
                 <div style={{position:"relative", width:"810px", background:"#383C41", overflow:"hidden"}} onClick={()=>{setFelectItem(Math.floor(Math.random() * 20+30))}}>
                     <div style={{display:"flex", paddingLeft:"3px", alignItems:"center", justifyContent:"space-between", height:"12%", width:"100%", border:"0px red solid", boxSizing:"border-box", background:"#2c3033"}}>
                         <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"23%"}}>
@@ -295,36 +370,19 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                                     onChange={handleChange}/>
                             </label>
                         </div>
-                        {/*<div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"23%"}}>
-                            <label for="StudyDescription">StudyDescription
-                                <input name="StudyDescription" type="text" placeholder="StudyDescription"
-                                    value={StudyDescription}
-                                    onChange={handleChange}/>
-                            </label>
-                        </div> */}
                         <div className="pacs-form" style={{border:"0px red solid", display:"flex", flexDirection:"column", width:"28%"}}>
                             <label for="StudyDescription">StudyDescription
                                 <input name="StudyDescription" type="text" placeholder="StudyDescription"
                                     value={StudyDescription}
                                     onChange={handleChange}/>
                             </label>
-                            {/* <label for="StudyDescription">StudyDescription
-                                <select name="StudyDescription" onChange={handleChange} value={StudyDescription} style={{border:"0px", color:"white", textAlignLast:"left"}}>
-                                    <option value="betaben">{"[\u00B9\u2078F]Florbetaben"}</option>
-                                    <option value="betapir">{"[\u00B9\u2078F]Florbetapir"}</option>
-                                    <option value="pib">{"[\u00B9\u00B9C]Pittsburg Compound B"}</option>
-                                </select>
-                            </label> */}
                         </div>
-                        {/* findHandler();  */}
                         {(stepChecker == 0 && !fetching) && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
                             <div style={{}} className="pacs-btn" onClick={()=>{setCurrentJPGURL_head(''); findHandler();}}>Search</div>
                         </div>}
-                        {/* getHandler();   */}
                         {(stepChecker == 0 && fetching) && <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
                             <div style={{}} className="pacs-btn" >Searching...</div>
                         </div>}
-                        {/* getHandler();   */}
                         {stepChecker == 1 && !fetching &&
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
                             <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); getHandler();}}>Download</div>
@@ -337,11 +395,6 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
                             <div style={{}} className="pacs-btn" onClick={()=>{setCurrentJPGURL_head(''); handleReset();deleteFiles();}}>Reset</div>
                         </div>}
-                        {/* {stepChecker == 2 && fetching && 
-                        <div className="pacs-form" style={{display: "flex", justifyContent:"flex-end", border:"0px red solid", boxSizing:"border-box"}}>
-                            <div style={{}} className="pacs-btn type1" onClick={()=>{setCurrentJPGURL_head(''); }}>Loading</div>
-                        </div>
-                        } */}
                     </div>
                     {stepChecker == 1 && 
                     <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", marginTop:"20px", height:"80%", width:"103%", border:"0px white solid", boxSizing:"border-box"}}>
@@ -374,7 +427,7 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                     {currentJPGURL_head != "" && <div style={{position:"absolute", border:"0px red solid", top:"5%", left:"73%", height:"37%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>S</div><div>I</div></div>}
                     {currentJPGURL_head != "" && <div style={{position:"absolute", border:"0px red solid", top:"50%", left:"23%", height:"45%", userSelect:"none", display:"flex", justifyContent:"space-between", flexDirection:'column'}}><div>A</div><div>P</div></div>}
                 </div>
-            </div>
+            </div> */}
             <div style={{display:"flex", marginTop:"21px", justifyContent:"space-between", alignItems:"center"}}>
                 <div className="upload-checkbox-label" onClick={()=>{setaddToWorklist(!isChecked); setIsChecked(!isChecked);}}>
                     <div className={`upload-checkbox ${isChecked && 'act'}`}>
