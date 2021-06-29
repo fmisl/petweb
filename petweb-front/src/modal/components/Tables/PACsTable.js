@@ -105,6 +105,7 @@ export default class PACsTable extends Component {
       { render: this.renderClick, name: 'BirthDate', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>BirthDate&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
       { render: this.renderClick, name: 'StudyDate', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>StudyDate&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
       { render: this.renderClick, name: 'Modality', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>Modality&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
+      { render: this.renderClick, name: 'StudyDescription', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>StudyDescription&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
     //   { render: this.renderClick, name: 'FileName', displayName: <div style={{position:"relative", display:"flex", alignItems:"center", justifyContent:"center"}}>FileName&nbsp;</div>, inputFilterable: false, exactFilterable: false, sortable: false },
       { render: this.renderRemove, name: 'Remove', displayName: "", inputFilterable: false, exactFilterable: false, sortable: false },
     ];

@@ -25,6 +25,7 @@ import dicom2nifti
 import json
 from zipfile import ZipFile
 import time
+import pandas as pd
 
 class uploader(APIView):
     # def async_function(self, request, Format, myfiles, caseID):
@@ -93,7 +94,7 @@ class uploader(APIView):
         for myfile in myfiles.values():
             # print(os.path.join(user_path, myfile['FileName']))
             target_file = os.path.join(database_path, myfile['FileName'])
-            target_folder = os.path.join(database_path, ",".join(myfile['FileName'].split('.')[:-1]))
+            target_folder = os.path.join(database_path, "".join(myfile['FileName'].split('.')[:-1]))
             tracerName = myfile['Tracer']
             print(tracerName)
             #
@@ -178,6 +179,13 @@ class uploader(APIView):
                 # full_path2 = os.path.join(inout_path, 'global_centil.txt')
                 Qresult = np.append(aal_region[:,0,:], centil_suvr[:,0].reshape(1,2), axis=0)
                 np.savetxt(full_path1, Qresult, '%.3f')
+                df = pd.DataFrame(Qresult, columns=['suvr', 'Centiloid'],
+                                  index=['Frontal_L', 'Frontal_R', 'Precuneus_PCC_L', 'Precuneus_PCC_R',
+                                         'Lateral_temporal_L', 'Lateral_temporal_R', 'Parietal_L', 'Parietal_R',
+                                         'Occipital_L', 'Occipital_R', 'Medial_temporal_L', 'Medial_temporal_R',
+                                         'Basal_ganglia_L', 'Basal_ganglia_R', 'Global', 'Centiloid_Composite'])
+                df.to_csv(os.path.join(inout_path, "".join(myfile['FileName'].split('.')[:-1])+'.csv'), index=True, encoding='cp949')
+
                 self.update_quantification_DB(request, myfile, Qresult)
                 # print("----------complete train & quantification--------------------------------------------------------------")
 
@@ -743,7 +751,7 @@ class uploader(APIView):
         NofNii = len([v for i, v in enumerate(database_files) if (v.split(".")[-1] == 'nii')])
 
         userID = models.User.objects.filter(username=username)[0]
-        # [np.savetxt(os.path.join(database_path, str(NofNii+i)+"_"+",".join(v['FileName'].split(".")[:-1])+".txt"),[]) for i, v in enumerate(jsonData)]
+        # [np.savetxt(os.path.join(database_path, str(NofNii+i)+"_"+"".join(v['FileName'].split(".")[:-1])+".txt"),[]) for i, v in enumerate(jsonData)]
         for i, v in enumerate(jsonData):
             newCase = models.Case.objects.create(
                 UserID=userID,
@@ -854,7 +862,7 @@ class uploader(APIView):
         # for i, filename in enumerate(filenames):
         #     if filename.split(".")[-1]=='nii':
         #         try:
-        #             txt_file_path = os.path.join(database_path, ",".join(filename.split(".")[:-1]), 'aal_subregion.txt')
+        #             txt_file_path = os.path.join(database_path, "".join(filename.split(".")[:-1]), 'aal_subregion.txt')
         #             file = open(txt_file_path, 'r')
         #             lines = file.read().split('\n')
         #             data = lines[-2].split(' ')[1]
@@ -1002,9 +1010,9 @@ class uploader(APIView):
                     hz = int(vz / 2)
                     hy = int(vy / 2)
                     hx = int(vx / 2)
-                    saveJPGPath_hz = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hz.jpg")
-                    saveJPGPath_hy = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hy.jpg")
-                    saveJPGPath_hx = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hx.jpg")
+                    saveJPGPath_hz = os.path.join(uploader_path, "".join(myfile.split('.')[:-1]) + "_hz.jpg")
+                    saveJPGPath_hy = os.path.join(uploader_path, "".join(myfile.split('.')[:-1]) + "_hy.jpg")
+                    saveJPGPath_hx = os.path.join(uploader_path, "".join(myfile.split('.')[:-1]) + "_hx.jpg")
                     uint8_img2D = img3D[:, :, hz]
                     uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
                     uint8_img2D = 255 * uint8_img2D
@@ -1057,9 +1065,9 @@ class uploader(APIView):
                     hz = int(vz/2)
                     hy = int(vy/2)
                     hx = int(vx/2)
-                    saveJPGPath_hz = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hz.jpg")
-                    saveJPGPath_hy = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hy.jpg")
-                    saveJPGPath_hx = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hx.jpg")
+                    saveJPGPath_hz = os.path.join(uploader_path, "".join(f.name.split('.')[:-1])+"_hz.jpg")
+                    saveJPGPath_hy = os.path.join(uploader_path, "".join(f.name.split('.')[:-1])+"_hy.jpg")
+                    saveJPGPath_hx = os.path.join(uploader_path, "".join(f.name.split('.')[:-1])+"_hx.jpg")
                     uint8_img2D = img3D[:,:,hz]
                     uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
                     uint8_img2D = 255 * uint8_img2D
@@ -1107,9 +1115,9 @@ class uploader(APIView):
                     hz = int(vz/2)
                     hy = int(vy/2)
                     hx = int(vx/2)
-                    saveJPGPath_hz = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hz.jpg")
-                    saveJPGPath_hy = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hy.jpg")
-                    saveJPGPath_hx = os.path.join(uploader_path, ",".join(f.name.split('.')[:-1])+"_hx.jpg")
+                    saveJPGPath_hz = os.path.join(uploader_path, "".join(f.name.split('.')[:-1])+"_hz.jpg")
+                    saveJPGPath_hy = os.path.join(uploader_path, "".join(f.name.split('.')[:-1])+"_hy.jpg")
+                    saveJPGPath_hx = os.path.join(uploader_path, "".join(f.name.split('.')[:-1])+"_hx.jpg")
                     uint8_img2D = img3D[:,:,hz]
                     uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
                     uint8_img2D = 255 * uint8_img2D
@@ -1509,33 +1517,33 @@ class pacs(APIView):
             tracer = '[11C]PIB'
 
         if Method == 'find':
-            # _Patient_name=['BAK^SHEON SE', 'BAK^JEONG SUK', 'KIM^JEONG YEOPH', 'RYU^HYO MUN']
-            # _Patient_ID=['17555243', '26506827', '54799369', '27642694']
-            # _Date_of_birth=['19361207', '19430107', '19490712', '19440303']
-            # _Study_date=["20210618","20210618","20210618","20210618"]
-            # _Modality=["PT", "PT", "PT", "PT"]
-            # _Study_description=['hahahah', 'hello world', 'hello world', 'hello world']
-            # _Study_instanceUID=["1111111111", "2222222222", "2222222222", "2222222222"]
-            # _Series_info=['3333333333', '4444444444', '4444444444', '4444444444']
-            # findResult = [{'id': i, 'Focus': False,'Group': 0,
-            #              'FileName': None, 'Tracer': tracer,
-            #              'PatientName': _Patient_name[i], 'PatientID':_Patient_ID[i], 'BirthDate':_Date_of_birth[i],
-            #              'StudyDate':_Study_date[i], 'Modality':_Modality[i], 'StudyDescription':_Study_description[i], 'StudyInstanceUID':_Study_instanceUID[i], 'SeriesInfo':_Series_info[i],
-            #              } for i, patientID in enumerate(_Patient_ID)]
-            # return Response(data=findResult, status=status.HTTP_200_OK)
-
-            if StudyDate == '':
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
-            print('step1')
-            print("step2")
-            # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            _Patient_name=['BAK^SHEON SE', 'BAK^JEONG SUK', 'KIM^JEONG YEOPH', 'RYU^HYO MUN']
+            _Patient_ID=['17555243', '26506827', '54799369', '27642694']
+            _Date_of_birth=['19361207', '19430107', '19490712', '19440303']
+            _Study_date=["20210618","20210618","20210618","20210618"]
+            _Modality=["PT", "PT", "PT", "PT"]
+            _Study_description=['PET^F18_Florbetaben_late_phase_90min_Brain_list_mode (Adult)', 'PET^F18_Florbetaben_late_phase_90min_Brain_list (Adult)', 'PET^F18_Florbetaben_late_phase_Brain_list (Adult)', 'PET^F18_Florbetaben_late_phase_Brain_list_Mode (Adult)']
+            _Study_instanceUID=["1111111111", "2222222222", "2222222222", "2222222222"]
+            _Series_info=['3333333333', '4444444444', '4444444444', '4444444444']
             findResult = [{'id': i, 'Focus': False,'Group': 0,
                          'FileName': None, 'Tracer': tracer,
-                         'PatientName': Patient_name[i], 'PatientID':Patient_ID[i], 'BirthDate':Date_of_birth[i],
-                         'StudyDate':Study_date[i], 'Modality':Modality[i], 'StudyDescription':Study_description[i], 'StudyInstanceUID':Study_instanceUID[i], 'SeriesInfo':Series_info[i],
-                         } for i, patientID in enumerate(Patient_ID)]
+                         'PatientName': _Patient_name[i], 'PatientID':_Patient_ID[i], 'BirthDate':_Date_of_birth[i],
+                         'StudyDate':_Study_date[i], 'Modality':_Modality[i], 'StudyDescription':_Study_description[i], 'StudyInstanceUID':_Study_instanceUID[i], 'SeriesInfo':_Series_info[i],
+                         } for i, patientID in enumerate(_Patient_ID)]
             return Response(data=findResult, status=status.HTTP_200_OK)
+
+            # if StudyDate == '':
+            #     return Response(status=status.HTTP_400_BAD_REQUEST)
+            # Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
+            # print('step1')
+            # print("step2")
+            # # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            # findResult = [{'id': i, 'Focus': False,'Group': 0,
+            #              'FileName': None, 'Tracer': tracer,
+            #              'PatientName': Patient_name[i], 'PatientID':Patient_ID[i], 'BirthDate':Date_of_birth[i],
+            #              'StudyDate':Study_date[i], 'Modality':Modality[i], 'StudyDescription':Study_description[i], 'StudyInstanceUID':Study_instanceUID[i], 'SeriesInfo':Series_info[i],
+            #              } for i, patientID in enumerate(Patient_ID)]
+            # return Response(data=findResult, status=status.HTTP_200_OK)
 
         if Method == 'get':
             Patient_ID = request.data['PatientID']
@@ -1583,9 +1591,9 @@ class pacs(APIView):
                     hz = int(vz / 2)
                     hy = int(vy / 2)
                     hx = int(vx / 2)
-                    saveJPGPath_hz = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hz.jpg")
-                    saveJPGPath_hy = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hy.jpg")
-                    saveJPGPath_hx = os.path.join(uploader_path, ",".join(myfile.split('.')[:-1]) + "_hx.jpg")
+                    saveJPGPath_hz = os.path.join(uploader_path, "".join(myfile.split('.')[:-1]) + "_hz.jpg")
+                    saveJPGPath_hy = os.path.join(uploader_path, "".join(myfile.split('.')[:-1]) + "_hy.jpg")
+                    saveJPGPath_hx = os.path.join(uploader_path, "".join(myfile.split('.')[:-1]) + "_hx.jpg")
                     uint8_img2D = img3D[:, :, hz]
                     uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
                     uint8_img2D = 255 * uint8_img2D
@@ -1612,3 +1620,82 @@ class pacs(APIView):
             # return Response(status=status.HTTP_200_OK)
             print('step6')
             return Response(data=fileList, status=status.HTTP_200_OK)
+
+
+
+
+
+            # Patient_ID = request.data['PatientID']
+            # Study_instanceUID = request.data['StudyInstanceUID']
+            # Series_info = request.data['SeriesInfo']
+            # # Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
+            # # print([Patient_name, Patient_ID])
+            # self.get_oneItem_dcmtk(Patient_ID, Study_instanceUID, Series_info, [0, 1], target_path=dcm_folder_path)
+            # print('step3')
+            #
+            # dcm2niix_path = os.path.join(settings.BASE_DIR, 'dcm2niix.exe')
+            # # subprocess.run([dcm2niix_path, "-o", r'uploads\dwnusa\uploader', "-f", "%t_%p_%s", dcm_folder_path])
+            # try:
+            #     subprocess.run(
+            #         [dcm2niix_path, "-o", uploader_path, "-b", "y", "-ba", "n", "-f", "%t_%p_%s", dcm_folder_path],
+            #         check=True)
+            # except subprocess.CalledProcessError as e:
+            #     return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # print('step4')
+            #
+            # database_files = os.listdir(uploader_path)
+            # for idx, myfile in enumerate(database_files):
+            #     if (myfile.split(".")[-1] == 'nii'):
+            #         myfilename=myfile.split(".")[:-1]
+            #         target_nifti_path = os.path.join(uploader_path, myfilename[0]+'.json')
+            #         with open(target_nifti_path) as f:
+            #             dcm_header = json.load(f)
+            #         print(dcm_header)
+            #         NiiPath = os.path.join(uploader_path, myfile)
+            #         nimg3D = nib.load(NiiPath)
+            #         InputAffineX0.append(nimg3D.affine[0][0])
+            #         InputAffineY1.append(nimg3D.affine[1][1])
+            #         InputAffineZ2.append(nimg3D.affine[2][2])
+            #         dcmPatientID.append(dcm_header['PatientID'])
+            #         dcmPatientName.append(dcm_header['PatientName'])
+            #         dcmFileName.append(myfile)
+            #         np.array(nimg3D.header['pixdim'][1:4])
+            #         dsfactor = [float(f) / w for w, f in
+            #                     zip([2, 2, 2], nimg3D.header['pixdim'][1:4])]  # 픽셀크기 2mm로 변환용 factor
+            #         img3D = np.squeeze(np.array(nimg3D.dataobj))
+            #         img3D = nd.interpolation.zoom(img3D, zoom=dsfactor)  # 2mm 픽셀로 스케일 변환
+            #         # vx, vy, vz = img3D_2mm.shape # 크기는 (91, 109, 91) 이어야함
+            #         vx, vy, vz = img3D.shape
+            #         # Save jpg files
+            #         hz = int(vz / 2)
+            #         hy = int(vy / 2)
+            #         hx = int(vx / 2)
+            #         saveJPGPath_hz = os.path.join(uploader_path, "".join(myfile.split('.')[:-1]) + "_hz.jpg")
+            #         saveJPGPath_hy = os.path.join(uploader_path, "".join(myfile.split('.')[:-1]) + "_hy.jpg")
+            #         saveJPGPath_hx = os.path.join(uploader_path, "".join(myfile.split('.')[:-1]) + "_hx.jpg")
+            #         uint8_img2D = img3D[:, :, hz]
+            #         uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+            #         uint8_img2D = 255 * uint8_img2D
+            #         uint8_img2D = np.rot90(uint8_img2D)
+            #         Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hz)
+            #         uint8_img2D = img3D[:, hy, :]
+            #         uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+            #         uint8_img2D = 255 * uint8_img2D
+            #         uint8_img2D = np.rot90(uint8_img2D)
+            #         Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hy)
+            #         uint8_img2D = img3D[hx, :, :]
+            #         uint8_img2D = (uint8_img2D - uint8_img2D.min()) / (uint8_img2D.max() - uint8_img2D.min())
+            #         uint8_img2D = 255 * uint8_img2D
+            #         uint8_img2D = np.rot90(uint8_img2D)
+            #         Image.fromarray(uint8_img2D.astype(np.uint8)).save(saveJPGPath_hx)
+            # print('step5')
+            # # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            # fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientID':dcmPatientID[i], 'PatientName': dcmPatientName[i], 'Group': 0, 'fileID': None,
+            #              'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
+            #              for i, filename in enumerate(dcmFileName) if (filename.split(".")[-1]=='nii')]
+            # # fileList = [{'id': i, 'Focus': False,'FileName': filename, 'Tracer': tracer, 'PatientName': Patient_name[i], 'Group': 0, 'fileID': None,
+            # #              'InputAffineX0':InputAffineX0[i],'InputAffineY1':InputAffineY1[i],'InputAffineZ2':InputAffineZ2[i]}
+            # #              for i, filename in enumerate(filenames) if (filename.split(".")[-1]=='nii')]
+            # # return Response(status=status.HTTP_200_OK)
+            # print('step6')
+            # return Response(data=fileList, status=status.HTTP_200_OK)

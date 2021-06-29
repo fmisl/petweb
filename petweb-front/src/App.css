@@ -1789,14 +1789,13 @@ input:-webkit-autofill:active {
 }
 
 .view-btn > .view-menu > div:nth-child(1) {
-  background: #118af7;
 }
 
-.view-btn > .view-menu > div:nth-child(1):hover {
+/* .view-btn > .view-menu > div:nth-child(1):hover {
   background: #118af7;
   border: 1px white solid;
   box-sizing: border-box;
-}
+} */
 
 .view-btn > .view-menu > div:nth-child(1):active {
   color: #118af7;
@@ -1806,6 +1805,7 @@ input:-webkit-autofill:active {
 }
 
 .view-btn > .view-menu > div:hover {
+  background: #118af7;
   border: 1px #118af7 solid;
   box-sizing: border-box;
 }

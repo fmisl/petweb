@@ -322,9 +322,9 @@ function ConnectPACS({ setListID, listID, setFetchState, fetchState, selectTrace
                         </div>}
                     </div>
                     {stepChecker == 1 && 
-                    <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-start", marginTop:"20px", height:"80%", width:"1585px", border:"1px white solid", boxSizing:"border-box", overflow:"hidden"}}>
+                    <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-start", marginTop:"20px", height:"80%", width:"1585px", border:"0px white solid", boxSizing:"border-box", overflow:"hidden"}}>
                         {fetching ? 
-                        <div style={{border: "0px red solid", position:"relative"}}><div style={{position:"absolute", top:"29%", left:"32%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"28px", border:"0px blue solid"}}><div>{(dcmCount/148).toFixed(0)}/{patientCount}</div><div>{(dcmCount/allDcmCount*100).toFixed(0)}%</div></div><img width="200px" src={loadingGIF}/></div>
+                        <div style={{border: "0px red solid", position:"relative"}}><div style={{position:"absolute", top:"29%", left:"32%", display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", width:"70px", fontSize:"28px", border:"0px blue solid"}}><div>{Math.floor(dcmCount/148).toFixed(0)}/{patientCount}</div><div>{(dcmCount/allDcmCount*100).toFixed(0)}%</div></div><img width="200px" src={loadingGIF}/></div>
                         :
                         <PACsTable setListID={setListID} selectTracer={selectTracer} fileList={finddata} getJPGURL={getJPGURL} removeFileList={removeIteminFindData} updateFileList={updateFileList}/>}
                     </div>}

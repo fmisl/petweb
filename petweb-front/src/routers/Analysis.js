@@ -109,6 +109,13 @@ class Analysis extends Component {
   componentWillUnmount() {
     // ReactDOM.findDOMNode(this).removeEventListener('wheel', this.handleWheel);
   }
+  csvDownload = async () =>{
+    const {counter, stackManager, fileList} = this.props;
+    const token = localStorage.getItem('token')
+    const username = localStorage.getItem('username')
+    const downloadUrl = IPinUSE+'result/download/'+username+'/database/'+counter.fileID+'/'+counter.fileID+'.csv';
+    setTimeout(() => window.open(downloadUrl, "_blank"), 1000);
+  }
   niftiDownload = async () =>{
     const {counter, stackManager, fileList} = this.props;
     // console.log('download nifti')
@@ -142,7 +149,7 @@ class Analysis extends Component {
   }
   render(){
     const {subRegion} = this.state;
-    const {niftiDownload} = this;
+    const {niftiDownload, csvDownload} = this;
     // console.log('state: ', subRegion)
     const { counter, isLogged, increment, decrement, listSelected, stackManager } = this.props;
     // const counter = useSelector(state => state.counter);
@@ -219,11 +226,10 @@ class Analysis extends Component {
                 <IconBurger className={`view-icon ${this.state.showMenu && 'show'}`}/>
                 {this.state.showMenu && 
                   <div className="view-menu" onClick={(e)=>e.stopPropagation()}>
-                    {/* <div>Save</div>
-                    <div>Delete</div>
-                    <div>Export PNG</div> */}
                     <div onClick={niftiDownload}>Export Nifti</div>
-                  </div>}
+                    <div onClick={csvDownload}>Export as CSV</div>
+                  </div>
+                  }
               </div>
             </div>
           </div>
