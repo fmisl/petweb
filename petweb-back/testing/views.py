@@ -1509,33 +1509,33 @@ class pacs(APIView):
             tracer = '[11C]PIB'
 
         if Method == 'find':
-            # _Patient_name=['BAK^SHEON SE', 'BAK^JEONG SUK', 'KIM^JEONG YEOPH', 'RYU^HYO MUN']
-            # _Patient_ID=['17555243', '26506827', '54799369', '27642694']
-            # _Date_of_birth=['19361207', '19430107', '19490712', '19440303']
-            # _Study_date=["20210618","20210618","20210618","20210618"]
-            # _Modality=["PT", "PT", "PT", "PT"]
-            # _Study_description=['hahahah', 'hello world', 'hello world', 'hello world']
-            # _Study_instanceUID=["1111111111", "2222222222", "2222222222", "2222222222"]
-            # _Series_info=['3333333333', '4444444444', '4444444444', '4444444444']
-            # findResult = [{'id': i, 'Focus': False,'Group': 0,
-            #              'FileName': None, 'Tracer': tracer,
-            #              'PatientName': _Patient_name[i], 'PatientID':_Patient_ID[i], 'BirthDate':_Date_of_birth[i],
-            #              'StudyDate':_Study_date[i], 'Modality':_Modality[i], 'StudyDescription':_Study_description[i], 'StudyInstanceUID':_Study_instanceUID[i], 'SeriesInfo':_Series_info[i],
-            #              } for i, patientID in enumerate(_Patient_ID)]
-            # return Response(data=findResult, status=status.HTTP_200_OK)
-
-            if StudyDate == '':
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
-            print('step1')
-            print("step2")
-            # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            _Patient_name=['BAK^SHEON SE', 'BAK^JEONG SUK', 'KIM^JEONG YEOPH', 'RYU^HYO MUN']
+            _Patient_ID=['17555243', '26506827', '54799369', '27642694']
+            _Date_of_birth=['19361207', '19430107', '19490712', '19440303']
+            _Study_date=["20210618","20210618","20210618","20210618"]
+            _Modality=["PT", "PT", "PT", "PT"]
+            _Study_description=['PET^F18_Florbetaben_late_phase_90min_Brain_list_mode (Adult)', 'PET^F18_Florbetaben_late_phase_90min_Brain_list (Adult)', 'PET^F18_Florbetaben_late_phase_Brain_list (Adult)', 'PET^F18_Florbetaben_late_phase_Brain_list_Mode (Adult)']
+            _Study_instanceUID=["1111111111", "2222222222", "2222222222", "2222222222"]
+            _Series_info=['3333333333', '4444444444', '4444444444', '4444444444']
             findResult = [{'id': i, 'Focus': False,'Group': 0,
                          'FileName': None, 'Tracer': tracer,
-                         'PatientName': Patient_name[i], 'PatientID':Patient_ID[i], 'BirthDate':Date_of_birth[i],
-                         'StudyDate':Study_date[i], 'Modality':Modality[i], 'StudyDescription':Study_description[i], 'StudyInstanceUID':Study_instanceUID[i], 'SeriesInfo':Series_info[i],
-                         } for i, patientID in enumerate(Patient_ID)]
+                         'PatientName': _Patient_name[i], 'PatientID':_Patient_ID[i], 'BirthDate':_Date_of_birth[i],
+                         'StudyDate':_Study_date[i], 'Modality':_Modality[i], 'StudyDescription':_Study_description[i], 'StudyInstanceUID':_Study_instanceUID[i], 'SeriesInfo':_Series_info[i],
+                         } for i, patientID in enumerate(_Patient_ID)]
             return Response(data=findResult, status=status.HTTP_200_OK)
+
+            # if StudyDate == '':
+            #     return Response(status=status.HTTP_400_BAD_REQUEST)
+            # Patient_name, Patient_ID, Date_of_birth, Study_date, Modality, Study_description, Study_instanceUID, Series_info = self.find_dcmtk(date=StudyDate, ptid=PatientID)
+            # print('step1')
+            # print("step2")
+            # # filenames = [_ for _ in os.listdir(uploader_path) if _.endswith(".nii")]
+            # findResult = [{'id': i, 'Focus': False,'Group': 0,
+            #              'FileName': None, 'Tracer': tracer,
+            #              'PatientName': Patient_name[i], 'PatientID':Patient_ID[i], 'BirthDate':Date_of_birth[i],
+            #              'StudyDate':Study_date[i], 'Modality':Modality[i], 'StudyDescription':Study_description[i], 'StudyInstanceUID':Study_instanceUID[i], 'SeriesInfo':Series_info[i],
+            #              } for i, patientID in enumerate(Patient_ID)]
+            # return Response(data=findResult, status=status.HTTP_200_OK)
 
         if Method == 'get':
             Patient_ID = request.data['PatientID']
